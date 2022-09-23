@@ -116,8 +116,9 @@ class _MenuPageState extends State<MenuPage> {
               ),
               Center(
                 child: Container(
-                  decoration:
-                      BoxDecoration(border: Border.all(color: Color.fromARGB(255, 247, 240, 240))),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          color: Color.fromARGB(255, 247, 240, 240))),
                   width: 200,
                   child: CustomButton(
                     color: Colors.white70,

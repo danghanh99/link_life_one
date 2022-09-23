@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:link_life_one/screen/menu_page.dart';
-
 import '../components/custom_text_field.dart';
 import '../shared/assets.dart';
 import '../shared/custom_button.dart';
@@ -26,7 +24,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Color(0xFFFFFA7A),
+      backgroundColor: const Color(0xFFFFFA7A),
       body: Padding(
         padding: const EdgeInsets.only(
           top: 50,
@@ -78,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   SizedBox(
                     width: size.width - 30,
                     child: CustomButton(
-                      color: Color(0xFFFFA800),
+                      color: const Color(0xFFFFA800),
                       onClick: () {
                         if (_formKey.currentState?.validate() == true) {
                           Navigator.push(
