@@ -18,6 +18,42 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String name2 = name ?? '';
+    final arr = name2.split(' ');
+    if (arr.length >= 2) {
+      final arr = name!.split(' ');
+      return Container(
+        decoration: BoxDecoration(
+          color: color ?? Colors.purple,
+          borderRadius: BorderRadius.circular(borderRadius ?? 16),
+        ),
+        child: Center(
+          child: TextButton(
+            onPressed: () {
+              onClick.call();
+            },
+            child: Column(
+              children: [
+                Text(
+                  arr[0],
+                  style: textStyle ??
+                      TextStyles.BODY_14.apply(
+                        color: Colors.white,
+                      ),
+                ),
+                Text(
+                  arr[1],
+                  style: textStyle ??
+                      TextStyles.BODY_14.apply(
+                        color: Colors.white,
+                      ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
     return Container(
       decoration: BoxDecoration(
         color: color ?? Colors.purple,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:link_life_one/screen/quan_ly_nhap_xuat_page.dart';
 import 'package:link_life_one/screen/quan_ly_thanh_vien_page.dart';
 import 'package:link_life_one/screen/xac_nhan_thanh_tich_page.dart';
 
@@ -206,7 +207,7 @@ class _MenuPageState extends State<MenuPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const QuanLyThanhVienPage(),
+            builder: (context) => const QuanLyNhapXuatPage(),
           ),
         );
         break;
