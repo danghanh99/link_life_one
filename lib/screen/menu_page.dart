@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/quan_ly_nhap_xuat_page.dart';
 import 'package:link_life_one/screen/quan_ly_thanh_vien_page.dart';
+import 'package:link_life_one/screen/so_tai_khoan_page.dart';
 import 'package:link_life_one/screen/xac_nhan_thanh_tich_page.dart';
 
 import '../components/custom_text_field.dart';
@@ -176,6 +177,14 @@ class _MenuPageState extends State<MenuPage> {
     // '部材管理',
     // '出納帳',
     switch (name) {
+      case ('出納帳'):
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SoTaiKhoanPage(),
+          ),
+        );
+        break;
       case ('工事完了報告'):
         Navigator.push(
           context,
