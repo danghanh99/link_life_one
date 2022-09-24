@@ -21,6 +21,11 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   date_format: ^2.0.4
   intl: ^0.17.0
+  json_to_model: ^2.3.0
+  json_serializable: ^6.0.1
+  test: ^1.16.5
+  dalocale: ^2.0.0
+  build_runner: ^2.0.6
 
 flutter:
   uses-material-design: true

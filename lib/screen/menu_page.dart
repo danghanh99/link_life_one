@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:link_life_one/screen/quan_ly_thanh_vien_page.dart';
+import 'package:link_life_one/screen/xac_nhan_thanh_tich_page.dart';
 
 import '../components/custom_text_field.dart';
 import '../shared/assets.dart';
@@ -115,11 +117,14 @@ class _MenuPageState extends State<MenuPage> {
                 onChanged: (text) {},
                 maxLines: 5,
               ),
+              const SizedBox(
+                height: 10,
+              ),
               Center(
                 child: Container(
                   decoration: BoxDecoration(
                       border: Border.all(
-                          color: Color.fromARGB(255, 247, 240, 240))),
+                          color: const Color.fromARGB(255, 247, 240, 240))),
                   width: 200,
                   child: CustomButton(
                     color: Colors.white70,
@@ -135,14 +140,14 @@ class _MenuPageState extends State<MenuPage> {
               ),
               GridView.count(
                 crossAxisCount: 2,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 20,
                 childAspectRatio: 2,
                 children: listNames.map((name) {
                   return CustomButton(
-                    color: Color(0xFFFFFA7A),
+                    color: const Color(0xFFFFFA7A),
                     onClick: () {
                       navigateTo(name);
                     },
@@ -178,6 +183,34 @@ class _MenuPageState extends State<MenuPage> {
           ),
         );
         break;
+
+      case ('実績確認'):
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const XacNhanThanhTichPage(),
+          ),
+        );
+        break;
+
+      case ('部材管理'):
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const QuanLyThanhVienPage(),
+          ),
+        );
+        break;
+
+      case ('入出庫管理'):
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const QuanLyThanhVienPage(),
+          ),
+        );
+        break;
+
       default:
         {}
     }
