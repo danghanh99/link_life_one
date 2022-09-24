@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:link_life_one/screen/quan_ly_nhap_xuat_page.dart';
-import 'package:link_life_one/screen/quan_ly_thanh_vien_page.dart';
-import 'package:link_life_one/screen/so_tai_khoan_page.dart';
-import 'package:link_life_one/screen/xac_nhan_thanh_tich_page.dart';
+import 'package:link_life_one/screen/page5/quan_ly_nhap_xuat_page.dart';
+import 'package:link_life_one/screen/page6/quan_ly_thanh_vien_page.dart';
+import 'package:link_life_one/screen/page7/so_tai_khoan_page.dart';
+import 'package:link_life_one/screen/page4/xac_nhan_thanh_tich_page.dart';
 
 import '../components/custom_text_field.dart';
 import '../shared/assets.dart';
 import '../shared/custom_button.dart';
-import '../shared/validator.dart';
-import 'bao_cao_hoan_thanh_cong_trinh_page.dart';
+import 'page3/bao_cao_hoan_thanh_cong_trinh_page.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({

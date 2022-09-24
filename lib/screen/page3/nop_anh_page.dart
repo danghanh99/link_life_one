@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/login_page.dart';
 
-import '../components/custom_text_field.dart';
-import '../shared/assets.dart';
-import '../shared/custom_button.dart';
+import '../../components/custom_text_field.dart';
+import '../../shared/assets.dart';
+import '../../shared/custom_button.dart';
 
-class SoTaiKhoanPage extends StatefulWidget {
-  const SoTaiKhoanPage({
+class NopAnhPage extends StatefulWidget {
+  const NopAnhPage({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<SoTaiKhoanPage> createState() => _SoTaiKhoanPageState();
+  State<NopAnhPage> createState() => _NopAnhPageState();
 }
 
-class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
+class _NopAnhPageState extends State<NopAnhPage> {
   List<String> listNames = [
     '入出庫管理',
     '部材管理',
@@ -25,7 +25,7 @@ class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: const Color(0xFFFFFFFF),
+      backgroundColor: Color(0xFFFFFFFF),
       body: Padding(
         padding: const EdgeInsets.only(
           top: 20,
@@ -34,6 +34,8 @@ class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
           left: 16,
         ),
         child: Column(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          // mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -69,7 +71,7 @@ class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
                 child: CustomButton(
                   color: Colors.white70,
                   onClick: () {},
-                  name: '出納帳',
+                  name: '写真提出',
                   textStyle: const TextStyle(
                     color: Color(0xFF042C5C),
                     fontSize: 18,
@@ -81,31 +83,44 @@ class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
             const SizedBox(
               height: 10,
             ),
+            const SizedBox(
+              height: 5,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 10,
+              ),
+              decoration: BoxDecoration(
+                border: Border.all(),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: CustomTextField(
+                  fillColor: const Color(0xFFD9D9D9),
+                  hint: '',
+                  type: TextInputType.emailAddress,
+                  onChanged: (text) {},
+                  maxLines: 25,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Text(
-                  '担当者',
-                  style: TextStyle(
-                    color: Color(0xFF042C5C),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: _moreButton(context),
-                ),
                 Container(
-                  width: 70,
+                  width: 140,
                   height: 37,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFA800),
+                    color: const Color(0xFFA1A1A1),
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
                     onPressed: () {},
                     child: const Text(
-                      '表示',
+                      '写真を選択',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -116,78 +131,28 @@ class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
                 ),
               ],
             ),
-
-            // Expanded(child: Container()),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: const [
-                    Text(
-                      '本日時点の回収累計 :',
-                      style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      '入金額 :',
-                      style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      '未入金額 :',
-                      style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
+            Expanded(child: Container()),
+            Container(
+              width: 80,
+              height: 37,
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFA800),
+                borderRadius: BorderRadius.circular(26),
+              ),
+              child: TextButton(
+                onPressed: () {},
+                child: const Text(
+                  '登録',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
-                      '￥ 1,000,000',
-                      style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      '￥ 800,000',
-                      style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      '￥ 200,000',
-                      style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+              ),
             ),
             const SizedBox(
-              height: 10,
+              height: 15,
             )
           ],
         ),
@@ -370,7 +335,6 @@ class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
       offset: const Offset(-35, -90),
       child: Container(
         width: 130,
-        height: 30,
         decoration: BoxDecoration(
           color: const Color(0xFFF5F6F8),
           borderRadius: BorderRadius.circular(8),
@@ -379,10 +343,10 @@ class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             const Text(
-              "担当者を選択",
+              "投函数を選択",
               style: TextStyle(
-                color: Color(0xFF999999),
-                fontSize: 14,
+                color: Color(0xFF042C5C),
+                fontSize: 15,
                 fontWeight: FontWeight.w400,
               ),
             ),

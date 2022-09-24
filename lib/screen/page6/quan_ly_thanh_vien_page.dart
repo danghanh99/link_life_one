@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:link_life_one/screen/xac_nhan_thanh_tich_page.dart';
+import 'package:link_life_one/screen/page4/xac_nhan_thanh_tich_page.dart';
 
-import '../components/custom_text_field.dart';
-import '../shared/assets.dart';
-import '../shared/custom_button.dart';
-import '../shared/validator.dart';
-import 'bao_cao_hoan_thanh_cong_trinh_page.dart';
-import 'login_page.dart';
+import '../../components/custom_text_field.dart';
+import '../../shared/assets.dart';
+import '../../shared/custom_button.dart';
+import '../../shared/validator.dart';
+import '../page3/bao_cao_hoan_thanh_cong_trinh_page.dart';
+import '../login_page.dart';
 
-class QuanLyNhapXuatPage extends StatefulWidget {
-  const QuanLyNhapXuatPage({
+class QuanLyThanhVienPage extends StatefulWidget {
+  const QuanLyThanhVienPage({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<QuanLyNhapXuatPage> createState() => _QuanLyNhapXuatPageState();
+  State<QuanLyThanhVienPage> createState() => _QuanLyThanhVienPageState();
 }
 
-class _QuanLyNhapXuatPageState extends State<QuanLyNhapXuatPage> {
+class _QuanLyThanhVienPageState extends State<QuanLyThanhVienPage> {
   List<String> listNames = [
-    '入庫予定表',
-    '部材持ち出し 登録',
-    '部材持ち戻り 登録',
+    '部材発注',
+    '棚卸',
+    '発注承認',
   ];
 
   @override
@@ -160,7 +160,7 @@ class _QuanLyNhapXuatPageState extends State<QuanLyNhapXuatPage> {
         child: CustomButton(
           color: Colors.white70,
           onClick: () {},
-          name: '入出庫メニュー',
+          name: '部材発注・棚卸 メニュー',
           textStyle: const TextStyle(
             color: Color(0xFF042C5C),
             fontSize: 18,

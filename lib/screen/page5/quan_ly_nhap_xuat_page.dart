@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:link_life_one/screen/xac_nhan_thanh_tich_page.dart';
+import 'package:link_life_one/screen/page4/xac_nhan_thanh_tich_page.dart';
+import 'package:link_life_one/screen/page5/lich_kiem_ke_page.dart';
 
-import '../components/custom_text_field.dart';
-import '../shared/assets.dart';
-import '../shared/custom_button.dart';
-import '../shared/validator.dart';
-import 'bao_cao_hoan_thanh_cong_trinh_page.dart';
-import 'login_page.dart';
+import '../../components/custom_text_field.dart';
+import '../../shared/assets.dart';
+import '../../shared/custom_button.dart';
+import '../../shared/validator.dart';
+import '../page3/bao_cao_hoan_thanh_cong_trinh_page.dart';
+import '../login_page.dart';
 
-class QuanLyThanhVienPage extends StatefulWidget {
-  const QuanLyThanhVienPage({
+class QuanLyNhapXuatPage extends StatefulWidget {
+  const QuanLyNhapXuatPage({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<QuanLyThanhVienPage> createState() => _QuanLyThanhVienPageState();
+  State<QuanLyNhapXuatPage> createState() => _QuanLyNhapXuatPageState();
 }
 
-class _QuanLyThanhVienPageState extends State<QuanLyThanhVienPage> {
+class _QuanLyNhapXuatPageState extends State<QuanLyNhapXuatPage> {
   List<String> listNames = [
-    '部材発注',
-    '棚卸',
-    '発注承認',
+    '入庫予定表',
+    '部材持ち出し 登録',
+    '部材持ち戻り 登録',
   ];
 
   @override
@@ -73,18 +74,15 @@ class _QuanLyThanhVienPageState extends State<QuanLyThanhVienPage> {
   }
 
   void navigateTo(String name) {
-    // '工事完了報告',
-    // 'スケジュール管理',
-    // '実績確認',
-    // '入出庫管理',
-    // '部材管理',
-    // '出納帳',
+    //  '入庫予定表',
+    // '部材持ち出し 登録',
+    // '部材持ち戻り 登録',
     switch (name) {
-      case ('工事完了報告'):
+      case ('入庫予定表'):
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const BaoCaoHoanThanhCongTrinhPage(),
+            builder: (context) => const LichKiemKePage(),
           ),
         );
         break;
@@ -160,7 +158,7 @@ class _QuanLyThanhVienPageState extends State<QuanLyThanhVienPage> {
         child: CustomButton(
           color: Colors.white70,
           onClick: () {},
-          name: '部材発注・棚卸 メニュー',
+          name: '入出庫メニュー',
           textStyle: const TextStyle(
             color: Color(0xFF042C5C),
             fontSize: 18,

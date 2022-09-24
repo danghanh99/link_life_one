@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
 
-import '../shared/assets.dart';
-import '../shared/custom_button.dart';
-import '../shared/date_formatter copy.dart';
+import '../../shared/assets.dart';
+import '../../shared/custom_button.dart';
+import '../../shared/date_formatter copy.dart';
 
 class XacNhanThanhTichPage extends StatefulWidget {
   const XacNhanThanhTichPage({
