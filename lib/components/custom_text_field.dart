@@ -130,9 +130,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
       validator: widget.validator,
       textCapitalization: widget.textCapitalization,
       inputFormatters: widget.inputFormatters,
-      onFieldSubmitted: (v) => FocusScope.of(context).requestFocus(widget.nextFocus),
+      onFieldSubmitted: (v) =>
+          FocusScope.of(context).requestFocus(widget.nextFocus),
       onChanged: widget.onChanged,
-      decoration: widget.isChatText == true
+      decoration: false
           ? InputDecoration(
               errorStyle: TextStyles.BODY_14.apply(
                 color: AppColors.ERROR_VALIDATE,
@@ -159,23 +160,24 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     ),
               // contentPadding:
               //     new EdgeInsets.symmetric(vertical: 18.0, horizontal: 16.0),
-              contentPadding: EdgeInsets.fromLTRB(2, 16, 16, 16),
-              prefixIcon: SizedBox(
-                width: 20,
-              ),
-              prefixIconConstraints: BoxConstraints(
-                minWidth: 0,
-                maxWidth: 15,
-                minHeight: 2,
-              ),
-              suffixIcon: _buildIcon())
+              // contentPadding: EdgeInsets.fromLTRB(2, 16, 16, 16),
+              // prefixIcon: SizedBox(
+              //   width: 20,
+              // ),
+              // prefixIconConstraints: BoxConstraints(
+              //   minWidth: 0,
+              //   maxWidth: 15,
+              //   minHeight: 2,
+              // ),
+              // suffixIcon: _buildIcon(),
+            )
           : InputDecoration(
               errorStyle: TextStyles.BODY_14.apply(
                 color: AppColors.ERROR_VALIDATE,
                 fontFamily: 'LinotteSemiBold',
               ),
               isDense: true,
-              helperText: ' ',
+              // helperText: ' ',
               filled: true,
               errorMaxLines: 2,
               enabledBorder: _borderOutline(),
@@ -195,18 +197,18 @@ class _CustomTextFieldState extends State<CustomTextField> {
                       color: AppColors.PLACE_HOLDER,
                       fontFamily: 'LinotteSemiBold',
                     ),
-              contentPadding: widget.isNameField == true
-                  ? EdgeInsets.fromLTRB(5.0, 8.0, 5.0, 8.0)
-                  : EdgeInsets.fromLTRB(2, 16, 16, 16),
-              prefixIcon: SizedBox(
-                width: 20,
-              ),
-              prefixIconConstraints: BoxConstraints(
-                minWidth: 0,
-                maxWidth: 15,
-                minHeight: 2,
-              ),
-              suffixIcon: _buildIcon(),
+              // contentPadding: widget.isNameField == true
+              //     ? EdgeInsets.fromLTRB(5.0, 8.0, 5.0, 8.0)
+              //     : EdgeInsets.fromLTRB(2, 16, 16, 16),
+              // prefixIcon: SizedBox(
+              //   width: 20,
+              // ),
+              // prefixIconConstraints: BoxConstraints(
+              //   minWidth: 0,
+              //   maxWidth: 15,
+              //   minHeight: 2,
+              // ),
+              // suffixIcon: _buildIcon(),
             ),
     );
   }
@@ -249,7 +251,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   }
 
   Widget toast = Container(
-    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+    // padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(25.0),
       color: Colors.white,

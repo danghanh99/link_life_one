@@ -5,16 +5,16 @@ import '../shared/assets.dart';
 import '../shared/custom_button.dart';
 import '../shared/validator.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({
+class LoginPage extends StatefulWidget {
+  const LoginPage({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
 
   final TextEditingController passwordController = TextEditingController();
@@ -72,6 +72,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                     controller: passwordController,
                     isPassword: true,
+                  ),
+                  const SizedBox(
+                    height: 10,
                   ),
                   SizedBox(
                     width: size.width - 30,

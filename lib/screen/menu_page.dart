@@ -4,6 +4,7 @@ import '../components/custom_text_field.dart';
 import '../shared/assets.dart';
 import '../shared/custom_button.dart';
 import '../shared/validator.dart';
+import 'bao_cao_hoan_thanh_cong_trinh_page.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({
@@ -31,7 +32,7 @@ class _MenuPageState extends State<MenuPage> {
       backgroundColor: Color(0xFFFFFFFF),
       body: Padding(
         padding: const EdgeInsets.only(
-          top: 50,
+          top: 20,
           bottom: 16,
           right: 16,
           left: 16,
@@ -142,7 +143,9 @@ class _MenuPageState extends State<MenuPage> {
                 children: listNames.map((name) {
                   return CustomButton(
                     color: Color(0xFFFFFA7A),
-                    onClick: () {},
+                    onClick: () {
+                      navigateTo(name);
+                    },
                     name: name,
                     textStyle: const TextStyle(
                       color: Colors.black,
@@ -157,5 +160,26 @@ class _MenuPageState extends State<MenuPage> {
         ),
       ),
     );
+  }
+
+  void navigateTo(String name) {
+    // '工事完了報告',
+    // 'スケジュール管理',
+    // '実績確認',
+    // '入出庫管理',
+    // '部材管理',
+    // '出納帳',
+    switch (name) {
+      case ('工事完了報告'):
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const BaoCaoHoanThanhCongTrinhPage(),
+          ),
+        );
+        break;
+      default:
+        {}
+    }
   }
 }
