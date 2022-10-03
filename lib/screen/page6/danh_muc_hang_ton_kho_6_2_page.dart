@@ -3,20 +3,23 @@ import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page5/danh_sach_ton_kho_page.dart';
 
+import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../../shared/date_formatter copy.dart';
+import 'danh_sach_cac_bo_phan_5_1_2_page.dart';
 
-class DanhSachNguyenLieuPage extends StatefulWidget {
-  const DanhSachNguyenLieuPage({
+class DanhMucHangTonKho62Page extends StatefulWidget {
+  const DanhMucHangTonKho62Page({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<DanhSachNguyenLieuPage> createState() => _DanhSachNguyenLieuPageState();
+  State<DanhMucHangTonKho62Page> createState() =>
+      _DanhMucHangTonKho62PageState();
 }
 
-class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
+class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
   List<String> listNames = [
     '入出庫管理',
     '部材管理',
@@ -284,18 +287,31 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
   List<Widget> _buildCells2(int count, int row) {
     List<String> colNames = [
       '',
-      'カテゴリ',
+      '部材 管理番号',
+      '分類',
       'メーカー',
-      '自社コード',
+      '品番',
       '商品名',
-      '在庫 数量',
-      '持ち出し数量',
+      '先月 実在庫',
+      '出庫数量',
+      '発注数量',
+      '単価',
+      '当月 実在庫',
+      '当月在庫額',
     ];
 
     List<double> colwidth = [
       30,
       130,
       130,
+      100,
+      150,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
       100,
       100,
       100,
@@ -341,7 +357,7 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
   List<Widget> _buildRows(int count) {
     return List.generate(count, (index) {
       return Row(
-        children: _buildCells2(7, index),
+        children: _buildCells2(12, index),
       );
     });
   }
@@ -401,6 +417,32 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
               height: 10,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [
+                Text(
+                  '発注却下品番・理由 / コメント',
+                  style: TextStyle(
+                    color: Color(0xFF042C5C),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            CustomTextField(
+              fillColor: const Color(0xFFA5A7A9),
+              hint: '',
+              type: TextInputType.emailAddress,
+              onChanged: (text) {},
+              maxLines: 3,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
               children: [
                 Container(
                   width: 100,
@@ -437,7 +479,8 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const DanhSachTonKhoPage(),
+                          builder: (context) =>
+                              const DanhSachCacBoPhan512Page(),
                         ),
                       );
                     },
@@ -493,7 +536,7 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
                   );
                 },
                 child: const Text(
-                  '入庫処理',
+                  '発注申請',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -642,7 +685,7 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
         child: CustomButton(
           color: Colors.white70,
           onClick: () {},
-          name: '部材持ち出しリスト',
+          name: '棚卸リスト',
           textStyle: const TextStyle(
             color: Color(0xFF042C5C),
             fontSize: 18,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/page5/quan_ly_nhap_xuat_page.dart';
 import 'package:link_life_one/screen/page6/quan_ly_thanh_vien_page.dart';
+import 'package:link_life_one/screen/page7/quan_ly_lich_bieu_7_1_page.dart';
 import 'package:link_life_one/screen/page7/so_tai_khoan_page.dart';
 import 'package:link_life_one/screen/page4/xac_nhan_thanh_tich_page.dart';
 
@@ -176,6 +177,14 @@ class _MenuPageState extends State<MenuPage> {
     // '部材管理',
     // '出納帳',
     switch (name) {
+      case ('スケジュール管理'):
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const QuanLyLichBieu71Page(),
+          ),
+        );
+        break;
       case ('出納帳'):
         Navigator.push(
           context,

@@ -7,6 +7,9 @@ import '../../shared/custom_button.dart';
 import '../../shared/validator.dart';
 import '../page3/bao_cao_hoan_thanh_cong_trinh_page.dart';
 import '../login_page.dart';
+import 'danh_muc_hang_ton_kho_6_2_page.dart';
+import 'danh_sach_dat_hang_cac_bo_phan_6_1_page.dart';
+import 'danh_sach_dat_hang_cac_bo_phan_6_3_page.dart';
 
 class QuanLyThanhVienPage extends StatefulWidget {
   const QuanLyThanhVienPage({
@@ -80,20 +83,29 @@ class _QuanLyThanhVienPageState extends State<QuanLyThanhVienPage> {
     // '部材管理',
     // '出納帳',
     switch (name) {
-      case ('工事完了報告'):
+      case ('部材発注'):
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const BaoCaoHoanThanhCongTrinhPage(),
+            builder: (context) => const DanhSachDatHangCacBoPhan61Page(),
           ),
         );
         break;
 
-      case ('実績確認'):
+      case ('棚卸'):
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const XacNhanThanhTichPage(),
+            builder: (context) => const DanhMucHangTonKho62Page(),
+          ),
+        );
+        break;
+
+      case ('発注承認'):
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DanhSachDatHangCacBoPhan63Page(),
           ),
         );
         break;

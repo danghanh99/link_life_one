@@ -8,6 +8,8 @@ import '../../shared/custom_button.dart';
 import '../../shared/validator.dart';
 import '../page3/bao_cao_hoan_thanh_cong_trinh_page.dart';
 import '../login_page.dart';
+import 'danh_sach_nguyen_lieu_page.dart';
+import 'danh_sach_nhan_lai_vat_lieu_page.dart';
 
 class QuanLyNhapXuatPage extends StatefulWidget {
   const QuanLyNhapXuatPage({
@@ -87,14 +89,24 @@ class _QuanLyNhapXuatPageState extends State<QuanLyNhapXuatPage> {
         );
         break;
 
-      case ('実績確認'):
+      case ('部材持ち出し 登録'):
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const XacNhanThanhTichPage(),
+            builder: (context) => const DanhSachNguyenLieuPage(),
           ),
         );
         break;
+
+      case ('部材持ち戻り 登録'):
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DanhSachNhanLaiVatLieuPage(),
+          ),
+        );
+        break;
+
       default:
         {}
     }

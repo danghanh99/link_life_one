@@ -3,20 +3,23 @@ import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page5/danh_sach_ton_kho_page.dart';
 
+import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../../shared/date_formatter copy.dart';
+import 'danh_sach_cac_bo_phan_5_1_2_page.dart';
 
-class DanhSachNguyenLieuPage extends StatefulWidget {
-  const DanhSachNguyenLieuPage({
+class PheDuyetDonDatHang631Page extends StatefulWidget {
+  const PheDuyetDonDatHang631Page({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<DanhSachNguyenLieuPage> createState() => _DanhSachNguyenLieuPageState();
+  State<PheDuyetDonDatHang631Page> createState() =>
+      _PheDuyetDonDatHang631PageState();
 }
 
-class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
+class _PheDuyetDonDatHang631PageState extends State<PheDuyetDonDatHang631Page> {
   List<String> listNames = [
     '入出庫管理',
     '部材管理',
@@ -285,17 +288,28 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
     List<String> colNames = [
       '',
       'カテゴリ',
-      'メーカー',
-      '自社コード',
+      '分類',
+      '品番',
       '商品名',
-      '在庫 数量',
-      '持ち出し数量',
+      'LOT',
+      '発注 単価',
+      '数量',
+      '単位',
+      '合計',
     ];
 
     List<double> colwidth = [
       30,
       130,
       130,
+      100,
+      150,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
       100,
       100,
       100,
@@ -341,7 +355,7 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
   List<Widget> _buildRows(int count) {
     return List.generate(count, (index) {
       return Row(
-        children: _buildCells2(7, index),
+        children: _buildCells2(10, index),
       );
     });
   }
@@ -401,18 +415,73 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
               height: 10,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [
+                Text(
+                  '発注却下品番・理由 / コメント',
+                  style: TextStyle(
+                    color: Color(0xFF042C5C),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            CustomTextField(
+              fillColor: const Color(0xFFFFFFFF),
+              hint: '',
+              type: TextInputType.emailAddress,
+              onChanged: (text) {},
+              maxLines: 3,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+
+            Expanded(child: Container()),
+            // Container(
+            //   width: 120,
+            //   height: 37,
+            //   decoration: BoxDecoration(
+            //     color: const Color(0xFF6D8FDB),
+            //     borderRadius: BorderRadius.circular(26),
+            //   ),
+            //   child: TextButton(
+            //     onPressed: () {
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) => const DanhSachTonKhoPage(),
+            //         ),
+            //       );
+            //     },
+            //     child: const Text(
+            //       '発注申請',
+            //       style: TextStyle(
+            //         color: Colors.white,
+            //         fontSize: 16,
+            //         fontWeight: FontWeight.w600,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
                   width: 100,
                   height: 37,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFA1A1A1),
+                    color: const Color(0xFFF96265),
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
                     onPressed: () {},
                     child: const Text(
-                      'QR読取',
+                      '発注却下',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -420,51 +489,18 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Container(
-                  width: 120,
-                  height: 37,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFA1A1A1),
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      print("object");
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const DanhSachTonKhoPage(),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      'リストから選択',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 5,
                 ),
                 Container(
                   width: 100,
                   height: 37,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFA6366),
+                    color: const Color(0xFF6D8FDB),
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
                     onPressed: () {},
                     child: const Text(
-                      '削除',
+                      '発注承認',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -475,36 +511,9 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
                 ),
               ],
             ),
-            Expanded(child: Container()),
-            Container(
-              width: 120,
-              height: 37,
-              decoration: BoxDecoration(
-                color: const Color(0xFF6D8FDB),
-                borderRadius: BorderRadius.circular(26),
-              ),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const DanhSachTonKhoPage(),
-                    ),
-                  );
-                },
-                child: const Text(
-                  '入庫処理',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
           ],
         ),
       ),
@@ -642,7 +651,7 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
         child: CustomButton(
           color: Colors.white70,
           onClick: () {},
-          name: '部材持ち出しリスト',
+          name: '発注承認',
           textStyle: const TextStyle(
             color: Color(0xFF042C5C),
             fontSize: 18,

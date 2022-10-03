@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page5/danh_sach_ton_kho_page.dart';
+import 'package:link_life_one/screen/page5/danh_sach_nhan_lai_vat_lieu_page.dart';
 
+import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../../shared/date_formatter copy.dart';
 
-class DanhSachNguyenLieuPage extends StatefulWidget {
-  const DanhSachNguyenLieuPage({
+class DanhSachCacBoPhan512Page extends StatefulWidget {
+  const DanhSachCacBoPhan512Page({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<DanhSachNguyenLieuPage> createState() => _DanhSachNguyenLieuPageState();
+  State<DanhSachCacBoPhan512Page> createState() =>
+      _DanhSachCacBoPhan512PageState();
 }
 
-class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
+class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
   List<String> listNames = [
     '入出庫管理',
     '部材管理',
@@ -284,12 +286,12 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
   List<Widget> _buildCells2(int count, int row) {
     List<String> colNames = [
       '',
-      'カテゴリ',
+      '部材 管理番号',
+      '分類',
       'メーカー',
-      '自社コード',
-      '商品名',
-      '在庫 数量',
-      '持ち出し数量',
+      '品番',
+      '',
+      '',
     ];
 
     List<double> colwidth = [
@@ -359,90 +361,62 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
           left: 16,
         ),
         child: Column(
+          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             header(),
             title(),
             const SizedBox(
               height: 10,
             ),
-
-            const SizedBox(
-              height: 25,
-            ),
-
-            Flexible(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // SingleChildScrollView(
-                    //   scrollDirection: Axis.vertical,
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: _buildCells(20),
-                    //   ),
-                    // ),
-                    Flexible(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: _buildRows(4),
-                        ),
-                      ),
-                    )
-                  ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                columnText(
+                  width: size.width / 2 - 20,
+                  text: '分類',
                 ),
-              ),
+                columnText(
+                  width: size.width / 2 - 20,
+                  text: '品番',
+                ),
+              ],
             ),
-            // Expanded(child: Container()),
+
             const SizedBox(
               height: 10,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                columnText(
+                  width: size.width / 2 - 20,
+                  text: 'メーカー',
+                ),
+                columnText(
+                  width: size.width / 2 - 20,
+                  text: '商品名',
+                ),
+              ],
+            ),
+
+            const SizedBox(
+              height: 10,
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   width: 100,
                   height: 37,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFA1A1A1),
+                    color: const Color(0xFF6D8FDB),
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
                     onPressed: () {},
                     child: const Text(
-                      'QR読取',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Container(
-                  width: 120,
-                  height: 37,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFA1A1A1),
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      print("object");
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const DanhSachTonKhoPage(),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      'リストから選択',
+                      '検索',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -458,13 +432,13 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
                   width: 100,
                   height: 37,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFA6366),
+                    color: const Color(0xFFA1A1A1),
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
                     onPressed: () {},
                     child: const Text(
-                      '削除',
+                      'クリア',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -475,12 +449,56 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
                 ),
               ],
             ),
+
+            const SizedBox(
+              height: 10,
+            ),
+            Flexible(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                // child: Row(
+                //   crossAxisAlignment: CrossAxisAlignment.start,
+                //   children: <Widget>[
+                //     // SingleChildScrollView(
+                //     //   scrollDirection: Axis.vertical,
+                //     //   child: Column(
+                //     //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     //     children: _buildCells(20),
+                //     //   ),
+                //     // ),
+                //     Flexible(
+                //       child: SingleChildScrollView(
+                //         scrollDirection: Axis.horizontal,
+                //         child: Column(
+                //           crossAxisAlignment: CrossAxisAlignment.start,
+                //           children: _buildRows(4),
+                //         ),
+                //       ),
+                //     )
+                //   ],
+                // ),
+                child: Flexible(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: _buildRows(4),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            // Expanded(child: Container()),
+            const SizedBox(
+              height: 10,
+            ),
+
             Expanded(child: Container()),
             Container(
               width: 120,
               height: 37,
               decoration: BoxDecoration(
-                color: const Color(0xFF6D8FDB),
+                color: const Color(0xFFFFA800),
                 borderRadius: BorderRadius.circular(26),
               ),
               child: TextButton(
@@ -488,12 +506,12 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const DanhSachTonKhoPage(),
+                      builder: (context) => const DanhSachNhanLaiVatLieuPage(),
                     ),
                   );
                 },
                 child: const Text(
-                  '入庫処理',
+                  '追加',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -642,7 +660,7 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
         child: CustomButton(
           color: Colors.white70,
           onClick: () {},
-          name: '部材持ち出しリスト',
+          name: '部材リスト',
           textStyle: const TextStyle(
             color: Color(0xFF042C5C),
             fontSize: 18,
@@ -650,6 +668,37 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget columnText({
+    double? width,
+    Color? color,
+    String? hint,
+    String? text,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          text ?? '',
+          style: const TextStyle(
+            color: Color(0xFF042C5C),
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(
+          width: width ?? 30,
+          child: CustomTextField(
+            fillColor: color,
+            hint: hint ?? '',
+            type: TextInputType.emailAddress,
+            onChanged: (text) {},
+            maxLines: 1,
+          ),
+        ),
+      ],
     );
   }
 }
