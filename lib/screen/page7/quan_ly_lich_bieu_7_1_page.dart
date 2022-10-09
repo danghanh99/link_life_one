@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page3/yeu_cau_bieu_mau_page.dart';
+import 'package:link_life_one/screen/page7/page_7_2_1.dart';
 
-import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 
@@ -112,7 +111,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   '協力店名 / 営業所名',
                   style: TextStyle(
                     color: Color(0xFF042C5C),
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -129,12 +128,15 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => Page721()));
+                    },
                     child: const Text(
                       '表示',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

@@ -30,9 +30,11 @@ class CustomButton extends StatelessWidget {
         child: Center(
           child: TextButton(
             onPressed: () {
-              onClick.call();
+              // onClick.call();
             },
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   arr[0],
@@ -60,16 +62,22 @@ class CustomButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius ?? 16),
       ),
       child: Center(
-        child: TextButton(
-          onPressed: () {
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
             onClick.call();
           },
-          child: Text(
-            name ?? 'Save',
-            style: textStyle ??
-                TextStyles.BODY_14.apply(
-                  color: Colors.white,
-                ),
+          child: TextButton(
+            onPressed: () {
+              onClick.call();
+            },
+            child: Text(
+              name ?? 'Save',
+              style: textStyle ??
+                  TextStyles.BODY_14.apply(
+                    color: Colors.white,
+                  ),
+            ),
           ),
         ),
       ),
