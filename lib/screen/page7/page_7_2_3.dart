@@ -47,18 +47,36 @@ class _Page723State extends State<Page723> {
               height: 50,
               width: size.width,
               color: const Color.fromARGB(255, 229, 164, 68),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '営業案内登録',
-                    style: TextStyle(
-                      color: Color(0xFF042C5C),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '営業案内登録',
+                        style: TextStyle(
+                          color: Color(0xFF042C5C),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
-                  ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        '戻る',
+                        style: TextStyle(
+                          color: Color(0xFF042C5C),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

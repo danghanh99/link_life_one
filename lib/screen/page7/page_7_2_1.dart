@@ -38,18 +38,36 @@ class _Page721State extends State<Page721> {
               height: 50,
               width: size.width,
               color: const Color(0xFF6F86D6),
-              child: const Padding(
+              child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'ネット工事(アポ済み)',
-                    style: TextStyle(
-                      color: Color(0xFF042C5C),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'ネット工事(アポ済み)',
+                        style: TextStyle(
+                          color: Color(0xFF042C5C),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
-                  ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        '戻る',
+                        style: TextStyle(
+                          color: Color(0xFF042C5C),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
