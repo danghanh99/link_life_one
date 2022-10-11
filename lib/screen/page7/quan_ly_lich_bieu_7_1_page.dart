@@ -276,37 +276,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Flexible(
+                    Expanded(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
-                        // child: Row(
-                        //   crossAxisAlignment: CrossAxisAlignment.start,
-                        //   children: <Widget>[
-                        //     // SingleChildScrollView(
-                        //     //   scrollDirection: Axis.vertical,
-                        //     //   child: Column(
-                        //     //     crossAxisAlignment: CrossAxisAlignment.start,
-                        //     //     children: _buildCells(20),
-                        //     //   ),
-                        //     // ),
-                        //     Flexible(
-                        //       child: SingleChildScrollView(
-                        //         scrollDirection: Axis.horizontal,
-                        //         child: Column(
-                        //           crossAxisAlignment: CrossAxisAlignment.start,
-                        //           children: _buildRows(4),
-                        //         ),
-                        //       ),
-                        //     )
-                        //   ],
-                        // ),
-                        child: Flexible(
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: _buildRows(4),
-                            ),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: _buildRows(4),
                           ),
                         ),
                       ),
