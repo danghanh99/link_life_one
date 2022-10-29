@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/page4/xac_nhan_thanh_tich_page.dart';
-import 'package:link_life_one/screen/page5/lich_kiem_ke_page.dart';
+import 'package:link_life_one/screen/page5/page_5_1_lich_kiem_ke.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../../shared/validator.dart';
-import '../page3/bao_cao_hoan_thanh_cong_trinh_page.dart';
+import '../menu_page.dart';
+import '../page3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 import '../login_page.dart';
-import 'danh_sach_nguyen_lieu_page.dart';
-import 'danh_sach_nhan_lai_vat_lieu_page.dart';
+import 'page_5_2_danh_sach_nguyen_lieu.dart';
+import 'page_5_3_danh_sach_nhan_lai_vat_lieu.dart';
 
 class QuanLyNhapXuatPage extends StatefulWidget {
   const QuanLyNhapXuatPage({
@@ -84,7 +85,7 @@ class _QuanLyNhapXuatPageState extends State<QuanLyNhapXuatPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const LichKiemKePage(),
+            builder: (context) => const Page51LichKiemKe(),
           ),
         );
         break;
@@ -93,7 +94,7 @@ class _QuanLyNhapXuatPageState extends State<QuanLyNhapXuatPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const DanhSachNguyenLieuPage(),
+            builder: (context) => const Page52DanhSachNguyenLieu(),
           ),
         );
         break;
@@ -102,7 +103,7 @@ class _QuanLyNhapXuatPageState extends State<QuanLyNhapXuatPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const DanhSachNhanLaiVatLieuPage(),
+            builder: (context) => const Page53DanhSachNhanLaiVatLieu(),
           ),
         );
         break;
@@ -116,10 +117,20 @@ class _QuanLyNhapXuatPageState extends State<QuanLyNhapXuatPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Image.asset(
-          Assets.LOGO_LINK,
-          width: 100,
-          height: 100,
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MenuPage(),
+              ),
+            );
+          },
+          child: Image.asset(
+            Assets.LOGO_LINK,
+            width: 100,
+            height: 100,
+          ),
         ),
         Column(
           children: [

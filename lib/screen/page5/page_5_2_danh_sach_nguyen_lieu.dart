@@ -1,263 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page5/danh_sach_nguyen_lieu_page.dart';
-
+import 'package:link_life_one/screen/page5/danh_sach_ton_kho_page.dart';
+import '../../shared/date_formatter copy.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
-import '../../shared/date_formatter copy.dart';
+import '../menu_page.dart';
 
-class LichKiemKePage extends StatefulWidget {
-  const LichKiemKePage({
+class Page52DanhSachNguyenLieu extends StatefulWidget {
+  const Page52DanhSachNguyenLieu({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<LichKiemKePage> createState() => _LichKiemKePageState();
+  State<Page52DanhSachNguyenLieu> createState() =>
+      _Page52DanhSachNguyenLieuState();
 }
 
-class _LichKiemKePageState extends State<LichKiemKePage> {
+class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
+  int radioRow0 = 0;
+  int radioRow1 = 1;
+  int radioRow2 = 2;
+  late int currentRadioRow;
   List<String> listNames = [
     '入出庫管理',
     '部材管理',
     '出納帳',
-  ];
-
-  List<ThanhTich> listThanhTich = [
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-01'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-02'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-03'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-04'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-05'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-06'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-07'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-08'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-09'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-10'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-11'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-12'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-13'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-14'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-15'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-16'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-17'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-18'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-19'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-20'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-21'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-22'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-23'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-24'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-25'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-26'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
   ];
 
   List<Widget> _buildCells(int count) {
@@ -284,14 +52,12 @@ class _LichKiemKePageState extends State<LichKiemKePage> {
   List<Widget> _buildCells2(int count, int row) {
     List<String> colNames = [
       '',
-      '入庫予定日',
       'カテゴリ',
       'メーカー',
-      '品番',
+      '自社コード',
       '商品名',
-      ' 入荷 (入庫) 数量',
-      '設置先氏名',
-      '工事日'
+      '在庫 数量',
+      '持ち出し数量',
     ];
 
     List<double> colwidth = [
@@ -299,11 +65,9 @@ class _LichKiemKePageState extends State<LichKiemKePage> {
       130,
       130,
       100,
+      240,
       100,
-      100,
-      50,
-      100,
-      100,
+      160,
     ];
     return List.generate(count, (col) {
       if (row == 0) {
@@ -334,20 +98,63 @@ class _LichKiemKePageState extends State<LichKiemKePage> {
         alignment: Alignment.center,
         width: colwidth[col],
         height: 50,
-        child: const Text(
-          '',
-          style: TextStyle(color: Colors.black),
-        ),
+        child: contentTable(col, row),
       );
     });
+  }
+
+  Widget contentTable(int col, int row) {
+    if (col == 6) {
+      return Row(
+        children: [
+          const Text(''),
+          const Spacer(),
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                left: BorderSide(
+                  color: Colors.black,
+                  width: 0.7,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 7, left: 7),
+            child: _moreButton(context),
+          ),
+        ],
+      );
+    }
+    return col == 0
+        ? RadioListTile(
+            value: row,
+            groupValue: currentRadioRow,
+            onChanged: (e) {
+              setState(() {
+                currentRadioRow = row;
+              });
+            },
+          )
+        : const Text(
+            '',
+            style: TextStyle(color: Colors.black),
+          );
   }
 
   List<Widget> _buildRows(int count) {
     return List.generate(count, (index) {
       return Row(
-        children: _buildCells2(9, index),
+        children: _buildCells2(7, index),
       );
     });
+  }
+
+  @override
+  void initState() {
+    currentRadioRow = -1;
+
+    super.initState();
   }
 
   @override
@@ -365,6 +172,7 @@ class _LichKiemKePageState extends State<LichKiemKePage> {
         child: Column(
           children: [
             header(),
+
             title(),
             const SizedBox(
               height: 10,
@@ -404,6 +212,85 @@ class _LichKiemKePageState extends State<LichKiemKePage> {
             const SizedBox(
               height: 10,
             ),
+            Row(
+              children: [
+                Container(
+                  width: 100,
+                  height: 37,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFA1A1A1),
+                    borderRadius: BorderRadius.circular(26),
+                  ),
+                  child: TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'QR読取',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Container(
+                  width: 140,
+                  height: 37,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFA1A1A1),
+                    borderRadius: BorderRadius.circular(26),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      print("object");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DanhSachTonKhoPage(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'リストから選択',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Container(
+                  width: 100,
+                  height: 37,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFA6366),
+                    borderRadius: BorderRadius.circular(26),
+                  ),
+                  child: TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      '削除',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Expanded(child: Container()),
             Container(
               width: 120,
               height: 37,
@@ -416,13 +303,14 @@ class _LichKiemKePageState extends State<LichKiemKePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const DanhSachNguyenLieuPage(),
+                      builder: (context) => const DanhSachTonKhoPage(),
                     ),
                   );
                 },
                 child: const Text(
-                  '入庫処理',
+                  '持ち出し登録',
                   style: TextStyle(
+                    decoration: TextDecoration.underline,
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -430,9 +318,9 @@ class _LichKiemKePageState extends State<LichKiemKePage> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
           ],
         ),
       ),
@@ -537,10 +425,20 @@ class _LichKiemKePageState extends State<LichKiemKePage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Image.asset(
-          Assets.LOGO_LINK,
-          width: 100,
-          height: 100,
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MenuPage(),
+              ),
+            );
+          },
+          child: Image.asset(
+            Assets.LOGO_LINK,
+            width: 100,
+            height: 100,
+          ),
         ),
         Column(
           children: [
@@ -552,6 +450,9 @@ class _LichKiemKePageState extends State<LichKiemKePage> {
                 ),
               );
             }),
+            const SizedBox(
+              height: 10,
+            ),
             const SizedBox(
               height: 10,
             ),
@@ -573,13 +474,70 @@ class _LichKiemKePageState extends State<LichKiemKePage> {
         child: CustomButton(
           color: Colors.white70,
           onClick: () {},
-          name: '入庫予定表',
+          name: '部材持ち出しリスト',
           textStyle: const TextStyle(
             color: Color(0xFF042C5C),
             fontSize: 18,
             fontWeight: FontWeight.w700,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _moreButton(BuildContext context) {
+    return PopupMenuButton<int>(
+      color: Colors.white,
+      padding: EdgeInsets.zero,
+      onSelected: (number) {
+        if (number == 1) {
+          // Navigator.of(context).push(MaterialPageRoute(
+          //     builder: (context) => EditThemePage(
+          //           index: index,
+          //           meditationThemeDTO: meditationThemeDTO,
+          //         )));
+        }
+        if (number == 2) {}
+      },
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0))),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          height: 25,
+          padding: const EdgeInsets.only(right: 0, left: 10),
+          value: 1,
+          child: Row(
+            children: const [
+              SizedBox(
+                width: 14,
+              ),
+              Text(
+                "Dropdown item",
+              ),
+            ],
+          ),
+        ),
+        const PopupMenuDivider(),
+        PopupMenuItem(
+          height: 25,
+          padding: const EdgeInsets.only(right: 0, left: 10),
+          value: 2,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: const [
+              SizedBox(
+                width: 14,
+              ),
+              Text(
+                "Dropdown item",
+              ),
+            ],
+          ),
+        ),
+      ],
+      offset: const Offset(-25, -10),
+      child: Image.asset(
+        Assets.icDropdown,
       ),
     );
   }

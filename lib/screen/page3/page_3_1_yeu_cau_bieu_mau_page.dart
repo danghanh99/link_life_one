@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page3/nop_anh_page.dart';
+import 'package:link_life_one/screen/page3/page_3_2_nop_anh.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
+import '../menu_page.dart';
 
 class Page31YeuCauBieuMauPage extends StatefulWidget {
   const Page31YeuCauBieuMauPage({
@@ -43,10 +44,20 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image.asset(
-                  Assets.LOGO_LINK,
-                  width: 100,
-                  height: 100,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MenuPage(),
+                      ),
+                    );
+                  },
+                  child: Image.asset(
+                    Assets.LOGO_LINK,
+                    width: 100,
+                    height: 100,
+                  ),
                 ),
                 Column(
                   children: [
@@ -224,7 +235,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const NopAnhPage(),
+                          builder: (context) => const Page32NopAnh(),
                         ),
                       );
                     },

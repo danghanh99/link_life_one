@@ -7,6 +7,7 @@ import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../../shared/date_formatter copy.dart';
+import '../menu_page.dart';
 import 'danh_sach_cac_bo_phan_5_1_2_page.dart';
 
 class DanhMucHangTonKho62Page extends StatefulWidget {
@@ -652,10 +653,20 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Image.asset(
-          Assets.LOGO_LINK,
-          width: 100,
-          height: 100,
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MenuPage(),
+              ),
+            );
+          },
+          child: Image.asset(
+            Assets.LOGO_LINK,
+            width: 100,
+            height: 100,
+          ),
         ),
         Column(
           children: [

@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/login_page.dart';
+import 'package:link_life_one/screen/menu_page.dart';
+import 'package:link_life_one/screen/page3/page_3_1_yeu_cau_bieu_mau_page.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 
-class NopAnhPage extends StatefulWidget {
-  const NopAnhPage({
+class Page3BaoCaoHoanThanhCongTrinh extends StatefulWidget {
+  const Page3BaoCaoHoanThanhCongTrinh({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<NopAnhPage> createState() => _NopAnhPageState();
+  State<Page3BaoCaoHoanThanhCongTrinh> createState() =>
+      _Page3BaoCaoHoanThanhCongTrinhState();
 }
 
-class _NopAnhPageState extends State<NopAnhPage> {
+class _Page3BaoCaoHoanThanhCongTrinhState
+    extends State<Page3BaoCaoHoanThanhCongTrinh> {
   List<String> listNames = [
     '入出庫管理',
     '部材管理',
@@ -40,10 +44,30 @@ class _NopAnhPageState extends State<NopAnhPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image.asset(
-                  Assets.LOGO_LINK,
-                  width: 100,
-                  height: 100,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MenuPage(),
+                      ),
+                    );
+                  },
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MenuPage(),
+                        ),
+                      );
+                    },
+                    child: Image.asset(
+                      Assets.LOGO_LINK,
+                      width: 100,
+                      height: 100,
+                    ),
+                  ),
                 ),
                 Column(
                   children: [
@@ -74,7 +98,7 @@ class _NopAnhPageState extends State<NopAnhPage> {
                 child: CustomButton(
                   color: Colors.white70,
                   onClick: () {},
-                  name: '写真提出',
+                  name: '工事一覧',
                   textStyle: const TextStyle(
                     color: Color(0xFF042C5C),
                     fontSize: 18,
@@ -86,6 +110,43 @@ class _NopAnhPageState extends State<NopAnhPage> {
             const SizedBox(
               height: 10,
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  width: 5,
+                ),
+                leftNextButton(2, '先週'),
+                const SizedBox(width: 8),
+                leftNextButton(1, '前日'),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 15,
+                    right: 8,
+                    left: 8,
+                  ),
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        Assets.icCalendar,
+                      ),
+                      const SizedBox(width: 3),
+                      const Text(
+                        "2022 / 08 / 23 (火)",
+                        style: TextStyle(
+                          color: Color(0xFF77869E),
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                rightNextButton(1, '翌日'),
+                const SizedBox(width: 8),
+                rightNextButton(2, '翌週'),
+              ],
+            ),
             const SizedBox(
               height: 5,
             ),
@@ -96,34 +157,81 @@ class _NopAnhPageState extends State<NopAnhPage> {
               decoration: BoxDecoration(
                 border: Border.all(),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: CustomTextField(
-                  fillColor: const Color(0xFFD9D9D9),
-                  hint: '',
-                  type: TextInputType.emailAddress,
-                  onChanged: (text) {},
-                  maxLines: 25,
+              child: ListView.separated(
+                shrinkWrap: true,
+                reverse: true,
+                padding: const EdgeInsets.only(right: 15, left: 15),
+                itemCount: listNames.length,
+                itemBuilder: (ctx, i) {
+                  return CustomTextField(
+                    fillColor: const Color(0xFFD9D9D9),
+                    hint: '',
+                    type: TextInputType.emailAddress,
+                    onChanged: (text) {},
+                    maxLines: 5,
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const SizedBox(
+                  height: 5,
                 ),
               ),
             ),
             const SizedBox(
               height: 5,
             ),
+            Container(
+              width: 120,
+              height: 37,
+              decoration: BoxDecoration(
+                color: const Color(0xFF4F4F4F),
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: TextButton(
+                onPressed: () {},
+                child: const Text(
+                  '続きを見る',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(child: Container()),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                const Text(
+                  'チラシ投函数',
+                  style: TextStyle(
+                    color: Color(0xFF042C5C),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: _moreButton(context),
+                ),
                 Container(
-                  width: 140,
+                  width: 70,
                   height: 37,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFA1A1A1),
+                    color: const Color(0xFFFFA800),
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Page31YeuCauBieuMauPage(),
+                        ),
+                      );
+                    },
                     child: const Text(
-                      '写真を選択',
+                      '更新',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -134,28 +242,8 @@ class _NopAnhPageState extends State<NopAnhPage> {
                 ),
               ],
             ),
-            Expanded(child: Container()),
-            Container(
-              width: 80,
-              height: 37,
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFA800),
-                borderRadius: BorderRadius.circular(26),
-              ),
-              child: TextButton(
-                onPressed: () {},
-                child: const Text(
-                  '登録',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
             const SizedBox(
-              height: 15,
+              height: 10,
             )
           ],
         ),
@@ -313,6 +401,9 @@ class _NopAnhPageState extends State<NopAnhPage> {
               ),
               Text(
                 "投函数を選択",
+                style: TextStyle(
+                    // color: Color(0xFF9999999),
+                    ),
               ),
             ],
           ),
@@ -338,6 +429,7 @@ class _NopAnhPageState extends State<NopAnhPage> {
       offset: const Offset(-35, -90),
       child: Container(
         width: 130,
+        height: 30,
         decoration: BoxDecoration(
           color: const Color(0xFFF5F6F8),
           borderRadius: BorderRadius.circular(8),
@@ -348,7 +440,7 @@ class _NopAnhPageState extends State<NopAnhPage> {
             const Text(
               "投函数を選択",
               style: TextStyle(
-                color: Color(0xFF042C5C),
+                color: Color(0xFF999999),
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
               ),

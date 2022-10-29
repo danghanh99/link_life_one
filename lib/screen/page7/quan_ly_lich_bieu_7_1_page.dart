@@ -4,6 +4,7 @@ import 'package:link_life_one/screen/page7/page_7_2_1.dart';
 
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
+import '../menu_page.dart';
 
 class QuanLyLichBieu71Page extends StatefulWidget {
   const QuanLyLichBieu71Page({
@@ -58,10 +59,20 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image.asset(
-                  Assets.LOGO_LINK,
-                  width: 100,
-                  height: 100,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MenuPage(),
+                      ),
+                    );
+                  },
+                  child: Image.asset(
+                    Assets.LOGO_LINK,
+                    width: 100,
+                    height: 100,
+                  ),
                 ),
                 Column(
                   children: [

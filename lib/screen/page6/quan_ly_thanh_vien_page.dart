@@ -5,7 +5,8 @@ import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../../shared/validator.dart';
-import '../page3/bao_cao_hoan_thanh_cong_trinh_page.dart';
+import '../menu_page.dart';
+import '../page3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 import '../login_page.dart';
 import 'danh_muc_hang_ton_kho_6_2_page.dart';
 import 'danh_sach_dat_hang_cac_bo_phan_6_1_page.dart';
@@ -118,10 +119,20 @@ class _QuanLyThanhVienPageState extends State<QuanLyThanhVienPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Image.asset(
-          Assets.LOGO_LINK,
-          width: 100,
-          height: 100,
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MenuPage(),
+              ),
+            );
+          },
+          child: Image.asset(
+            Assets.LOGO_LINK,
+            width: 100,
+            height: 100,
+          ),
         ),
         Column(
           children: [

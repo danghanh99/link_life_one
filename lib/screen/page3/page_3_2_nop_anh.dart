@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page3/page_3_1_yeu_cau_bieu_mau_page.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
+import '../menu_page.dart';
 
-class BaoCaoHoanThanhCongTrinhPage extends StatefulWidget {
-  const BaoCaoHoanThanhCongTrinhPage({
+class Page32NopAnh extends StatefulWidget {
+  const Page32NopAnh({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<BaoCaoHoanThanhCongTrinhPage> createState() =>
-      _BaoCaoHoanThanhCongTrinhPageState();
+  State<Page32NopAnh> createState() => _Page32NopAnhState();
 }
 
-class _BaoCaoHoanThanhCongTrinhPageState
-    extends State<BaoCaoHoanThanhCongTrinhPage> {
+class _Page32NopAnhState extends State<Page32NopAnh> {
   List<String> listNames = [
     '入出庫管理',
     '部材管理',
@@ -43,10 +41,20 @@ class _BaoCaoHoanThanhCongTrinhPageState
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image.asset(
-                  Assets.LOGO_LINK,
-                  width: 100,
-                  height: 100,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MenuPage(),
+                      ),
+                    );
+                  },
+                  child: Image.asset(
+                    Assets.LOGO_LINK,
+                    width: 100,
+                    height: 100,
+                  ),
                 ),
                 Column(
                   children: [
@@ -57,12 +65,6 @@ class _BaoCaoHoanThanhCongTrinhPageState
                           builder: (context) => LoginPage(),
                         ),
                       );
-                    }),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    textLineDown('戻る', () {
-                      Navigator.pop(context);
                     }),
                   ],
                 ),
@@ -77,7 +79,7 @@ class _BaoCaoHoanThanhCongTrinhPageState
                 child: CustomButton(
                   color: Colors.white70,
                   onClick: () {},
-                  name: '工事一覧',
+                  name: '写真提出',
                   textStyle: const TextStyle(
                     color: Color(0xFF042C5C),
                     fontSize: 18,
@@ -86,45 +88,16 @@ class _BaoCaoHoanThanhCongTrinhPageState
                 ),
               ),
             ),
+            Row(
+              children: [
+                textLineDown('戻る', () {
+                  Navigator.pop(context);
+                }),
+                Spacer(),
+              ],
+            ),
             const SizedBox(
               height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  width: 5,
-                ),
-                leftNextButton(2, '先週'),
-                const SizedBox(width: 8),
-                leftNextButton(1, '前日'),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: 15,
-                    right: 8,
-                    left: 8,
-                  ),
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        Assets.icCalendar,
-                      ),
-                      const SizedBox(width: 3),
-                      const Text(
-                        "2022 / 08 / 23 (火)",
-                        style: TextStyle(
-                          color: Color(0xFF77869E),
-                          fontSize: 14.5,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                rightNextButton(1, '翌日'),
-                const SizedBox(width: 8),
-                rightNextButton(2, '翌週'),
-              ],
             ),
             const SizedBox(
               height: 5,
@@ -136,82 +109,36 @@ class _BaoCaoHoanThanhCongTrinhPageState
               decoration: BoxDecoration(
                 border: Border.all(),
               ),
-              child: ListView.separated(
-                shrinkWrap: true,
-                reverse: true,
-                padding: const EdgeInsets.only(right: 15, left: 15),
-                itemCount: listNames.length,
-                itemBuilder: (ctx, i) {
-                  return CustomTextField(
-                    fillColor: const Color(0xFFD9D9D9),
-                    hint: '',
-                    type: TextInputType.emailAddress,
-                    onChanged: (text) {},
-                    maxLines: 5,
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const SizedBox(
-                  height: 5,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: CustomTextField(
+                  fillColor: const Color(0xFFD9D9D9),
+                  hint: '',
+                  type: TextInputType.emailAddress,
+                  onChanged: (text) {},
+                  maxLines: 20,
                 ),
               ),
             ),
             const SizedBox(
               height: 5,
             ),
-            Container(
-              width: 120,
-              height: 37,
-              decoration: BoxDecoration(
-                color: const Color(0xFF4F4F4F),
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: TextButton(
-                onPressed: () {},
-                child: const Text(
-                  '続きを見る',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-            Expanded(child: Container()),
             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Text(
-                  '続きを見る',
-                  style: TextStyle(
-                    color: Color(0xFF042C5C),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: _moreButton(context),
-                ),
                 Container(
-                  width: 70,
+                  width: 140,
                   height: 37,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFA800),
+                    color: const Color(0xFFA1A1A1),
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Page31YeuCauBieuMauPage(),
-                        ),
-                      );
-                    },
+                    onPressed: () {},
                     child: const Text(
-                      '更新',
+                      '写真を選択',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -221,8 +148,29 @@ class _BaoCaoHoanThanhCongTrinhPageState
                 ),
               ],
             ),
+            // Expanded(child: Container()),
+            Spacer(),
+            Container(
+              width: 80,
+              height: 37,
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFA800),
+                borderRadius: BorderRadius.circular(26),
+              ),
+              child: TextButton(
+                onPressed: () {},
+                child: const Text(
+                  '登録',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(
-              height: 10,
+              height: 15,
             )
           ],
         ),

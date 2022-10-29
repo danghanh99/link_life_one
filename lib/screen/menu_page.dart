@@ -8,7 +8,7 @@ import 'package:link_life_one/screen/page4/xac_nhan_thanh_tich_page.dart';
 import '../components/custom_text_field.dart';
 import '../shared/assets.dart';
 import '../shared/custom_button.dart';
-import 'page3/bao_cao_hoan_thanh_cong_trinh_page.dart';
+import 'page3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({
@@ -206,7 +206,7 @@ class _MenuPageState extends State<MenuPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const BaoCaoHoanThanhCongTrinhPage(),
+            builder: (context) => const Page3BaoCaoHoanThanhCongTrinh(),
           ),
         );
         break;

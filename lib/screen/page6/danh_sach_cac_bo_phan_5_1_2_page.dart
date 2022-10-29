@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page5/danh_sach_nhan_lai_vat_lieu_page.dart';
+import 'package:link_life_one/screen/page5/page_5_3_danh_sach_nhan_lai_vat_lieu.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../../shared/date_formatter copy.dart';
+import '../menu_page.dart';
 
 class DanhSachCacBoPhan512Page extends StatefulWidget {
   const DanhSachCacBoPhan512Page({
@@ -506,7 +507,8 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const DanhSachNhanLaiVatLieuPage(),
+                      builder: (context) =>
+                          const Page53DanhSachNhanLaiVatLieu(),
                     ),
                   );
                 },
@@ -627,10 +629,20 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Image.asset(
-          Assets.LOGO_LINK,
-          width: 100,
-          height: 100,
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MenuPage(),
+              ),
+            );
+          },
+          child: Image.asset(
+            Assets.LOGO_LINK,
+            width: 100,
+            height: 100,
+          ),
         ),
         Column(
           children: [
