@@ -60,7 +60,7 @@ class _MenuPageState extends State<MenuPage> {
                     },
                     child: const Text(
                       'ログアウト',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Color(0xFF042C5C),
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
@@ -79,6 +79,15 @@ class _MenuPageState extends State<MenuPage> {
                   ),
                   const Text(
                     '新着コメント',
+                    style: TextStyle(
+                      color: Color(0xFF042C5C),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const Spacer(),
+                  const Text(
+                    '既読にする',
                     style: TextStyle(
                       color: Color(0xFF042C5C),
                       fontSize: 18,

@@ -642,6 +642,9 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
                 ),
               );
             }),
+            const SizedBox(
+              height: 10,
+            ),
             textLineDown('戻る', () {
               Navigator.pop(context);
             }),

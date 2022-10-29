@@ -633,6 +633,9 @@ class _PheDuyetDonDatHang631PageState extends State<PheDuyetDonDatHang631Page> {
                 ),
               );
             }),
+            const SizedBox(
+              height: 10,
+            ),
             textLineDown('戻る', () {
               Navigator.pop(context);
             }),

@@ -30,7 +30,7 @@ class CustomButton extends StatelessWidget {
         child: Center(
           child: TextButton(
             onPressed: () {
-              // onClick.call();
+              onClick.call();
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

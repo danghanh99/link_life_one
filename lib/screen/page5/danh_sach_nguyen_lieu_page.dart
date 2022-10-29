@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page5/danh_sach_ton_kho_page.dart';
-
+import '../../shared/date_formatter copy.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
-import '../../shared/date_formatter copy.dart';
 
 class DanhSachNguyenLieuPage extends StatefulWidget {
   const DanhSachNguyenLieuPage({
@@ -17,247 +16,14 @@ class DanhSachNguyenLieuPage extends StatefulWidget {
 }
 
 class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
+  int radioRow0 = 0;
+  int radioRow1 = 1;
+  int radioRow2 = 2;
+  late int currentRadioRow;
   List<String> listNames = [
     '入出庫管理',
     '部材管理',
     '出納帳',
-  ];
-
-  List<ThanhTich> listThanhTich = [
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-01'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-02'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-03'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-04'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-05'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-06'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-07'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-08'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-09'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-10'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-11'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-12'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-13'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-14'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-15'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-16'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-17'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-18'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-19'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-20'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-21'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-22'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-23'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-24'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-25'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-26'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
   ];
 
   List<Widget> _buildCells(int count) {
@@ -297,9 +63,9 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
       130,
       130,
       100,
+      240,
       100,
-      100,
-      100,
+      160,
     ];
     return List.generate(count, (col) {
       if (row == 0) {
@@ -330,12 +96,76 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
         alignment: Alignment.center,
         width: colwidth[col],
         height: 50,
-        child: const Text(
-          '',
-          style: TextStyle(color: Colors.black),
-        ),
+        child: contentTable(col, row),
       );
     });
+  }
+
+  Widget contentTable(int col, int row) {
+    if (col == 6) {
+      return Row(
+        children: [
+          const Text(''),
+          const Spacer(),
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                left: BorderSide(
+                  color: Colors.black,
+                  width: 0.7,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 7, left: 7),
+            child: _moreButton(context),
+          ),
+        ],
+      );
+    }
+    return col == 0
+        ? RadioListTile(
+            value: getValue(row),
+            groupValue: currentRadioRow,
+            onChanged: (e) {
+              changeRadio(row);
+            },
+          )
+        : const Text(
+            '',
+            style: TextStyle(color: Colors.black),
+          );
+  }
+
+  int getValue(int row) {
+    if (row == 1) return 1;
+    if (row == 2) return 2;
+    if (row == 3) return 3;
+    return -1;
+  }
+
+  void changeRadio(int row) {
+    if (row == 1) {
+      setState(() {
+        currentRadioRow = 1;
+      });
+    }
+    if (row == 2) {
+      setState(() {
+        currentRadioRow = 2;
+      });
+    }
+    if (row == 3) {
+      setState(() {
+        currentRadioRow = 3;
+      });
+    }
+    // if (row == currentRadioRow) {
+    //   setState(() {
+    //     currentRadioRow = -1;
+    //   });
+    // }
   }
 
   List<Widget> _buildRows(int count) {
@@ -344,6 +174,13 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
         children: _buildCells2(7, index),
       );
     });
+  }
+
+  @override
+  void initState() {
+    currentRadioRow = -1;
+
+    super.initState();
   }
 
   @override
@@ -361,6 +198,7 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
         child: Column(
           children: [
             header(),
+
             title(),
             const SizedBox(
               height: 10,
@@ -414,6 +252,7 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
                     child: const Text(
                       'QR読取',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -425,7 +264,7 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
                   width: 5,
                 ),
                 Container(
-                  width: 120,
+                  width: 140,
                   height: 37,
                   decoration: BoxDecoration(
                     color: const Color(0xFFA1A1A1),
@@ -444,6 +283,7 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
                     child: const Text(
                       'リストから選択',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -466,6 +306,7 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
                     child: const Text(
                       '削除',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -493,8 +334,9 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
                   );
                 },
                 child: const Text(
-                  '入庫処理',
+                  '持ち出し登録',
                   style: TextStyle(
+                    decoration: TextDecoration.underline,
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -502,9 +344,9 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
           ],
         ),
       ),
@@ -624,6 +466,12 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
                 ),
               );
             }),
+            const SizedBox(
+              height: 10,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
             textLineDown('戻る', () {
               Navigator.pop(context);
             }),
@@ -649,6 +497,63 @@ class _DanhSachNguyenLieuPageState extends State<DanhSachNguyenLieuPage> {
             fontWeight: FontWeight.w700,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _moreButton(BuildContext context) {
+    return PopupMenuButton<int>(
+      color: Colors.white,
+      padding: EdgeInsets.zero,
+      onSelected: (number) {
+        if (number == 1) {
+          // Navigator.of(context).push(MaterialPageRoute(
+          //     builder: (context) => EditThemePage(
+          //           index: index,
+          //           meditationThemeDTO: meditationThemeDTO,
+          //         )));
+        }
+        if (number == 2) {}
+      },
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0))),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          height: 25,
+          padding: const EdgeInsets.only(right: 0, left: 10),
+          value: 1,
+          child: Row(
+            children: const [
+              SizedBox(
+                width: 14,
+              ),
+              Text(
+                "Dropdown item",
+              ),
+            ],
+          ),
+        ),
+        const PopupMenuDivider(),
+        PopupMenuItem(
+          height: 25,
+          padding: const EdgeInsets.only(right: 0, left: 10),
+          value: 2,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: const [
+              SizedBox(
+                width: 14,
+              ),
+              Text(
+                "Dropdown item",
+              ),
+            ],
+          ),
+        ),
+      ],
+      offset: const Offset(-25, -10),
+      child: Image.asset(
+        Assets.icDropdown,
       ),
     );
   }

@@ -55,6 +55,9 @@ class _NopAnhPageState extends State<NopAnhPage> {
                         ),
                       );
                     }),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     textLineDown('戻る', () {
                       Navigator.pop(context);
                     }),

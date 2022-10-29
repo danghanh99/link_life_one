@@ -680,6 +680,9 @@ class _DanhSachDatHangCacBoPhan61PageState
                 ),
               );
             }),
+            const SizedBox(
+              height: 10,
+            ),
             textLineDown('戻る', () {
               Navigator.pop(context);
             }),

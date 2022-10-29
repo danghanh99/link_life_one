@@ -25,78 +25,81 @@ class _LoginPageState extends State<LoginPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0xFFFFFA7A),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          top: 50,
-          bottom: 16,
-          right: 16,
-          left: 16,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Center(
-              child: Image.asset(
-                Assets.LOGO_LINK,
-                width: 200,
-                height: 200,
+      body: SingleChildScrollView(
+        // reverse: true,
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: 50,
+            bottom: 16,
+            right: 16,
+            left: 16,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Center(
+                child: Image.asset(
+                  Assets.LOGO_LINK,
+                  width: 200,
+                  height: 200,
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("担当者コード"),
-                  CustomTextField(
-                    hint: '例) 123456789',
-                    type: TextInputType.phone,
-                    validator: _validateEmail,
-                    controller: emailController,
-                    onChanged: (text) {
-                      isLoginEnabled.value = true;
-                    },
-                  ),
-                  const Text("パスワード"),
-                  CustomTextField(
-                    hint: '',
-                    type: TextInputType.text,
-                    textCapitalization: TextCapitalization.none,
-                    validator: _validatePassword,
-                    onChanged: (text) {
-                      isLoginEnabled.value = true;
-                    },
-                    controller: passwordController,
-                    isPassword: true,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  SizedBox(
-                    width: size.width - 30,
-                    child: CustomButton(
-                      color: const Color(0xFFFFA800),
-                      onClick: () {
-                        if (_formKey.currentState?.validate() == true) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MenuPage(),
-                            ),
-                          );
-                        }
+              const SizedBox(
+                height: 10,
+              ),
+              Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("担当者コード"),
+                    CustomTextField(
+                      hint: '例) 123456789',
+                      type: TextInputType.phone,
+                      validator: _validateEmail,
+                      controller: emailController,
+                      onChanged: (text) {
+                        isLoginEnabled.value = true;
                       },
-                      name: 'ログイン',
                     ),
-                  )
-                ],
+                    const Text("パスワード"),
+                    CustomTextField(
+                      hint: '',
+                      type: TextInputType.text,
+                      textCapitalization: TextCapitalization.none,
+                      validator: _validatePassword,
+                      onChanged: (text) {
+                        isLoginEnabled.value = true;
+                      },
+                      controller: passwordController,
+                      isPassword: true,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      width: size.width - 30,
+                      child: CustomButton(
+                        color: const Color(0xFFFFA800),
+                        onClick: () {
+                          if (_formKey.currentState?.validate() == true) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MenuPage(),
+                              ),
+                            );
+                          }
+                        },
+                        name: 'ログイン',
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

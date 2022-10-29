@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page3/yeu_cau_bieu_mau_page.dart';
+import 'package:link_life_one/screen/page3/page_3_1_yeu_cau_bieu_mau_page.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
@@ -58,6 +58,9 @@ class _BaoCaoHoanThanhCongTrinhPageState
                         ),
                       );
                     }),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     textLineDown('戻る', () {
                       Navigator.pop(context);
                     }),
@@ -202,7 +205,7 @@ class _BaoCaoHoanThanhCongTrinhPageState
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const YeuCauBieuMauPage(),
+                          builder: (context) => const Page31YeuCauBieuMauPage(),
                         ),
                       );
                     },

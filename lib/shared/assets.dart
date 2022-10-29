@@ -10,4 +10,6 @@ class Assets {
   static const String icCalendar = './assets/images/ic_calendar.png';
 
   static const String icDown = './assets/images/down.png';
+
+  static const String icDropdown = './assets/images/ic_dropdown.png';
 }

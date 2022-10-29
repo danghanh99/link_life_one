@@ -550,6 +550,9 @@ class _DanhSachNhanLaiVatLieuPageState
                 ),
               );
             }),
+            const SizedBox(
+              height: 10,
+            ),
             textLineDown('戻る', () {
               Navigator.pop(context);
             }),

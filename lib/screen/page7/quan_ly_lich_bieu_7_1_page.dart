@@ -73,6 +73,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         ),
                       );
                     }),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     textLineDown('戻る', () {
                       Navigator.pop(context);
                     }),
@@ -188,6 +191,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 ),
               ],
             ),
+            const SizedBox(
+              height: 5,
+            ),
             // value = '個人';
             value == '個人'
                 ? Row(
@@ -205,7 +211,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         width: 120,
                         height: 37,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFFFA800),
+                          color: const Color(0xFF6C8EDA),
                           borderRadius: BorderRadius.circular(26),
                         ),
                         child: TextButton(
@@ -216,6 +222,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                               color: Colors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
+                              decoration: TextDecoration.underline,
                             ),
                           ),
                         ),
@@ -468,7 +475,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 width: 14,
               ),
               Text(
-                "投函数を選択",
+                "営業所を選択",
                 style: TextStyle(color: Color(0xFF999999)),
               ),
             ],
@@ -478,6 +485,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       offset: const Offset(-35, -90),
       child: Container(
         width: 130,
+        height: 37,
         decoration: BoxDecoration(
           color: const Color(0xFFF5F6F8),
           borderRadius: BorderRadius.circular(8),
@@ -486,7 +494,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             const Text(
-              "投函数を選択",
+              "営業所を選択",
               style: TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 15,
@@ -559,6 +567,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       offset: const Offset(-35, -90),
       child: Container(
         width: 200,
+        height: 37,
         decoration: BoxDecoration(
           color: const Color(0xFFF5F6F8),
           borderRadius: BorderRadius.circular(8),

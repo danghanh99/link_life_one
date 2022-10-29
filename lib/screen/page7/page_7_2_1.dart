@@ -83,7 +83,7 @@ class _Page721State extends State<Page721> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '登録情報：神奈川営業所事務　テキスト氏名　2022/01/19(水) HH:MM',
+                        '登録情報：神奈川営業所事務　テキスト氏名\n2022/01/19(水) HH:MM',
                         style: TextStyle(
                           color: Color(0xFF042C5C),
                           fontSize: 13,
@@ -97,7 +97,7 @@ class _Page721State extends State<Page721> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '登録情報：神奈川営業所事務　テキスト氏名　2022/01/19(水) HH:MM',
+                        '更新情報：神奈川営業所事務　テキスト氏名\n2022/01/19(水) HH:MM',
                         style: TextStyle(
                           color: Color(0xFF042C5C),
                           fontSize: 14,

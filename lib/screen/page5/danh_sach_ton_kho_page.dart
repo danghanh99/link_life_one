@@ -641,6 +641,9 @@ class _DanhSachTonKhoPageState extends State<DanhSachTonKhoPage> {
                 ),
               );
             }),
+            const SizedBox(
+              height: 10,
+            ),
             textLineDown('戻る', () {
               Navigator.pop(context);
             }),

@@ -552,6 +552,9 @@ class _LichKiemKePageState extends State<LichKiemKePage> {
                 ),
               );
             }),
+            const SizedBox(
+              height: 10,
+            ),
             textLineDown('戻る', () {
               Navigator.pop(context);
             }),

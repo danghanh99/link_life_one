@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page3/nop_anh_page.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 
-class YeuCauBieuMauPage extends StatefulWidget {
-  const YeuCauBieuMauPage({
+class Page31YeuCauBieuMauPage extends StatefulWidget {
+  const Page31YeuCauBieuMauPage({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<YeuCauBieuMauPage> createState() => _YeuCauBieuMauPageState();
+  State<Page31YeuCauBieuMauPage> createState() =>
+      _Page31YeuCauBieuMauPageState();
 }
 
-class _YeuCauBieuMauPageState extends State<YeuCauBieuMauPage> {
+class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
   List<String> listNames = [
     '入出庫管理',
     '部材管理',
@@ -56,6 +58,9 @@ class _YeuCauBieuMauPageState extends State<YeuCauBieuMauPage> {
                         ),
                       );
                     }),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     textLineDown('戻る', () {
                       Navigator.pop(context);
                     }),
@@ -119,7 +124,61 @@ class _YeuCauBieuMauPageState extends State<YeuCauBieuMauPage> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Container(
+                              width: double.infinity,
+                              child: CupertinoAlertDialog(
+                                title: const Text(
+                                  "この工事を設置不可で登録を行います。\n(元に戻せません)",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                content: const Padding(
+                                  padding: EdgeInsets.only(top: 15),
+                                  child: Text(
+                                    "操作は必ず本部へ電話報告後に行ってください。\nまたサイボウズの設置不可アプリ登録は必ず行ってください。",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context); //close Dialog
+                                      },
+                                      child: const Text(
+                                        '戻る',
+                                        style: TextStyle(
+                                          color: Color(0xFFEB5757),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      )),
+                                  TextButton(
+                                    onPressed: () {},
+                                    child: const Text(
+                                      'はい',
+                                      style: TextStyle(
+                                        color: Color(0xFF007AFF),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            );
+                          });
+                    },
                     child: const Text(
                       '設置不可',
                       style: TextStyle(
@@ -154,7 +213,7 @@ class _YeuCauBieuMauPageState extends State<YeuCauBieuMauPage> {
                 ),
                 Expanded(child: Container()),
                 Container(
-                  width: 100,
+                  width: 140,
                   height: 37,
                   decoration: BoxDecoration(
                     color: const Color(0xFFFFA800),
@@ -391,3 +450,8 @@ class _YeuCauBieuMauPageState extends State<YeuCauBieuMauPage> {
     );
   }
 }
+
+
+// この工事を設置不可で登録を行います。
+// (元に戻せません)
+

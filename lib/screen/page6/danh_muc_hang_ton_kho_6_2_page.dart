@@ -667,6 +667,9 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
                 ),
               );
             }),
+            const SizedBox(
+              height: 10,
+            ),
             textLineDown('戻る', () {
               Navigator.pop(context);
             }),
