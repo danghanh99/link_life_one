@@ -27,7 +27,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    ScrollController scrollController = ScrollController();
+    ScrollController _scrollController = ScrollController();
+    ScrollController scrollController2 = ScrollController();
 
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF),
@@ -286,25 +287,26 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         child: NotificationListener<ScrollNotification>(
                           onNotification: (ScrollNotification scrollInfo) {
                             print('scrolling.... ${scrollInfo.metrics.pixels}');
-                            scrollController.jumpTo(scrollInfo.metrics.pixels);
+                            _scrollController.jumpTo(scrollInfo.metrics.pixels);
                             return false;
                           },
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: _buildRows(10),
+                              children: _buildRows(10, scrollController2),
                             ),
                           ),
                         ),
                       ),
                     ),
                     SingleChildScrollView(
-                      controller: scrollController,
+                      physics: NeverScrollableScrollPhysics(),
+                      controller: _scrollController,
                       scrollDirection: Axis.horizontal,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: _buildRows(1),
+                        children: _buildLastRows2(1),
                       ),
                     ),
                   ],
@@ -607,24 +609,291 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   }
 
   // TABLE begin
-  List<Widget> _buildRows(int count) {
+  List<Widget> _buildRows(int count, ScrollController scrollController2) {
     return List.generate(count, (index) {
       return Row(
-        children: _buildCells2(8, index),
+        children: _buildCells2(8, index, scrollController2),
       );
     });
   }
 
-  List<Widget> _buildCells2(int count, int row) {
+  List<Widget> _buildLastRows2(int count) {
+    return List.generate(count, (index) {
+      return Row(
+        children: _buildLastRowCells(8, index),
+      );
+    });
+  }
+
+  List<Widget> _buildCells2(
+      int count, int row, ScrollController scrollController2) {
     List<String> colNames = [
       '',
-      '23',
-      '24',
-      '25',
-      '26',
-      '27',
-      '28',
-      '29',
+      '23　(日)',
+      '24　(月)',
+      '25　(火)',
+      '26　(水)',
+      '27　(木)',
+      '28　(金)',
+      '29　(土)',
+    ];
+
+    List<double> colwidth = [
+      130,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+      150,
+    ];
+    return List.generate(count, (col) {
+      if (row == 0) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(width: 0.5),
+            color: const Color(0xFFA5A7A9),
+          ),
+          alignment: Alignment.center,
+          width: colwidth[col],
+          height: 30,
+          child: Text(
+            colNames[col],
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        );
+      }
+
+      if (col != 0 && row != 0) {
+        String value = '追加希望 追加希望 追加希望 追加希望 追加希望';
+        String firstPart = value.split(' ').toList()[0];
+        String secondPart = value.substring(firstPart.length, value.length);
+
+        String value2 = 'ネット工事 ネット工事 ネット工事 ネット工事 ネット工事';
+        String firstPart2 = value2.split(' ').toList()[0];
+        String secondPart2 = value2.substring(firstPart2.length, value2.length);
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(width: 0.5),
+            color: Colors.white,
+          ),
+          alignment: Alignment.topLeft,
+          width: colwidth[col],
+          height: 320,
+          // child: const Text(
+          //   '',
+          //   style: TextStyle(color: Colors.black),
+          // ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: colwidth[col],
+                color: Color.fromARGB(255, 198, 221, 231),
+                child: Padding(
+                  padding: EdgeInsets.all(3),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '9:00-10:00',
+                        style: TextStyle(fontSize: 10),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                            style: TextStyle(color: Colors.black),
+                            children: [
+                              WidgetSpan(
+                                child: Container(
+                                  color: Color.fromARGB(255, 23, 137, 229),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: 2,
+                                    ),
+                                    child: Text(
+                                      firstPart,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              TextSpan(
+                                text: secondPart,
+                              ),
+                            ]),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                width: colwidth[col],
+                color: Color.fromARGB(255, 191, 222, 209),
+                child: Padding(
+                  padding: EdgeInsets.all(3),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '10:30-12:30',
+                        style: TextStyle(fontSize: 10),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                            style: TextStyle(color: Colors.black),
+                            children: [
+                              WidgetSpan(
+                                child: Container(
+                                  color: Color.fromARGB(255, 22, 176, 60),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: 2,
+                                    ),
+                                    child: Text(
+                                      firstPart2,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              TextSpan(
+                                text: secondPart2,
+                              ),
+                            ]),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                width: colwidth[col],
+                color: Color.fromARGB(255, 241, 241, 224),
+                child: Padding(
+                  padding: EdgeInsets.all(3),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '10:30-12:30',
+                        style: TextStyle(fontSize: 10),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                            style: TextStyle(color: Colors.black),
+                            children: [
+                              WidgetSpan(
+                                child: Container(
+                                  color: Color.fromARGB(255, 224, 195, 88),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: 2,
+                                    ),
+                                    child: Text(
+                                      firstPart2,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              TextSpan(
+                                text: secondPart2,
+                              ),
+                            ]),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                width: colwidth[col],
+                color: Color.fromARGB(255, 242, 223, 222),
+                child: Padding(
+                  padding: EdgeInsets.all(3),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '10:30-12:30',
+                        style: TextStyle(fontSize: 10),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                            style: TextStyle(color: Colors.black),
+                            children: [
+                              WidgetSpan(
+                                child: Container(
+                                  color: Colors.red,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: 2,
+                                    ),
+                                    child: Text(
+                                      '!! 重要 !!',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              TextSpan(
+                                text: secondPart2,
+                              ),
+                            ]),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Icon(Icons.post_add_rounded),
+            ],
+          ),
+        );
+      }
+
+      return Container(
+        decoration: BoxDecoration(
+          border: Border.all(width: 0.5),
+          color: Colors.white,
+        ),
+        alignment: Alignment.topLeft,
+        width: colwidth[col],
+        height: 320,
+        child: const Text(
+          '',
+          style: TextStyle(color: Colors.black),
+        ),
+      );
+    });
+  }
+
+  List<Widget> _buildLastRowCells(int count, int row) {
+    List<String> colNames = [
+      '',
+      '23　(日)',
+      '24　(月)',
+      '25　(火)',
+      '26　(水)',
+      '27　(木)',
+      '28　(金)',
+      '29　(土)',
     ];
 
     List<double> colwidth = [
@@ -665,7 +934,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
           border: Border.all(width: 0.5),
           color: Colors.white,
         ),
-        alignment: Alignment.center,
+        alignment: Alignment.topLeft,
         width: colwidth[col],
         height: 200,
         child: const Text(
