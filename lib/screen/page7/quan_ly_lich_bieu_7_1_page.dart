@@ -23,25 +23,11 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   ];
   String value = 'グループ';
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   if (widget.initialValue != null) {
-  //     musicDTO = widget.initialValue!.musicDTO;
-  //     selectSoundController.text = musicDTO!.name;
-  //     intervalBellDuration = widget.initialValue!.duration.toDouble();
-  //   }
-
-  //   WidgetsBinding.instance.addPostFrameCallback(
-  //     (_) {
-  //       BlocProvider.of<MusicBloc>(context).add(const LoadMusicEvent());
-  //     },
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    ScrollController scrollController = ScrollController();
 
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF),
@@ -297,13 +283,28 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     Expanded(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: _buildRows(4),
+                        child: NotificationListener<ScrollNotification>(
+                          onNotification: (ScrollNotification scrollInfo) {
+                            print('scrolling.... ${scrollInfo.metrics.pixels}');
+                            scrollController.jumpTo(scrollInfo.metrics.pixels);
+                            return false;
+                          },
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: _buildRows(10),
+                            ),
                           ),
                         ),
+                      ),
+                    ),
+                    SingleChildScrollView(
+                      controller: scrollController,
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: _buildRows(1),
                       ),
                     ),
                   ],

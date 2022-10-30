@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/page5/quan_ly_nhap_xuat_page.dart';
 import 'package:link_life_one/screen/page6/page_6_quan_ly_thanh_vien.dart';
 import 'package:link_life_one/screen/page7/quan_ly_lich_bieu_7_1_page.dart';
-import 'package:link_life_one/screen/page7/so_tai_khoan_page.dart';
+import 'package:link_life_one/screen/page7/page_7_so_tai_khoan_page.dart';
 import 'package:link_life_one/screen/page4/xac_nhan_thanh_tich_page.dart';
 
 import '../components/custom_text_field.dart';

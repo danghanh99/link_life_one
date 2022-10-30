@@ -73,9 +73,12 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    textLineDown('戻る', () {
-                      Navigator.pop(context);
-                    }),
+                    // textLineDown(
+                    //   '戻る',
+                    //   () {
+                    //     Navigator.pop(context);
+                    //   },
+                    // ),
                   ],
                 ),
               ],
@@ -97,6 +100,14 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                   ),
                 ),
               ),
+            ),
+            Row(
+              children: [
+                textLineDown('戻る', () {
+                  Navigator.pop(context);
+                }),
+                Spacer(),
+              ],
             ),
             const SizedBox(
               height: 10,
@@ -194,6 +205,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                     child: const Text(
                       '設置不可',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -216,6 +228,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                     child: const Text(
                       '写真確認',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
