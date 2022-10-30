@@ -130,8 +130,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => Page721()));
+                      // Navigator.of(context).push(
+                      //     MaterialPageRoute(builder: (context) => Page721()));
                     },
                     child: const Text(
                       '表示',
@@ -691,179 +691,185 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
           //   '',
           //   style: TextStyle(color: Colors.black),
           // ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: colwidth[col],
-                color: Color.fromARGB(255, 198, 221, 231),
-                child: Padding(
-                  padding: EdgeInsets.all(3),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '9:00-10:00',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                      RichText(
-                        text: TextSpan(
-                            style: TextStyle(color: Colors.black),
-                            children: [
-                              WidgetSpan(
-                                child: Container(
-                                  color: Color.fromARGB(255, 23, 137, 229),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      bottom: 2,
-                                    ),
-                                    child: Text(
-                                      firstPart,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => Page721()));
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: colwidth[col],
+                  color: Color.fromARGB(255, 198, 221, 231),
+                  child: Padding(
+                    padding: EdgeInsets.all(3),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '9:00-10:00',
+                          style: TextStyle(fontSize: 10),
+                        ),
+                        RichText(
+                          text: TextSpan(
+                              style: TextStyle(color: Colors.black),
+                              children: [
+                                WidgetSpan(
+                                  child: Container(
+                                    color: Color.fromARGB(255, 23, 137, 229),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 2,
+                                      ),
+                                      child: Text(
+                                        firstPart,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              TextSpan(
-                                text: secondPart,
-                              ),
-                            ]),
-                      ),
-                    ],
+                                TextSpan(
+                                  text: secondPart,
+                                ),
+                              ]),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                width: colwidth[col],
-                color: Color.fromARGB(255, 191, 222, 209),
-                child: Padding(
-                  padding: EdgeInsets.all(3),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '10:30-12:30',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                      RichText(
-                        text: TextSpan(
-                            style: TextStyle(color: Colors.black),
-                            children: [
-                              WidgetSpan(
-                                child: Container(
-                                  color: Color.fromARGB(255, 22, 176, 60),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      bottom: 2,
-                                    ),
-                                    child: Text(
-                                      firstPart2,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
+                Container(
+                  width: colwidth[col],
+                  color: Color.fromARGB(255, 191, 222, 209),
+                  child: Padding(
+                    padding: EdgeInsets.all(3),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '10:30-12:30',
+                          style: TextStyle(fontSize: 10),
+                        ),
+                        RichText(
+                          text: TextSpan(
+                              style: TextStyle(color: Colors.black),
+                              children: [
+                                WidgetSpan(
+                                  child: Container(
+                                    color: Color.fromARGB(255, 22, 176, 60),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 2,
+                                      ),
+                                      child: Text(
+                                        firstPart2,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              TextSpan(
-                                text: secondPart2,
-                              ),
-                            ]),
-                      ),
-                    ],
+                                TextSpan(
+                                  text: secondPart2,
+                                ),
+                              ]),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                width: colwidth[col],
-                color: Color.fromARGB(255, 241, 241, 224),
-                child: Padding(
-                  padding: EdgeInsets.all(3),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '10:30-12:30',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                      RichText(
-                        text: TextSpan(
-                            style: TextStyle(color: Colors.black),
-                            children: [
-                              WidgetSpan(
-                                child: Container(
-                                  color: Color.fromARGB(255, 224, 195, 88),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      bottom: 2,
-                                    ),
-                                    child: Text(
-                                      firstPart2,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
+                Container(
+                  width: colwidth[col],
+                  color: Color.fromARGB(255, 241, 241, 224),
+                  child: Padding(
+                    padding: EdgeInsets.all(3),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '10:30-12:30',
+                          style: TextStyle(fontSize: 10),
+                        ),
+                        RichText(
+                          text: TextSpan(
+                              style: TextStyle(color: Colors.black),
+                              children: [
+                                WidgetSpan(
+                                  child: Container(
+                                    color: Color.fromARGB(255, 224, 195, 88),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 2,
+                                      ),
+                                      child: Text(
+                                        firstPart2,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              TextSpan(
-                                text: secondPart2,
-                              ),
-                            ]),
-                      ),
-                    ],
+                                TextSpan(
+                                  text: secondPart2,
+                                ),
+                              ]),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                width: colwidth[col],
-                color: Color.fromARGB(255, 242, 223, 222),
-                child: Padding(
-                  padding: EdgeInsets.all(3),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '10:30-12:30',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                      RichText(
-                        text: TextSpan(
-                            style: TextStyle(color: Colors.black),
-                            children: [
-                              WidgetSpan(
-                                child: Container(
-                                  color: Colors.red,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      bottom: 2,
-                                    ),
-                                    child: Text(
-                                      '!! 重要 !!',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
+                Container(
+                  width: colwidth[col],
+                  color: Color.fromARGB(255, 242, 223, 222),
+                  child: Padding(
+                    padding: EdgeInsets.all(3),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '10:30-12:30',
+                          style: TextStyle(fontSize: 10),
+                        ),
+                        RichText(
+                          text: TextSpan(
+                              style: TextStyle(color: Colors.black),
+                              children: [
+                                WidgetSpan(
+                                  child: Container(
+                                    color: Colors.red,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 2,
+                                      ),
+                                      child: Text(
+                                        '!! 重要 !!',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              TextSpan(
-                                text: secondPart2,
-                              ),
-                            ]),
-                      ),
-                    ],
+                                TextSpan(
+                                  text: secondPart2,
+                                ),
+                              ]),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Icon(Icons.post_add_rounded),
-            ],
+                Icon(Icons.post_add_rounded),
+              ],
+            ),
           ),
         );
       }
