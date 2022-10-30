@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page5/page_5_3_danh_sach_nhan_lai_vat_lieu.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
-import '../../shared/date_formatter copy.dart';
 import '../menu_page.dart';
 import 'danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
@@ -28,333 +26,21 @@ class _DanhSachDatHangCacBoPhan61PageState
     '出納帳',
   ];
 
-  List<ThanhTich> listThanhTich = [
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-01'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-02'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-03'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-04'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-05'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-06'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-07'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-08'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-09'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-10'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-11'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-12'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-13'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-14'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-15'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-16'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-17'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-18'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-19'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-20'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-21'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-22'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-23'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-24'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-25'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-26'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-  ];
+  late int currentRadioRow;
 
-  List<Widget> _buildCells(int count) {
-    return List.generate(
-      count,
-      (index) => Container(
-        decoration: BoxDecoration(
-          border: Border.all(),
-          color: Colors.black,
-        ),
-        alignment: Alignment.center,
-        width: 50,
-        height: 50,
-        // color: Colors.white,
-        margin: const EdgeInsets.all(1.0),
-        child: Text(
-          "col ${index + 1}",
-          style: const TextStyle(color: Colors.white),
-        ),
-      ),
-    );
-  }
+  @override
+  void initState() {
+    currentRadioRow = -1;
 
-  List<Widget> _buildCells2(int count, int row) {
-    List<String> colNames = [
-      '',
-      '発注ID',
-      'ステータス',
-      '発注日',
-      '発注者',
-      '品番',
-      '商品名',
-    ];
-
-    List<double> colwidth = [
-      30,
-      130,
-      130,
-      100,
-      100,
-      100,
-      100,
-    ];
-    return List.generate(count, (col) {
-      if (row == 0) {
-        return Container(
-          decoration: BoxDecoration(
-            border: Border.all(width: 0.5),
-            color: const Color(0xFFFF9900),
-          ),
-          alignment: Alignment.center,
-          width: colwidth[col],
-          height: 80,
-          child: Text(
-            colNames[col],
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        );
-      }
-
-      return Container(
-        decoration: BoxDecoration(
-          border: Border.all(width: 0.5),
-          color: Colors.white,
-        ),
-        alignment: Alignment.center,
-        width: colwidth[col],
-        height: 50,
-        child: const Text(
-          '',
-          style: TextStyle(color: Colors.black),
-        ),
-      );
-    });
-  }
-
-  List<Widget> _buildRows(int count) {
-    return List.generate(count, (index) {
-      return Row(
-        children: _buildCells2(7, index),
-      );
-    });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false, //new line
+
       backgroundColor: const Color(0xFFFFFFFF),
       body: Padding(
         padding: const EdgeInsets.only(
@@ -371,36 +57,47 @@ class _DanhSachDatHangCacBoPhan61PageState
             const SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                columnText(
-                  width: size.width / 2 - 20,
-                  text: '発注ID',
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: const Color(0xFFA5A7A9),
                 ),
-                columnText(
-                  width: size.width / 2 - 20,
-                  text: '発注者',
-                ),
-              ],
-            ),
-
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                columnText(
-                  width: size.width / 2 - 20,
-                  text: 'ステータス',
-                ),
-                // columnText(
-                //   width: size.width / 2 - 20,
-                //   text: '商品名',
-                // ),
-                Container()
-              ],
+              ),
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      columnText(
+                        width: size.width / 2 - 30,
+                        text: '発注ID',
+                      ),
+                      columnText(
+                        width: size.width / 2 - 30,
+                        text: '発注者',
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      columnText2(
+                        width: size.width / 2 - 20,
+                        text: 'ステータス',
+                      ),
+                      // columnText(
+                      //   width: size.width / 2 - 20,
+                      //   text: '商品名',
+                      // ),
+                      Container()
+                    ],
+                  ),
+                ],
+              ),
             ),
 
             const SizedBox(
@@ -422,6 +119,7 @@ class _DanhSachDatHangCacBoPhan61PageState
                     child: const Text(
                       '検索',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -444,6 +142,7 @@ class _DanhSachDatHangCacBoPhan61PageState
                     child: const Text(
                       'クリア',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -457,37 +156,35 @@ class _DanhSachDatHangCacBoPhan61PageState
             const SizedBox(
               height: 10,
             ),
-            Flexible(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                // child: Row(
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //   children: <Widget>[
-                //     // SingleChildScrollView(
-                //     //   scrollDirection: Axis.vertical,
-                //     //   child: Column(
-                //     //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     //     children: _buildCells(20),
-                //     //   ),
-                //     // ),
-                //     Flexible(
-                //       child: SingleChildScrollView(
-                //         scrollDirection: Axis.horizontal,
-                //         child: Column(
-                //           crossAxisAlignment: CrossAxisAlignment.start,
-                //           children: _buildRows(4),
-                //         ),
-                //       ),
-                //     )
-                //   ],
-                // ),
-                child: Flexible(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: _buildRows(4),
-                    ),
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              // child: Row(
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: <Widget>[
+              //     // SingleChildScrollView(
+              //     //   scrollDirection: Axis.vertical,
+              //     //   child: Column(
+              //     //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     //     children: _buildCells(20),
+              //     //   ),
+              //     // ),
+              //     Flexible(
+              //       child: SingleChildScrollView(
+              //         scrollDirection: Axis.horizontal,
+              //         child: Column(
+              //           crossAxisAlignment: CrossAxisAlignment.start,
+              //           children: _buildRows(4),
+              //         ),
+              //       ),
+              //     )
+              //   ],
+              // ),
+              child: Flexible(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: _buildRows(4),
                   ),
                 ),
               ),
@@ -550,6 +247,7 @@ class _DanhSachDatHangCacBoPhan61PageState
                     child: const Text(
                       'リスト確認',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -588,7 +286,11 @@ class _DanhSachDatHangCacBoPhan61PageState
     );
   }
 
-  Widget _dropDownButton(BuildContext context, String value) {
+  Widget _dropDownButton(
+    BuildContext context,
+    String value,
+    double width,
+  ) {
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
@@ -609,7 +311,7 @@ class _DanhSachDatHangCacBoPhan61PageState
                 width: 14,
               ),
               Text(
-                "投函数を選択",
+                "Dropdown item1",
               ),
             ],
           ),
@@ -626,16 +328,16 @@ class _DanhSachDatHangCacBoPhan61PageState
                 width: 14,
               ),
               Text(
-                "投函数を選択",
+                "Dropdown item2",
               ),
             ],
           ),
         ),
       ],
-      offset: const Offset(-35, -90),
+      offset: const Offset(-0, 50),
       child: Container(
-        width: 130,
-        height: 30,
+        width: width - 4,
+        height: 45,
         decoration: BoxDecoration(
           color: const Color(0xFFF5F6F8),
           borderRadius: BorderRadius.circular(8),
@@ -740,6 +442,9 @@ class _DanhSachDatHangCacBoPhan61PageState
             fontWeight: FontWeight.w600,
           ),
         ),
+        const SizedBox(
+          height: 5,
+        ),
         SizedBox(
           width: width ?? 30,
           child: CustomTextField(
@@ -752,5 +457,130 @@ class _DanhSachDatHangCacBoPhan61PageState
         ),
       ],
     );
+  }
+
+  Widget columnText2({
+    double? width,
+    Color? color,
+    String? hint,
+    String? text,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          text ?? '',
+          style: const TextStyle(
+            color: Color(0xFF042C5C),
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        _dropDownButton(context, 'カテゴリを選択', width ?? 30),
+      ],
+    );
+  }
+
+  Widget contentTable(int col, int row) {
+    return col == 0
+        ? RadioListTile(
+            value: row,
+            groupValue: currentRadioRow,
+            onChanged: (e) {
+              setState(() {
+                currentRadioRow = row;
+              });
+            },
+          )
+        : const Text(
+            '',
+            style: TextStyle(color: Colors.black),
+          );
+  }
+
+  List<Widget> _buildCells(int count) {
+    return List.generate(
+      count,
+      (index) => Container(
+        decoration: BoxDecoration(
+          border: Border.all(),
+          color: Colors.black,
+        ),
+        alignment: Alignment.center,
+        width: 50,
+        height: 50,
+        // color: Colors.white,
+        margin: const EdgeInsets.all(1.0),
+        child: Text(
+          "col ${index + 1}",
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildCells2(int count, int row) {
+    List<String> colNames = [
+      '',
+      '発注ID',
+      'ステータス',
+      '発注日',
+      '発注者',
+      '品番',
+      '商品名',
+    ];
+
+    List<double> colwidth = [
+      30,
+      130,
+      130,
+      100,
+      100,
+      100,
+      100,
+    ];
+    return List.generate(count, (col) {
+      if (row == 0) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(width: 0.5),
+            color: const Color(0xFFFF9900),
+          ),
+          alignment: Alignment.center,
+          width: colwidth[col],
+          height: 80,
+          child: Text(
+            colNames[col],
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        );
+      }
+
+      return Container(
+        decoration: BoxDecoration(
+          border: Border.all(width: 0.5),
+          color: Colors.white,
+        ),
+        alignment: Alignment.center,
+        width: colwidth[col],
+        height: 50,
+        child: contentTable(col, row),
+      );
+    });
+  }
+
+  List<Widget> _buildRows(int count) {
+    return List.generate(count, (index) {
+      return Row(
+        children: _buildCells2(7, index),
+      );
+    });
   }
 }

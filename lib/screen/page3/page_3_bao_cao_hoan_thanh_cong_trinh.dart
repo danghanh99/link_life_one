@@ -23,12 +23,15 @@ class _Page3BaoCaoHoanThanhCongTrinhState
     '入出庫管理',
     '部材管理',
     '出納帳',
+    '12',
+    '1234',
   ];
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Color(0xFFFFFFFF),
       body: Padding(
         padding: const EdgeInsets.only(
@@ -151,6 +154,7 @@ class _Page3BaoCaoHoanThanhCongTrinhState
               height: 5,
             ),
             Container(
+              height: 400,
               padding: const EdgeInsets.symmetric(
                 vertical: 10,
               ),
@@ -159,16 +163,40 @@ class _Page3BaoCaoHoanThanhCongTrinhState
               ),
               child: ListView.separated(
                 shrinkWrap: true,
-                reverse: true,
+                physics: ClampingScrollPhysics(),
+                // reverse: true,
                 padding: const EdgeInsets.only(right: 15, left: 15),
                 itemCount: listNames.length,
                 itemBuilder: (ctx, i) {
-                  return CustomTextField(
-                    fillColor: const Color(0xFFD9D9D9),
-                    hint: '',
-                    type: TextInputType.emailAddress,
-                    onChanged: (text) {},
-                    maxLines: 5,
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: i / 1 == 0
+                          ? Color.fromARGB(255, 216, 181, 111)
+                          : Color.fromARGB(255, 111, 177, 224),
+                      border: Border.all(
+                        color: i / 1 == 0
+                            ? Color.fromARGB(255, 216, 181, 111)
+                            : Color.fromARGB(255, 111, 177, 224),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            i / 1 == 0
+                                ? '訪問時間：13:00   報告：済'
+                                : '訪問時間：14:00　　報告：未',
+                          ),
+                          Text('受注ID：19000000××　人数：3人　目安作業時間：20（ｍ）'),
+                          Text('工事アイテム：〇〇'),
+                          Text('住所：〇〇県〇〇市'),
+                          Text('氏名：〇〇〇'),
+                        ],
+                      ),
+                    ),
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) =>

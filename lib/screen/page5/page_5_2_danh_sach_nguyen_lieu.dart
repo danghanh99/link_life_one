@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page5/danh_sach_ton_kho_page.dart';
+import 'package:link_life_one/screen/page5/page_5_2_1_danh_sach_ton_kho.dart';
 import '../../shared/date_formatter copy.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
@@ -250,7 +250,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const DanhSachTonKhoPage(),
+                          builder: (context) => const Page521DanhSachTonKho(),
                         ),
                       );
                     },
@@ -299,14 +299,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                 borderRadius: BorderRadius.circular(26),
               ),
               child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const DanhSachTonKhoPage(),
-                    ),
-                  );
-                },
+                onPressed: () {},
                 child: const Text(
                   '持ち出し登録',
                   style: TextStyle(

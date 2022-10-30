@@ -356,6 +356,7 @@ class _DanhSachDatHangCacBoPhan63PageState
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFFFFFFF),
       body: Padding(
         padding: const EdgeInsets.only(

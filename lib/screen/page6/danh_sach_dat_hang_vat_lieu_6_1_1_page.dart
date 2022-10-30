@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page5/danh_sach_ton_kho_page.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
-import '../../shared/date_formatter copy.dart';
 import '../menu_page.dart';
 import 'danh_sach_cac_bo_phan_5_1_2_page.dart';
 
@@ -27,6 +25,15 @@ class _DanhSachDatHangVatLieu611PageState
     '部材管理',
     '出納帳',
   ];
+
+  late int currentRadioRow;
+
+  @override
+  void initState() {
+    currentRadioRow = -1;
+
+    super.initState();
+  }
 
   List<ThanhTich> listThanhTich = [
     ThanhTich(
@@ -346,10 +353,7 @@ class _DanhSachDatHangVatLieu611PageState
         alignment: Alignment.center,
         width: colwidth[col],
         height: 50,
-        child: const Text(
-          '',
-          style: TextStyle(color: Colors.black),
-        ),
+        child: contentTable(col, row),
       );
     });
   }
@@ -366,6 +370,7 @@ class _DanhSachDatHangVatLieu611PageState
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFFFFFFF),
       body: Padding(
         padding: const EdgeInsets.only(
@@ -386,30 +391,28 @@ class _DanhSachDatHangVatLieu611PageState
               height: 25,
             ),
 
-            Flexible(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // SingleChildScrollView(
-                    //   scrollDirection: Axis.vertical,
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: _buildCells(20),
-                    //   ),
-                    // ),
-                    Flexible(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: _buildRows(4),
-                        ),
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // SingleChildScrollView(
+                  //   scrollDirection: Axis.vertical,
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: _buildCells(20),
+                  //   ),
+                  // ),
+                  Flexible(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: _buildRows(4),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
             ),
             // Expanded(child: Container()),
@@ -434,7 +437,7 @@ class _DanhSachDatHangVatLieu611PageState
             ),
             CustomTextField(
               fillColor: const Color(0xFFA5A7A9),
-              hint: '',
+              hint: 'テキストテキストテキスト',
               type: TextInputType.emailAddress,
               onChanged: (text) {},
               maxLines: 3,
@@ -456,6 +459,7 @@ class _DanhSachDatHangVatLieu611PageState
                     child: const Text(
                       'QR読取',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -467,7 +471,7 @@ class _DanhSachDatHangVatLieu611PageState
                   width: 5,
                 ),
                 Container(
-                  width: 120,
+                  width: 140,
                   height: 37,
                   decoration: BoxDecoration(
                     color: const Color(0xFFA1A1A1),
@@ -487,6 +491,7 @@ class _DanhSachDatHangVatLieu611PageState
                     child: const Text(
                       'リストから選択',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -509,6 +514,7 @@ class _DanhSachDatHangVatLieu611PageState
                     child: const Text(
                       '削除',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -527,17 +533,11 @@ class _DanhSachDatHangVatLieu611PageState
                 borderRadius: BorderRadius.circular(26),
               ),
               child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const DanhSachTonKhoPage(),
-                    ),
-                  );
-                },
+                onPressed: () {},
                 child: const Text(
                   '発注申請',
                   style: TextStyle(
+                    decoration: TextDecoration.underline,
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -705,6 +705,103 @@ class _DanhSachDatHangVatLieu611PageState
             fontWeight: FontWeight.w700,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget contentTable(int col, int row) {
+    if (col == 7) {
+      return Row(
+        children: [
+          const Text(''),
+          const Spacer(),
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                left: BorderSide(
+                  color: Colors.black,
+                  width: 0.7,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 7, left: 7),
+            child: _moreButton(context),
+          ),
+        ],
+      );
+    }
+
+    return col == 0
+        ? RadioListTile(
+            value: row,
+            groupValue: currentRadioRow,
+            onChanged: (e) {
+              setState(() {
+                currentRadioRow = row;
+              });
+            },
+          )
+        : const Text(
+            '',
+            style: TextStyle(color: Colors.black),
+          );
+  }
+
+  Widget _moreButton(BuildContext context) {
+    return PopupMenuButton<int>(
+      color: Colors.white,
+      padding: EdgeInsets.zero,
+      onSelected: (number) {
+        if (number == 1) {
+          // Navigator.of(context).push(MaterialPageRoute(
+          //     builder: (context) => EditThemePage(
+          //           index: index,
+          //           meditationThemeDTO: meditationThemeDTO,
+          //         )));
+        }
+        if (number == 2) {}
+      },
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0))),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          height: 25,
+          padding: const EdgeInsets.only(right: 0, left: 10),
+          value: 1,
+          child: Row(
+            children: const [
+              SizedBox(
+                width: 14,
+              ),
+              Text(
+                "Dropdown item",
+              ),
+            ],
+          ),
+        ),
+        const PopupMenuDivider(),
+        PopupMenuItem(
+          height: 25,
+          padding: const EdgeInsets.only(right: 0, left: 10),
+          value: 2,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: const [
+              SizedBox(
+                width: 14,
+              ),
+              Text(
+                "Dropdown item",
+              ),
+            ],
+          ),
+        ),
+      ],
+      offset: const Offset(-25, -10),
+      child: Image.asset(
+        Assets.icDropdown,
       ),
     );
   }

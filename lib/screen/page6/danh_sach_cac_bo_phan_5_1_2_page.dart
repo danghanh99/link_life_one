@@ -6,7 +6,6 @@ import 'package:link_life_one/screen/page5/page_5_3_danh_sach_nhan_lai_vat_lieu.
 import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
-import '../../shared/date_formatter copy.dart';
 import '../menu_page.dart';
 
 class DanhSachCacBoPhan512Page extends StatefulWidget {
@@ -25,6 +24,15 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
     '部材管理',
     '出納帳',
   ];
+
+  late int currentRadioRow;
+
+  @override
+  void initState() {
+    currentRadioRow = -1;
+
+    super.initState();
+  }
 
   List<ThanhTich> listThanhTich = [
     ThanhTich(
@@ -333,10 +341,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
         alignment: Alignment.center,
         width: colwidth[col],
         height: 50,
-        child: const Text(
-          '',
-          style: TextStyle(color: Colors.black),
-        ),
+        child: contentTable(col, row),
       );
     });
   }
@@ -353,6 +358,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFFFFFFF),
       body: Padding(
         padding: const EdgeInsets.only(
@@ -369,35 +375,46 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
             const SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                columnText(
-                  width: size.width / 2 - 20,
-                  text: '分類',
-                ),
-                columnText(
-                  width: size.width / 2 - 20,
-                  text: '品番',
-                ),
-              ],
-            ),
 
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                columnText(
-                  width: size.width / 2 - 20,
-                  text: 'メーカー',
-                ),
-                columnText(
-                  width: size.width / 2 - 20,
-                  text: '商品名',
-                ),
-              ],
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFA5A7A9),
+                border: Border.all(width: 1),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      columnText2(
+                        width: size.width / 2 - 30,
+                        text: '分類',
+                      ),
+                      columnText(
+                        width: size.width / 2 - 30,
+                        text: '品番',
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      columnText(
+                        width: size.width / 2 - 30,
+                        text: 'メーカー',
+                      ),
+                      columnText(
+                        width: size.width / 2 - 30,
+                        text: '商品名',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
 
             const SizedBox(
@@ -419,6 +436,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
                     child: const Text(
                       '検索',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -441,6 +459,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
                     child: const Text(
                       'クリア',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -454,37 +473,35 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
             const SizedBox(
               height: 10,
             ),
-            Flexible(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                // child: Row(
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //   children: <Widget>[
-                //     // SingleChildScrollView(
-                //     //   scrollDirection: Axis.vertical,
-                //     //   child: Column(
-                //     //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     //     children: _buildCells(20),
-                //     //   ),
-                //     // ),
-                //     Flexible(
-                //       child: SingleChildScrollView(
-                //         scrollDirection: Axis.horizontal,
-                //         child: Column(
-                //           crossAxisAlignment: CrossAxisAlignment.start,
-                //           children: _buildRows(4),
-                //         ),
-                //       ),
-                //     )
-                //   ],
-                // ),
-                child: Flexible(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: _buildRows(4),
-                    ),
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              // child: Row(
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: <Widget>[
+              //     // SingleChildScrollView(
+              //     //   scrollDirection: Axis.vertical,
+              //     //   child: Column(
+              //     //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     //     children: _buildCells(20),
+              //     //   ),
+              //     // ),
+              //     Flexible(
+              //       child: SingleChildScrollView(
+              //         scrollDirection: Axis.horizontal,
+              //         child: Column(
+              //           crossAxisAlignment: CrossAxisAlignment.start,
+              //           children: _buildRows(4),
+              //         ),
+              //       ),
+              //     )
+              //   ],
+              // ),
+              child: Flexible(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: _buildRows(4),
                   ),
                 ),
               ),
@@ -551,7 +568,11 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
     );
   }
 
-  Widget _dropDownButton(BuildContext context, String value) {
+  Widget _dropDownButton(
+    BuildContext context,
+    String value,
+    double width,
+  ) {
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
@@ -572,7 +593,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
                 width: 14,
               ),
               Text(
-                "投函数を選択",
+                "Dropdown item1",
               ),
             ],
           ),
@@ -589,16 +610,16 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
                 width: 14,
               ),
               Text(
-                "投函数を選択",
+                "Dropdown item2",
               ),
             ],
           ),
         ),
       ],
-      offset: const Offset(-35, -90),
+      offset: const Offset(-0, 50),
       child: Container(
-        width: 130,
-        height: 30,
+        width: width,
+        height: 50,
         decoration: BoxDecoration(
           color: const Color(0xFFF5F6F8),
           borderRadius: BorderRadius.circular(8),
@@ -686,6 +707,31 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
     );
   }
 
+  Widget columnText2({
+    double? width,
+    Color? color,
+    String? hint,
+    String? text,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          text ?? '',
+          style: const TextStyle(
+            color: Color(0xFF042C5C),
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        _dropDownButton(context, 'カテゴリを選択', width ?? 30),
+      ],
+    );
+  }
+
   Widget columnText({
     double? width,
     Color? color,
@@ -703,6 +749,9 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
             fontWeight: FontWeight.w600,
           ),
         ),
+        const SizedBox(
+          height: 5,
+        ),
         SizedBox(
           width: width ?? 30,
           child: CustomTextField(
@@ -715,5 +764,22 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
         ),
       ],
     );
+  }
+
+  Widget contentTable(int col, int row) {
+    return col == 0
+        ? RadioListTile(
+            value: row,
+            groupValue: currentRadioRow,
+            onChanged: (e) {
+              setState(() {
+                currentRadioRow = row;
+              });
+            },
+          )
+        : const Text(
+            '',
+            style: TextStyle(color: Colors.black),
+          );
   }
 }

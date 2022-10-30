@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/page4/xac_nhan_thanh_tich_page.dart';
+import 'package:link_life_one/screen/page6/phe_duyet_don_dat_hang_6_3_1_page.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
@@ -12,16 +13,16 @@ import 'danh_muc_hang_ton_kho_6_2_page.dart';
 import 'danh_sach_dat_hang_cac_bo_phan_6_1_page.dart';
 import 'danh_sach_dat_hang_cac_bo_phan_6_3_page.dart';
 
-class QuanLyThanhVienPage extends StatefulWidget {
-  const QuanLyThanhVienPage({
+class Page6QuanLyThanhVien extends StatefulWidget {
+  const Page6QuanLyThanhVien({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<QuanLyThanhVienPage> createState() => _QuanLyThanhVienPageState();
+  State<Page6QuanLyThanhVien> createState() => _Page6QuanLyThanhVienState();
 }
 
-class _QuanLyThanhVienPageState extends State<QuanLyThanhVienPage> {
+class _Page6QuanLyThanhVienState extends State<Page6QuanLyThanhVien> {
   List<String> listNames = [
     '部材発注',
     '棚卸',
@@ -106,7 +107,7 @@ class _QuanLyThanhVienPageState extends State<QuanLyThanhVienPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const DanhSachDatHangCacBoPhan63Page(),
+            builder: (context) => const PheDuyetDonDatHang631Page(),
           ),
         );
         break;

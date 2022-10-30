@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page5/danh_sach_ton_kho_page.dart';
+import 'package:link_life_one/screen/page5/page_5_2_1_danh_sach_ton_kho.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
@@ -301,7 +301,7 @@ class _PheDuyetDonDatHang631PageState extends State<PheDuyetDonDatHang631Page> {
 
     List<double> colwidth = [
       30,
-      130,
+      200,
       130,
       100,
       150,
@@ -365,6 +365,7 @@ class _PheDuyetDonDatHang631PageState extends State<PheDuyetDonDatHang631Page> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFFFFFFF),
       body: Padding(
         padding: const EdgeInsets.only(
@@ -385,30 +386,28 @@ class _PheDuyetDonDatHang631PageState extends State<PheDuyetDonDatHang631Page> {
               height: 25,
             ),
 
-            Flexible(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // SingleChildScrollView(
-                    //   scrollDirection: Axis.vertical,
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: _buildCells(20),
-                    //   ),
-                    // ),
-                    Flexible(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: _buildRows(4),
-                        ),
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // SingleChildScrollView(
+                  //   scrollDirection: Axis.vertical,
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: _buildCells(20),
+                  //   ),
+                  // ),
+                  Flexible(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: _buildRows(4),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
             ),
             // Expanded(child: Container()),
@@ -433,7 +432,7 @@ class _PheDuyetDonDatHang631PageState extends State<PheDuyetDonDatHang631Page> {
             ),
             CustomTextField(
               fillColor: const Color(0xFFFFFFFF),
-              hint: '',
+              hint: 'テキストテキストテキスト',
               type: TextInputType.emailAddress,
               onChanged: (text) {},
               maxLines: 3,
@@ -455,7 +454,7 @@ class _PheDuyetDonDatHang631PageState extends State<PheDuyetDonDatHang631Page> {
             //       Navigator.push(
             //         context,
             //         MaterialPageRoute(
-            //           builder: (context) => const DanhSachTonKhoPage(),
+
             //         ),
             //       );
             //     },
@@ -503,6 +502,7 @@ class _PheDuyetDonDatHang631PageState extends State<PheDuyetDonDatHang631Page> {
                     child: const Text(
                       '発注承認',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
