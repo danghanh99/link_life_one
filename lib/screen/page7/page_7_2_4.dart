@@ -69,19 +69,19 @@ class _Page724State extends State<Page724> {
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        '戻る',
-                        style: TextStyle(
-                          color: Color(0xFF042C5C),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Navigator.pop(context);
+                    //   },
+                    //   child: const Text(
+                    //     '戻る',
+                    //     style: TextStyle(
+                    //       color: Color(0xFF042C5C),
+                    //       fontSize: 15,
+                    //       fontWeight: FontWeight.w500,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
