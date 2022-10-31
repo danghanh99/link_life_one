@@ -64,19 +64,19 @@ class _Page722State extends State<Page722> {
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        '戻る',
-                        style: TextStyle(
-                          color: Color(0xFF042C5C),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Navigator.pop(context);
+                    //   },
+                    //   child: const Text(
+                    //     '戻る',
+                    //     style: TextStyle(
+                    //       color: Color(0xFF042C5C),
+                    //       fontSize: 15,
+                    //       fontWeight: FontWeight.w500,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -328,16 +328,17 @@ class _Page722State extends State<Page722> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Page723(),
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const Page723(),
+                      //   ),
+                      // );
                     },
                     child: const Text(
                       '更新',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -357,17 +358,12 @@ class _Page722State extends State<Page722> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const DanhSachDatHangVatLieu611Page(),
-                        ),
-                      );
+                      Navigator.pop(context);
                     },
                     child: const Text(
                       'キャンセル',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,

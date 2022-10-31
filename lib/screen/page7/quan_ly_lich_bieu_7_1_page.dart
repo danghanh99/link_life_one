@@ -686,7 +686,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
           ),
           alignment: Alignment.topLeft,
           width: colwidth[col],
-          height: 320,
+          height: 400,
           // child: const Text(
           //   '',
           //   style: TextStyle(color: Colors.black),
@@ -881,7 +881,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         ),
         alignment: Alignment.topLeft,
         width: colwidth[col],
-        height: 320,
+        height: 400,
         child: const Text(
           '',
           style: TextStyle(color: Colors.black),
