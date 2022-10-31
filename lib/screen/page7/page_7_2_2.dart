@@ -18,9 +18,16 @@ class Page722 extends StatefulWidget {
 class _Page722State extends State<Page722> {
   late bool checkedValue;
 
+  late String nettoKouJi;
+  late String kaigiKara;
+  late String kaigiMade;
+
   @override
   void initState() {
     checkedValue = true;
+    nettoKouJi = 'ネット工事';
+    kaigiKara = '10：00';
+    kaigiMade = '12：00';
     super.initState();
   }
 
@@ -249,7 +256,7 @@ class _Page722State extends State<Page722> {
                             child: CustomTextField(
                               fillColor: const Color(0xFFF5F6F8),
                               hint: '',
-                              type: TextInputType.emailAddress,
+                              type: TextInputType.number,
                               onChanged: (text) {},
                               maxLines: 1,
                             ),
@@ -275,7 +282,7 @@ class _Page722State extends State<Page722> {
                             child: CustomTextField(
                               fillColor: const Color(0xFFF5F6F8),
                               hint: '',
-                              type: TextInputType.emailAddress,
+                              type: TextInputType.number,
                               onChanged: (text) {},
                               maxLines: 1,
                             ),
@@ -307,7 +314,7 @@ class _Page722State extends State<Page722> {
                     hint: '',
                     type: TextInputType.emailAddress,
                     onChanged: (text) {},
-                    maxLines: 3,
+                    maxLines: 5,
                   ),
                   const SizedBox(
                     height: 5,
@@ -387,8 +394,36 @@ class _Page722State extends State<Page722> {
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {
-        if (number == 1) {}
-        if (number == 2) {}
+        if (number == 1) {
+          setState(() {
+            nettoKouJi = 'ネット工事';
+          });
+        }
+        if (number == 2) {
+          setState(() {
+            nettoKouJi = 'ネット下見';
+          });
+        }
+        if (number == 3) {
+          setState(() {
+            nettoKouJi = '法人工事';
+          });
+        }
+        if (number == 4) {
+          setState(() {
+            nettoKouJi = '法人下見';
+          });
+        }
+        if (number == 5) {
+          setState(() {
+            nettoKouJi = '工事打診';
+          });
+        }
+        if (number == 6) {
+          setState(() {
+            nettoKouJi = '下見打診';
+          });
+        }
       },
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
@@ -429,7 +464,7 @@ class _Page722State extends State<Page722> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 3,
           child: Row(
             children: const [
               SizedBox(
@@ -445,7 +480,7 @@ class _Page722State extends State<Page722> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 4,
           child: Row(
             children: const [
               SizedBox(
@@ -461,7 +496,7 @@ class _Page722State extends State<Page722> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 5,
           child: Row(
             children: const [
               SizedBox(
@@ -477,7 +512,7 @@ class _Page722State extends State<Page722> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 6,
           child: Row(
             children: const [
               SizedBox(
@@ -501,9 +536,9 @@ class _Page722State extends State<Page722> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Text(
-              "ネット工事",
-              style: TextStyle(
+            Text(
+              nettoKouJi,
+              style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -525,8 +560,36 @@ class _Page722State extends State<Page722> {
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {
-        if (number == 1) {}
-        if (number == 2) {}
+        if (number == 1) {
+          setState(() {
+            kaigiKara = '9:00';
+          });
+        }
+        if (number == 2) {
+          setState(() {
+            kaigiKara = '9:30';
+          });
+        }
+        if (number == 3) {
+          setState(() {
+            kaigiKara = '10:00';
+          });
+        }
+        if (number == 4) {
+          setState(() {
+            kaigiKara = '10:30';
+          });
+        }
+        if (number == 5) {
+          setState(() {
+            kaigiKara = '11:00';
+          });
+        }
+        if (number == 6) {
+          setState(() {
+            kaigiKara = '11:30';
+          });
+        }
       },
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
@@ -567,7 +630,7 @@ class _Page722State extends State<Page722> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 3,
           child: Row(
             children: const [
               SizedBox(
@@ -583,7 +646,7 @@ class _Page722State extends State<Page722> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 4,
           child: Row(
             children: const [
               SizedBox(
@@ -599,7 +662,7 @@ class _Page722State extends State<Page722> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 5,
           child: Row(
             children: const [
               SizedBox(
@@ -615,7 +678,7 @@ class _Page722State extends State<Page722> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 6,
           child: Row(
             children: const [
               SizedBox(
@@ -639,9 +702,9 @@ class _Page722State extends State<Page722> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Text(
-              "10：00",
-              style: TextStyle(
+            Text(
+              kaigiKara,
+              style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -663,8 +726,36 @@ class _Page722State extends State<Page722> {
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {
-        if (number == 1) {}
-        if (number == 2) {}
+        if (number == 1) {
+          setState(() {
+            kaigiMade = '9:00';
+          });
+        }
+        if (number == 2) {
+          setState(() {
+            kaigiMade = '9:30';
+          });
+        }
+        if (number == 3) {
+          setState(() {
+            kaigiMade = '10:00';
+          });
+        }
+        if (number == 4) {
+          setState(() {
+            kaigiMade = '10:30';
+          });
+        }
+        if (number == 5) {
+          setState(() {
+            kaigiMade = '11:00';
+          });
+        }
+        if (number == 6) {
+          setState(() {
+            kaigiMade = '11:30';
+          });
+        }
       },
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
@@ -705,7 +796,7 @@ class _Page722State extends State<Page722> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 3,
           child: Row(
             children: const [
               SizedBox(
@@ -721,7 +812,7 @@ class _Page722State extends State<Page722> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 4,
           child: Row(
             children: const [
               SizedBox(
@@ -737,7 +828,7 @@ class _Page722State extends State<Page722> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 5,
           child: Row(
             children: const [
               SizedBox(
@@ -753,7 +844,7 @@ class _Page722State extends State<Page722> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 6,
           child: Row(
             children: const [
               SizedBox(
@@ -777,9 +868,9 @@ class _Page722State extends State<Page722> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Text(
-              "12：00",
-              style: TextStyle(
+            Text(
+              kaigiMade,
+              style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
                 fontWeight: FontWeight.w400,

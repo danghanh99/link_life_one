@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page7/page_7_2_1.dart';
+import 'package:link_life_one/screen/page7/page_7_2_3.dart';
+import 'package:link_life_one/screen/page7/page_7_2_4.dart';
 
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
@@ -867,7 +869,41 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     ),
                   ),
                 ),
-                Icon(Icons.post_add_rounded),
+                Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Page723(),
+                            ),
+                          );
+                        },
+                        child: Icon(
+                          Icons.add_circle,
+                          size: 16,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 3,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Page724(),
+                            ),
+                          );
+                        },
+                        child: Icon(Icons.insert_drive_file_outlined),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

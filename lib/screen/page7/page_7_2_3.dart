@@ -17,9 +17,14 @@ class Page723 extends StatefulWidget {
 
 class _Page723State extends State<Page723> {
   late bool checkedValue;
-
+  late String nettoKoJi;
+  late String kaigiKara;
+  late String kaigiMade;
   @override
   void initState() {
+    nettoKoJi = 'ネット工事';
+    kaigiKara = '10：00';
+    kaigiMade = '12：00';
     checkedValue = true;
     super.initState();
   }
@@ -64,19 +69,19 @@ class _Page723State extends State<Page723> {
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        '戻る',
-                        style: TextStyle(
-                          color: Color(0xFF042C5C),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Navigator.pop(context);
+                    //   },
+                    //   child: const Text(
+                    //     '戻る',
+                    //     style: TextStyle(
+                    //       color: Color(0xFF042C5C),
+                    //       fontSize: 15,
+                    //       fontWeight: FontWeight.w500,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -225,7 +230,7 @@ class _Page723State extends State<Page723> {
                             child: CustomTextField(
                               fillColor: const Color(0xFFF5F6F8),
                               hint: '',
-                              type: TextInputType.emailAddress,
+                              type: TextInputType.number,
                               onChanged: (text) {},
                               maxLines: 1,
                             ),
@@ -251,7 +256,7 @@ class _Page723State extends State<Page723> {
                             child: CustomTextField(
                               fillColor: const Color(0xFFF5F6F8),
                               hint: '',
-                              type: TextInputType.emailAddress,
+                              type: TextInputType.number,
                               onChanged: (text) {},
                               maxLines: 1,
                             ),
@@ -346,16 +351,17 @@ class _Page723State extends State<Page723> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Page724(),
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const Page724(),
+                      //   ),
+                      // );
                     },
                     child: const Text(
                       '更新',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -375,17 +381,12 @@ class _Page723State extends State<Page723> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const DanhSachDatHangVatLieu611Page(),
-                        ),
-                      );
+                      Navigator.pop(context);
                     },
                     child: const Text(
                       'キャンセル',
                       style: TextStyle(
+                        decoration: TextDecoration.underline,
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -409,8 +410,16 @@ class _Page723State extends State<Page723> {
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {
-        if (number == 1) {}
-        if (number == 2) {}
+        if (number == 1) {
+          setState(() {
+            nettoKoJi = '営業工事';
+          });
+        }
+        if (number == 2) {
+          setState(() {
+            nettoKoJi = '営業下見';
+          });
+        }
       },
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
@@ -459,9 +468,9 @@ class _Page723State extends State<Page723> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Text(
-              "ネット工事",
-              style: TextStyle(
+            Text(
+              nettoKoJi,
+              style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -483,8 +492,36 @@ class _Page723State extends State<Page723> {
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {
-        if (number == 1) {}
-        if (number == 2) {}
+        if (number == 1) {
+          setState(() {
+            kaigiKara = '9:00';
+          });
+        }
+        if (number == 2) {
+          setState(() {
+            kaigiKara = '9:30';
+          });
+        }
+        if (number == 3) {
+          setState(() {
+            kaigiKara = '10:00';
+          });
+        }
+        if (number == 4) {
+          setState(() {
+            kaigiKara = '10:30';
+          });
+        }
+        if (number == 5) {
+          setState(() {
+            kaigiKara = '11:00';
+          });
+        }
+        if (number == 6) {
+          setState(() {
+            kaigiKara = '11:30';
+          });
+        }
       },
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
@@ -525,7 +562,7 @@ class _Page723State extends State<Page723> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 3,
           child: Row(
             children: const [
               SizedBox(
@@ -541,7 +578,7 @@ class _Page723State extends State<Page723> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 4,
           child: Row(
             children: const [
               SizedBox(
@@ -557,7 +594,7 @@ class _Page723State extends State<Page723> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 5,
           child: Row(
             children: const [
               SizedBox(
@@ -573,7 +610,7 @@ class _Page723State extends State<Page723> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 6,
           child: Row(
             children: const [
               SizedBox(
@@ -597,9 +634,9 @@ class _Page723State extends State<Page723> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Text(
-              "10：00",
-              style: TextStyle(
+            Text(
+              kaigiKara,
+              style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -621,8 +658,36 @@ class _Page723State extends State<Page723> {
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {
-        if (number == 1) {}
-        if (number == 2) {}
+        if (number == 1) {
+          setState(() {
+            kaigiMade = '9:00';
+          });
+        }
+        if (number == 2) {
+          setState(() {
+            kaigiMade = '9:30';
+          });
+        }
+        if (number == 3) {
+          setState(() {
+            kaigiMade = '10:00';
+          });
+        }
+        if (number == 4) {
+          setState(() {
+            kaigiMade = '10:30';
+          });
+        }
+        if (number == 5) {
+          setState(() {
+            kaigiMade = '11:00';
+          });
+        }
+        if (number == 6) {
+          setState(() {
+            kaigiMade = '11:30';
+          });
+        }
       },
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
@@ -663,7 +728,7 @@ class _Page723State extends State<Page723> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 3,
           child: Row(
             children: const [
               SizedBox(
@@ -679,7 +744,7 @@ class _Page723State extends State<Page723> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 4,
           child: Row(
             children: const [
               SizedBox(
@@ -695,7 +760,7 @@ class _Page723State extends State<Page723> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 5,
           child: Row(
             children: const [
               SizedBox(
@@ -711,7 +776,7 @@ class _Page723State extends State<Page723> {
         PopupMenuItem(
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
+          value: 6,
           child: Row(
             children: const [
               SizedBox(
@@ -735,9 +800,9 @@ class _Page723State extends State<Page723> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Text(
-              "12：00",
-              style: TextStyle(
+            Text(
+              kaigiMade,
+              style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
