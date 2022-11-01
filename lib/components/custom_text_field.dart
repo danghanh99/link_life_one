@@ -197,6 +197,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                       color: AppColors.PLACE_HOLDER,
                       fontFamily: 'LinotteSemiBold',
                     ),
+              contentPadding: EdgeInsets.fromLTRB(5.0, 8.0, 5.0, 8.0),
               // contentPadding: widget.isNameField == true
               //     ? EdgeInsets.fromLTRB(5.0, 8.0, 5.0, 8.0)
               //     : EdgeInsets.fromLTRB(2, 16, 16, 16),

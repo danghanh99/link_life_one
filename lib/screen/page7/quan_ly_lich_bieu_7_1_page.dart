@@ -5,6 +5,7 @@ import 'package:link_life_one/screen/page7/page_7_2_2.dart';
 import 'package:link_life_one/screen/page7/page_7_2_3.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4.dart';
 
+import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../menu_page.dart';
@@ -26,6 +27,13 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     '出納帳',
   ];
   String value = 'グループ';
+  late bool show721;
+
+  @override
+  void initState() {
+    show721 = true;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -694,8 +702,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
           // ),
           child: GestureDetector(
             onTap: () {
-              // Navigator.of(context)
-              //     .push(MaterialPageRoute(builder: (context) => Page721()));
               CustomDialog.showCustomDialog(
                 context: context,
                 title: '',
@@ -879,11 +885,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Page723(),
-                            ),
+                          CustomDialog.showCustomDialog(
+                            context: context,
+                            title: '',
+                            body: Page723(),
                           );
                         },
                         child: Icon(
@@ -896,12 +901,17 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Page724(),
-                            ),
+                          CustomDialog.showCustomDialog(
+                            context: context,
+                            title: '',
+                            body: Page724(),
                           );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => const Page724(),
+                          //   ),
+                          // );
                         },
                         child: Icon(Icons.insert_drive_file_outlined),
                       ),

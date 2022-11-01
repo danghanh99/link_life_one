@@ -33,183 +33,179 @@ class _Page723State extends State<Page723> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0xFFFFFFFF),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          // top: 20,
-          bottom: 16,
-          // right: 16,
-          // left: 16,
-        ),
-        child: Column(
-          children: [
-            Container(
-              color: const Color.fromARGB(255, 229, 164, 68),
-              height: 30,
+    return Column(
+      children: [
+        // Container(
+        //   color: const Color.fromARGB(255, 229, 164, 68),
+        //   height: 30,
+        // ),
+        Container(
+          height: 50,
+          // width: size.width,
+          color: const Color.fromARGB(255, 229, 164, 68),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '営業案内登録',
+                    style: TextStyle(
+                      color: Color(0xFF042C5C),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //   },
+                //   child: const Text(
+                //     '戻る',
+                //     style: TextStyle(
+                //       color: Color(0xFF042C5C),
+                //       fontSize: 15,
+                //       fontWeight: FontWeight.w500,
+                //     ),
+                //   ),
+                // ),
+              ],
             ),
-            Container(
-              height: 50,
-              width: size.width,
-              color: const Color.fromARGB(255, 229, 164, 68),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Align(
+          ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 130,
+                    child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '営業案内登録',
+                        'タグ',
                         style: TextStyle(
                           color: Color(0xFF042C5C),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     Navigator.pop(context);
-                    //   },
-                    //   child: const Text(
-                    //     '戻る',
-                    //     style: TextStyle(
-                    //       color: Color(0xFF042C5C),
-                    //       fontSize: 15,
-                    //       fontWeight: FontWeight.w500,
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
+                  ),
+                  _moreButton(context),
+                  // const Spacer(),
+                  // Row(
+                  //   children: [
+                  //     Checkbox(
+                  //       activeColor: Colors.blue,
+                  //       checkColor: Colors.white,
+                  //       value: checkedValue,
+                  //       onChanged: (newValue) {
+                  //         setState(() {
+                  //           checkedValue = newValue ?? true;
+                  //         });
+                  //       },
+                  //     ),
+                  //     const Text(
+                  //       'アポイント済み',
+                  //     ),
+                  //   ],
+                  // ),
+                ],
               ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  Container(
+                    width: 130,
+                    child: const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '日時',
+                        style: TextStyle(
+                          color: Color(0xFF042C5C),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'タグ',
+                      '2022年01月19日(水)',
                       style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF000000),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w300,
                       ),
                     ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                    width: 5,
                   ),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _moreButton(context),
-                      // const Spacer(),
-                      // Row(
-                      //   children: [
-                      //     Checkbox(
-                      //       activeColor: Colors.blue,
-                      //       checkColor: Colors.white,
-                      //       value: checkedValue,
-                      //       onChanged: (newValue) {
-                      //         setState(() {
-                      //           checkedValue = newValue ?? true;
-                      //         });
-                      //       },
-                      //     ),
-                      //     const Text(
-                      //       'アポイント済み',
-                      //     ),
-                      //   ],
-                      // ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '日時',
-                      style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          '2022年01月19日(水)',
-                          style: TextStyle(
-                            color: Color(0xFF000000),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w300,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _moreButton2(context),
+                          Row(
+                            children: [
+                              Checkbox(
+                                activeColor: Colors.blue,
+                                checkColor: Colors.white,
+                                value: checkedValue,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    checkedValue = newValue ?? true;
+                                  });
+                                },
+                              ),
+                              const Text(
+                                '終日',
+                              ),
+                            ],
                           ),
+                        ],
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        '~',
+                        style: TextStyle(
+                          color: Color(0xFF000000),
+                          fontSize: 17,
+                          fontWeight: FontWeight.w300,
                         ),
                       ),
                       const SizedBox(
-                        height: 5,
+                        width: 10,
                       ),
-                      Row(
-                        children: [
-                          _moreButton2(context),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Text(
-                            '~',
-                            style: TextStyle(
-                              color: Color(0xFF000000),
-                              fontSize: 17,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          _moreButton3(context),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Checkbox(
-                            activeColor: Colors.blue,
-                            checkColor: Colors.white,
-                            value: checkedValue,
-                            onChanged: (newValue) {
-                              setState(() {
-                                checkedValue = newValue ?? true;
-                              });
-                            },
-                          ),
-                          const Text(
-                            '終日',
-                          ),
-                        ],
-                      ),
+                      _moreButton3(context),
                     ],
                   ),
-                  // CustomTextField(
-                  //   fillColor: const Color(0xFFFFFFFF),
-                  //   hint: '',
-                  //   type: TextInputType.emailAddress,
-                  //   onChanged: (text) {},
-                  //   maxLines: 1,
-                  // ),
-                  const SizedBox(
-                    height: 5,
-                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -221,187 +217,225 @@ class _Page723State extends State<Page723> {
                       ),
                     ),
                   ),
+                  const SizedBox(
+                    width: 5,
+                  ),
                   Row(
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: size.width / 2 - 80,
-                            child: CustomTextField(
-                              fillColor: const Color(0xFFF5F6F8),
-                              hint: '',
-                              type: TextInputType.number,
-                              onChanged: (text) {},
-                              maxLines: 1,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          const Text(
-                            '人',
-                            style: TextStyle(
-                              color: Color(0xFF042C5C),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          )
-                        ],
+                      Container(
+                        // width:
+                        //     size.width / 2 - 80,
+                        width: 80,
+                        child: CustomTextField(
+                          fillColor: const Color(0xFFF5F6F8),
+                          hint: '',
+                          type: TextInputType.number,
+                          onChanged: (text) {},
+                          maxLines: 1,
+                        ),
                       ),
-                      const Spacer(),
-                      Row(
-                        children: [
-                          Container(
-                            width: size.width / 2 - 80,
-                            child: CustomTextField(
-                              fillColor: const Color(0xFFF5F6F8),
-                              hint: '',
-                              type: TextInputType.number,
-                              onChanged: (text) {},
-                              maxLines: 1,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          const Text('時間')
-                        ],
+                      const SizedBox(
+                        width: 5,
                       ),
+                      const Text(
+                        '人',
+                        style: TextStyle(
+                          color: Color(0xFF042C5C),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      )
                     ],
                   ),
+                  // const Spacer(),
                   const SizedBox(
-                    height: 5,
+                    width: 20,
                   ),
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'お客様名',
-                      style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
+                  Row(
+                    children: [
+                      Container(
+                        // width:
+                        //     size.width / 2 - 80,
+                        width: 80,
+                        child: CustomTextField(
+                          fillColor: const Color(0xFFF5F6F8),
+                          hint: '',
+                          type: TextInputType.number,
+                          onChanged: (text) {},
+                          maxLines: 1,
+                        ),
                       ),
-                    ),
-                  ),
-                  CustomTextField(
-                    fillColor: const Color(0xFFF5F6F8),
-                    hint: '',
-                    type: TextInputType.emailAddress,
-                    onChanged: (text) {},
-                    maxLines: 1,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '参加者',
-                      style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
+                      const SizedBox(
+                        width: 5,
                       ),
-                    ),
-                  ),
-                  CustomTextField(
-                    fillColor: const Color(0xFFF5F6F8),
-                    hint: '',
-                    type: TextInputType.emailAddress,
-                    onChanged: (text) {},
-                    maxLines: 1,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-
-                  CustomTextField(
-                    fillColor: const Color(0xFFF5F6F8),
-                    hint: '',
-                    type: TextInputType.emailAddress,
-                    onChanged: (text) {},
-                    maxLines: 1,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  CustomTextField(
-                    fillColor: const Color(0xFFF5F6F8),
-                    hint: '',
-                    type: TextInputType.emailAddress,
-                    onChanged: (text) {},
-                    maxLines: 1,
+                      const Text('時間')
+                    ],
                   ),
                 ],
               ),
-            ),
-            Expanded(child: Container()),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 120,
-                  height: 37,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF6C8EDA),
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const Page724(),
-                      //   ),
-                      // );
-                    },
-                    child: const Text(
-                      '更新',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+              const SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: 130,
+                    child: const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'お客様名',
+                        style: TextStyle(
+                          color: Color(0xFF042C5C),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  width: 120,
-                  height: 37,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFA0A0A0),
-                    borderRadius: BorderRadius.circular(26),
+                  Container(
+                    width: 420,
+                    child: CustomTextField(
+                      fillColor: const Color(0xFFF5F6F8),
+                      hint: '',
+                      type: TextInputType.emailAddress,
+                      onChanged: (text) {},
+                      maxLines: 1,
+                    ),
                   ),
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text(
-                      'キャンセル',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                ],
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: 130,
+                    child: const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '参加者',
+                        style: TextStyle(
+                          color: Color(0xFF042C5C),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 420,
+                        child: CustomTextField(
+                          fillColor: const Color(0xFFF5F6F8),
+                          hint: '',
+                          type: TextInputType.emailAddress,
+                          onChanged: (text) {},
+                          maxLines: 1,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        width: 420,
+                        child: CustomTextField(
+                          fillColor: const Color(0xFFF5F6F8),
+                          hint: '',
+                          type: TextInputType.emailAddress,
+                          onChanged: (text) {},
+                          maxLines: 1,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        width: 420,
+                        child: CustomTextField(
+                          fillColor: const Color(0xFFF5F6F8),
+                          hint: '',
+                          type: TextInputType.emailAddress,
+                          onChanged: (text) {},
+                          maxLines: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        // Expanded(child: Container()),
+        SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 120,
+              height: 37,
+              decoration: BoxDecoration(
+                color: const Color(0xFF6C8EDA),
+                borderRadius: BorderRadius.circular(26),
+              ),
+              child: TextButton(
+                onPressed: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const Page724(),
+                  //   ),
+                  // );
+                },
+                child: const Text(
+                  '更新',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ],
+              ),
             ),
             const SizedBox(
-              height: 5,
+              width: 10,
+            ),
+            Container(
+              width: 120,
+              height: 37,
+              decoration: BoxDecoration(
+                color: const Color(0xFFA0A0A0),
+                borderRadius: BorderRadius.circular(26),
+              ),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  'キャンセル',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
-      ),
+        const SizedBox(
+          height: 10,
+        ),
+      ],
     );
   }
 

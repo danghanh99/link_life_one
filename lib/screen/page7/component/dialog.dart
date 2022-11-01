@@ -41,15 +41,15 @@ class CustomDialog extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(16),
-            ),
+            // borderRadius: BorderRadius.all(
+            //   Radius.circular(16),
+            // ),
           ),
-          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 25),
+          // padding: EdgeInsets.symmetric(horizontal: 30, vertical: 25),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                _buildTitle(),
+                // _buildTitle(),
                 body,
               ],
             ),
