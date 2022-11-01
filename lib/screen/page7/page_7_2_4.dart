@@ -1,9 +1,7 @@
-import 'package:check_points/check_point.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
-import '../page6/danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
 class Page724 extends StatefulWidget {
   const Page724({

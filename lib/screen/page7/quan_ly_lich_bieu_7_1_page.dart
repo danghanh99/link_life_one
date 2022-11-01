@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page7/page_7_2_1.dart';
+import 'package:link_life_one/screen/page7/page_7_2_2.dart';
 import 'package:link_life_one/screen/page7/page_7_2_3.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4.dart';
 
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../menu_page.dart';
+import 'component/dialog.dart';
 
 class QuanLyLichBieu71Page extends StatefulWidget {
   const QuanLyLichBieu71Page({
@@ -131,10 +133,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {
-                      // Navigator.of(context).push(
-                      //     MaterialPageRoute(builder: (context) => Page721()));
-                    },
+                    onPressed: () {},
                     child: const Text(
                       '表示',
                       style: TextStyle(
@@ -695,8 +694,13 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
           // ),
           child: GestureDetector(
             onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => Page721()));
+              // Navigator.of(context)
+              //     .push(MaterialPageRoute(builder: (context) => Page721()));
+              CustomDialog.showCustomDialog(
+                context: context,
+                title: '',
+                body: Page721(),
+              );
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

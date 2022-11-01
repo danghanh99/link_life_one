@@ -27,6 +27,7 @@ dev_dependencies:
   test: ^1.16.5
   dalocale: ^2.0.0
   build_runner: ^2.0.6
+  auto_size_text: ^3.0.0
 
 flutter:
   uses-material-design: true
