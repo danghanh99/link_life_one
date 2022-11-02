@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:intl/date_symbol_data_local.dart';
 import 'screen/login_page.dart';
 
 void main() {
+  initializeDateFormatting();
   runApp(const MyApp());
 }
 
