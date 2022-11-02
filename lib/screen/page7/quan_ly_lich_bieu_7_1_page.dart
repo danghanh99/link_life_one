@@ -97,7 +97,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               height: 5,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 const Text(
                   '協力店名 / 営業所名',
@@ -107,7 +107,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Expanded(child: Container()),
+                // Expanded(child: Container()),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: _moreButton(context),
