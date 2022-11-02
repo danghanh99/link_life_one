@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:link_life_one/models/lich_trinh.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page7/page_7_2_1.dart';
 import 'package:link_life_one/screen/page7/page_7_2_2.dart';
 import 'package:link_life_one/screen/page7/page_7_2_3.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4.dart';
-
 import '../../components/custom_text_field.dart';
+import 'package:link_life_one/services/lich_trinh_service.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../menu_page.dart';
@@ -26,24 +28,24 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     '部材管理',
     '出納帳',
   ];
+  List<LichTrinh> lichTrinh = [];
   String value = 'グループ';
   late bool show721;
+  DateTime date = DateTime.now();
 
   @override
   void initState() {
+    getList();
     show721 = true;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
-    ScrollController _scrollController = ScrollController();
+    ScrollController scrollController = ScrollController();
     ScrollController scrollController2 = ScrollController();
-
     return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: Padding(
         padding: const EdgeInsets.only(
           top: 20,
@@ -52,37 +54,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
           left: 16,
         ),
         child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MenuPage(),
-                      ),
-                    );
-                  },
-                  child: Image.asset(
-                    Assets.LOGO_LINK,
-                    width: 100,
-                    height: 100,
-                  ),
-                ),
+                backToMenu(),
                 Column(
                   children: [
-                    textLineDown('ログアウト', () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginPage(),
-                        ),
-                      );
-                    }),
+                    logout(),
                     const SizedBox(
                       height: 10,
                     ),
@@ -96,8 +75,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             Center(
               child: Container(
                 decoration: BoxDecoration(
-                    border:
-                        Border.all(color: Color.fromARGB(255, 247, 240, 240))),
+                    border: Border.all(
+                        color: const Color.fromARGB(255, 247, 240, 240))),
                 width: 200,
                 child: CustomButton(
                   color: Colors.white70,
@@ -170,8 +149,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     'グループ',
                     style: TextStyle(
                       color: value == 'グループ'
-                          ? Color(0xFF48C6EF)
-                          : Color(0xFF042C5C),
+                          ? const Color(0xFF48C6EF)
+                          : const Color(0xFF042C5C),
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
@@ -189,8 +168,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   child: Text(
                     '個人',
                     style: TextStyle(
-                      color:
-                          value == '個人' ? Color(0xFF48C6EF) : Color(0xFF042C5C),
+                      color: value == '個人'
+                          ? const Color(0xFF48C6EF)
+                          : const Color(0xFF042C5C),
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
@@ -201,12 +181,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             const SizedBox(
               height: 5,
             ),
-            // value = '個人';
             value == '個人'
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      // Expanded(child: Container()),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 0),
                         child: _moreButton2(context),
@@ -256,35 +234,49 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         const SizedBox(
                           width: 5,
                         ),
-                        leftNextButton(2, '先週'),
+                        leftNextButton('先週'),
                         const SizedBox(width: 8),
-                        leftNextButton(1, '前日'),
                         Padding(
                           padding: const EdgeInsets.only(
                             bottom: 15,
                             right: 8,
                             left: 8,
                           ),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                Assets.icCalendar,
-                              ),
-                              const SizedBox(width: 3),
-                              const Text(
-                                "2022 / 08 / 23 (火)",
-                                style: TextStyle(
-                                  color: Color(0xFF77869E),
-                                  fontSize: 14.5,
-                                  fontWeight: FontWeight.w400,
+                          child: GestureDetector(
+                            onTap: () async {
+                              DateTime? picked = await showDatePicker(
+                                  context: context,
+                                  initialDate: date,
+                                  firstDate: DateTime(1990),
+                                  lastDate: DateTime(2100));
+                              if (picked != null && picked != date) {
+                                setState(() {
+                                  date = picked;
+                                });
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  Assets.icCalendar,
                                 ),
-                              )
-                            ],
+                                const SizedBox(width: 3),
+                                Text(
+                                  DateFormat('yyyy /MM / dd (E)', 'ja')
+                                      .format(date)
+                                      .toString(),
+                                  style: const TextStyle(
+                                    color: Color(0xFF77869E),
+                                    fontSize: 14.5,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                        rightNextButton(1, '翌日'),
                         const SizedBox(width: 8),
-                        rightNextButton(2, '翌週'),
+                        rightNextButton('翌週'),
                       ],
                     ),
                     const SizedBox(
@@ -296,7 +288,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         child: NotificationListener<ScrollNotification>(
                           onNotification: (ScrollNotification scrollInfo) {
                             print('scrolling.... ${scrollInfo.metrics.pixels}');
-                            _scrollController.jumpTo(scrollInfo.metrics.pixels);
+                            scrollController.jumpTo(scrollInfo.metrics.pixels);
                             return false;
                           },
                           child: SingleChildScrollView(
@@ -310,8 +302,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       ),
                     ),
                     SingleChildScrollView(
-                      physics: NeverScrollableScrollPhysics(),
-                      controller: _scrollController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: scrollController,
                       scrollDirection: Axis.horizontal,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -351,7 +343,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     );
   }
 
-  Widget leftNextButton(int number, String text) {
+  Widget leftNextButton(String text) {
     return Column(
       children: [
         Container(
@@ -363,32 +355,28 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               fit: BoxFit.cover,
             ),
           ),
-          child: number == 1
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      Assets.polygonLeft,
-                      width: 13,
-                      height: 13,
-                    ),
-                  ],
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      Assets.polygonLeft,
-                      width: 13,
-                      height: 13,
-                    ),
-                    Image.asset(
-                      Assets.polygonLeft,
-                      width: 13,
-                      height: 13,
-                    ),
-                  ],
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                date = date.add(const Duration(days: -7));
+              });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  Assets.polygonLeft,
+                  width: 13,
+                  height: 13,
                 ),
+                Image.asset(
+                  Assets.polygonLeft,
+                  width: 13,
+                  height: 13,
+                ),
+              ],
+            ),
+          ),
         ),
         Text(
           text,
@@ -402,7 +390,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     );
   }
 
-  Widget rightNextButton(int number, String text) {
+  Widget rightNextButton(String text) {
     return Column(
       children: [
         Container(
@@ -414,32 +402,28 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               fit: BoxFit.cover,
             ),
           ),
-          child: number == 1
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      Assets.polygonRight,
-                      width: 13,
-                      height: 13,
-                    ),
-                  ],
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      Assets.polygonRight,
-                      width: 13,
-                      height: 13,
-                    ),
-                    Image.asset(
-                      Assets.polygonRight,
-                      width: 13,
-                      height: 13,
-                    ),
-                  ],
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                date = date.add(const Duration(days: 7));
+              });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  Assets.polygonRight,
+                  width: 13,
+                  height: 13,
                 ),
+                Image.asset(
+                  Assets.polygonRight,
+                  width: 13,
+                  height: 13,
+                ),
+              ],
+            ),
+          ),
         ),
         Text(
           text,
@@ -458,13 +442,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {
-        if (number == 1) {
-          // Navigator.of(context).push(MaterialPageRoute(
-          //     builder: (context) => EditThemePage(
-          //           index: index,
-          //           meditationThemeDTO: meditationThemeDTO,
-          //         )));
-        }
+        if (number == 1) {}
         if (number == 2) {}
       },
       shape: const RoundedRectangleBorder(
@@ -540,13 +518,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {
-        if (number == 1) {
-          // Navigator.of(context).push(MaterialPageRoute(
-          //     builder: (context) => EditThemePage(
-          //           index: index,
-          //           meditationThemeDTO: meditationThemeDTO,
-          //         )));
-        }
+        if (number == 1) {}
         if (number == 2) {}
       },
       shape: const RoundedRectangleBorder(
@@ -634,31 +606,35 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     });
   }
 
+  List<String> listDayOfWeek() {
+    DateTime firstDayOfWeek = date.subtract(Duration(days: date.weekday - 1));
+    return List.generate(8, (index) => index).map((value) {
+      if (value == 0) {
+        return '';
+      }
+      if (value == 1) {
+        return DateFormat('dd  (E)', 'ja')
+            .format(firstDayOfWeek.add(Duration(days: value + 5)));
+      }
+      return DateFormat(('dd  (E)'), 'ja').format(
+        firstDayOfWeek.add(Duration(days: value - 2)),
+      );
+    }).toList();
+  }
+
+  List<double> colWidth() {
+    return List.filled(10, 150);
+  }
+
+  void getList() async {
+    final list = await LichTrinhService.danhSachLichTrinh();
+    setState(() {
+      lichTrinh = list;
+    });
+  }
+
   List<Widget> _buildCells2(
       int count, int row, ScrollController scrollController2) {
-    List<String> colNames = [
-      '',
-      '23　(日)',
-      '24　(月)',
-      '25　(火)',
-      '26　(水)',
-      '27　(木)',
-      '28　(金)',
-      '29　(土)',
-    ];
-
-    List<double> colwidth = [
-      130,
-      150,
-      150,
-      150,
-      150,
-      150,
-      150,
-      150,
-      150,
-      150,
-    ];
     return List.generate(count, (col) {
       if (row == 0) {
         return Container(
@@ -667,10 +643,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             color: const Color(0xFFA5A7A9),
           ),
           alignment: Alignment.center,
-          width: colwidth[col],
+          width: colWidth()[col],
           height: 30,
           child: Text(
-            colNames[col],
+            listDayOfWeek()[col],
             style: const TextStyle(
               color: Colors.black,
               fontSize: 15,
@@ -694,7 +670,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             color: Colors.white,
           ),
           alignment: Alignment.topLeft,
-          width: colwidth[col],
+          width: colWidth()[col],
           height: 400,
           // child: const Text(
           //   '',
@@ -712,7 +688,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: colwidth[col],
+                  width: colWidth()[col],
                   color: Color.fromARGB(255, 198, 221, 231),
                   child: Padding(
                     padding: EdgeInsets.all(3),
@@ -754,7 +730,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   ),
                 ),
                 Container(
-                  width: colwidth[col],
+                  width: colWidth()[col],
                   color: Color.fromARGB(255, 191, 222, 209),
                   child: Padding(
                     padding: EdgeInsets.all(3),
@@ -796,7 +772,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   ),
                 ),
                 Container(
-                  width: colwidth[col],
+                  width: colWidth()[col],
                   color: Color.fromARGB(255, 241, 241, 224),
                   child: Padding(
                     padding: EdgeInsets.all(3),
@@ -838,7 +814,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   ),
                 ),
                 Container(
-                  width: colwidth[col],
+                  width: colWidth()[col],
                   color: Color.fromARGB(255, 242, 223, 222),
                   child: Padding(
                     padding: EdgeInsets.all(3),
@@ -930,7 +906,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
           color: Colors.white,
         ),
         alignment: Alignment.topLeft,
-        width: colwidth[col],
+        width: colWidth()[col],
         height: 400,
         child: const Text(
           '',
@@ -941,29 +917,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   }
 
   List<Widget> _buildLastRowCells(int count, int row) {
-    List<String> colNames = [
-      '',
-      '23　(日)',
-      '24　(月)',
-      '25　(火)',
-      '26　(水)',
-      '27　(木)',
-      '28　(金)',
-      '29　(土)',
-    ];
-
-    List<double> colwidth = [
-      130,
-      150,
-      150,
-      150,
-      150,
-      150,
-      150,
-      150,
-      150,
-      150,
-    ];
     return List.generate(count, (col) {
       if (row == 0) {
         return Container(
@@ -972,10 +925,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             color: const Color(0xFFA5A7A9),
           ),
           alignment: Alignment.center,
-          width: colwidth[col],
+          width: colWidth()[col],
           height: 30,
           child: Text(
-            colNames[col],
+            listDayOfWeek()[col],
             style: const TextStyle(
               color: Colors.black,
               fontSize: 15,
@@ -991,11 +944,40 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
           color: Colors.white,
         ),
         alignment: Alignment.topLeft,
-        width: colwidth[col],
+        width: colWidth()[col],
         height: 200,
         child: const Text(
           '',
           style: TextStyle(color: Colors.black),
+        ),
+      );
+    });
+  }
+
+  Widget backToMenu() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MenuPage(),
+          ),
+        );
+      },
+      child: Image.asset(
+        Assets.LOGO_LINK,
+        width: 100,
+        height: 100,
+      ),
+    );
+  }
+
+  Widget logout() {
+    return textLineDown('ログアウト', () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LoginPage(),
         ),
       );
     });
