@@ -97,7 +97,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               height: 5,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 const Text(
                   '協力店名 / 営業所名',
@@ -107,7 +106,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Expanded(child: Container()),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: _moreButton(context),
@@ -612,12 +610,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       if (value == 0) {
         return '';
       }
-      if (value == 1) {
-        return DateFormat('dd  (E)', 'ja')
-            .format(firstDayOfWeek.add(Duration(days: value + 5)));
-      }
       return DateFormat(('dd  (E)'), 'ja').format(
-        firstDayOfWeek.add(Duration(days: value - 2)),
+        firstDayOfWeek.add(Duration(days: value - 1)),
       );
     }).toList();
   }
