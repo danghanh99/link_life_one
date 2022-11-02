@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+part 'lich_trinh.g.dart';
 
 @JsonSerializable()
 class LichTrinh {
