@@ -12,6 +12,7 @@ import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../menu_page.dart';
 import 'component/dialog.dart';
+import 'component/popup_hien_thi.dart';
 
 class QuanLyLichBieu71Page extends StatefulWidget {
   const QuanLyLichBieu71Page({
@@ -118,7 +119,13 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      CustomDialog.showCustomDialog(
+                        context: context,
+                        title: '',
+                        body: const PopupHienThi(),
+                      );
+                    },
                     child: const Text(
                       '表示',
                       style: TextStyle(
