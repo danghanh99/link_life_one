@@ -78,21 +78,33 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    SizedBox(
-                      width: size.width - 30,
-                      child: CustomButton(
-                        color: const Color(0xFFFFA800),
-                        onClick: () {
-                          if (_formKey.currentState?.validate() == true) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MenuPage(),
-                              ),
-                            );
-                          }
-                        },
-                        name: 'ログイン',
+                    GestureDetector(
+                      onTap: () {
+                        if (_formKey.currentState?.validate() == true) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MenuPage(),
+                            ),
+                          );
+                        }
+                      },
+                      child: SizedBox(
+                        width: size.width - 30,
+                        child: CustomButton(
+                          color: const Color(0xFFFFA800),
+                          onClick: () {
+                            if (_formKey.currentState?.validate() == true) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MenuPage(),
+                                ),
+                              );
+                            }
+                          },
+                          name: 'ログイン',
+                        ),
                       ),
                     )
                   ],
