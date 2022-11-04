@@ -55,16 +55,21 @@ class _QuanLyNhapXuatPageState extends State<QuanLyNhapXuatPage> {
                 crossAxisSpacing: 20,
                 childAspectRatio: 2,
                 children: listNames.map((name) {
-                  return CustomButton(
-                    color: const Color(0xFFFFFA7A),
-                    onClick: () {
+                  return GestureDetector(
+                    onTap: () {
                       navigateTo(name);
                     },
-                    name: name,
-                    textStyle: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
+                    child: CustomButton(
+                      color: const Color(0xFFFFFA7A),
+                      onClick: () {
+                        navigateTo(name);
+                      },
+                      name: name,
+                      textStyle: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   );
                 }).toList(),
