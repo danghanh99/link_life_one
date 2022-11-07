@@ -4,6 +4,7 @@ import 'package:link_life_one/screen/page3/page_3_2_nop_anh.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../components/custom_text_field.dart';
+import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../menu_page.dart';
@@ -62,14 +63,16 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                 ),
                 Column(
                   children: [
-                    textLineDown('ログアウト', () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginPage(),
-                        ),
-                      );
-                    }),
+                    TextLineDown(
+                        text: 'ログアウト',
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginPage(),
+                            ),
+                          );
+                        }),
                     const SizedBox(
                       height: 10,
                     ),
@@ -103,9 +106,11 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
             ),
             Row(
               children: [
-                textLineDown('戻る', () {
-                  Navigator.pop(context);
-                }),
+                TextLineDown(
+                    text: '戻る',
+                    onTap: () {
+                      Navigator.pop(context);
+                    }),
                 Spacer(),
               ],
             ),
@@ -271,26 +276,6 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget textLineDown(String text, Function() onTap) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            onTap.call();
-          },
-          child: Text(
-            text,
-            style: const TextStyle(
-              color: Color(0xFF042C5C),
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ],
     );
   }
 

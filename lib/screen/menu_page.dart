@@ -55,16 +55,26 @@ class _MenuPageState extends State<MenuPage> {
                     width: 100,
                     height: 100,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text(
-                      'ログアウト',
-                      style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
+                  Container(
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFDFE0E3),
+                          width: 2.0,
+                        ),
+                      ),
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'ログアウト',
+                        style: TextStyle(
+                          color: Color(0xFF042C5C),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),

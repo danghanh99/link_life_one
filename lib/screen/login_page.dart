@@ -50,64 +50,76 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Form(
                 key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("担当者コード"),
-                    CustomTextField(
-                      hint: '例) 123456789',
-                      type: TextInputType.phone,
-                      validator: _validateEmail,
-                      controller: emailController,
-                      onChanged: (text) {
-                        isLoginEnabled.value = true;
-                      },
-                    ),
-                    const Text("パスワード"),
-                    CustomTextField(
-                      hint: '',
-                      type: TextInputType.text,
-                      textCapitalization: TextCapitalization.none,
-                      validator: _validatePassword,
-                      onChanged: (text) {
-                        isLoginEnabled.value = true;
-                      },
-                      controller: passwordController,
-                      isPassword: true,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        if (_formKey.currentState?.validate() == true) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MenuPage(),
-                            ),
-                          );
-                        }
-                      },
-                      child: SizedBox(
-                        width: size.width - 30,
-                        child: CustomButton(
-                          color: const Color(0xFFFFA800),
-                          onClick: () {
-                            if (_formKey.currentState?.validate() == true) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MenuPage(),
-                                ),
-                              );
-                            }
+                child: Center(
+                  child: SizedBox(
+                    width: 400,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("担当者コード"),
+                        CustomTextField(
+                          hint: '例) 123456789',
+                          type: TextInputType.phone,
+                          validator: _validateEmail,
+                          controller: emailController,
+                          onChanged: (text) {
+                            isLoginEnabled.value = true;
                           },
-                          name: 'ログイン',
                         ),
-                      ),
-                    )
-                  ],
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Text("パスワード"),
+                        CustomTextField(
+                          hint: '',
+                          type: TextInputType.text,
+                          textCapitalization: TextCapitalization.none,
+                          validator: _validatePassword,
+                          onChanged: (text) {
+                            isLoginEnabled.value = true;
+                          },
+                          controller: passwordController,
+                          isPassword: true,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              if (_formKey.currentState?.validate() == true) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MenuPage(),
+                                  ),
+                                );
+                              }
+                            },
+                            child: SizedBox(
+                              // width: size.width - 30,
+                              height: 37,
+                              child: CustomButton(
+                                color: const Color(0xFF6D8FDB),
+                                onClick: () {
+                                  if (_formKey.currentState?.validate() ==
+                                      true) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MenuPage(),
+                                      ),
+                                    );
+                                  }
+                                },
+                                name: 'ログイン',
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],

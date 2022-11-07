@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page5/page_5_2_1_danh_sach_ton_kho.dart';
+import '../../components/text_line_down.dart';
 import '../../shared/date_formatter copy.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
@@ -320,26 +321,6 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     );
   }
 
-  Widget textLineDown(String text, Function() onTap) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            onTap.call();
-          },
-          child: Text(
-            text,
-            style: const TextStyle(
-              color: Color(0xFF042C5C),
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _dropDownButton(BuildContext context, String value) {
     return PopupMenuButton<int>(
       color: Colors.white,
@@ -435,23 +416,24 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
         ),
         Column(
           children: [
-            textLineDown('ログアウト', () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginPage(),
-                ),
-              );
-            }),
+            TextLineDown(
+                text: 'ログアウト',
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginPage(),
+                    ),
+                  );
+                }),
             const SizedBox(
-              height: 10,
+              height: 20,
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            textLineDown('戻る', () {
-              Navigator.pop(context);
-            }),
+            TextLineDown(
+                text: '戻る',
+                onTap: () {
+                  Navigator.pop(context);
+                }),
           ],
         ),
       ],
