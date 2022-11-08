@@ -131,8 +131,8 @@ class _Page721State extends State<Page721> {
                           const SizedBox(
                             width: 10,
                           ),
-                          Text(
-                            '2022年01月19日(水) 10：00  〜  12：00',
+                          const Text(
+                            '2022年01月19日(水)   10：00  〜  12：00',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 14,
@@ -257,7 +257,7 @@ class _Page721State extends State<Page721> {
                           Row(
                             children: [
                               Row(
-                                children: [
+                                children: const [
                                   Text(
                                     '1',
                                     style: TextStyle(
@@ -266,10 +266,10 @@ class _Page721State extends State<Page721> {
                                       fontWeight: FontWeight.w300,
                                     ),
                                   ),
-                                  const SizedBox(
-                                    width: 5,
+                                  SizedBox(
+                                    width: 10,
                                   ),
-                                  const Text(
+                                  Text(
                                     '人',
                                     style: TextStyle(
                                       color: Color(0xFF042C5C),
@@ -279,8 +279,15 @@ class _Page721State extends State<Page721> {
                                   )
                                 ],
                               ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text('/'),
+                              const SizedBox(
+                                width: 10,
+                              ),
                               Row(
-                                children: [
+                                children: const [
                                   Text(
                                     '1',
                                     style: TextStyle(
@@ -289,10 +296,10 @@ class _Page721State extends State<Page721> {
                                       fontWeight: FontWeight.w300,
                                     ),
                                   ),
-                                  const SizedBox(
-                                    width: 5,
+                                  SizedBox(
+                                    width: 10,
                                   ),
-                                  const Text('時間')
+                                  Text('時間')
                                 ],
                               ),
                             ],

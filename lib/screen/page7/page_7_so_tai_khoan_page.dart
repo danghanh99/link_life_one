@@ -98,116 +98,127 @@ class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
               ),
             ),
             const SizedBox(
-              height: 10,
+              height: 40,
             ),
-            Row(
-              children: [
-                const Text(
-                  '担当者',
-                  style: TextStyle(
-                    color: Color(0xFF042C5C),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+            Padding(
+              padding: EdgeInsets.only(left: size.width / 4.5),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 60,
+                        child: Text(
+                          '担当者',
+                          style: TextStyle(
+                            color: Color(0xFF042C5C),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: _moreButton(context),
+                      ),
+                      Container(
+                        width: 70,
+                        height: 37,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFA800),
+                          borderRadius: BorderRadius.circular(26),
+                        ),
+                        child: TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            '表示',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: _moreButton(context),
-                ),
-                Container(
-                  width: 70,
-                  height: 37,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFA800),
-                    borderRadius: BorderRadius.circular(26),
+                  const SizedBox(
+                    height: 20,
                   ),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      '表示',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 70,
                       ),
-                    ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: const [
+                          Text(
+                            '本日時点の回収累計 :',
+                            style: TextStyle(
+                              color: Color(0xFF042C5C),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            '入金額 :',
+                            style: TextStyle(
+                              color: Color(0xFF042C5C),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            '未入金額 :',
+                            style: TextStyle(
+                              color: Color(0xFF042C5C),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            '￥ 1,000,000',
+                            style: TextStyle(
+                              color: Color(0xFF042C5C),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            '￥ 800,000',
+                            style: TextStyle(
+                              color: Color(0xFF042C5C),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            '￥ 200,000',
+                            style: TextStyle(
+                              color: Color(0xFF042C5C),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    height: 10,
+                  )
+                ],
+              ),
             ),
-
-            // Expanded(child: Container()),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: const [
-                    Text(
-                      '本日時点の回収累計 :',
-                      style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      '入金額 :',
-                      style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      '未入金額 :',
-                      style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
-                      '￥ 1,000,000',
-                      style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      '￥ 800,000',
-                      style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      '￥ 200,000',
-                      style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            )
           ],
         ),
       ),
