@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link_life_one/screen/menu_page.dart';
+import 'package:link_life_one/screen/menu_page/menu_page.dart';
 import '../components/custom_text_field.dart';
 import '../shared/assets.dart';
 import '../shared/custom_button.dart';

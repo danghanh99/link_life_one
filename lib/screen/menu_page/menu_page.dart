@@ -5,10 +5,13 @@ import 'package:link_life_one/screen/page7/quan_ly_lich_bieu_7_1_page.dart';
 import 'package:link_life_one/screen/page7/page_7_so_tai_khoan_page.dart';
 import 'package:link_life_one/screen/page4/xac_nhan_thanh_tich_page.dart';
 
-import '../components/custom_text_field.dart';
-import '../shared/assets.dart';
-import '../shared/custom_button.dart';
-import 'page3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
+import '../../shared/assets.dart';
+import '../../shared/custom_button.dart';
+import '../page3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
+import 'components/custom_menu_button.dart';
+import 'components/list_comment.dart';
+import 'components/list_thong_bao.dart';
+import 'components/menu.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({
@@ -27,6 +30,17 @@ class _MenuPageState extends State<MenuPage> {
     '入出庫管理',
     '部材管理',
     '出納帳',
+  ];
+
+  List<String> listComments = [
+    '2022 / 11 / 11　工事のテスト様に新着コメントがあります。',
+  ];
+
+  List<String> listThongBao = [
+    '未処理の入庫が 10 件あります。',
+    '未処理の完了報告が 5 件あります。',
+    '未処理の下見が 3 件あります。',
+    '未処理の部材発注申請が 5 件あります。',
   ];
 
   @override
@@ -107,12 +121,12 @@ class _MenuPageState extends State<MenuPage> {
                   ),
                 ],
               ),
-              CustomTextField(
-                fillColor: const Color(0xFFD9D9D9),
-                hint: '',
-                type: TextInputType.emailAddress,
-                onChanged: (text) {},
-                maxLines: 3,
+              const SizedBox(
+                height: 5,
+              ),
+              const ListComment(),
+              const SizedBox(
+                height: 5,
               ),
               Row(
                 children: [
@@ -132,13 +146,10 @@ class _MenuPageState extends State<MenuPage> {
                   ),
                 ],
               ),
-              CustomTextField(
-                fillColor: const Color(0xFFD9D9D9),
-                hint: '',
-                type: TextInputType.emailAddress,
-                onChanged: (text) {},
-                maxLines: 5,
+              const SizedBox(
+                height: 5,
               ),
+              const ListThongBao(),
               const SizedBox(
                 height: 10,
               ),
@@ -160,33 +171,39 @@ class _MenuPageState extends State<MenuPage> {
                   ),
                 ),
               ),
-              GridView.count(
-                crossAxisCount: 2,
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 20,
-                childAspectRatio: 2,
-                children: listNames.map((name) {
-                  return GestureDetector(
-                    onTap: () {
-                      navigateTo(name);
-                    },
-                    child: CustomButton(
-                      color: const Color(0xFFFFFA7A),
-                      onClick: () {
-                        navigateTo(name);
-                      },
-                      name: name,
-                      textStyle: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  );
-                }).toList(),
+              const SizedBox(
+                height: 20,
               ),
+              Menu(
+                listNames: listNames,
+              )
+              // GridView.count(
+              //   crossAxisCount: 2,
+              //   physics: const NeverScrollableScrollPhysics(),
+              //   shrinkWrap: true,
+              //   mainAxisSpacing: 10,
+              //   crossAxisSpacing: 20,navigateTo
+              //   childAspectRatio: 2,
+              //   children: listNames.map((name) {
+              //     return GestureDetector(
+              //       onTap: () {
+              //         navigateTo(name);
+              //       },
+              //       child: CustomButton(
+              //         color: const Color(0xFFFFFA7A),
+              //         onClick: () {
+              //           navigateTo(name);
+              //         },
+              //         name: name,
+              //         textStyle: const TextStyle(
+              //           color: Colors.black,
+              //           fontSize: 18,
+              //           fontWeight: FontWeight.w700,
+              //         ),
+              //       ),
+              //     );
+              //   }).toList(),
+              // ),
             ],
           ),
         ),

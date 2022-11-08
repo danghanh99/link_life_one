@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/menu_page.dart';
+import 'package:link_life_one/screen/menu_page/menu_page.dart';
 import 'package:link_life_one/screen/page3/page_3_1_yeu_cau_bieu_mau_page.dart';
 
 import '../../components/custom_text_field.dart';
