@@ -3,10 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:link_life_one/models/lich_trinh.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page7/page_7_2_1.dart';
-import 'package:link_life_one/screen/page7/page_7_2_2.dart';
 import 'package:link_life_one/screen/page7/page_7_2_3.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4.dart';
-import '../../components/custom_text_field.dart';
 import 'package:link_life_one/services/lich_trinh_service.dart';
 import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
@@ -37,7 +35,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
   @override
   void initState() {
-    getList();
     show721 = true;
     super.initState();
   }
@@ -147,56 +144,120 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      value = 'グループ';
-                    });
-                  },
-                  child: Text(
-                    'グループ',
-                    style: TextStyle(
-                      color: value == 'グループ'
-                          ? const Color(0xFF48C6EF)
-                          : const Color(0xFF042C5C),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          value = 'グループ';
+                        });
+                      },
+                      child: Text(
+                        'グループ',
+                        style: TextStyle(
+                          foreground: Paint()
+                            ..shader = LinearGradient(
+                              colors: value == 'グループ'
+                                  ? <Color>[
+                                      const Color(0xFF6F86D6),
+                                      const Color(0xFF48C6EF)
+                                    ]
+                                  : <Color>[
+                                      const Color(0xFF042C5C),
+                                      const Color(0xFF042C5C)
+                                    ],
+                            ).createShader(
+                              const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0),
+                            ),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
-                  ),
+                    Container(
+                      height: 3.0,
+                      width: 150,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: value == 'グループ'
+                              ? [
+                                  const Color(0xFF6F86D6),
+                                  const Color(0xFF48C6EF)
+                                ]
+                              : [
+                                  const Color(0xFFDFE0E3),
+                                  const Color(0xFFDFE0E3)
+                                ],
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.only(bottom: 5),
+                      ),
+                    )
+                  ],
                 ),
-                const SizedBox(
-                  width: 5,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      value = '個人';
-                    });
-                  },
-                  child: Text(
-                    '個人',
-                    style: TextStyle(
-                      color: value == '個人'
-                          ? const Color(0xFF48C6EF)
-                          : const Color(0xFF042C5C),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          value = '個人';
+                        });
+                      },
+                      child: Text(
+                        '個人',
+                        style: TextStyle(
+                          foreground: Paint()
+                            ..shader = LinearGradient(
+                              colors: value == '個人'
+                                  ? <Color>[
+                                      const Color(0xFF6F86D6),
+                                      const Color(0xFF48C6EF)
+                                    ]
+                                  : <Color>[
+                                      const Color(0xFF042C5C),
+                                      const Color(0xFF042C5C)
+                                    ],
+                            ).createShader(
+                              const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0),
+                            ),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
-                  ),
+                    Container(
+                      height: 3.0,
+                      width: 150,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: value == '個人'
+                              ? [
+                                  const Color(0xFF6F86D6),
+                                  const Color(0xFF48C6EF)
+                                ]
+                              : [
+                                  const Color(0xFFDFE0E3),
+                                  const Color(0xFFDFE0E3)
+                                ],
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.only(bottom: 5),
+                      ),
+                    )
+                  ],
                 ),
               ],
             ),
             const SizedBox(
-              height: 5,
+              height: 15,
             ),
             value == '個人'
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 0),
-                        child: _moreButton2(context),
-                      ),
+                      _moreButton2(context),
                       const SizedBox(
                         width: 10,
                       ),
@@ -646,248 +707,291 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         );
       }
 
-      if (col != 0 && row != 0) {
-        String value = '追加希望 追加希望 追加希望 追加希望 追加希望';
-        String firstPart = value.split(' ').toList()[0];
-        String secondPart = value.substring(firstPart.length, value.length);
-
-        String value2 = 'ネット工事 ネット工事 ネット工事 ネット工事 ネット工事';
-        String firstPart2 = value2.split(' ').toList()[0];
-        String secondPart2 = value2.substring(firstPart2.length, value2.length);
-        return Container(
-          decoration: BoxDecoration(
-            border: Border.all(width: 0.5),
-            color: Colors.white,
-          ),
-          alignment: Alignment.topLeft,
-          width: colWidth()[col],
-          height: 400,
-          // child: const Text(
-          //   '',
-          //   style: TextStyle(color: Colors.black),
-          // ),
-          child: GestureDetector(
-            onTap: () {
-              CustomDialog.showCustomDialog(
-                context: context,
-                title: '',
-                body: Page721(),
-              );
-            },
+      if (row != 0) {
+        if (col == 0) {
+          return Container(
+            decoration: BoxDecoration(
+              border: Border.all(width: 0.5),
+              color: Colors.white,
+            ),
+            alignment: Alignment.topLeft,
+            width: 150,
+            height: 400,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: colWidth()[col],
-                  color: Color.fromARGB(255, 198, 221, 231),
-                  child: Padding(
-                    padding: EdgeInsets.all(3),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '9:00-10:00',
-                          style: TextStyle(fontSize: 10),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                              style: TextStyle(color: Colors.black),
-                              children: [
-                                WidgetSpan(
-                                  child: Container(
-                                    color: Color.fromARGB(255, 23, 137, 229),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                        bottom: 2,
-                                      ),
-                                      child: Text(
-                                        firstPart,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: secondPart,
-                                ),
-                              ]),
-                        ),
-                      ],
+                Row(
+                  children: [
+                    Image.network(
+                      'https://picsum.photos/250?image=9',
+                      width: 20,
+                      height: 20,
                     ),
-                  ),
-                ),
-                Container(
-                  width: colWidth()[col],
-                  color: Color.fromARGB(255, 191, 222, 209),
-                  child: Padding(
-                    padding: EdgeInsets.all(3),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '10:30-12:30',
-                          style: TextStyle(fontSize: 10),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                              style: TextStyle(color: Colors.black),
-                              children: [
-                                WidgetSpan(
-                                  child: Container(
-                                    color: Color.fromARGB(255, 22, 176, 60),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                        bottom: 2,
-                                      ),
-                                      child: Text(
-                                        firstPart2,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: secondPart2,
-                                ),
-                              ]),
-                        ),
-                      ],
+                    const Text(
+                      'data 1',
+                      style: TextStyle(
+                          color: Color(0xFF042C5C),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400),
                     ),
-                  ),
+                  ],
                 ),
-                Container(
-                  width: colWidth()[col],
-                  color: Color.fromARGB(255, 241, 241, 224),
-                  child: Padding(
-                    padding: EdgeInsets.all(3),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '10:30-12:30',
-                          style: TextStyle(fontSize: 10),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                              style: TextStyle(color: Colors.black),
-                              children: [
-                                WidgetSpan(
-                                  child: Container(
-                                    color: Color.fromARGB(255, 224, 195, 88),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                        bottom: 2,
-                                      ),
-                                      child: Text(
-                                        firstPart2,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: secondPart2,
-                                ),
-                              ]),
-                        ),
-                      ],
+                Row(
+                  children: const [
+                    Icon(
+                      Icons.calendar_month,
+                      color: Colors.black,
+                      size: 30.0,
                     ),
-                  ),
-                ),
-                Container(
-                  width: colWidth()[col],
-                  color: Color.fromARGB(255, 242, 223, 222),
-                  child: Padding(
-                    padding: EdgeInsets.all(3),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '10:30-12:30',
-                          style: TextStyle(fontSize: 10),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                              style: TextStyle(color: Colors.black),
-                              children: [
-                                WidgetSpan(
-                                  child: Container(
-                                    color: Colors.red,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                        bottom: 2,
-                                      ),
-                                      child: Text(
-                                        '!! 重要 !!',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: secondPart2,
-                                ),
-                              ]),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          CustomDialog.showCustomDialog(
-                            context: context,
-                            title: '',
-                            body: Page723(),
-                          );
-                        },
-                        child: Icon(
-                          Icons.add_circle,
-                          size: 16,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 3,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          CustomDialog.showCustomDialog(
-                            context: context,
-                            title: '',
-                            body: Page724(),
-                          );
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => const Page724(),
-                          //   ),
-                          // );
-                        },
-                        child: Icon(Icons.insert_drive_file_outlined),
-                      ),
-                    ],
-                  ),
+                    Text(
+                      'data 2',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900),
+                    )
+                  ],
                 ),
               ],
             ),
-          ),
-        );
+          );
+        } else {
+          String value = '追加希望 追加希望 追加希望 追加希望 追加希望';
+          String firstPart = value.split(' ').toList()[0];
+          String secondPart = value.substring(firstPart.length, value.length);
+
+          String value2 = 'ネット工事 ネット工事 ネット工事 ネット工事 ネット工事';
+          String firstPart2 = value2.split(' ').toList()[0];
+          String secondPart2 =
+              value2.substring(firstPart2.length, value2.length);
+          return Container(
+            decoration: BoxDecoration(
+              border: Border.all(width: 0.5),
+              color: Colors.white,
+            ),
+            alignment: Alignment.topLeft,
+            width: colWidth()[col],
+            height: 400,
+            child: GestureDetector(
+              onTap: () {
+                CustomDialog.showCustomDialog(
+                  context: context,
+                  title: '',
+                  body: const Page721(),
+                );
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: colWidth()[col],
+                    color: const Color.fromARGB(255, 198, 221, 231),
+                    child: Padding(
+                      padding: const EdgeInsets.all(3),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '9:00-10:00',
+                            style: TextStyle(fontSize: 10),
+                          ),
+                          RichText(
+                            text: TextSpan(
+                                style: const TextStyle(color: Colors.black),
+                                children: [
+                                  WidgetSpan(
+                                    child: Container(
+                                      color: const Color.fromARGB(
+                                          255, 23, 137, 229),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 2,
+                                        ),
+                                        child: Text(
+                                          firstPart,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: secondPart,
+                                  ),
+                                ]),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: colWidth()[col],
+                    color: const Color.fromARGB(255, 191, 222, 209),
+                    child: Padding(
+                      padding: const EdgeInsets.all(3),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '10:30-12:30',
+                            style: TextStyle(fontSize: 10),
+                          ),
+                          RichText(
+                            text: TextSpan(
+                                style: const TextStyle(color: Colors.black),
+                                children: [
+                                  WidgetSpan(
+                                    child: Container(
+                                      color: const Color.fromARGB(
+                                          255, 22, 176, 60),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 2,
+                                        ),
+                                        child: Text(
+                                          firstPart2,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: secondPart2,
+                                  ),
+                                ]),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: colWidth()[col],
+                    color: const Color.fromARGB(255, 241, 241, 224),
+                    child: Padding(
+                      padding: const EdgeInsets.all(3),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '10:30-12:30',
+                            style: TextStyle(fontSize: 10),
+                          ),
+                          RichText(
+                            text: TextSpan(
+                                style: const TextStyle(color: Colors.black),
+                                children: [
+                                  WidgetSpan(
+                                    child: Container(
+                                      color: const Color.fromARGB(
+                                          255, 224, 195, 88),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 2,
+                                        ),
+                                        child: Text(
+                                          firstPart2,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: secondPart2,
+                                  ),
+                                ]),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: colWidth()[col],
+                    color: const Color.fromARGB(255, 242, 223, 222),
+                    child: Padding(
+                      padding: const EdgeInsets.all(3),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '10:30-12:30',
+                            style: TextStyle(fontSize: 10),
+                          ),
+                          RichText(
+                            text: TextSpan(
+                                style: const TextStyle(color: Colors.black),
+                                children: [
+                                  WidgetSpan(
+                                    child: Container(
+                                      color: Colors.red,
+                                      child: const Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: 2,
+                                        ),
+                                        child: Text(
+                                          '!! 重要 !!',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: secondPart2,
+                                  ),
+                                ]),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            CustomDialog.showCustomDialog(
+                              context: context,
+                              title: '',
+                              body: const Page723(),
+                            );
+                          },
+                          child: const Icon(
+                            Icons.add_circle,
+                            size: 16,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 3,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            CustomDialog.showCustomDialog(
+                              context: context,
+                              title: '',
+                              body: const Page724(),
+                            );
+                          },
+                          child: const Icon(Icons.insert_drive_file_outlined),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
       }
 
       return Container(
