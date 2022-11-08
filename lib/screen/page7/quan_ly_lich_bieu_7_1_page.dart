@@ -674,7 +674,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   }
 
   List<double> colWidth() {
-    return List.filled(10, 150);
+    return List<double>.generate(10, (int index) {
+      if (index == 0) return 200;
+      return 150.0;
+    }, growable: true);
   }
 
   void getList() async {
@@ -715,40 +718,43 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               color: Colors.white,
             ),
             alignment: Alignment.topLeft,
-            width: 150,
+            width: colWidth()[col],
             height: 400,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Image.network(
-                      'https://picsum.photos/250?image=9',
-                      width: 20,
-                      height: 20,
-                    ),
-                    const Text(
-                      'data 1',
-                      style: TextStyle(
-                          color: Color(0xFF042C5C),
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 5, left: 5),
+                  child: Row(
+                    children: [
+                      Image.network(
+                        'https://znews-stc.zdn.vn/static/topic/person/trump.jpg',
+                        width: 40,
+                        height: 40,
+                      ),
+                      const Text(
+                        'データ 1',
+                        style: TextStyle(
+                            color: Color(0xFF042C5C),
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  ),
                 ),
                 Row(
                   children: const [
                     Icon(
-                      Icons.calendar_month,
+                      Icons.calendar_month_rounded,
                       color: Colors.black,
-                      size: 30.0,
+                      size: 40.0,
                     ),
                     Text(
-                      'data 2',
+                      'データ 2',
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 20,
-                          fontWeight: FontWeight.w900),
+                          fontWeight: FontWeight.w600),
                     )
                   ],
                 ),
