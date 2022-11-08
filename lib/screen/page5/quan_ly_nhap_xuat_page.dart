@@ -3,6 +3,7 @@ import 'package:link_life_one/screen/page4/xac_nhan_thanh_tich_page.dart';
 import 'package:link_life_one/screen/page5/page_5_1_lich_kiem_ke.dart';
 
 import '../../components/custom_text_field.dart';
+import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../../shared/validator.dart';
@@ -139,41 +140,25 @@ class _QuanLyNhapXuatPageState extends State<QuanLyNhapXuatPage> {
         ),
         Column(
           children: [
-            textLineDown('ログアウト', () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginPage(),
-                ),
-              );
-            }),
+            TextLineDown(
+                text: 'ログアウト',
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginPage(),
+                    ),
+                  );
+                }),
             const SizedBox(
               height: 10,
             ),
-            textLineDown('戻る', () {
-              Navigator.pop(context);
-            }),
+            TextLineDown(
+                text: '戻る',
+                onTap: () {
+                  Navigator.pop(context);
+                }),
           ],
-        ),
-      ],
-    );
-  }
-
-  Widget textLineDown(String text, Function() onTap) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            onTap.call();
-          },
-          child: Text(
-            text,
-            style: const TextStyle(
-              color: Color(0xFF042C5C),
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
         ),
       ],
     );

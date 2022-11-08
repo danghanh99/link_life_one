@@ -8,6 +8,7 @@ import 'package:link_life_one/screen/page7/page_7_2_3.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4.dart';
 import '../../components/custom_text_field.dart';
 import 'package:link_life_one/services/lich_trinh_service.dart';
+import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../menu_page.dart';
@@ -66,9 +67,11 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     const SizedBox(
                       height: 10,
                     ),
-                    textLineDown('戻る', () {
-                      Navigator.pop(context);
-                    }),
+                    TextLineDown(
+                        text: '戻る',
+                        onTap: () {
+                          Navigator.pop(context);
+                        }),
                   ],
                 ),
               ],
@@ -331,26 +334,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget textLineDown(String text, Function() onTap) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            onTap.call();
-          },
-          child: Text(
-            text,
-            style: const TextStyle(
-              color: Color(0xFF042C5C),
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ],
     );
   }
 
@@ -980,13 +963,15 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   }
 
   Widget logout() {
-    return textLineDown('ログアウト', () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const LoginPage(),
-        ),
-      );
-    });
+    return TextLineDown(
+        text: 'ログアウト',
+        onTap: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginPage(),
+            ),
+          );
+        });
   }
 }

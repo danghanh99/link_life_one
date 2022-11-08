@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page5/page_5_2_danh_sach_nguyen_lieu.dart';
 
+import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../menu_page.dart';
@@ -120,26 +121,6 @@ class _Page53DanhSachNhanLaiVatLieuState
     );
   }
 
-  Widget textLineDown(String text, Function() onTap) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            onTap.call();
-          },
-          child: Text(
-            text,
-            style: const TextStyle(
-              color: Color(0xFF042C5C),
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _dropDownButton(BuildContext context, String value) {
     return PopupMenuButton<int>(
       color: Colors.white,
@@ -235,20 +216,24 @@ class _Page53DanhSachNhanLaiVatLieuState
         ),
         Column(
           children: [
-            textLineDown('ログアウト', () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginPage(),
-                ),
-              );
-            }),
+            TextLineDown(
+                text: 'ログアウト',
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginPage(),
+                    ),
+                  );
+                }),
             const SizedBox(
               height: 10,
             ),
-            textLineDown('戻る', () {
-              Navigator.pop(context);
-            }),
+            TextLineDown(
+                text: '戻る',
+                onTap: () {
+                  Navigator.pop(context);
+                }),
           ],
         ),
       ],
