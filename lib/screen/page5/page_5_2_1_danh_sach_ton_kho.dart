@@ -7,7 +7,7 @@ import '../../components/custom_text_field.dart';
 import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
-import '../menu_page.dart';
+import '../menu_page/menu_page.dart';
 
 class Page521DanhSachTonKho extends StatefulWidget {
   const Page521DanhSachTonKho({

@@ -5,7 +5,7 @@ import 'package:link_life_one/screen/page5/page_5_2_danh_sach_nguyen_lieu.dart';
 import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
-import '../menu_page.dart';
+import '../menu_page/menu_page.dart';
 
 class Page53DanhSachNhanLaiVatLieu extends StatefulWidget {
   const Page53DanhSachNhanLaiVatLieu({
@@ -61,13 +61,6 @@ class _Page53DanhSachNhanLaiVatLieuState
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    // SingleChildScrollView(
-                    //   scrollDirection: Axis.vertical,
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: _buildCells(20),
-                    //   ),
-                    // ),
                     Flexible(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
@@ -82,9 +75,6 @@ class _Page53DanhSachNhanLaiVatLieuState
               ),
             ),
             Expanded(child: Container()),
-            // const SizedBox(
-            //   height: 10,
-            // ),
             Container(
               width: 120,
               height: 37,
@@ -111,83 +101,6 @@ class _Page53DanhSachNhanLaiVatLieuState
                   ),
                 ),
               ),
-            ),
-            // const SizedBox(
-            //   height: 10,
-            // ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _dropDownButton(BuildContext context, String value) {
-    return PopupMenuButton<int>(
-      color: Colors.white,
-      padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {}
-        if (number == 2) {}
-      },
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "投函数を選択",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "投函数を選択",
-              ),
-            ],
-          ),
-        ),
-      ],
-      offset: const Offset(-35, -90),
-      child: Container(
-        width: 130,
-        height: 30,
-        decoration: BoxDecoration(
-          color: const Color(0xFFF5F6F8),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              value,
-              style: const TextStyle(
-                color: Color(0xFF999999),
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            Image.asset(
-              Assets.icDown,
-              width: 13,
-              height: 13,
             ),
           ],
         ),
@@ -292,16 +205,17 @@ class _Page53DanhSachNhanLaiVatLieuState
       '持ち戻り数量'
     ];
 
+    Size size = MediaQuery.of(context).size;
     List<double> colwidth = [
       30,
-      170,
-      130,
-      100,
-      100,
-      100,
-      100,
-      100,
-      120,
+      (size.width - 33) * 2 / 7 - 30,
+      (size.width - 33) / 7,
+      (size.width - 33) / 7,
+      (size.width - 33) / 7,
+      (size.width - 33) / 7,
+      (size.width - 33) / 7,
+      (size.width - 33) / 7,
+      (size.width - 33) / 7,
     ];
     return List.generate(count, (col) {
       if (row == 0) {
@@ -337,7 +251,87 @@ class _Page53DanhSachNhanLaiVatLieuState
     });
   }
 
+  Widget _moreButton(BuildContext context) {
+    return PopupMenuButton<int>(
+      color: Colors.white,
+      padding: EdgeInsets.zero,
+      onSelected: (number) {
+        if (number == 1) {
+          // Navigator.of(context).push(MaterialPageRoute(
+          //     builder: (context) => EditThemePage(
+          //           index: index,
+          //           meditationThemeDTO: meditationThemeDTO,
+          //         )));
+        }
+        if (number == 2) {}
+      },
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0))),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          height: 25,
+          padding: const EdgeInsets.only(right: 0, left: 10),
+          value: 1,
+          child: Row(
+            children: const [
+              SizedBox(
+                width: 14,
+              ),
+              Text(
+                "Dropdown item",
+              ),
+            ],
+          ),
+        ),
+        const PopupMenuDivider(),
+        PopupMenuItem(
+          height: 25,
+          padding: const EdgeInsets.only(right: 0, left: 10),
+          value: 2,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: const [
+              SizedBox(
+                width: 14,
+              ),
+              Text(
+                "Dropdown item",
+              ),
+            ],
+          ),
+        ),
+      ],
+      offset: const Offset(-25, -10),
+      child: Image.asset(
+        Assets.icDropdown,
+      ),
+    );
+  }
+
   Widget contentTable(int col, int row) {
+    if (col == 6) {
+      return Row(
+        children: [
+          const Text(''),
+          const Spacer(),
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                left: BorderSide(
+                  color: Colors.black,
+                  width: 0.7,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 7, left: 7),
+            child: _moreButton(context),
+          ),
+        ],
+      );
+    }
+
     return col == 0
         ? RadioListTile(
             value: row,

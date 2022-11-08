@@ -11,7 +11,7 @@ import 'package:link_life_one/services/lich_trinh_service.dart';
 import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
-import '../menu_page.dart';
+import '../menu_page/menu_page.dart';
 import 'component/dialog.dart';
 import 'component/popup_hien_thi.dart';
 
