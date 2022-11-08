@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page5/page_5_3_danh_sach_nhan_lai_vat_lieu.dart';
-import 'package:link_life_one/screen/page6/phe_duyet_don_dat_hang_6_3_1_page.dart';
+import 'package:link_life_one/screen/page6/page631/phe_duyet_don_dat_hang_6_3_1_page.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../components/text_line_down.dart';

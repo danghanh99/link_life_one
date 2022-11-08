@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:link_life_one/screen/page4/xac_nhan_thanh_tich_page.dart';
-import 'package:link_life_one/screen/page6/phe_duyet_don_dat_hang_6_3_1_page.dart';
+import 'package:link_life_one/screen/page6/page6_quan_ly/components/menu_page6.dart';
 
-import '../../components/custom_text_field.dart';
-import '../../components/text_line_down.dart';
-import '../../shared/assets.dart';
-import '../../shared/custom_button.dart';
-import '../../shared/validator.dart';
-import '../menu_page/menu_page.dart';
-import '../page3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
-import '../login_page.dart';
-import 'danh_muc_hang_ton_kho_6_2_page.dart';
-import 'danh_sach_dat_hang_cac_bo_phan_6_1_page.dart';
-import 'danh_sach_dat_hang_cac_bo_phan_6_3_page.dart';
+import '../../../components/text_line_down.dart';
+import '../../../shared/assets.dart';
+import '../../../shared/custom_button.dart';
+import '../../menu_page/menu_page.dart';
+import '../../login_page.dart';
 
 class Page6QuanLyThanhVien extends StatefulWidget {
   const Page6QuanLyThanhVien({
@@ -49,77 +42,15 @@ class _Page6QuanLyThanhVienState extends State<Page6QuanLyThanhVien> {
             children: [
               header(),
               title(),
-              GridView.count(
-                crossAxisCount: 2,
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 20,
-                childAspectRatio: 2,
-                children: listNames.map((name) {
-                  return GestureDetector(
-                    onTap: () {
-                      navigateTo(name);
-                    },
-                    child: CustomButton(
-                      color: const Color(0xFFFFFA7A),
-                      onClick: () {
-                        navigateTo(name);
-                      },
-                      name: name,
-                      textStyle: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  );
-                }).toList(),
+              const SizedBox(
+                height: 20,
               ),
+              MenuPage6(listNames: listNames)
             ],
           ),
         ),
       ),
     );
-  }
-
-  void navigateTo(String name) {
-    // '工事完了報告',
-    // 'スケジュール管理',
-    // '実績確認',
-    // '入出庫管理',
-    // '部材管理',
-    // '出納帳',
-    switch (name) {
-      case ('部材発注'):
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const DanhSachDatHangCacBoPhan61Page(),
-          ),
-        );
-        break;
-
-      case ('棚卸'):
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const DanhMucHangTonKho62Page(),
-          ),
-        );
-        break;
-
-      case ('発注承認'):
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const PheDuyetDonDatHang631Page(),
-          ),
-        );
-        break;
-      default:
-        {}
-    }
   }
 
   Widget header() {
@@ -173,7 +104,7 @@ class _Page6QuanLyThanhVienState extends State<Page6QuanLyThanhVien> {
         decoration: BoxDecoration(
             border:
                 Border.all(color: const Color.fromARGB(255, 247, 240, 240))),
-        width: 240,
+        width: 300,
         child: CustomButton(
           color: Colors.white70,
           onClick: () {},

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/menu_page/menu_page.dart';
 import 'package:link_life_one/screen/page3/page_3_1_yeu_cau_bieu_mau_page.dart';
@@ -27,6 +28,7 @@ class _Page3BaoCaoHoanThanhCongTrinhState
     '12',
     '1234',
   ];
+  DateTime date = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +44,6 @@ class _Page3BaoCaoHoanThanhCongTrinhState
           left: 16,
         ),
         child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -124,35 +124,49 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                 const SizedBox(
                   width: 5,
                 ),
-                leftNextButton(2, '先週'),
+                leftNextButton('先週'),
                 const SizedBox(width: 8),
-                leftNextButton(1, '前日'),
                 Padding(
                   padding: const EdgeInsets.only(
                     bottom: 15,
                     right: 8,
                     left: 8,
                   ),
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        Assets.icCalendar,
-                      ),
-                      const SizedBox(width: 3),
-                      const Text(
-                        "2022 / 08 / 23 (火)",
-                        style: TextStyle(
-                          color: Color(0xFF77869E),
-                          fontSize: 14.5,
-                          fontWeight: FontWeight.w400,
+                  child: GestureDetector(
+                    onTap: () async {
+                      DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: date,
+                          firstDate: DateTime(1990),
+                          lastDate: DateTime(2100));
+                      if (picked != null && picked != date) {
+                        setState(() {
+                          date = picked;
+                        });
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          Assets.icCalendar,
                         ),
-                      )
-                    ],
+                        const SizedBox(width: 3),
+                        Text(
+                          DateFormat('yyyy /MM / dd (E)', 'ja')
+                              .format(date)
+                              .toString(),
+                          style: const TextStyle(
+                            color: Color(0xFF77869E),
+                            fontSize: 14.5,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                rightNextButton(1, '翌日'),
                 const SizedBox(width: 8),
-                rightNextButton(2, '翌週'),
+                rightNextButton('翌週'),
               ],
             ),
             const SizedBox(
@@ -176,11 +190,11 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                   return Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: i / 1 == 0
+                      color: i / 1 != 0
                           ? Color.fromARGB(255, 216, 181, 111)
                           : Color.fromARGB(255, 111, 177, 224),
                       border: Border.all(
-                        color: i / 1 == 0
+                        color: i / 1 != 0
                             ? Color.fromARGB(255, 216, 181, 111)
                             : Color.fromARGB(255, 111, 177, 224),
                       ),
@@ -284,7 +298,7 @@ class _Page3BaoCaoHoanThanhCongTrinhState
     );
   }
 
-  Widget leftNextButton(int number, String text) {
+  Widget leftNextButton(String text) {
     return Column(
       children: [
         Container(
@@ -296,32 +310,28 @@ class _Page3BaoCaoHoanThanhCongTrinhState
               fit: BoxFit.cover,
             ),
           ),
-          child: number == 1
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      Assets.polygonLeft,
-                      width: 13,
-                      height: 13,
-                    ),
-                  ],
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      Assets.polygonLeft,
-                      width: 13,
-                      height: 13,
-                    ),
-                    Image.asset(
-                      Assets.polygonLeft,
-                      width: 13,
-                      height: 13,
-                    ),
-                  ],
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                date = date.add(const Duration(days: -7));
+              });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  Assets.polygonLeft,
+                  width: 13,
+                  height: 13,
                 ),
+                Image.asset(
+                  Assets.polygonLeft,
+                  width: 13,
+                  height: 13,
+                ),
+              ],
+            ),
+          ),
         ),
         Text(
           text,
@@ -335,7 +345,7 @@ class _Page3BaoCaoHoanThanhCongTrinhState
     );
   }
 
-  Widget rightNextButton(int number, String text) {
+  Widget rightNextButton(String text) {
     return Column(
       children: [
         Container(
@@ -347,32 +357,28 @@ class _Page3BaoCaoHoanThanhCongTrinhState
               fit: BoxFit.cover,
             ),
           ),
-          child: number == 1
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      Assets.polygonRight,
-                      width: 13,
-                      height: 13,
-                    ),
-                  ],
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      Assets.polygonRight,
-                      width: 13,
-                      height: 13,
-                    ),
-                    Image.asset(
-                      Assets.polygonRight,
-                      width: 13,
-                      height: 13,
-                    ),
-                  ],
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                date = date.add(const Duration(days: 7));
+              });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  Assets.polygonRight,
+                  width: 13,
+                  height: 13,
                 ),
+                Image.asset(
+                  Assets.polygonRight,
+                  width: 13,
+                  height: 13,
+                ),
+              ],
+            ),
+          ),
         ),
         Text(
           text,

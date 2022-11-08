@@ -465,13 +465,18 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
             const SizedBox(
               height: 25,
             ),
-            const Text(
-              '※ 委託費は、下見案件1件あたりの委託額を加算済みの数値です。',
-              style: TextStyle(
-                color: Color(0xFF9D9D9D),
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-              ),
+            Row(
+              children: const [
+                Text(
+                  '※ 委託費は、下見案件1件あたりの委託額を加算済みの数値です。',
+                  style: TextStyle(
+                    color: Color(0xFF9D9D9D),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+              ],
             ),
             Flexible(
               child: SingleChildScrollView(

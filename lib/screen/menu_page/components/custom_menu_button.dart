@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 import '../../../shared/custom_button.dart';
 import '../../page3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 import '../../page4/xac_nhan_thanh_tich_page.dart';
-import '../../page5/quan_ly_nhap_xuat_page.dart';
-import '../../page6/page_6_quan_ly_thanh_vien.dart';
+import '../../page5/page5_quan_ly/quan_ly_nhap_xuat_page.dart';
+import '../../page5/page_5_1_lich_kiem_ke.dart';
+import '../../page5/page_5_2_danh_sach_nguyen_lieu.dart';
+import '../../page5/page_5_3_danh_sach_nhan_lai_vat_lieu.dart';
+import '../../page6/danh_muc_hang_ton_kho_6_2_page.dart';
+import '../../page6/danh_sach_dat_hang_cac_bo_phan_6_1_page.dart';
+import '../../page6/page6_quan_ly/page_6_quan_ly_thanh_vien.dart';
+import '../../page6/page631/phe_duyet_don_dat_hang_6_3_1_page.dart';
 import '../../page7/page_7_so_tai_khoan_page.dart';
 import '../../page7/quan_ly_lich_bieu_7_1_page.dart';
 
@@ -103,6 +109,63 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
         );
         break;
 
+//page 5
+      case ('入庫予定表'):
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Page51LichKiemKe(),
+          ),
+        );
+        break;
+
+      case ('部材持ち出し 登録'):
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Page52DanhSachNguyenLieu(),
+          ),
+        );
+        break;
+
+      case ('部材持ち戻り 登録'):
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Page53DanhSachNhanLaiVatLieu(),
+          ),
+        );
+        break;
+// page 5 end
+
+// page 6 begin
+      case ('部材発注'):
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DanhSachDatHangCacBoPhan61Page(),
+          ),
+        );
+        break;
+
+      case ('棚卸'):
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DanhMucHangTonKho62Page(),
+          ),
+        );
+        break;
+
+      case ('発注承認'):
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const PheDuyetDonDatHang631Page(),
+          ),
+        );
+        break;
+// page 6 end
       default:
         {}
     }
