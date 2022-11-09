@@ -517,8 +517,8 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
                 130,
                 100,
                 100,
-                100,
-                100,
+                120,
+                120,
               ]
             : [
                 30,

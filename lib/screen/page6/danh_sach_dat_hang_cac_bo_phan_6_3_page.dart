@@ -178,7 +178,7 @@ class _DanhSachDatHangCacBoPhan63PageState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       columnText2(
-                        width: size.width / 2 - 30,
+                        width: size.width / 2 - 28,
                         text: 'ステータス',
                       ),
                       Container()
@@ -404,7 +404,7 @@ class _DanhSachDatHangCacBoPhan63PageState
       offset: const Offset(-0, 50),
       child: Container(
         width: width - 4,
-        height: 45,
+        height: 34,
         decoration: BoxDecoration(
           color: const Color(0xFFF5F6F8),
           borderRadius: BorderRadius.circular(8),

@@ -85,7 +85,7 @@ class _DanhSachDatHangCacBoPhan61PageState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       columnText2(
-                        width: size.width / 2 - 20,
+                        width: size.width / 2 - 30,
                         text: 'ステータス',
                       ),
                       Container()

@@ -295,17 +295,32 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
       '工事日'
     ];
 
-    List<double> colwidth = [
-      30,
-      170,
-      130,
-      100,
-      100,
-      100,
-      50,
-      100,
-      100,
-    ];
+    Size size = MediaQuery.of(context).size;
+    List<double> colwidth =
+        MediaQuery.of(context).orientation == Orientation.portrait
+            ? [
+                30,
+                170,
+                130,
+                100,
+                100,
+                100,
+                50,
+                100,
+                100,
+              ]
+            : [
+                30,
+                2 * (size.width - 33) / 9,
+                (size.width - 33) / 9,
+                (size.width - 33) / 9,
+                (size.width - 33) / 9,
+                (size.width - 33) / 9,
+                0.7 * (size.width - 33) / 9,
+                (size.width - 33) / 9,
+                (size.width - 33) / 9,
+              ];
+
     return List.generate(count, (col) {
       if (row == 0) {
         return Container(

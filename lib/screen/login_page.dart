@@ -66,9 +66,9 @@ class _LoginPageState extends State<LoginPage> {
                             isLoginEnabled.value = true;
                           },
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
+                        // const SizedBox(
+                        //   height: 10,
+                        // ),
                         const Text("パスワード"),
                         CustomTextField(
                           hint: '',
@@ -81,9 +81,9 @@ class _LoginPageState extends State<LoginPage> {
                           controller: passwordController,
                           isPassword: true,
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
+                        // const SizedBox(
+                        //   height: 10,
+                        // ),
                         Center(
                           child: GestureDetector(
                             onTap: () {
