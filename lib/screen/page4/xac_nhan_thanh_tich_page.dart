@@ -292,17 +292,30 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
       '追加工事件数',
       '物販件数',
     ];
-
-    List<double> colwidth = [
-      110,
-      130,
-      130,
-      100,
-      100,
-      100,
-      100,
-      100,
-    ];
+    Size size = MediaQuery.of(context).size;
+    List<double> colwidth =
+        MediaQuery.of(context).orientation == Orientation.portrait
+            ? [
+                110,
+                130,
+                130,
+                100,
+                100,
+                100,
+                100,
+                100,
+              ]
+            : [
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+              ];
     return List.generate(count, (col) {
       if (row == 0) {
         return Container(
@@ -445,9 +458,10 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
             ),
             Row(
               children: [
-                const SizedBox(
+                Container(
+                  alignment: Alignment.center,
                   width: 80,
-                  child: Text(
+                  child: const Text(
                     '対象月',
                     style: TextStyle(
                       color: Color(0xFF042C5C),
@@ -478,19 +492,15 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
                 Spacer(),
               ],
             ),
+            const SizedBox(
+              height: 10,
+            ),
             Flexible(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    // SingleChildScrollView(
-                    //   scrollDirection: Axis.vertical,
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: _buildCells(20),
-                    //   ),
-                    // ),
                     Flexible(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
