@@ -310,23 +310,39 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
       '当月在庫額',
     ];
 
-    List<double> colwidth = [
-      30,
-      130,
-      130,
-      100,
-      150,
-      100,
-      100,
-      100,
-      100,
-      100,
-      100,
-      100,
-      100,
-      100,
-      100,
-    ];
+    Size size = MediaQuery.of(context).size;
+    List<double> colwidth =
+        MediaQuery.of(context).orientation == Orientation.portrait
+            ? [
+                30,
+                130,
+                130,
+                100,
+                150,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+              ]
+            : [
+                30,
+                2 * (size.width - 33) / 12 - 30,
+                (size.width - 33) / 12,
+                (size.width - 33) / 12,
+                (size.width - 33) / 12,
+                (size.width - 33) / 12,
+                (size.width - 33) / 12,
+                (size.width - 33) / 12,
+                (size.width - 33) / 12,
+                (size.width - 33) / 12,
+                (size.width - 33) / 12,
+                (size.width - 33) / 12,
+                (size.width - 33) / 12,
+              ];
     return List.generate(count, (col) {
       if (row == 0) {
         return Container(
@@ -399,13 +415,6 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  // SingleChildScrollView(
-                  //   scrollDirection: Axis.vertical,
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: _buildCells(20),
-                  //   ),
-                  // ),
                   Flexible(
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,

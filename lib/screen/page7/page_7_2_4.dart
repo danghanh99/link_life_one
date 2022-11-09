@@ -31,284 +31,239 @@ class _Page724State extends State<Page724> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Column(
-      children: [
-        Container(
-          height: 50,
-          // width: size.width,
-          color: const Color(0xFFFFFA7A),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return SizedBox(
+      width: 650,
+      child: Column(
+        children: [
+          Container(
+            height: 50,
+            color: const Color(0xFFFFFA7A),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'メモ登録',
+                      style: TextStyle(
+                        color: Color(0xFF042C5C),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
               children: [
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'メモ登録',
+                Row(
+                  children: [
+                    Container(
+                      width: 130,
+                      child: const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '概要',
+                          style: TextStyle(
+                            color: Color(0xFF042C5C),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                    _moreButton(context),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 130,
+                      child: const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '日時',
+                          style: TextStyle(
+                            color: Color(0xFF042C5C),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '2022年01月19日(水)',
+                        style: TextStyle(
+                          color: Color(0xFF000000),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                      width: 5,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _moreButton2(context),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  activeColor: Colors.blue,
+                                  checkColor: Colors.white,
+                                  value: checkedValue,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      checkedValue = newValue ?? true;
+                                    });
+                                  },
+                                ),
+                                const Text(
+                                  '終日',
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Text(
+                          '~',
+                          style: TextStyle(
+                            color: Color(0xFF000000),
+                            fontSize: 17,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        _moreButton3(context),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 130,
+                      child: const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '内容',
+                          style: TextStyle(
+                            color: Color(0xFF042C5C),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 420,
+                      child: CustomTextField(
+                        fillColor: const Color(0xFFF5F6F8),
+                        hint: '',
+                        type: TextInputType.emailAddress,
+                        onChanged: (text) {},
+                        maxLines: 6,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 120,
+                height: 37,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF6C8EDA),
+                  borderRadius: BorderRadius.circular(26),
+                ),
+                child: TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    '登録',
                     style: TextStyle(
-                      color: Color(0xFF042C5C),
+                      decoration: TextDecoration.underline,
+                      color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
-                // GestureDetector(
-                //   onTap: () {
-                //     Navigator.pop(context);
-                //   },
-                //   child: const Text(
-                //     '戻る',
-                //     style: TextStyle(
-                //       color: Color(0xFF042C5C),
-                //       fontSize: 15,
-                //       fontWeight: FontWeight.w500,
-                //     ),
-                //   ),
-                // ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 130,
-                    child: const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '概要',
-                        style: TextStyle(
-                          color: Color(0xFF042C5C),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ),
-                  _moreButton(context),
-                  // const Spacer(),
-                  // Row(
-                  //   children: [
-                  //     Checkbox(
-                  //       activeColor: Colors.blue,
-                  //       checkColor: Colors.white,
-                  //       value: checkedValue,
-                  //       onChanged: (newValue) {
-                  //         setState(() {
-                  //           checkedValue = newValue ?? true;
-                  //         });
-                  //       },
-                  //     ),
-                  //     const Text(
-                  //       'アポイント済み',
-                  //     ),
-                  //   ],
-                  // ),
-                ],
               ),
               const SizedBox(
-                height: 5,
+                width: 10,
               ),
-              const SizedBox(
-                height: 5,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 130,
-                    child: const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '日時',
-                        style: TextStyle(
-                          color: Color(0xFF042C5C),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+              Container(
+                width: 120,
+                height: 37,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF96265),
+                  borderRadius: BorderRadius.circular(26),
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    '削除',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '2022年01月19日(水)',
-                      style: TextStyle(
-                        color: Color(0xFF000000),
-                        fontSize: 13,
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                    width: 5,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _moreButton2(context),
-                          Row(
-                            children: [
-                              Checkbox(
-                                activeColor: Colors.blue,
-                                checkColor: Colors.white,
-                                value: checkedValue,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    checkedValue = newValue ?? true;
-                                  });
-                                },
-                              ),
-                              const Text(
-                                '終日',
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Text(
-                        '~',
-                        style: TextStyle(
-                          color: Color(0xFF000000),
-                          fontSize: 17,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      _moreButton3(context),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 130,
-                    child: const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '内容',
-                        style: TextStyle(
-                          color: Color(0xFF042C5C),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 420,
-                    child: CustomTextField(
-                      fillColor: const Color(0xFFF5F6F8),
-                      hint: '',
-                      type: TextInputType.emailAddress,
-                      onChanged: (text) {},
-                      maxLines: 6,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 5,
+                ),
               ),
             ],
           ),
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 120,
-              height: 37,
-              decoration: BoxDecoration(
-                color: const Color(0xFF6C8EDA),
-                borderRadius: BorderRadius.circular(26),
-              ),
-              child: TextButton(
-                onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) =>
-                  //         const DanhSachDatHangVatLieu611Page(),
-                  //   ),
-                  // );
-                },
-                child: const Text(
-                  '登録',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Container(
-              width: 120,
-              height: 37,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF96265),
-                borderRadius: BorderRadius.circular(26),
-              ),
-              child: TextButton(
-                onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) =>
-                  //         const DanhSachDatHangVatLieu611Page(),
-                  //   ),
-                  // );
-
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  '削除',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-      ],
+          const SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
     );
   }
 

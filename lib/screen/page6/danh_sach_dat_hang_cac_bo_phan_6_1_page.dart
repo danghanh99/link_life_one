@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
 
 import '../../components/custom_text_field.dart';
@@ -51,7 +50,6 @@ class _DanhSachDatHangCacBoPhan61PageState
           left: 16,
         ),
         child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             header(),
             title(),
@@ -87,24 +85,18 @@ class _DanhSachDatHangCacBoPhan61PageState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       columnText2(
-                        width: size.width / 2 - 20,
+                        width: size.width / 2 - 30,
                         text: 'ステータス',
                       ),
-                      // columnText(
-                      //   width: size.width / 2 - 20,
-                      //   text: '商品名',
-                      // ),
                       Container()
                     ],
                   ),
                 ],
               ),
             ),
-
             const SizedBox(
               height: 10,
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -153,48 +145,22 @@ class _DanhSachDatHangCacBoPhan61PageState
                 ),
               ],
             ),
-
             const SizedBox(
               height: 10,
             ),
             SingleChildScrollView(
               scrollDirection: Axis.vertical,
-              // child: Row(
-              //   crossAxisAlignment: CrossAxisAlignment.start,
-              //   children: <Widget>[
-              //     // SingleChildScrollView(
-              //     //   scrollDirection: Axis.vertical,
-              //     //   child: Column(
-              //     //     crossAxisAlignment: CrossAxisAlignment.start,
-              //     //     children: _buildCells(20),
-              //     //   ),
-              //     // ),
-              //     Flexible(
-              //       child: SingleChildScrollView(
-              //         scrollDirection: Axis.horizontal,
-              //         child: Column(
-              //           crossAxisAlignment: CrossAxisAlignment.start,
-              //           children: _buildRows(4),
-              //         ),
-              //       ),
-              //     )
-              //   ],
-              // ),
-              child: Flexible(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: _buildRows(4),
-                  ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: _buildRows(4),
                 ),
               ),
             ),
-            // Expanded(child: Container()),
             const SizedBox(
               height: 10,
             ),
-
             Expanded(child: Container()),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -207,14 +173,7 @@ class _DanhSachDatHangCacBoPhan61PageState
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const DanhSachNhanLaiVatLieuPage(),
-                      //   ),
-                      // );
-                    },
+                    onPressed: () {},
                     child: const Text(
                       '新規部材発注',
                       style: TextStyle(
@@ -324,20 +283,26 @@ class _DanhSachDatHangCacBoPhan61PageState
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              value,
-              style: const TextStyle(
-                color: Color(0xFF999999),
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Text(
+                value,
+                style: const TextStyle(
+                  color: Color(0xFF999999),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
-            Image.asset(
-              Assets.icDown,
-              width: 13,
-              height: 13,
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Image.asset(
+                Assets.icDown,
+                width: 13,
+                height: 13,
+              ),
             ),
           ],
         ),
@@ -517,16 +482,28 @@ class _DanhSachDatHangCacBoPhan61PageState
       '品番',
       '商品名',
     ];
+    Size size = MediaQuery.of(context).size;
+    List<double> colwidth =
+        MediaQuery.of(context).orientation == Orientation.portrait
+            ? [
+                30,
+                130,
+                130,
+                100,
+                100,
+                120,
+                120,
+              ]
+            : [
+                30,
+                (size.width - 33) * 2 / 7 + -30,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+              ];
 
-    List<double> colwidth = [
-      30,
-      130,
-      130,
-      100,
-      100,
-      100,
-      100,
-    ];
     return List.generate(count, (col) {
       if (row == 0) {
         return Container(
