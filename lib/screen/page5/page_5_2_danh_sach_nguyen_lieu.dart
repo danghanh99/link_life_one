@@ -61,15 +61,28 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
       '持ち出し数量',
     ];
 
-    List<double> colwidth = [
-      30,
-      130,
-      130,
-      100,
-      240,
-      100,
-      160,
-    ];
+    Size size = MediaQuery.of(context).size;
+    List<double> colwidth =
+        MediaQuery.of(context).orientation == Orientation.portrait
+            ? [
+                30,
+                130,
+                130,
+                100,
+                240,
+                100,
+                160,
+              ]
+            : [
+                30,
+                (size.width - 33) * 2 / 7 + -30,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+              ];
+
     return List.generate(count, (col) {
       if (row == 0) {
         return Container(

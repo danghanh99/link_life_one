@@ -65,6 +65,7 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       columnText2(
                         width: size.width / 2 - 30,
@@ -248,7 +249,7 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
       offset: const Offset(-0, 50),
       child: Container(
         width: width,
-        height: 37,
+        height: 34,
         decoration: BoxDecoration(
           color: const Color(0xFFF5F6F8),
           borderRadius: BorderRadius.circular(8),

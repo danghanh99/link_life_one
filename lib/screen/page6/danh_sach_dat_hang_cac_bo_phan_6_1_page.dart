@@ -491,8 +491,8 @@ class _DanhSachDatHangCacBoPhan61PageState
                 130,
                 100,
                 100,
-                100,
-                100,
+                120,
+                120,
               ]
             : [
                 30,
