@@ -177,7 +177,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 fontFamily: 'LinotteSemiBold',
               ),
               isDense: true,
-              // helperText: ' ',
+              helperText: ' ',
               filled: true,
               errorMaxLines: 2,
               enabledBorder: _borderOutline(),
