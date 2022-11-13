@@ -328,6 +328,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                                 setState(() {
                                   date = picked;
                                 });
+                                callGetListSukejuuru(date);
                               }
                             },
                             child: Row(
@@ -837,21 +838,21 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
   Color kojiColorWithType(e) {
     switch (e['TYPE']) {
-      case '1':
+      case 1:
         return const Color.fromARGB(255, 242, 223, 222);
-      case '2':
+      case 2:
         return Colors.green;
-      case '3':
-        return Colors.black;
-      case '4':
-        return Colors.yellow;
-      case '5':
+      case 3:
         return Colors.blue;
-      case '6':
+      case 4:
+        return Colors.yellow;
+      case 5:
+        return Colors.blue;
+      case 6:
         return Colors.pinkAccent;
-      case '7':
+      case 7:
         return Colors.white;
-      case '8':
+      case 8:
         return Colors.teal;
       default:
         return const Color.fromARGB(255, 242, 223, 222);
@@ -860,44 +861,44 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
   Color backgroundKojiItem(e) {
     switch (e['TYPE']) {
-      case '1':
+      case 1:
         return Colors.red;
-      case '2':
+      case 2:
         return Colors.teal;
-      case '3':
+      case 3:
         return Colors.indigoAccent;
-      case '4':
+      case 4:
         return Colors.lightBlue;
-      case '5':
+      case 5:
         return Colors.brown;
-      case '6':
+      case 6:
         return Colors.white;
-      case '7':
+      case 7:
         return Colors.blue;
-      case '8':
+      case 8:
         return Colors.yellow;
       default:
-        return Colors.red;
+        return const Color.fromARGB(255, 195, 161, 172);
     }
   }
 
   String textKojiItem(e) {
     switch (e['TYPE']) {
-      case '1':
+      case 1:
         return "1";
-      case '2':
+      case 2:
         return "2";
-      case '3':
+      case 3:
         return "3";
-      case '4':
+      case 4:
         return "4";
-      case '5':
+      case 5:
         return "5";
-      case '6':
+      case 6:
         return "6";
-      case '7':
+      case 7:
         return "7";
-      case '8':
+      case 8:
         return "8";
       default:
         return "";
