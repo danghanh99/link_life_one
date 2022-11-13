@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:link_life_one/models/koji.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/menu_page/menu_page.dart';
+import 'package:link_life_one/screen/page3/page_3/components/logout_widget.dart';
 import 'package:link_life_one/screen/page3/page_3_1_yeu_cau_bieu_mau_page.dart';
 
-import '../../components/custom_text_field.dart';
-import '../../components/text_line_down.dart';
-import '../../shared/assets.dart';
-import '../../shared/custom_button.dart';
+import '../../../api/KojiPageApi/get_list_koji_api.dart';
+import '../../../components/text_line_down.dart';
+import '../../../shared/assets.dart';
+import '../../../shared/custom_button.dart';
+import 'components/title_widget.dart';
 
 class Page3BaoCaoHoanThanhCongTrinh extends StatefulWidget {
   const Page3BaoCaoHoanThanhCongTrinh({
@@ -31,11 +34,25 @@ class _Page3BaoCaoHoanThanhCongTrinhState
   DateTime date = DateTime.now();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<List<Koji>> callGetListKojiApi() async {
+    return await GetListKojiApi().getListKojiApi();
+  }
+
+  String formatJikan({required String? jikan}) {
+    if (jikan == null || jikan == '' || jikan.length != 4) return '';
+    jikan = jikan[0] + jikan[1] + ":" + jikan[2] + jikan[3];
+    return jikan;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: Padding(
         padding: const EdgeInsets.only(
           top: 20,
@@ -45,76 +62,8 @@ class _Page3BaoCaoHoanThanhCongTrinhState
         ),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MenuPage(),
-                      ),
-                    );
-                  },
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MenuPage(),
-                        ),
-                      );
-                    },
-                    child: Image.asset(
-                      Assets.LOGO_LINK,
-                      width: 100,
-                      height: 100,
-                    ),
-                  ),
-                ),
-                Column(
-                  children: [
-                    TextLineDown(
-                        text: 'ログアウト',
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginPage(),
-                            ),
-                          );
-                        }),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextLineDown(
-                        text: '戻る',
-                        onTap: () {
-                          Navigator.pop(context);
-                        }),
-                  ],
-                ),
-              ],
-            ),
-            Center(
-              child: Container(
-                decoration: BoxDecoration(
-                    border:
-                        Border.all(color: Color.fromARGB(255, 247, 240, 240))),
-                width: 200,
-                child: CustomButton(
-                  color: Colors.white70,
-                  onClick: () {},
-                  name: '工事一覧',
-                  textStyle: const TextStyle(
-                    color: Color(0xFF042C5C),
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
+            const LogoutWidget(),
+            const TitleWidget(),
             const SizedBox(
               height: 10,
             ),
@@ -180,49 +129,62 @@ class _Page3BaoCaoHoanThanhCongTrinhState
               decoration: BoxDecoration(
                 border: Border.all(),
               ),
-              child: ListView.separated(
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                // reverse: true,
-                padding: const EdgeInsets.only(right: 15, left: 15),
-                itemCount: listNames.length,
-                itemBuilder: (ctx, i) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: i / 1 != 0
-                          ? Color.fromARGB(255, 216, 181, 111)
-                          : Color.fromARGB(255, 111, 177, 224),
-                      border: Border.all(
-                        color: i / 1 != 0
-                            ? Color.fromARGB(255, 216, 181, 111)
-                            : Color.fromARGB(255, 111, 177, 224),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            i / 1 == 0
-                                ? '訪問時間：13:00   報告：済'
-                                : '訪問時間：14:00　　報告：未',
+              child: FutureBuilder<List<Koji>>(
+                  future: callGetListKojiApi(),
+                  builder: (context, response) {
+                    if (response.data == null) {
+                      return const SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      padding: const EdgeInsets.only(right: 15, left: 15),
+                      itemCount: response.data!.length,
+                      itemBuilder: (ctx, index) {
+                        final item = response.data![index];
+                        bool isShitami = item.type == 'SITAMI';
+                        return Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: !isShitami
+                                ? const Color.fromARGB(255, 216, 181, 111)
+                                : const Color.fromARGB(255, 111, 177, 224),
+                            border: Border.all(
+                              color: !isShitami
+                                  ? const Color.fromARGB(255, 216, 181, 111)
+                                  : const Color.fromARGB(255, 111, 177, 224),
+                            ),
                           ),
-                          Text('受注ID：19000000××　人数：3人　目安作業時間：20（ｍ）'),
-                          Text('工事アイテム：〇〇'),
-                          Text('住所：〇〇県〇〇市'),
-                          Text('氏名：〇〇〇'),
-                        ],
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  isShitami
+                                      ? '訪問時間：${formatJikan(jikan: item.sitamiHomonJikan)}　　報告：未'
+                                      : '訪問時間：${formatJikan(jikan: item.kojiHomonJikan)}   報告：済',
+                                ),
+                                Text(
+                                    '受注ID： ${item.jyucyuId}　人数：${item.shitamiJinin}人　目安作業時間：${item.shitamiJikan ?? ''}(m)'),
+                                Text('工事アイテム： ${item.kojiItem}'),
+                                Text('住所： ${item.setsakiAddress}'),
+                                Text('氏名： ${item.setsakiName}'),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const SizedBox(
+                        height: 5,
                       ),
-                    ),
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const SizedBox(
-                  height: 5,
-                ),
-              ),
+                    );
+                  }),
             ),
             const SizedBox(
               height: 5,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../shared/custom_button.dart';
-import '../../page3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
+import '../../page3/page_3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 import '../../page4/xac_nhan_thanh_tich_page.dart';
 import '../../page5/page5_quan_ly/quan_ly_nhap_xuat_page.dart';
 import '../../page5/page_5_1_lich_kiem_ke.dart';
