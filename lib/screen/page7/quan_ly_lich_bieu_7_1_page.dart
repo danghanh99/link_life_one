@@ -935,54 +935,60 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   }
 
   Widget kojiItemWithType(int row, int col, e) {
-    return Container(
-      width: colWidth()[col],
-      color: kojiColorWithType(e),
-      child: Padding(
-        padding: const EdgeInsets.all(3),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            e['SITAMIHOMONJIKAN'] != '' &&
-                    e['SITAMIHOMONJIKAN_END'] != '' &&
-                    e['SITAMIHOMONJIKAN'] != null &&
-                    e['SITAMIHOMONJIKAN_END'] != null
-                ? Text(
-                    "${e['SITAMIHOMONJIKAN']} - ${e['SITAMIHOMONJIKAN_END']}",
-                    style: const TextStyle(fontSize: 10),
-                  )
-                : Container(),
-            RichText(
-              text: TextSpan(
-                  style: const TextStyle(color: Colors.black),
-                  children: [
-                    WidgetSpan(
-                      child: Container(
-                        // color: backgroundKojiItem(e),
-                        color: getColorByText(
-                          text: e["KBNMSAI_NAME"],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: 2,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 2),
+      child: Container(
+        width: colWidth()[col],
+        color: kojiColorWithType(e),
+        child: Padding(
+          padding: const EdgeInsets.all(3),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              e['SITAMIHOMONJIKAN'] != '' &&
+                      e['SITAMIHOMONJIKAN_END'] != '' &&
+                      e['SITAMIHOMONJIKAN'] != null &&
+                      e['SITAMIHOMONJIKAN_END'] != null
+                  ? Text(
+                      "${e['SITAMIHOMONJIKAN']} - ${e['SITAMIHOMONJIKAN_END']}",
+                      style: const TextStyle(fontSize: 10),
+                    )
+                  : (e['START_TIME'] != null && e['END_TIME'] != null) ? Text(
+                      "${e['START_TIME']} - ${e['END_TIME']}",
+                      style: const TextStyle(fontSize: 10),
+                    ) : Container(),
+              RichText(
+                text: TextSpan(
+                    style: const TextStyle(color: Colors.black),
+                    children: [
+                      WidgetSpan(
+                        child: Container(
+                          // color: backgroundKojiItem(e),
+                          color: getColorByText(
+                            text: e["KBNMSAI_NAME"],
                           ),
-                          child: Text(
-                            e['KBNMSAI_NAME'],
-                            style: TextStyle(
-                              // color: kojiColorWithType(e),
-                              color: Colors.white,
-                              fontSize: 14,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 2,
+                            ),
+                            child: Text(
+                              e['KBNMSAI_NAME'],
+                              style: TextStyle(
+                                // color: kojiColorWithType(e),
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    TextSpan(
-                      text: e['SETSAKI_ADDRESS'],
-                    ),
-                  ]),
-            ),
-          ],
+                      TextSpan(
+                        text: e['SETSAKI_ADDRESS'],
+                      ),
+                    ]),
+              ),
+            ],
+          ),
         ),
       ),
     );
