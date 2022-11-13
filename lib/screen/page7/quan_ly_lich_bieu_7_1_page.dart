@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:link_life_one/models/lich_trinh.dart';
+import 'package:link_life_one/api/sukejuuru_page_api/get_list_sukejuuru.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page7/page_7_2_1.dart';
 import 'package:link_life_one/screen/page7/page_7_2_3.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4.dart';
-import 'package:link_life_one/services/lich_trinh_service.dart';
 import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
@@ -28,7 +27,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     '部材管理',
     '出納帳',
   ];
-  List<LichTrinh> lichTrinh = [];
+  List<dynamic> sukejuuru = [];
   String value = 'グループ';
   late bool show721;
   DateTime date = DateTime.now();
@@ -36,6 +35,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   @override
   void initState() {
     show721 = true;
+    callGetListSukejuuru(date);
     super.initState();
   }
 
@@ -368,10 +368,20 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                           },
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: _buildRows(10, scrollController2),
-                            ),
+                            child: FutureBuilder<List<dynamic>>(
+                                future: callGetListSukejuuruWithoutState(date),
+                                builder: (context, response) {
+                                  if (response.data == null) {
+                                    return const Text('data');
+                                  }
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: _buildRows(
+                                        response.data!.length + 1,
+                                        scrollController2),
+                                  );
+                                }),
                           ),
                         ),
                       ),
@@ -414,6 +424,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             onTap: () {
               setState(() {
                 date = date.add(const Duration(days: -7));
+                callGetListSukejuuru(date);
               });
             },
             child: Row(
@@ -462,6 +473,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               setState(() {
                 date = date.add(const Duration(days: 7));
               });
+              callGetListSukejuuru(date);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -653,6 +665,15 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     });
   }
 
+  List<String> _listDay() {
+    DateTime firstDayOfWeek = date.subtract(Duration(days: date.weekday - 1));
+    return List.generate(7, (index) => index).map((value) {
+      return DateFormat(('yyyy-MM-dd')).format(
+        firstDayOfWeek.add(Duration(days: value)),
+      );
+    }).toList();
+  }
+
   List<Widget> _buildLastRows2(int count) {
     return List.generate(count, (index) {
       return Row(
@@ -678,13 +699,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       if (index == 0) return 200;
       return 150.0;
     }, growable: true);
-  }
-
-  void getList() async {
-    final list = await LichTrinhService.danhSachLichTrinh();
-    setState(() {
-      lichTrinh = list;
-    });
   }
 
   List<Widget> _buildCells2(
@@ -732,9 +746,11 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         width: 40,
                         height: 40,
                       ),
-                      const Text(
-                        'データ 1',
-                        style: TextStyle(
+                      Text(
+                        sukejuuru.isNotEmpty
+                            ? sukejuuru[row - 1]["TANT_NAME"]
+                            : '',
+                        style: const TextStyle(
                             color: Color(0xFF042C5C),
                             fontSize: 20,
                             fontWeight: FontWeight.w400),
@@ -762,241 +778,25 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             ),
           );
         } else {
-          String value = '追加希望 追加希望 追加希望 追加希望 追加希望';
-          String firstPart = value.split(' ').toList()[0];
-          String secondPart = value.substring(firstPart.length, value.length);
-
-          String value2 = 'ネット工事 ネット工事 ネット工事 ネット工事 ネット工事';
-          String firstPart2 = value2.split(' ').toList()[0];
-          String secondPart2 =
-              value2.substring(firstPart2.length, value2.length);
           return Container(
-            decoration: BoxDecoration(
-              border: Border.all(width: 0.5),
-              color: Colors.white,
-            ),
-            alignment: Alignment.topLeft,
-            width: colWidth()[col],
-            height: 400,
-            child: GestureDetector(
-              onTap: () {
-                CustomDialog.showCustomDialog(
-                  context: context,
-                  title: '',
-                  body: const Page721(),
-                );
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: colWidth()[col],
-                    color: const Color.fromARGB(255, 198, 221, 231),
-                    child: Padding(
-                      padding: const EdgeInsets.all(3),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '9:00-10:00',
-                            style: TextStyle(fontSize: 10),
-                          ),
-                          RichText(
-                            text: TextSpan(
-                                style: const TextStyle(color: Colors.black),
-                                children: [
-                                  WidgetSpan(
-                                    child: Container(
-                                      color: const Color.fromARGB(
-                                          255, 23, 137, 229),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 2,
-                                        ),
-                                        child: Text(
-                                          firstPart,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: secondPart,
-                                  ),
-                                ]),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: colWidth()[col],
-                    color: const Color.fromARGB(255, 191, 222, 209),
-                    child: Padding(
-                      padding: const EdgeInsets.all(3),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '10:30-12:30',
-                            style: TextStyle(fontSize: 10),
-                          ),
-                          RichText(
-                            text: TextSpan(
-                                style: const TextStyle(color: Colors.black),
-                                children: [
-                                  WidgetSpan(
-                                    child: Container(
-                                      color: const Color.fromARGB(
-                                          255, 22, 176, 60),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 2,
-                                        ),
-                                        child: Text(
-                                          firstPart2,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: secondPart2,
-                                  ),
-                                ]),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: colWidth()[col],
-                    color: const Color.fromARGB(255, 241, 241, 224),
-                    child: Padding(
-                      padding: const EdgeInsets.all(3),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '10:30-12:30',
-                            style: TextStyle(fontSize: 10),
-                          ),
-                          RichText(
-                            text: TextSpan(
-                                style: const TextStyle(color: Colors.black),
-                                children: [
-                                  WidgetSpan(
-                                    child: Container(
-                                      color: const Color.fromARGB(
-                                          255, 224, 195, 88),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 2,
-                                        ),
-                                        child: Text(
-                                          firstPart2,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: secondPart2,
-                                  ),
-                                ]),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: colWidth()[col],
-                    color: const Color.fromARGB(255, 242, 223, 222),
-                    child: Padding(
-                      padding: const EdgeInsets.all(3),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '10:30-12:30',
-                            style: TextStyle(fontSize: 10),
-                          ),
-                          RichText(
-                            text: TextSpan(
-                                style: const TextStyle(color: Colors.black),
-                                children: [
-                                  WidgetSpan(
-                                    child: Container(
-                                      color: Colors.red,
-                                      child: const Padding(
-                                        padding: EdgeInsets.only(
-                                          bottom: 2,
-                                        ),
-                                        child: Text(
-                                          '!! 重要 !!',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: secondPart2,
-                                  ),
-                                ]),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            CustomDialog.showCustomDialog(
-                              context: context,
-                              title: '',
-                              body: const Page723(),
-                            );
-                          },
-                          child: const Icon(
-                            Icons.add_circle,
-                            size: 16,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 3,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            CustomDialog.showCustomDialog(
-                              context: context,
-                              title: '',
-                              body: const Page724(),
-                            );
-                          },
-                          child: const Icon(Icons.insert_drive_file_outlined),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              decoration: BoxDecoration(
+                border: Border.all(width: 0.5),
+                color: Colors.white,
               ),
-            ),
-          );
+              alignment: Alignment.topLeft,
+              width: colWidth()[col],
+              height: 400,
+              child: GestureDetector(
+                  onTap: () {
+                    CustomDialog.showCustomDialog(
+                      context: context,
+                      title: '',
+                      body: const Page721(),
+                    );
+                  },
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: kojiItems(row - 1, col))));
         }
       }
 
@@ -1014,6 +814,177 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         ),
       );
     });
+  }
+
+  List<Widget> kojiItems(int row, int col) {
+    List<Widget> xxx = [];
+    _listDay().forEach(
+      (element) {
+        if (sukejuuru.isNotEmpty &&
+            sukejuuru[row] != null &&
+            sukejuuru[row][element] != null &&
+            sukejuuru[row][element].isNotEmpty &&
+            element.split('-').last == listDayOfWeek()[col].split(' ').first) {
+          sukejuuru[row][element].forEach(
+            (e) => xxx.addAll([kojiItemWithType(row, col, e)]),
+          );
+        }
+      },
+    );
+    xxx.add(insert());
+    return xxx;
+  }
+
+  Color kojiColorWithType(e) {
+    switch (e['TYPE']) {
+      case '1':
+        return const Color.fromARGB(255, 242, 223, 222);
+      case '2':
+        return Colors.green;
+      case '3':
+        return Colors.black;
+      case '4':
+        return Colors.yellow;
+      case '5':
+        return Colors.blue;
+      case '6':
+        return Colors.pinkAccent;
+      case '7':
+        return Colors.white;
+      case '8':
+        return Colors.teal;
+      default:
+        return const Color.fromARGB(255, 242, 223, 222);
+    }
+  }
+
+  Color backgroundKojiItem(e) {
+    switch (e['TYPE']) {
+      case '1':
+        return Colors.red;
+      case '2':
+        return Colors.teal;
+      case '3':
+        return Colors.indigoAccent;
+      case '4':
+        return Colors.lightBlue;
+      case '5':
+        return Colors.brown;
+      case '6':
+        return Colors.white;
+      case '7':
+        return Colors.blue;
+      case '8':
+        return Colors.yellow;
+      default:
+        return Colors.red;
+    }
+  }
+
+  String textKojiItem(e) {
+    switch (e['TYPE']) {
+      case '1':
+        return "1";
+      case '2':
+        return "2";
+      case '3':
+        return "3";
+      case '4':
+        return "4";
+      case '5':
+        return "5";
+      case '6':
+        return "6";
+      case '7':
+        return "7";
+      case '8':
+        return "8";
+      default:
+        return "";
+    }
+  }
+
+  Widget kojiItemWithType(int row, int col, e) {
+    return Container(
+      width: colWidth()[col],
+      color: kojiColorWithType(e),
+      child: Padding(
+        padding: const EdgeInsets.all(3),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            e['SITAMIHOMONJIKAN'] != null && e['SITAMIHOMONJIKAN_END'] != null
+                ? Text(
+                    "${e['SITAMIHOMONJIKAN']} - ${e['SITAMIHOMONJIKAN_END']}",
+                    style: const TextStyle(fontSize: 10),
+                  )
+                : Container(),
+            RichText(
+              text: TextSpan(
+                  style: const TextStyle(color: Colors.black),
+                  children: [
+                    WidgetSpan(
+                      child: Container(
+                        color: backgroundKojiItem(e),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 2,
+                          ),
+                          child: Text(
+                            textKojiItem(e),
+                            style: TextStyle(
+                              color: kojiColorWithType(e),
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    TextSpan(
+                      text: e['SETSAKI_ADDRESS'],
+                    ),
+                  ]),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget insert() {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              CustomDialog.showCustomDialog(
+                context: context,
+                title: '',
+                body: const Page723(),
+              );
+            },
+            child: const Icon(
+              Icons.add_circle,
+              size: 16,
+            ),
+          ),
+          const SizedBox(
+            width: 3,
+          ),
+          GestureDetector(
+            onTap: () {
+              CustomDialog.showCustomDialog(
+                context: context,
+                title: '',
+                body: const Page724(),
+              );
+            },
+            child: const Icon(Icons.insert_drive_file_outlined),
+          ),
+        ],
+      ),
+    );
   }
 
   List<Widget> _buildLastRowCells(int count, int row) {
@@ -1070,6 +1041,19 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         height: 100,
       ),
     );
+  }
+
+  Future<List<dynamic>> callGetListSukejuuru(DateTime date) async {
+    final result = await GetListSukejuuru().getListSukejuuru(date);
+    setState(() {
+      sukejuuru = result;
+    });
+
+    return result;
+  }
+
+  Future<List<dynamic>> callGetListSukejuuruWithoutState(DateTime date) async {
+    return await GetListSukejuuru().getListSukejuuru(date);
   }
 
   Widget logout() {
