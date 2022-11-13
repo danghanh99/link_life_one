@@ -879,29 +879,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     }
   }
 
-  String textKojiItem(e) {
-    switch (e['TYPE']) {
-      case 1:
-        return "1";
-      case 2:
-        return "2";
-      case 3:
-        return "3";
-      case 4:
-        return "4";
-      case 5:
-        return "5";
-      case 6:
-        return "6";
-      case 7:
-        return "7";
-      case 8:
-        return "8";
-      default:
-        return "";
-    }
-  }
-
   Widget kojiItemWithType(int row, int col, e) {
     return Container(
       width: colWidth()[col],
@@ -929,7 +906,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                             bottom: 2,
                           ),
                           child: Text(
-                            textKojiItem(e),
+                            e['KBNMSAI_NAME'],
                             style: TextStyle(
                               color: kojiColorWithType(e),
                               fontSize: 14,
