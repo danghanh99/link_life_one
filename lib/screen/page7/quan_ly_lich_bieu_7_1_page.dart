@@ -372,14 +372,11 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                             child: FutureBuilder<List<dynamic>>(
                                 future: callGetListSukejuuruWithoutState(date),
                                 builder: (context, response) {
-                                  if (response.data == null) {
-                                    return const Text('data');
-                                  }
                                   return Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: _buildRows(
-                                        response.data!.length + 1,
+                                        response.data != null && response.data!.isNotEmpty ? response.data!.length + 1 : 2,
                                         scrollController2),
                                   );
                                 }),
