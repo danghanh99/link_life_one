@@ -376,7 +376,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: _buildRows(
-                                        response.data != null && response.data!.isNotEmpty ? response.data!.length + 1 : 2,
+                                        response.data != null &&
+                                                response.data!.isNotEmpty
+                                            ? response.data!.length + 1
+                                            : 2,
                                         scrollController2),
                                   );
                                 }),
@@ -724,6 +727,13 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
       if (row != 0) {
         if (col == 0) {
+          bool emptyName = sukejuuru.isEmpty;
+          if (sukejuuru.isNotEmpty) {
+            emptyName = sukejuuru[row - 1]["TANT_NAME"] == null ||
+                    sukejuuru[row - 1]["TANT_NAME"].toString() == ''
+                ? true
+                : false;
+          }
           return Container(
             decoration: BoxDecoration(
               border: Border.all(width: 0.5),
@@ -732,72 +742,76 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             alignment: Alignment.topLeft,
             width: colWidth()[col],
             height: 400,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 5, left: 5),
-                  child: Row(
+            child: emptyName
+                ? Container()
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.network(
-                        'https://znews-stc.zdn.vn/static/topic/person/trump.jpg',
-                        width: 40,
-                        height: 40,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5, left: 5),
+                        child: Row(
+                          children: [
+                            // Image.network(
+                            //   'https://znews-stc.zdn.vn/static/topic/person/trump.jpg',
+                            //   width: 40,
+                            //   height: 40,
+                            // ),
+                            Text(
+                              sukejuuru[row - 1]["TANT_NAME"],
+                              style: const TextStyle(
+                                  color: Color(0xFF042C5C),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
                       ),
-                      Text(
-                        sukejuuru.isNotEmpty
-                            ? sukejuuru[row - 1]["TANT_NAME"]
-                            : '',
-                        style: const TextStyle(
-                            color: Color(0xFF042C5C),
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400),
+                      Row(
+                        children: const [
+                          Icon(
+                            Icons.calendar_month_rounded,
+                            color: Colors.black,
+                            size: 40.0,
+                          ),
+                          // Text(
+                          //   'データ 2',
+                          //   style: TextStyle(
+                          //       color: Colors.black,
+                          //       fontSize: 20,
+                          //       fontWeight: FontWeight.w600),
+                          // )
+                        ],
                       ),
                     ],
                   ),
-                ),
-                Row(
-                  children: const [
-                    Icon(
-                      Icons.calendar_month_rounded,
-                      color: Colors.black,
-                      size: 40.0,
-                    ),
-                    Text(
-                      'データ 2',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600),
-                    )
-                  ],
-                ),
-              ],
-            ),
           );
         } else {
           return Container(
-              decoration: BoxDecoration(
-                border: Border.all(width: 0.5),
-                color: Colors.white,
+            decoration: BoxDecoration(
+              border: Border.all(width: 0.5),
+              color: Colors.white,
+            ),
+            alignment: Alignment.topLeft,
+            width: colWidth()[col],
+            height: 400,
+            child: GestureDetector(
+              onTap: () {
+                CustomDialog.showCustomDialog(
+                  context: context,
+                  title: '',
+                  body: const Page721(),
+                );
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: kojiItems(row - 1, col),
               ),
-              alignment: Alignment.topLeft,
-              width: colWidth()[col],
-              height: 400,
-              child: GestureDetector(
-                  onTap: () {
-                    CustomDialog.showCustomDialog(
-                      context: context,
-                      title: '',
-                      body: const Page721(),
-                    );
-                  },
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: kojiItems(row - 1, col))));
+            ),
+          );
         }
       }
 
+      // don't use
       return Container(
         decoration: BoxDecoration(
           border: Border.all(width: 0.5),
@@ -879,6 +893,47 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     }
   }
 
+  Color getColorByText({required String text}) {
+    switch (text) {
+      case '!! 重要 !!':
+        return Colors.red;
+      case 'ネット工事':
+        return Color.fromARGB(255, 44, 162, 48);
+      case '工事打診':
+        return Colors.greenAccent;
+      case '営業下見':
+        return Colors.indigoAccent;
+      case '営業工事':
+        return Colors.lightBlue;
+      default:
+        return Colors.white;
+        ;
+    }
+  }
+
+  String textKojiItem(e) {
+    switch (e['TYPE']) {
+      case 1:
+        return "1";
+      case 2:
+        return "2";
+      case 3:
+        return "3";
+      case 4:
+        return "4";
+      case 5:
+        return "5";
+      case 6:
+        return "6";
+      case 7:
+        return "7";
+      case 8:
+        return "8";
+      default:
+        return "";
+    }
+  }
+
   Widget kojiItemWithType(int row, int col, e) {
     return Container(
       width: colWidth()[col],
@@ -888,7 +943,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            e['SITAMIHOMONJIKAN'] != null && e['SITAMIHOMONJIKAN_END'] != null
+            e['SITAMIHOMONJIKAN'] != '' &&
+                    e['SITAMIHOMONJIKAN_END'] != '' &&
+                    e['SITAMIHOMONJIKAN'] != null &&
+                    e['SITAMIHOMONJIKAN_END'] != null
                 ? Text(
                     "${e['SITAMIHOMONJIKAN']} - ${e['SITAMIHOMONJIKAN_END']}",
                     style: const TextStyle(fontSize: 10),
@@ -900,7 +958,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   children: [
                     WidgetSpan(
                       child: Container(
-                        color: backgroundKojiItem(e),
+                        // color: backgroundKojiItem(e),
+                        color: getColorByText(
+                          text: e["KBNMSAI_NAME"],
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.only(
                             bottom: 2,
@@ -908,7 +969,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                           child: Text(
                             e['KBNMSAI_NAME'],
                             style: TextStyle(
-                              color: kojiColorWithType(e),
+                              // color: kojiColorWithType(e),
+                              color: Colors.white,
                               fontSize: 14,
                             ),
                           ),
