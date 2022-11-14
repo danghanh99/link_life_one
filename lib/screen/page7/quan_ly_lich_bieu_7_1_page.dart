@@ -379,7 +379,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                                         response.data != null &&
                                                 response.data!.isNotEmpty
                                             ? response.data!.length + 1
-                                            : 2,
+                                            : 3,
                                         scrollController2),
                                   );
                                 }),
