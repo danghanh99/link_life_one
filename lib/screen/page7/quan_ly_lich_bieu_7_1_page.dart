@@ -898,16 +898,49 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       case '!! 重要 !!':
         return Colors.red;
       case 'ネット工事':
-        return Color.fromARGB(255, 44, 162, 48);
+        return Color.fromARGB(255, 46, 196, 51);
       case '工事打診':
-        return Colors.greenAccent;
+        return Color.fromARGB(255, 84, 218, 22);
       case '営業下見':
-        return Colors.indigoAccent;
+        return Colors.purple;
       case '営業工事':
-        return Colors.lightBlue;
+        return Color.fromARGB(255, 176, 39, 73);
+      case '日予実':
+        return Colors.blue;
+      case '計予実':
+        return Colors.yellow;
+      case 'ネット下見 ':
+        return Colors.red;
+      case '下見打診':
+        return Color.fromARGB(255, 232, 105, 147);
       default:
         return Colors.white;
         ;
+    }
+  }
+
+  Color getBackgroundColorByText({required String text}) {
+    switch (text) {
+      case '!! 重要 !!':
+        return Color.fromARGB(255, 229, 165, 160);
+      case 'ネット工事':
+        return Color.fromARGB(255, 174, 224, 177);
+      case '工事打診':
+        return Color.fromARGB(255, 173, 228, 144);
+      case '営業下見':
+        return Color.fromARGB(255, 174, 133, 181);
+      case '営業工事':
+        return Color.fromARGB(255, 182, 140, 150);
+      case '日予実':
+        return Color.fromARGB(255, 145, 184, 215);
+      case '計予実':
+        return Color.fromARGB(255, 233, 225, 153);
+      case 'ネット下見 ':
+        return Color.fromARGB(255, 229, 165, 160);
+      case '下見打診':
+        return Color.fromARGB(255, 224, 192, 203);
+      default:
+        return Colors.white;
     }
   }
 
@@ -939,7 +972,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       padding: const EdgeInsets.only(bottom: 2),
       child: Container(
         width: colWidth()[col],
-        color: kojiColorWithType(e),
+        // color: kojiColorWithType(e),
+        color: getBackgroundColorByText(
+          text: e["KBNMSAI_NAME"],
+        ),
         child: Padding(
           padding: const EdgeInsets.all(3),
           child: Column(
@@ -953,10 +989,12 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       "${e['SITAMIHOMONJIKAN']} - ${e['SITAMIHOMONJIKAN_END']}",
                       style: const TextStyle(fontSize: 10),
                     )
-                  : (e['START_TIME'] != null && e['END_TIME'] != null) ? Text(
-                      "${e['START_TIME']} - ${e['END_TIME']}",
-                      style: const TextStyle(fontSize: 10),
-                    ) : Container(),
+                  : (e['START_TIME'] != null && e['END_TIME'] != null)
+                      ? Text(
+                          "${e['START_TIME']} - ${e['END_TIME']}",
+                          style: const TextStyle(fontSize: 10),
+                        )
+                      : Container(),
               RichText(
                 text: TextSpan(
                     style: const TextStyle(color: Colors.black),

@@ -38,8 +38,8 @@ class _Page3BaoCaoHoanThanhCongTrinhState
     super.initState();
   }
 
-  Future<List<Koji>> callGetListKojiApi() async {
-    return await GetListKojiApi().getListKojiApi();
+  Future<List<Koji>> callGetListKojiApi({DateTime? inputDate}) async {
+    return await GetListKojiApi().getListKojiApi(date: inputDate ?? date);
   }
 
   String formatJikan({required String? jikan}) {
@@ -92,6 +92,7 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                         setState(() {
                           date = picked;
                         });
+                        callGetListKojiApi(inputDate: picked);
                       }
                     },
                     child: Row(
@@ -133,11 +134,7 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                   future: callGetListKojiApi(),
                   builder: (context, response) {
                     if (response.data == null) {
-                      return const SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: CircularProgressIndicator(),
-                      );
+                      return Center(child: Text("Loading..."));
                     }
                     return ListView.separated(
                       shrinkWrap: true,
@@ -277,6 +274,7 @@ class _Page3BaoCaoHoanThanhCongTrinhState
               setState(() {
                 date = date.add(const Duration(days: -7));
               });
+              callGetListKojiApi(inputDate: date);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -324,6 +322,7 @@ class _Page3BaoCaoHoanThanhCongTrinhState
               setState(() {
                 date = date.add(const Duration(days: 7));
               });
+              callGetListKojiApi(inputDate: date);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

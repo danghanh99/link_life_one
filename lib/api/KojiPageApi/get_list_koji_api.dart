@@ -1,16 +1,19 @@
 import "package:http/http.dart" as http;
+import 'package:intl/intl.dart';
 import 'package:link_life_one/models/koji.dart';
 import 'dart:convert';
 
 class GetListKojiApi {
   GetListKojiApi() : super();
 
-  Future<List<Koji>> getListKojiApi() async {
+  Future<List<Koji>> getListKojiApi({DateTime? date}) async {
+    DateTime date2 = date != null ? date : DateTime.now();
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/requestConstructionList.php?YMD=2022-11-11"),
+          "https://koji-app.starboardasiavn.com/requestConstructionList.php?YMD=${DateFormat(('yyyy-MM-dd')).format(date2)}"),
     );
 
+    print("xx");
     if (response.statusCode == 200) {
       response.statusCode;
       final List<dynamic> body = jsonDecode(response.body);
