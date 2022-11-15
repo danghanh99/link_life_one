@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:link_life_one/models/lich_trinh.dart';
+import 'package:link_life_one/api/sukejuuru_page_api/get_list_sukejuuru.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page7/page_7_2_1.dart';
 import 'package:link_life_one/screen/page7/page_7_2_3.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4.dart';
-import 'package:link_life_one/services/lich_trinh_service.dart';
 import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
@@ -28,7 +27,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     '部材管理',
     '出納帳',
   ];
-  List<LichTrinh> lichTrinh = [];
+  List<dynamic> sukejuuru = [];
   String value = 'グループ';
   late bool show721;
   DateTime date = DateTime.now();
@@ -36,6 +35,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   @override
   void initState() {
     show721 = true;
+    callGetListSukejuuru(date);
     super.initState();
   }
 
@@ -328,6 +328,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                                 setState(() {
                                   date = picked;
                                 });
+                                callGetListSukejuuru(date);
                               }
                             },
                             child: Row(
@@ -368,10 +369,20 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                           },
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: _buildRows(10, scrollController2),
-                            ),
+                            child: FutureBuilder<List<dynamic>>(
+                                future: callGetListSukejuuruWithoutState(date),
+                                builder: (context, response) {
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: _buildRows(
+                                        response.data != null &&
+                                                response.data!.isNotEmpty
+                                            ? response.data!.length + 1
+                                            : 3,
+                                        scrollController2),
+                                  );
+                                }),
                           ),
                         ),
                       ),
@@ -414,6 +425,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             onTap: () {
               setState(() {
                 date = date.add(const Duration(days: -7));
+                callGetListSukejuuru(date);
               });
             },
             child: Row(
@@ -462,6 +474,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               setState(() {
                 date = date.add(const Duration(days: 7));
               });
+              callGetListSukejuuru(date);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -653,6 +666,15 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     });
   }
 
+  List<String> _listDay() {
+    DateTime firstDayOfWeek = date.subtract(Duration(days: date.weekday - 1));
+    return List.generate(7, (index) => index).map((value) {
+      return DateFormat(('yyyy-MM-dd')).format(
+        firstDayOfWeek.add(Duration(days: value)),
+      );
+    }).toList();
+  }
+
   List<Widget> _buildLastRows2(int count) {
     return List.generate(count, (index) {
       return Row(
@@ -680,13 +702,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     }, growable: true);
   }
 
-  void getList() async {
-    final list = await LichTrinhService.danhSachLichTrinh();
-    setState(() {
-      lichTrinh = list;
-    });
-  }
-
   List<Widget> _buildCells2(
       int count, int row, ScrollController scrollController2) {
     return List.generate(count, (col) {
@@ -712,6 +727,13 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
       if (row != 0) {
         if (col == 0) {
+          bool emptyName = sukejuuru.isEmpty;
+          if (sukejuuru.isNotEmpty) {
+            emptyName = sukejuuru[row - 1]["TANT_NAME"] == null ||
+                    sukejuuru[row - 1]["TANT_NAME"].toString() == ''
+                ? true
+                : false;
+          }
           return Container(
             decoration: BoxDecoration(
               border: Border.all(width: 0.5),
@@ -720,56 +742,50 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             alignment: Alignment.topLeft,
             width: colWidth()[col],
             height: 400,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 5, left: 5),
-                  child: Row(
+            child: emptyName
+                ? Container()
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.network(
-                        'https://znews-stc.zdn.vn/static/topic/person/trump.jpg',
-                        width: 40,
-                        height: 40,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5, left: 5),
+                        child: Row(
+                          children: [
+                            // Image.network(
+                            //   'https://znews-stc.zdn.vn/static/topic/person/trump.jpg',
+                            //   width: 40,
+                            //   height: 40,
+                            // ),
+                            Text(
+                              sukejuuru[row - 1]["TANT_NAME"],
+                              style: const TextStyle(
+                                  color: Color(0xFF042C5C),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
                       ),
-                      const Text(
-                        'データ 1',
-                        style: TextStyle(
-                            color: Color(0xFF042C5C),
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400),
+                      Row(
+                        children: const [
+                          Icon(
+                            Icons.calendar_month_rounded,
+                            color: Colors.black,
+                            size: 40.0,
+                          ),
+                          // Text(
+                          //   'データ 2',
+                          //   style: TextStyle(
+                          //       color: Colors.black,
+                          //       fontSize: 20,
+                          //       fontWeight: FontWeight.w600),
+                          // )
+                        ],
                       ),
                     ],
                   ),
-                ),
-                Row(
-                  children: const [
-                    Icon(
-                      Icons.calendar_month_rounded,
-                      color: Colors.black,
-                      size: 40.0,
-                    ),
-                    Text(
-                      'データ 2',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600),
-                    )
-                  ],
-                ),
-              ],
-            ),
           );
         } else {
-          String value = '追加希望 追加希望 追加希望 追加希望 追加希望';
-          String firstPart = value.split(' ').toList()[0];
-          String secondPart = value.substring(firstPart.length, value.length);
-
-          String value2 = 'ネット工事 ネット工事 ネット工事 ネット工事 ネット工事';
-          String firstPart2 = value2.split(' ').toList()[0];
-          String secondPart2 =
-              value2.substring(firstPart2.length, value2.length);
           return Container(
             decoration: BoxDecoration(
               border: Border.all(width: 0.5),
@@ -788,218 +804,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: colWidth()[col],
-                    color: const Color.fromARGB(255, 198, 221, 231),
-                    child: Padding(
-                      padding: const EdgeInsets.all(3),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '9:00-10:00',
-                            style: TextStyle(fontSize: 10),
-                          ),
-                          RichText(
-                            text: TextSpan(
-                                style: const TextStyle(color: Colors.black),
-                                children: [
-                                  WidgetSpan(
-                                    child: Container(
-                                      color: const Color.fromARGB(
-                                          255, 23, 137, 229),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 2,
-                                        ),
-                                        child: Text(
-                                          firstPart,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: secondPart,
-                                  ),
-                                ]),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: colWidth()[col],
-                    color: const Color.fromARGB(255, 191, 222, 209),
-                    child: Padding(
-                      padding: const EdgeInsets.all(3),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '10:30-12:30',
-                            style: TextStyle(fontSize: 10),
-                          ),
-                          RichText(
-                            text: TextSpan(
-                                style: const TextStyle(color: Colors.black),
-                                children: [
-                                  WidgetSpan(
-                                    child: Container(
-                                      color: const Color.fromARGB(
-                                          255, 22, 176, 60),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 2,
-                                        ),
-                                        child: Text(
-                                          firstPart2,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: secondPart2,
-                                  ),
-                                ]),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: colWidth()[col],
-                    color: const Color.fromARGB(255, 241, 241, 224),
-                    child: Padding(
-                      padding: const EdgeInsets.all(3),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '10:30-12:30',
-                            style: TextStyle(fontSize: 10),
-                          ),
-                          RichText(
-                            text: TextSpan(
-                                style: const TextStyle(color: Colors.black),
-                                children: [
-                                  WidgetSpan(
-                                    child: Container(
-                                      color: const Color.fromARGB(
-                                          255, 224, 195, 88),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 2,
-                                        ),
-                                        child: Text(
-                                          firstPart2,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: secondPart2,
-                                  ),
-                                ]),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: colWidth()[col],
-                    color: const Color.fromARGB(255, 242, 223, 222),
-                    child: Padding(
-                      padding: const EdgeInsets.all(3),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '10:30-12:30',
-                            style: TextStyle(fontSize: 10),
-                          ),
-                          RichText(
-                            text: TextSpan(
-                                style: const TextStyle(color: Colors.black),
-                                children: [
-                                  WidgetSpan(
-                                    child: Container(
-                                      color: Colors.red,
-                                      child: const Padding(
-                                        padding: EdgeInsets.only(
-                                          bottom: 2,
-                                        ),
-                                        child: Text(
-                                          '!! 重要 !!',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: secondPart2,
-                                  ),
-                                ]),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            CustomDialog.showCustomDialog(
-                              context: context,
-                              title: '',
-                              body: const Page723(),
-                            );
-                          },
-                          child: const Icon(
-                            Icons.add_circle,
-                            size: 16,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 3,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            CustomDialog.showCustomDialog(
-                              context: context,
-                              title: '',
-                              body: const Page724(),
-                            );
-                          },
-                          child: const Icon(Icons.insert_drive_file_outlined),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                children: kojiItems(row - 1, col),
               ),
             ),
           );
         }
       }
 
+      // don't use
       return Container(
         decoration: BoxDecoration(
           border: Border.all(width: 0.5),
@@ -1014,6 +826,246 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         ),
       );
     });
+  }
+
+  List<Widget> kojiItems(int row, int col) {
+    List<Widget> xxx = [];
+    _listDay().forEach(
+      (element) {
+        if (sukejuuru.isNotEmpty &&
+            sukejuuru[row] != null &&
+            sukejuuru[row][element] != null &&
+            sukejuuru[row][element].isNotEmpty &&
+            element.split('-').last == listDayOfWeek()[col].split(' ').first) {
+          sukejuuru[row][element].forEach(
+            (e) => xxx.addAll([kojiItemWithType(row, col, e)]),
+          );
+        }
+      },
+    );
+    xxx.add(insert());
+    return xxx;
+  }
+
+  Color kojiColorWithType(e) {
+    switch (e['TYPE']) {
+      case 1:
+        return const Color.fromARGB(255, 242, 223, 222);
+      case 2:
+        return Colors.green;
+      case 3:
+        return Colors.blue;
+      case 4:
+        return Colors.yellow;
+      case 5:
+        return Colors.blue;
+      case 6:
+        return Colors.pinkAccent;
+      case 7:
+        return Colors.white;
+      case 8:
+        return Colors.teal;
+      default:
+        return const Color.fromARGB(255, 242, 223, 222);
+    }
+  }
+
+  Color backgroundKojiItem(e) {
+    switch (e['TYPE']) {
+      case 1:
+        return Colors.red;
+      case 2:
+        return Colors.teal;
+      case 3:
+        return Colors.indigoAccent;
+      case 4:
+        return Colors.lightBlue;
+      case 5:
+        return Colors.brown;
+      case 6:
+        return Colors.white;
+      case 7:
+        return Colors.blue;
+      case 8:
+        return Colors.yellow;
+      default:
+        return const Color.fromARGB(255, 195, 161, 172);
+    }
+  }
+
+  Color getColorByText({required String text}) {
+    switch (text) {
+      case '!! 重要 !!':
+        return Colors.red;
+      case 'ネット工事':
+        return Color.fromARGB(255, 46, 196, 51);
+      case '工事打診':
+        return Color.fromARGB(255, 84, 218, 22);
+      case '営業下見':
+        return Colors.purple;
+      case '営業工事':
+        return Color.fromARGB(255, 176, 39, 73);
+      case '日予実':
+        return Colors.blue;
+      case '計予実':
+        return Colors.yellow;
+      case 'ネット下見 ':
+        return Colors.red;
+      case '下見打診':
+        return Color.fromARGB(255, 232, 105, 147);
+      default:
+        return Colors.white;
+        ;
+    }
+  }
+
+  Color getBackgroundColorByText({required String text}) {
+    switch (text) {
+      case '!! 重要 !!':
+        return Color.fromARGB(255, 229, 165, 160);
+      case 'ネット工事':
+        return Color.fromARGB(255, 174, 224, 177);
+      case '工事打診':
+        return Color.fromARGB(255, 173, 228, 144);
+      case '営業下見':
+        return Color.fromARGB(255, 174, 133, 181);
+      case '営業工事':
+        return Color.fromARGB(255, 182, 140, 150);
+      case '日予実':
+        return Color.fromARGB(255, 145, 184, 215);
+      case '計予実':
+        return Color.fromARGB(255, 233, 225, 153);
+      case 'ネット下見 ':
+        return Color.fromARGB(255, 229, 165, 160);
+      case '下見打診':
+        return Color.fromARGB(255, 224, 192, 203);
+      default:
+        return Colors.white;
+    }
+  }
+
+  String textKojiItem(e) {
+    switch (e['TYPE']) {
+      case 1:
+        return "1";
+      case 2:
+        return "2";
+      case 3:
+        return "3";
+      case 4:
+        return "4";
+      case 5:
+        return "5";
+      case 6:
+        return "6";
+      case 7:
+        return "7";
+      case 8:
+        return "8";
+      default:
+        return "";
+    }
+  }
+
+  Widget kojiItemWithType(int row, int col, e) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 2),
+      child: Container(
+        width: colWidth()[col],
+        // color: kojiColorWithType(e),
+        color: getBackgroundColorByText(
+          text: e["KBNMSAI_NAME"],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(3),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              e['SITAMIHOMONJIKAN'] != '' &&
+                      e['SITAMIHOMONJIKAN_END'] != '' &&
+                      e['SITAMIHOMONJIKAN'] != null &&
+                      e['SITAMIHOMONJIKAN_END'] != null
+                  ? Text(
+                      "${e['SITAMIHOMONJIKAN']} - ${e['SITAMIHOMONJIKAN_END']}",
+                      style: const TextStyle(fontSize: 10),
+                    )
+                  : (e['START_TIME'] != null && e['END_TIME'] != null)
+                      ? Text(
+                          "${e['START_TIME']} - ${e['END_TIME']}",
+                          style: const TextStyle(fontSize: 10),
+                        )
+                      : Container(),
+              RichText(
+                text: TextSpan(
+                    style: const TextStyle(color: Colors.black),
+                    children: [
+                      WidgetSpan(
+                        child: Container(
+                          // color: backgroundKojiItem(e),
+                          color: getColorByText(
+                            text: e["KBNMSAI_NAME"],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 2,
+                            ),
+                            child: Text(
+                              e['KBNMSAI_NAME'],
+                              style: TextStyle(
+                                // color: kojiColorWithType(e),
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      TextSpan(
+                        text: e['SETSAKI_ADDRESS'],
+                      ),
+                    ]),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget insert() {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              CustomDialog.showCustomDialog(
+                context: context,
+                title: '',
+                body: const Page723(),
+              );
+            },
+            child: const Icon(
+              Icons.add_circle,
+              size: 16,
+            ),
+          ),
+          const SizedBox(
+            width: 3,
+          ),
+          GestureDetector(
+            onTap: () {
+              CustomDialog.showCustomDialog(
+                context: context,
+                title: '',
+                body: const Page724(),
+              );
+            },
+            child: const Icon(Icons.insert_drive_file_outlined),
+          ),
+        ],
+      ),
+    );
   }
 
   List<Widget> _buildLastRowCells(int count, int row) {
@@ -1070,6 +1122,19 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         height: 100,
       ),
     );
+  }
+
+  Future<List<dynamic>> callGetListSukejuuru(DateTime date) async {
+    final result = await GetListSukejuuru().getListSukejuuru(date);
+    setState(() {
+      sukejuuru = result;
+    });
+
+    return result;
+  }
+
+  Future<List<dynamic>> callGetListSukejuuruWithoutState(DateTime date) async {
+    return await GetListSukejuuru().getListSukejuuru(date);
   }
 
   Widget logout() {
