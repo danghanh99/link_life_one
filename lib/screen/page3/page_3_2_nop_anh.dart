@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/login_page.dart';
+import 'package:link_life_one/screen/page3/page_3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../components/text_line_down.dart';
@@ -164,7 +165,15 @@ class _Page32NopAnhState extends State<Page32NopAnh> {
                 borderRadius: BorderRadius.circular(26),
               ),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const Page3BaoCaoHoanThanhCongTrinh(),
+                    ),
+                  );
+                },
                 child: const Text(
                   '登録',
                   style: TextStyle(

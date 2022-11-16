@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/models/koji.dart';
@@ -144,34 +145,153 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                       itemBuilder: (ctx, index) {
                         final item = response.data![index];
                         bool isShitami = item.type == 'SITAMI';
-                        return Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: !isShitami
-                                ? const Color.fromARGB(255, 216, 181, 111)
-                                : const Color.fromARGB(255, 111, 177, 224),
-                            border: Border.all(
+                        return GestureDetector(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Container(
+                                    width: 300,
+                                    child: CupertinoAlertDialog(
+                                      title: const Text(
+                                        "この工事を設置不可で登録を行います。\n(元に戻せません)",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      content: const Padding(
+                                        padding: EdgeInsets.only(top: 15),
+                                        child: Text(
+                                          "操作は必ず本部へ電話報告後に行ってください。\nまたサイボウズの設置不可アプリ登録は必ず行ってください。",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      actions: <Widget>[
+                                        Row(
+                                          // mainAxisAlignment:
+                                          //     MainAxisAlignment.spaceAround,
+                                          children: [
+                                            SizedBox(
+                                              width: 90,
+                                              child: TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(
+                                                        context); //close Dialog
+                                                  },
+                                                  child: const Text(
+                                                    '戻る',
+                                                    style: TextStyle(
+                                                      color: Color(0xFFEB5757),
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  )),
+                                            ),
+                                            Container(
+                                              width: 90,
+                                              decoration: const BoxDecoration(
+                                                border: Border(
+                                                  left: BorderSide(
+                                                    //                   <--- left side
+                                                    color: Colors.grey,
+                                                    width: 1.5,
+                                                  ),
+                                                  right: BorderSide(
+                                                    //                    <--- top side
+                                                    color: Colors.grey,
+                                                    width: 1.5,
+                                                  ),
+                                                ),
+                                              ),
+                                              child: TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(
+                                                        context); //close Dialog
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const Page31YeuCauBieuMauPage(),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: const Text(
+                                                    'いいえ',
+                                                    style: TextStyle(
+                                                      color: Color(0xFFEB5757),
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  )),
+                                            ),
+                                            SizedBox(
+                                              width: 90,
+                                              child: TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(
+                                                      context); //close Dialog
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const Page31YeuCauBieuMauPage(),
+                                                    ),
+                                                  );
+                                                },
+                                                child: const Text(
+                                                  'はい',
+                                                  style: TextStyle(
+                                                    color: Color(0xFF007AFF),
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
                               color: !isShitami
                                   ? const Color.fromARGB(255, 216, 181, 111)
                                   : const Color.fromARGB(255, 111, 177, 224),
+                              border: Border.all(
+                                color: !isShitami
+                                    ? const Color.fromARGB(255, 216, 181, 111)
+                                    : const Color.fromARGB(255, 111, 177, 224),
+                              ),
                             ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  isShitami
-                                      ? '訪問時間：${formatJikan(jikan: item.sitamiHomonJikan)}　　報告：未'
-                                      : '訪問時間：${formatJikan(jikan: item.kojiHomonJikan)}   報告：済',
-                                ),
-                                Text(
-                                    '受注ID： ${item.jyucyuId}　人数：${item.shitamiJinin}人　目安作業時間：${item.shitamiJikan ?? ''}(m)'),
-                                Text('工事アイテム： ${item.kojiItem}'),
-                                Text('住所： ${item.setsakiAddress}'),
-                                Text('氏名： ${item.setsakiName}'),
-                              ],
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    isShitami
+                                        ? '訪問時間：${formatJikan(jikan: item.sitamiHomonJikan)}　　報告：未'
+                                        : '訪問時間：${formatJikan(jikan: item.kojiHomonJikan)}   報告：済',
+                                  ),
+                                  Text(
+                                      '受注ID： ${item.jyucyuId}　人数：${item.shitamiJinin}人　目安作業時間：${item.shitamiJikan ?? ''}(m)'),
+                                  Text('工事アイテム： ${item.kojiItem}'),
+                                  Text('住所： ${item.setsakiAddress}'),
+                                  Text('氏名： ${item.setsakiName}'),
+                                ],
+                              ),
                             ),
                           ),
                         );
@@ -228,14 +348,7 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Page31YeuCauBieuMauPage(),
-                        ),
-                      );
-                    },
+                    onPressed: () {},
                     child: const Text(
                       '更新',
                       style: TextStyle(

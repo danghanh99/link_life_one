@@ -76,12 +76,6 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    // textLineDown(
-                    //   '戻る',
-                    //   () {
-                    //     Navigator.pop(context);
-                    //   },
-                    // ),
                   ],
                 ),
               ],
@@ -192,7 +186,16 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                                         ),
                                       )),
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.pop(context); //close Dialog
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const Page32NopAnh(),
+                                        ),
+                                      );
+                                    },
                                     child: const Text(
                                       'はい',
                                       style: TextStyle(
@@ -250,14 +253,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Page32NopAnh(),
-                        ),
-                      );
-                    },
+                    onPressed: () {},
                     child: const Text(
                       '工事・下見報告',
                       style: TextStyle(
@@ -460,8 +456,3 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
     );
   }
 }
-
-
-// この工事を設置不可で登録を行います。
-// (元に戻せません)
-
