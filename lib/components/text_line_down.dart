@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class TextLineDown extends StatefulWidget {
   final String text;
+  final TextStyle? style;
   final Function? onTap;
   const TextLineDown({
     Key? key,
     required this.text,
+    this.style,
     this.onTap,
   }) : super(key: key);
 
@@ -37,11 +39,12 @@ class _TextLineDownState extends State<TextLineDown> {
               },
               child: Text(
                 widget.text,
-                style: const TextStyle(
-                  color: Color(0xFF042C5C),
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: widget.style ??
+                    const TextStyle(
+                      color: Color(0xFF042C5C),
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
               ),
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page3/page_3_2_nop_anh.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:link_life_one/screen/page3/shitami_houkoku_page.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../components/text_line_down.dart';
@@ -148,67 +149,68 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                   child: TextButton(
                     onPressed: () {
                       showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Container(
-                              width: double.infinity,
-                              child: CupertinoAlertDialog(
-                                title: const Text(
-                                  "この工事を設置不可で登録を行います。\n(元に戻せません)",
+                        context: context,
+                        builder: (context) {
+                          return Container(
+                            width: double.infinity,
+                            child: CupertinoAlertDialog(
+                              title: const Text(
+                                "この工事を設置不可で登録を行います。\n(元に戻せません)",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              content: const Padding(
+                                padding: EdgeInsets.only(top: 15),
+                                child: Text(
+                                  "操作は必ず本部へ電話報告後に行ってください。\nまたサイボウズの設置不可アプリ登録は必ず行ってください。",
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                content: const Padding(
-                                  padding: EdgeInsets.only(top: 15),
-                                  child: Text(
-                                    "操作は必ず本部へ電話報告後に行ってください。\nまたサイボウズの設置不可アプリ登録は必ず行ってください。",
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context); //close Dialog
+                                    },
+                                    child: const Text(
+                                      '戻る',
+                                      style: TextStyle(
+                                        color: Color(0xFFEB5757),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    )),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context); //close Dialog
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const Page32NopAnh(),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text(
+                                    'はい',
                                     style: TextStyle(
-                                      color: Colors.black,
+                                      color: Color(0xFF007AFF),
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                ),
-                                actions: <Widget>[
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context); //close Dialog
-                                      },
-                                      child: const Text(
-                                        '戻る',
-                                        style: TextStyle(
-                                          color: Color(0xFFEB5757),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      )),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context); //close Dialog
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const Page32NopAnh(),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text(
-                                      'はい',
-                                      style: TextStyle(
-                                        color: Color(0xFF007AFF),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            );
-                          });
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
                     },
                     child: const Text(
                       '設置不可',
@@ -253,7 +255,14 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ShitamiHoukoku(),
+                        ),
+                      );
+                    },
                     child: const Text(
                       '工事・下見報告',
                       style: TextStyle(
