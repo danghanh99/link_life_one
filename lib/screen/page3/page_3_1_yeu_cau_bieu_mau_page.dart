@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page3/page_3_2_nop_anh.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/screen/page3/shitami_houkoku_page.dart';
 
 import '../../components/custom_text_field.dart';
@@ -9,9 +10,12 @@ import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../menu_page/menu_page.dart';
+import 'koji_houkoku.dart';
 
 class Page31YeuCauBieuMauPage extends StatefulWidget {
+  final DateTime? initialDate;
   const Page31YeuCauBieuMauPage({
+    this.initialDate,
     Key? key,
   }) : super(key: key);
 
@@ -193,7 +197,9 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const Page32NopAnh(),
+                                            ShashinTeishuutsuGamenPage(
+                                          initialDate: widget.initialDate,
+                                        ),
                                       ),
                                     );
                                   },
@@ -256,10 +262,21 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                   ),
                   child: TextButton(
                     onPressed: () {
+                      // truong hop 2 huy lam
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const ShitamiHoukoku(),
+                      //   ),
+                      // );
+
+                      // truong hop 1 hanh lam
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ShitamiHoukoku(),
+                          builder: (context) => KojiHoukoku(
+                            initialDate: widget.initialDate,
+                          ),
                         ),
                       );
                     },

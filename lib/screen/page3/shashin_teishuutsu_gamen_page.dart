@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:link_life_one/components/text_line_down.dart';
+import 'package:link_life_one/screen/page3/page_3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 
 class ShashinTeishuutsuGamenPage extends StatefulWidget {
-  const ShashinTeishuutsuGamenPage({super.key});
+  final DateTime? initialDate;
+  const ShashinTeishuutsuGamenPage({super.key, this.initialDate});
 
   @override
   State<ShashinTeishuutsuGamenPage> createState() =>
@@ -111,9 +113,14 @@ class _ShashinTeishuutsuGamenPageState
                     padding: const EdgeInsets.only(right: 18),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
-                        // Navigator.canPop((context) => {});
-                        // Navigator.popUntil(context, (route) => );
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Page3BaoCaoHoanThanhCongTrinh(
+                              initialDate: widget.initialDate,
+                            ),
+                          ),
+                        );
                       },
                       child: Container(
                         width: 150,

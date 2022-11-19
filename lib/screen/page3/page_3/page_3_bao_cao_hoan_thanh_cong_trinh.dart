@@ -14,7 +14,9 @@ import '../../../shared/custom_button.dart';
 import 'components/title_widget.dart';
 
 class Page3BaoCaoHoanThanhCongTrinh extends StatefulWidget {
+  final DateTime? initialDate;
   const Page3BaoCaoHoanThanhCongTrinh({
+    this.initialDate,
     Key? key,
   }) : super(key: key);
 
@@ -36,7 +38,9 @@ class _Page3BaoCaoHoanThanhCongTrinhState
 
   @override
   void initState() {
+    date = widget.initialDate ?? DateTime.now();
     super.initState();
+    callGetListKojiApi(inputDate: date);
   }
 
   Future<List<Koji>> callGetListKojiApi({DateTime? inputDate}) async {
@@ -218,7 +222,9 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                                                       context,
                                                       MaterialPageRoute(
                                                         builder: (context) =>
-                                                            const Page31YeuCauBieuMauPage(),
+                                                            Page31YeuCauBieuMauPage(
+                                                                initialDate:
+                                                                    date),
                                                       ),
                                                     );
                                                   },
@@ -242,7 +248,9 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          const Page31YeuCauBieuMauPage(),
+                                                          Page31YeuCauBieuMauPage(
+                                                        initialDate: date,
+                                                      ),
                                                     ),
                                                   );
                                                 },

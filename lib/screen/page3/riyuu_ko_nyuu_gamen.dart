@@ -127,7 +127,7 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
                     const SizedBox(),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
+                        // Navigator.pop(context);
                       },
                       child: Container(
                         decoration: BoxDecoration(
