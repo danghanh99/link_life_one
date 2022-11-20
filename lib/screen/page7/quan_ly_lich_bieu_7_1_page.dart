@@ -1042,7 +1042,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               CustomDialog.showCustomDialog(
                 context: context,
                 title: '',
-                body: const Page723(),
+                body: Page723(
+                  initialDate: date,
+                ),
               );
             },
             child: const Icon(
@@ -1058,7 +1060,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               CustomDialog.showCustomDialog(
                 context: context,
                 title: '',
-                body: const Page724(),
+                body: Page724(
+                  initialDate: date,
+                ),
               );
             },
             child: const Icon(Icons.insert_drive_file_outlined),

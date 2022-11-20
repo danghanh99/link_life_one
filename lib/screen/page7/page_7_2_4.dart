@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../shared/assets.dart';
 
 class Page724 extends StatefulWidget {
+  final DateTime initialDate;
   const Page724({
+    required this.initialDate,
     Key? key,
   }) : super(key: key);
 
@@ -23,7 +26,7 @@ class _Page724State extends State<Page724> {
     memo = 'メモ';
     kaigiKara = '10：00';
     kaigiMade = '12：00';
-    checkedValue = true;
+    checkedValue = false;
     super.initState();
   }
 
@@ -108,13 +111,15 @@ class _Page724State extends State<Page724> {
                         ),
                       ),
                     ),
-                    const Align(
+                    Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '2022年01月19日(水)',
-                        style: TextStyle(
+                        DateFormat('yyyy今MM月dd日(E)', 'ja')
+                            .format(widget.initialDate)
+                            .toString(),
+                        style: const TextStyle(
                           color: Color(0xFF000000),
-                          fontSize: 13,
+                          fontSize: 14,
                           fontWeight: FontWeight.w300,
                         ),
                       ),
@@ -248,6 +253,31 @@ class _Page724State extends State<Page724> {
                   },
                   child: const Text(
                     '削除',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Container(
+                width: 120,
+                height: 37,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(26),
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'キャンセル',
                     style: TextStyle(
                       decoration: TextDecoration.underline,
                       color: Colors.white,

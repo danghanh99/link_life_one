@@ -1,5 +1,6 @@
 import 'package:check_points/check_point.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4.dart';
 
 import '../../components/custom_text_field.dart';
@@ -8,7 +9,9 @@ import '../../shared/validator.dart';
 import '../page6/danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
 class Page723 extends StatefulWidget {
+  final DateTime initialDate;
   const Page723({
+    required this.initialDate,
     Key? key,
   }) : super(key: key);
 
@@ -50,7 +53,7 @@ class _Page723State extends State<Page723> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '営業案内登録',
+                        '営業案件登録',
                         style: TextStyle(
                           color: Color(0xFF042C5C),
                           fontSize: 16,
@@ -109,13 +112,15 @@ class _Page723State extends State<Page723> {
                           ),
                         ),
                       ),
-                      const Align(
+                      Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '2022年01月19日(水)',
-                          style: TextStyle(
+                          DateFormat('yyyy今MM月dd日(E)', 'ja')
+                              .format(widget.initialDate)
+                              .toString(),
+                          style: const TextStyle(
                             color: Color(0xFF000000),
-                            fontSize: 13,
+                            fontSize: 14,
                             fontWeight: FontWeight.w300,
                           ),
                         ),
