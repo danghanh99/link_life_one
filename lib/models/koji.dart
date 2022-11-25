@@ -12,7 +12,6 @@ class Koji {
   final String kojiItem;
   final String setsakiAddress;
   final String setsakiName;
-  final String type;
 
   Koji({
     this.kojiHomonJikan,
@@ -24,7 +23,6 @@ class Koji {
     required this.kojiItem,
     required this.setsakiAddress,
     required this.setsakiName,
-    required this.type,
   });
 
   factory Koji.fromJson(Map<String, dynamic> json) {
@@ -38,7 +36,6 @@ class Koji {
       kojiItem: json["KOJI_ITEM"],
       setsakiAddress: json["SETSAKI_ADDRESS"],
       setsakiName: json["SETSAKI_NAME"],
-      type: json["TYPE"],
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:link_life_one/api/Login/login_api.dart';
 import 'package:link_life_one/screen/menu_page/menu_page.dart';
 import '../components/custom_text_field.dart';
 import '../shared/assets.dart';
@@ -104,12 +105,18 @@ class _LoginPageState extends State<LoginPage> {
                                 onClick: () {
                                   if (_formKey.currentState?.validate() ==
                                       true) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => MenuPage(),
-                                      ),
-                                    );
+                                    LoginApi().login(
+                                        id: emailController.text,
+                                        password: passwordController.text,
+                                        onSuccess: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => MenuPage(),
+                                            ),
+                                          );
+                                        },
+                                        onFailed: () {});
                                   }
                                 },
                                 name: 'ログイン',

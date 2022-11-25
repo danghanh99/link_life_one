@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page3/page_3_2_nop_anh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/screen/page3/shitami_houkoku_page.dart';
-
 import '../../components/custom_text_field.dart';
 import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
@@ -14,7 +12,9 @@ import 'koji_houkoku.dart';
 
 class Page31YeuCauBieuMauPage extends StatefulWidget {
   final DateTime? initialDate;
+  final bool isShitami;
   const Page31YeuCauBieuMauPage({
+    required this.isShitami,
     this.initialDate,
     Key? key,
   }) : super(key: key);
@@ -33,10 +33,9 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: Padding(
         padding: const EdgeInsets.only(
           top: 20,
@@ -45,8 +44,6 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
           left: 16,
         ),
         child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -74,7 +71,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => LoginPage(),
+                              builder: (context) => const LoginPage(),
                             ),
                           );
                         }),
@@ -88,8 +85,8 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
             Center(
               child: Container(
                 decoration: BoxDecoration(
-                    border:
-                        Border.all(color: Color.fromARGB(255, 247, 240, 240))),
+                    border: Border.all(
+                        color: const Color.fromARGB(255, 247, 240, 240))),
                 width: 200,
                 child: CustomButton(
                   color: Colors.white70,
@@ -110,7 +107,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                     onTap: () {
                       Navigator.pop(context);
                     }),
-                Spacer(),
+                const Spacer(),
               ],
             ),
             const SizedBox(
@@ -262,23 +259,23 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      // truong hop 2 huy lam
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const ShitamiHoukoku(),
-                      //   ),
-                      // );
-
-                      // truong hop 1 hanh lam
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => KojiHoukoku(
-                            initialDate: widget.initialDate,
+                      if (widget.isShitami) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ShitamiHoukoku(),
                           ),
-                        ),
-                      );
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => KojiHoukoku(
+                              initialDate: widget.initialDate,
+                            ),
+                          ),
+                        );
+                      }
                     },
                     child: const Text(
                       '工事・下見報告',

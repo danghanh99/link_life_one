@@ -16,6 +16,10 @@ dependencies:
   check_points: ^0.0.1+1
   intl: ^0.17.0
   http:
+  flutter_session_manager: ^1.0.3
+  shared_preferences: ^2.0.15
+  hive_flutter: ^1.1.0
+  path_provider: ^2.0.11
 
 dev_dependencies:
   flutter_test:
