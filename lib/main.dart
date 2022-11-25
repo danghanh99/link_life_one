@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:link_life_one/hive.dart';
@@ -20,12 +21,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const LoginPage(),
-    );
+    return ScreenUtilInit(
+        designSize: const Size(810, 1080),
+        builder: (context, _) => MaterialApp(
+              theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+              debugShowCheckedModeBanner: false,
+              home: const LoginPage(),
+            ));
+    ;
   }
 }

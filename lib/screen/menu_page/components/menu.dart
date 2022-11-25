@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'custom_menu_button.dart';
 
@@ -22,16 +23,16 @@ class _MenuState extends State<Menu> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomMenuButton(
-              width: 300,
-              height: 70,
+              width: 300.w,
+              height: 70.h,
               name: widget.listNames[0],
             ),
             const SizedBox(
               width: 40,
             ),
             CustomMenuButton(
-              width: 300,
-              height: 70,
+              width: 300.w,
+              height: 70.h,
               name: widget.listNames[1],
             ),
           ],
@@ -43,16 +44,16 @@ class _MenuState extends State<Menu> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomMenuButton(
-              width: 300,
-              height: 70,
+              width: 300.w,
+              height: 70.h,
               name: widget.listNames[2],
             ),
             const SizedBox(
               width: 40,
             ),
             CustomMenuButton(
-              width: 300,
-              height: 70,
+              width: 300.w,
+              height: 70.h,
               name: widget.listNames[3],
             ),
           ],
@@ -64,16 +65,16 @@ class _MenuState extends State<Menu> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomMenuButton(
-              width: 300,
-              height: 70,
+              width: 300.w,
+              height: 70.h,
               name: widget.listNames[4],
             ),
             const SizedBox(
               width: 40,
             ),
             CustomMenuButton(
-              width: 300,
-              height: 70,
+              width: 300.w,
+              height: 70.h,
               name: widget.listNames[5],
             ),
           ],

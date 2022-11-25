@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
@@ -188,7 +189,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
             Row(
               children: [
                 Container(
-                  width: 100,
+                  width: 100.w,
                   height: 37,
                   decoration: BoxDecoration(
                     color: const Color(0xFFFA6366),
@@ -277,7 +278,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                   width: 5,
                 ),
                 Container(
-                  width: 100,
+                  width: 100.w,
                   height: 37,
                   decoration: BoxDecoration(
                     color: const Color(0xFF6D8FDB),
@@ -298,7 +299,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                 ),
                 Expanded(child: Container()),
                 Container(
-                  width: 140,
+                  width: 140.w,
                   height: 37,
                   decoration: BoxDecoration(
                     color: const Color(0xFFFFA800),

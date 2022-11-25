@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/models/koji.dart';
 import 'package:link_life_one/screen/page3/page_3/components/logout_widget.dart';
@@ -123,7 +124,7 @@ class _Page3BaoCaoHoanThanhCongTrinhState
               height: 5,
             ),
             Container(
-              height: 400,
+              height: 400.h,
               padding: const EdgeInsets.symmetric(
                 vertical: 10,
               ),

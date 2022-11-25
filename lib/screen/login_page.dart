@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/api/Login/login_api.dart';
 import 'package:link_life_one/screen/menu_page/menu_page.dart';
 import '../components/custom_text_field.dart';
@@ -42,12 +43,12 @@ class _LoginPageState extends State<LoginPage> {
               Center(
                 child: Image.asset(
                   Assets.LOGO_LINK,
-                  width: 200,
-                  height: 200,
+                  width: 200.w,
+                  height: 200.h,
                 ),
               ),
-              const SizedBox(
-                height: 10,
+              SizedBox(
+                height: 10.h,
               ),
               Form(
                 key: _formKey,
@@ -67,9 +68,6 @@ class _LoginPageState extends State<LoginPage> {
                             isLoginEnabled.value = true;
                           },
                         ),
-                        // const SizedBox(
-                        //   height: 10,
-                        // ),
                         const Text("パスワード"),
                         CustomTextField(
                           hint: '',
@@ -82,9 +80,6 @@ class _LoginPageState extends State<LoginPage> {
                           controller: passwordController,
                           isPassword: true,
                         ),
-                        // const SizedBox(
-                        //   height: 10,
-                        // ),
                         Center(
                           child: GestureDetector(
                             onTap: () {
@@ -104,7 +99,6 @@ class _LoginPageState extends State<LoginPage> {
                               }
                             },
                             child: SizedBox(
-                              // width: size.width - 30,
                               height: 37,
                               child: CustomButton(
                                 color: const Color(0xFF6D8FDB),

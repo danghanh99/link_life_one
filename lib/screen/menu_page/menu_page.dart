@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/screen/page5/page5_quan_ly/quan_ly_nhap_xuat_page.dart';
 import 'package:link_life_one/screen/page6/page6_quan_ly/page_6_quan_ly_thanh_vien.dart';
 import 'package:link_life_one/screen/page7/quan_ly_lich_bieu_7_1_page.dart';
@@ -70,15 +71,15 @@ class _MenuPageState extends State<MenuPage> {
                 children: [
                   Image.asset(
                     Assets.LOGO_LINK,
-                    width: 100,
-                    height: 100,
+                    width: 100.w,
+                    height: 100.h,
                   ),
                   Container(
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          color: Color(0xFFDFE0E3),
-                          width: 2.0,
+                          color: const Color(0xFFDFE0E3),
+                          width: 2.w,
                         ),
                       ),
                     ),
@@ -181,33 +182,6 @@ class _MenuPageState extends State<MenuPage> {
               Menu(
                 listNames: listNames,
               )
-              // GridView.count(
-              //   crossAxisCount: 2,
-              //   physics: const NeverScrollableScrollPhysics(),
-              //   shrinkWrap: true,
-              //   mainAxisSpacing: 10,
-              //   crossAxisSpacing: 20,navigateTo
-              //   childAspectRatio: 2,
-              //   children: listNames.map((name) {
-              //     return GestureDetector(
-              //       onTap: () {
-              //         navigateTo(name);
-              //       },
-              //       child: CustomButton(
-              //         color: const Color(0xFFFFFA7A),
-              //         onClick: () {
-              //           navigateTo(name);
-              //         },
-              //         name: name,
-              //         textStyle: const TextStyle(
-              //           color: Colors.black,
-              //           fontSize: 18,
-              //           fontWeight: FontWeight.w700,
-              //         ),
-              //       ),
-              //     );
-              //   }).toList(),
-              // ),
             ],
           ),
         ),
@@ -216,12 +190,6 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   void navigateTo(String name) {
-    // '工事完了報告',
-    // 'スケジュール管理',
-    // '実績確認',
-    // '入出庫管理',
-    // '部材管理',
-    // '出納帳',
     switch (name) {
       case ('スケジュール管理'):
         Navigator.push(
