@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page3/page_3_2_nop_anh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
-import 'package:link_life_one/screen/page3/shitami_houkoku_page.dart';
 
-import '../../components/custom_text_field.dart';
 import '../../components/text_line_down.dart';
+import '../../models/koji.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../menu_page/menu_page.dart';
@@ -14,8 +12,12 @@ import 'koji_houkoku.dart';
 
 class Page31YeuCauBieuMauPage extends StatefulWidget {
   final DateTime? initialDate;
+  final List<Koji> listKoji;
+  final bool isSendAList;
   const Page31YeuCauBieuMauPage({
     this.initialDate,
+    required this.isSendAList,
+    required this.listKoji,
     Key? key,
   }) : super(key: key);
 
@@ -128,12 +130,53 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: CustomTextField(
-                  fillColor: const Color(0xFFD9D9D9),
-                  hint: '',
-                  type: TextInputType.emailAddress,
-                  onChanged: (text) {},
-                  maxLines: 25,
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  padding: const EdgeInsets.only(right: 15, left: 15),
+                  itemCount: widget.listKoji.length,
+                  itemBuilder: (ctx, index) {
+                    final item = widget.listKoji[index];
+                    bool isShitami = item.type == 'SITAMI';
+                    return GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: !isShitami
+                              ? const Color.fromARGB(255, 216, 181, 111)
+                              : const Color.fromARGB(255, 111, 177, 224),
+                          border: Border.all(
+                            color: !isShitami
+                                ? const Color.fromARGB(255, 216, 181, 111)
+                                : const Color.fromARGB(255, 111, 177, 224),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                isShitami
+                                    ? '訪問時間：${formatJikan(jikan: item.sitamiHomonJikan)}　　報告：未'
+                                    : '訪問時間：${formatJikan(jikan: item.kojiHomonJikan)}   報告：済',
+                              ),
+                              Text(
+                                  '受注ID： ${item.jyucyuId}　人数：${item.shitamiJinin}人　目安作業時間：${item.shitamiJikan ?? ''}(m)'),
+                              Text('工事アイテム： ${item.kojiItem}'),
+                              Text('住所： ${item.setsakiAddress}'),
+                              Text('氏名： ${item.setsakiName}'),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const SizedBox(
+                    height: 5,
+                  ),
                 ),
               ),
             ),
@@ -480,5 +523,11 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
         ),
       ),
     );
+  }
+
+  String formatJikan({required String? jikan}) {
+    if (jikan == null || jikan == '' || jikan.length != 4) return '';
+    jikan = jikan[0] + jikan[1] + ":" + jikan[2] + jikan[3];
+    return jikan;
   }
 }

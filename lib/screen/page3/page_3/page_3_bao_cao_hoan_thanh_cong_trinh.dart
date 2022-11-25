@@ -223,6 +223,11 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                                                       MaterialPageRoute(
                                                         builder: (context) =>
                                                             Page31YeuCauBieuMauPage(
+                                                                listKoji: [
+                                                              item
+                                                            ],
+                                                                isSendAList:
+                                                                    false,
                                                                 initialDate:
                                                                     date),
                                                       ),
@@ -249,6 +254,9 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                                                     MaterialPageRoute(
                                                       builder: (context) =>
                                                           Page31YeuCauBieuMauPage(
+                                                        listKoji:
+                                                            response.data!,
+                                                        isSendAList: true,
                                                         initialDate: date,
                                                       ),
                                                     ),
