@@ -481,7 +481,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children:
-                                              _buildRows(0, scrollController2),
+                                              _buildRows(1, scrollController2),
                                         )
                                       : Column(
                                           crossAxisAlignment:

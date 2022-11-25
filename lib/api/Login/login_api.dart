@@ -18,14 +18,22 @@ class LoginApi {
       onFailed.call();
     } else {
       if (response.statusCode == 200) {
-        final box = await Hive.openBox<String>('user');
-        box.add(jsonDecode(response.body)['TANT_CD']);
-        box.values;
-
-        onSuccess.call();
+        openBox((box) {
+          box.add(jsonDecode(response.body)['TANT_CD']);
+          box.values;
+          onSuccess.call();
+        });
       } else {
         onFailed.call();
       }
+    }
+  }
+
+  void openBox(Function(Box<String>) onsuccess) async {
+    final box = await Hive.openBox<String>('user');
+
+    if (box.isOpen) {
+      onsuccess.call(box);
     }
   }
 }

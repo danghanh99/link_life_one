@@ -89,12 +89,18 @@ class _LoginPageState extends State<LoginPage> {
                           child: GestureDetector(
                             onTap: () {
                               if (_formKey.currentState?.validate() == true) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MenuPage(),
-                                  ),
-                                );
+                                LoginApi().login(
+                                    id: emailController.text,
+                                    password: passwordController.text,
+                                    onSuccess: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => MenuPage(),
+                                        ),
+                                      );
+                                    },
+                                    onFailed: () {});
                               }
                             },
                             child: SizedBox(
