@@ -14,14 +14,18 @@ class LoginApi {
     final response = await http
         .post(Uri.parse(url), body: {'LOGIN_ID': id, 'PASSWORD': password});
 
-    if (response.statusCode == 200) {
-      final box = await Hive.openBox<String>('user');
-      box.add(jsonDecode(response.body)['TANT_CD']);
-      box.values;
-
-      onSuccess.call();
-    } else {
+    if (response.body == "{\"error_message\":Unauthorized}[]") {
       onFailed.call();
+    } else {
+      if (response.statusCode == 200) {
+        final box = await Hive.openBox<String>('user');
+        box.add(jsonDecode(response.body)['TANT_CD']);
+        box.values;
+
+        onSuccess.call();
+      } else {
+        onFailed.call();
+      }
     }
   }
 }
