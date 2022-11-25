@@ -5,6 +5,10 @@ import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page7/page_7_2_1.dart';
 import 'package:link_life_one/screen/page7/page_7_2_3.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4.dart';
+import '../../api/sukejuuru_page_api/get_anken_cua_mot_phong_ban.dart';
+import '../../api/sukejuuru_page_api/get_du_lieu_cua_mot_nhan_vien_trong_phong_ban.dart';
+import '../../api/sukejuuru_page_api/get_list_nhan_vien_cua_phong_ban.dart';
+import '../../api/sukejuuru_page_api/get_list_phong_ban.dart';
 import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
@@ -27,16 +31,108 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     '部材管理',
     '出納帳',
   ];
+
+  List<dynamic> listNhanVien = [];
+
+  List<dynamic> listAnkenPhongBan = [];
+
   List<dynamic> sukejuuru = [];
-  String value = 'グループ';
-  late bool show721;
-  DateTime date = DateTime.now();
+
+  dynamic sukejuuruPhongBan;
+
+  List<dynamic> listPhongBan = [];
+
+  String nhanVien = '';
+
+  String value1nguoi = 'グループ';
+  DateTime date = DateTime.parse('2022-11-11');
+
+  String phongBanName = '';
+  String phongBanId = '';
 
   @override
   void initState() {
-    show721 = true;
     callGetListSukejuuru(date);
+
+    callGetListPhongBan();
+
     super.initState();
+  }
+
+  Future<List<dynamic>> callGetListPhongBan() async {
+    final result = await GetListPhongBan().getListPhongBan(onSuccess: (list) {
+      setState(() {
+        listPhongBan = list;
+      });
+
+      if (listPhongBan[0]["KOJIGYOSYA_CD"] != null &&
+          listPhongBan[0]["KOJIGYOSYA_CD"] != "") {
+        callGetAnkenCuaMotPhongBan(
+            kojiGyoSyaCd: listPhongBan[0]["KOJIGYOSYA_CD"], date: date);
+        setState(() {
+          phongBanId = listPhongBan[0]["KOJIGYOSYA_CD"];
+          phongBanName = listPhongBan[0]["KOJIGYOSYA_NAME"];
+        });
+      }
+    });
+
+    return result;
+  }
+
+  Future<List<dynamic>> callGetListNhanVienCuaPhongBan(
+      {required String kojiGyoSyaCd}) async {
+    final result = await GetListNhanVienCuaPhongBan()
+        .getListNhanVienCuaPhongBan("11009", (response) {
+      print(response);
+      setState(() {
+        listNhanVien = response;
+        nhanVien = listNhanVien.first["TANT_NAME"];
+      });
+    });
+
+    return result;
+  }
+
+  Future<dynamic> callGetAnkenCuaMotPhongBan(
+      {required String kojiGyoSyaCd,
+      required DateTime date,
+      Function? onsuccess}) async {
+    final dynamic result = await GetAnkenCuaMotPhongBan()
+        .getAnkenCuaMotPhongBan(kojiGyoSyaCd, date, (response) {
+      setState(() {
+        sukejuuru = response["PERSON"][0];
+        sukejuuruPhongBan = response["OFFICE"];
+
+        // print(response);
+      });
+      onsuccess?.call();
+    });
+
+    // if (result["PERSON"] != null) {
+    //   callGetListNhanVienCuaPhongBan(kojiGyoSyaCd: kojiGyoSyaCd);
+    // }
+
+    return result;
+  }
+
+  Future<List<dynamic>> callGetDuLieuCuaMotNhanVienTrongPhongBan(
+      {required String kojiGyoSyaCd,
+      required DateTime date,
+      Function? onsuccess}) async {
+    final List<dynamic> result = await GetDuLieuCuaMotNhanVienTrongPhongBan()
+        .getDuLieuCuaMotNhanVienTrongPhongBan(kojiGyoSyaCd, date, (body) {
+      // setState(() {
+      //   sukejuuru = [];
+
+      //   sukejuuru = body;
+      // });
+    });
+
+    // if (result["PERSON"] != null) {
+    //   callGetListNhanVienCuaPhongBan(kojiGyoSyaCd: kojiGyoSyaCd);
+    // }
+
+    return result;
   }
 
   @override
@@ -149,7 +245,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          value = 'グループ';
+                          value1nguoi = 'グループ';
                         });
                       },
                       child: Text(
@@ -157,7 +253,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         style: TextStyle(
                           foreground: Paint()
                             ..shader = LinearGradient(
-                              colors: value == 'グループ'
+                              colors: value1nguoi == 'グループ'
                                   ? <Color>[
                                       const Color(0xFF6F86D6),
                                       const Color(0xFF48C6EF)
@@ -179,7 +275,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       width: 150,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: value == 'グループ'
+                          colors: value1nguoi == 'グループ'
                               ? [
                                   const Color(0xFF6F86D6),
                                   const Color(0xFF48C6EF)
@@ -201,15 +297,18 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          value = '個人';
+                          value1nguoi = '個人';
                         });
+
+                        callGetListNhanVienCuaPhongBan(
+                            kojiGyoSyaCd: phongBanId);
                       },
                       child: Text(
                         '個人',
                         style: TextStyle(
                           foreground: Paint()
                             ..shader = LinearGradient(
-                              colors: value == '個人'
+                              colors: value1nguoi == '個人'
                                   ? <Color>[
                                       const Color(0xFF6F86D6),
                                       const Color(0xFF48C6EF)
@@ -231,7 +330,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       width: 150,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: value == '個人'
+                          colors: value1nguoi == '個人'
                               ? [
                                   const Color(0xFF6F86D6),
                                   const Color(0xFF48C6EF)
@@ -253,7 +352,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             const SizedBox(
               height: 15,
             ),
-            value == '個人'
+            value1nguoi == '個人'
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -328,7 +427,11 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                                 setState(() {
                                   date = picked;
                                 });
-                                callGetListSukejuuru(date);
+                                // callGetListSukejuuru(date);
+                                callGetAnkenCuaMotPhongBan(
+                                  kojiGyoSyaCd: phongBanId,
+                                  date: date,
+                                );
                               }
                             },
                             child: Row(
@@ -369,19 +472,24 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                           },
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            child: FutureBuilder<List<dynamic>>(
-                                future: callGetListSukejuuruWithoutState(date),
+                            child: FutureBuilder<dynamic>(
+                                future: callGetAnkenCuaMotPhongBan(
+                                    kojiGyoSyaCd: phongBanId, date: date),
                                 builder: (context, response) {
-                                  return Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: _buildRows(
-                                        response.data != null &&
-                                                response.data!.isNotEmpty
-                                            ? response.data!.length + 1
-                                            : 3,
-                                        scrollController2),
-                                  );
+                                  return response.data == null
+                                      ? Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children:
+                                              _buildRows(0, scrollController2),
+                                        )
+                                      : Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: _buildRows(
+                                              sukejuuru.length + 2,
+                                              scrollController2),
+                                        );
                                 }),
                           ),
                         ),
@@ -425,7 +533,11 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             onTap: () {
               setState(() {
                 date = date.add(const Duration(days: -7));
-                callGetListSukejuuru(date);
+                // callGetListSukejuuru(date);
+                callGetAnkenCuaMotPhongBan(
+                  kojiGyoSyaCd: phongBanId,
+                  date: date,
+                );
               });
             },
             child: Row(
@@ -474,7 +586,11 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               setState(() {
                 date = date.add(const Duration(days: 7));
               });
-              callGetListSukejuuru(date);
+              // callGetListSukejuuru(date);
+              callGetAnkenCuaMotPhongBan(
+                kojiGyoSyaCd: phongBanId,
+                date: date,
+              );
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -506,54 +622,78 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   }
 
   Widget _moreButton(BuildContext context) {
+    List<String> list = [
+      "営業所を選択 1",
+      "営業所を選択 2",
+      "営業所を選択 3",
+      "営業所を選択 4",
+      "営業所を選択 5",
+      "営業所を選択 6",
+      "営業所を選択 3",
+      "営業所を選択 2"
+    ];
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {}
-        if (number == 2) {}
-      },
+      onSelected: (number) {},
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      constraints: BoxConstraints(
+        minWidth: 250,
+        maxWidth: MediaQuery.of(context).size.width,
+      ),
+      itemBuilder: (context) => listPhongBan.map((item) {
+        return PopupMenuItem(
+          onTap: () {
+            int index = listPhongBan.indexOf(item);
+            callGetAnkenCuaMotPhongBan(
+                kojiGyoSyaCd: listPhongBan[index]["KOJIGYOSYA_CD"],
+                date: date,
+                onsuccess: () {
+//                   WidgetsBinding.instance.addPostFrameCallback((_) {
+//                     try {
+//                       Future.delayed(const Duration(milliseconds: 2000), () {
+// // Here you can write your code
+
+//                         callGetListNhanVienCuaPhongBan(
+//                             kojiGyoSyaCd: listPhongBan[index]["KOJIGYOSYA_CD"]);
+//                       });
+//                     } catch (_) {}
+//                   });
+                });
+            setState(() {
+              phongBanName = listPhongBan[index]["KOJIGYOSYA_NAME"];
+              phongBanId = listPhongBan[index]["KOJIGYOSYA_CD"];
+            });
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
           value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Text(
+                      item["KOJIGYOSYA_NAME"].toString(),
+                      style: TextStyle(color: Color(0xFF999999)),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "営業所を選択",
-                style: TextStyle(color: Color(0xFF999999)),
-              ),
+              const Divider(),
             ],
           ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "営業所を選択",
-                style: TextStyle(color: Color(0xFF999999)),
-              ),
-            ],
-          ),
-        ),
-      ],
-      offset: const Offset(-35, -90),
+        );
+      }).toList(),
+      offset: const Offset(-35, 35),
       child: Container(
-        width: 130,
+        width: 160,
         height: 37,
         decoration: BoxDecoration(
           color: const Color(0xFFF5F6F8),
@@ -562,12 +702,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Text(
-              "営業所を選択",
-              style: TextStyle(
-                color: Color(0xFF999999),
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
+            Expanded(
+              child: Text(
+                phongBanName,
+                style: const TextStyle(
+                  color: Color(0xFF999999),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
             Image.asset(
@@ -591,43 +733,44 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       },
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      itemBuilder: (context) => listNhanVien.map((item) {
+        int index = listNhanVien.indexOf(item);
+        return PopupMenuItem(
+          onTap: () {
+            // int index = listNhanVien.indexOf(item);
+            // callGetDuLieuCuaMotNhanVienTrongPhongBan(
+            //     kojiGyoSyaCd: listNhanVien[index]["TANT_CD"], date: date);
+
+            // setState(() {
+            //   nhanVien = listNhanVien[index]["TANT_NAME"];
+            // });
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
           value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Text(
+                      item["TANT_NAME"].toString(),
+                      style: TextStyle(color: Color(0xFF999999)),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "営業所を選択",
-                style: TextStyle(color: Color(0xFF999999)),
-              ),
+              const Divider(),
             ],
           ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "投函数を選択",
-                style: TextStyle(color: Color(0xFF999999)),
-              ),
-            ],
-          ),
-        ),
-      ],
-      offset: const Offset(-35, -90),
+        );
+      }).toList(),
+      offset: const Offset(0, 40),
       child: Container(
         width: 200,
         height: 37,
@@ -638,9 +781,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Text(
-              "愛知営業所　テスト 太郎",
-              style: TextStyle(
+            Text(
+              nhanVien,
+              style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
@@ -726,13 +869,45 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       }
 
       if (row != 0) {
-        if (col == 0) {
-          bool emptyName = sukejuuru.isEmpty;
-          if (sukejuuru.isNotEmpty) {
-            emptyName = sukejuuru[row - 1]["TANT_NAME"] == null ||
-                    sukejuuru[row - 1]["TANT_NAME"].toString() == ''
-                ? true
-                : false;
+        if (row == 1) {
+          if (col == 0) {
+            return Container(
+              decoration: BoxDecoration(
+                border: Border.all(width: 0.5),
+                color: Colors.white,
+              ),
+              alignment: Alignment.topLeft,
+              width: colWidth()[col],
+              height: 400,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5, left: 5),
+                    child: Row(
+                      children: [
+                        Text(
+                          phongBanName,
+                          style: const TextStyle(
+                              color: Color(0xFF042C5C),
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: const [
+                      Icon(
+                        Icons.calendar_month_rounded,
+                        color: Colors.black,
+                        size: 40.0,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
           }
           return Container(
             decoration: BoxDecoration(
@@ -742,48 +917,84 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             alignment: Alignment.topLeft,
             width: colWidth()[col],
             height: 400,
-            child: emptyName
-                ? Container()
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            child: GestureDetector(
+              onTap: () {
+                CustomDialog.showCustomDialog(
+                  context: context,
+                  title: '',
+                  body: const Page721(),
+                );
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: kojiItemsPhongBan(row - 1, col),
+                // children: [Text("phong ban")],
+              ),
+            ),
+          );
+        }
+        if (col == 0) {
+          // bool emptyName = sukejuuru.isEmpty;
+          // // if (sukejuuru.isNotEmpty) {
+          // //   emptyName = sukejuuru[row - 1]["TANT_NAME"] == null ||
+          // //           sukejuuru[row - 1]["TANT_NAME"].toString() == ''
+          // //       ? true
+          // //       : false;
+          // // }
+          // emptyName = true;
+          return Container(
+            decoration: BoxDecoration(
+              border: Border.all(width: 0.5),
+              color: Colors.white,
+            ),
+            alignment: Alignment.topLeft,
+            width: colWidth()[col],
+            height: 400,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 5, left: 5),
+                  child: Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5, left: 5),
-                        child: Row(
-                          children: [
-                            // Image.network(
-                            //   'https://znews-stc.zdn.vn/static/topic/person/trump.jpg',
-                            //   width: 40,
-                            //   height: 40,
-                            // ),
-                            Text(
-                              sukejuuru[row - 1]["TANT_NAME"],
-                              style: const TextStyle(
-                                  color: Color(0xFF042C5C),
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        children: const [
-                          Icon(
-                            Icons.calendar_month_rounded,
-                            color: Colors.black,
-                            size: 40.0,
+                      // Image.network(
+                      //   'https://znews-stc.zdn.vn/static/topic/person/trump.jpg',
+                      //   width: 40,
+                      //   height: 40,
+                      // ),
+                      Expanded(
+                        child: SizedBox(
+                          width: colWidth()[col],
+                          child: Text(
+                            sukejuuru[row - 2]["TANT_NAME"],
+                            style: const TextStyle(
+                                color: Color(0xFF042C5C),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400),
                           ),
-                          // Text(
-                          //   'データ 2',
-                          //   style: TextStyle(
-                          //       color: Colors.black,
-                          //       fontSize: 20,
-                          //       fontWeight: FontWeight.w600),
-                          // )
-                        ],
+                        ),
                       ),
                     ],
                   ),
+                ),
+                Row(
+                  children: const [
+                    Icon(
+                      Icons.calendar_month_rounded,
+                      color: Colors.black,
+                      size: 40.0,
+                    ),
+                    // Text(
+                    //   'データ 2',
+                    //   style: TextStyle(
+                    //       color: Colors.black,
+                    //       fontSize: 20,
+                    //       fontWeight: FontWeight.w600),
+                    // )
+                  ],
+                ),
+              ],
+            ),
           );
         } else {
           return Container(
@@ -805,6 +1016,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: kojiItems(row - 1, col),
+                // children: [Text("nhan vien")],
               ),
             ),
           );
@@ -833,11 +1045,30 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     _listDay().forEach(
       (element) {
         if (sukejuuru.isNotEmpty &&
-            sukejuuru[row] != null &&
-            sukejuuru[row][element] != null &&
-            sukejuuru[row][element].isNotEmpty &&
+            sukejuuru[row - 1] != null &&
+            sukejuuru[row - 1][element] != null &&
+            sukejuuru[row - 1][element].isNotEmpty &&
             element.split('-').last == listDayOfWeek()[col].split(' ').first) {
-          sukejuuru[row][element].forEach(
+          sukejuuru[row - 1][element].forEach(
+            (e) => xxx.addAll([kojiItemWithType(row - 1, col, e)]),
+          );
+        }
+      },
+    );
+    xxx.add(insert());
+    return xxx;
+  }
+
+  List<Widget> kojiItemsPhongBan(int row, int col) {
+    List<Widget> xxx = [];
+
+    _listDay().forEach(
+      (element) {
+        if (sukejuuruPhongBan != null &&
+            sukejuuruPhongBan[element] != null &&
+            sukejuuruPhongBan[element].isNotEmpty &&
+            element.split('-').last == listDayOfWeek()[col].split(' ').first) {
+          sukejuuruPhongBan[element].forEach(
             (e) => xxx.addAll([kojiItemWithType(row, col, e)]),
           );
         }

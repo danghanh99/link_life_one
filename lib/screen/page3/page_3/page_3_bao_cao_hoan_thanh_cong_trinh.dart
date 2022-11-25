@@ -212,10 +212,11 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                                                     MaterialPageRoute(
                                                       builder: (context) =>
                                                           Page31YeuCauBieuMauPage(
-                                                              isShitami:
-                                                                  isShitami,
-                                                              initialDate:
-                                                                  date),
+                                                        isShitami: isShitami,
+                                                        initialDate: date,
+                                                        listKoji: [item],
+                                                        isSendAList: true,
+                                                      ),
                                                     ),
                                                   );
                                                 },
@@ -241,6 +242,8 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                                                         Page31YeuCauBieuMauPage(
                                                       isShitami: isShitami,
                                                       initialDate: date,
+                                                      listKoji: response.data!,
+                                                      isSendAList: true,
                                                     ),
                                                   ),
                                                 );
