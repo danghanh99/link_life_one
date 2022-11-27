@@ -5,16 +5,16 @@ import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page7/page_7_2_1.dart';
 import 'package:link_life_one/screen/page7/page_7_2_3.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4.dart';
-import '../../api/sukejuuru_page_api/get_anken_cua_mot_phong_ban.dart';
-import '../../api/sukejuuru_page_api/get_du_lieu_cua_mot_nhan_vien_trong_phong_ban.dart';
-import '../../api/sukejuuru_page_api/get_list_nhan_vien_cua_phong_ban.dart';
-import '../../api/sukejuuru_page_api/get_list_phong_ban.dart';
-import '../../components/text_line_down.dart';
-import '../../shared/assets.dart';
-import '../../shared/custom_button.dart';
-import '../menu_page/menu_page.dart';
-import 'component/dialog.dart';
-import 'component/popup_hien_thi.dart';
+import '../../../api/sukejuuru_page_api/get_anken_cua_mot_phong_ban.dart';
+import '../../../api/sukejuuru_page_api/get_du_lieu_cua_mot_nhan_vien_trong_phong_ban.dart';
+import '../../../api/sukejuuru_page_api/get_list_nhan_vien_cua_phong_ban.dart';
+import '../../../api/sukejuuru_page_api/get_list_phong_ban.dart';
+import '../../../components/text_line_down.dart';
+import '../../../shared/assets.dart';
+import '../../../shared/custom_button.dart';
+import '../../menu_page/menu_page.dart';
+import '../component/dialog.dart';
+import '../component/popup_hien_thi.dart';
 
 class QuanLyLichBieu71Page extends StatefulWidget {
   const QuanLyLichBieu71Page({
@@ -102,15 +102,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       setState(() {
         sukejuuru = response["PERSON"][0];
         sukejuuruPhongBan = response["OFFICE"];
-
-        // print(response);
       });
       onsuccess?.call();
     });
-
-    // if (result["PERSON"] != null) {
-    //   callGetListNhanVienCuaPhongBan(kojiGyoSyaCd: kojiGyoSyaCd);
-    // }
 
     return result;
   }
@@ -120,17 +114,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       required DateTime date,
       Function? onsuccess}) async {
     final List<dynamic> result = await GetDuLieuCuaMotNhanVienTrongPhongBan()
-        .getDuLieuCuaMotNhanVienTrongPhongBan(kojiGyoSyaCd, date, (body) {
-      // setState(() {
-      //   sukejuuru = [];
-
-      //   sukejuuru = body;
-      // });
-    });
-
-    // if (result["PERSON"] != null) {
-    //   callGetListNhanVienCuaPhongBan(kojiGyoSyaCd: kojiGyoSyaCd);
-    // }
+        .getDuLieuCuaMotNhanVienTrongPhongBan(kojiGyoSyaCd, date, (body) {});
 
     return result;
   }
@@ -934,14 +918,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
           );
         }
         if (col == 0) {
-          // bool emptyName = sukejuuru.isEmpty;
-          // // if (sukejuuru.isNotEmpty) {
-          // //   emptyName = sukejuuru[row - 1]["TANT_NAME"] == null ||
-          // //           sukejuuru[row - 1]["TANT_NAME"].toString() == ''
-          // //       ? true
-          // //       : false;
-          // // }
-          // emptyName = true;
           return Container(
             decoration: BoxDecoration(
               border: Border.all(width: 0.5),
@@ -957,11 +933,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   padding: const EdgeInsets.only(top: 5, left: 5),
                   child: Row(
                     children: [
-                      // Image.network(
-                      //   'https://znews-stc.zdn.vn/static/topic/person/trump.jpg',
-                      //   width: 40,
-                      //   height: 40,
-                      // ),
                       Expanded(
                         child: SizedBox(
                           width: colWidth()[col],
@@ -984,13 +955,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       color: Colors.black,
                       size: 40.0,
                     ),
-                    // Text(
-                    //   'データ 2',
-                    //   style: TextStyle(
-                    //       color: Colors.black,
-                    //       fontSize: 20,
-                    //       fontWeight: FontWeight.w600),
-                    // )
                   ],
                 ),
               ],
@@ -1016,7 +980,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: kojiItems(row - 1, col),
-                // children: [Text("nhan vien")],
               ),
             ),
           );
@@ -1140,13 +1103,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         return Colors.blue;
       case '計予実':
         return Colors.yellow;
-      case 'ネット下見 ':
+      case 'ネット下見':
         return Colors.red;
       case '下見打診':
         return Color.fromARGB(255, 232, 105, 147);
+      case 'メモ':
+        return Color(0xFFF6B704);
       default:
-        return Colors.white;
-        ;
+        return Colors.grey;
     }
   }
 
@@ -1166,12 +1130,16 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         return Color.fromARGB(255, 145, 184, 215);
       case '計予実':
         return Color.fromARGB(255, 233, 225, 153);
-      case 'ネット下見 ':
+      case 'ネット下見':
         return Color.fromARGB(255, 229, 165, 160);
       case '下見打診':
         return Color.fromARGB(255, 224, 192, 203);
+      case 'メモ':
+        return Color.fromARGB(255, 239, 206, 115);
+      case '月次':
+        return Color(0xFF2F8FAD);
       default:
-        return Colors.white;
+        return Color.fromARGB(255, 227, 223, 223);
     }
   }
 
@@ -1203,7 +1171,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       padding: const EdgeInsets.only(bottom: 2),
       child: Container(
         width: colWidth()[col],
-        // color: kojiColorWithType(e),
         color: getBackgroundColorByText(
           text: e["KBNMSAI_NAME"],
         ),
@@ -1242,7 +1209,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                             ),
                             child: Text(
                               e['KBNMSAI_NAME'],
-                              style: TextStyle(
+                              style: const TextStyle(
                                 // color: kojiColorWithType(e),
                                 color: Colors.white,
                                 fontSize: 14,
@@ -1253,6 +1220,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       ),
                       TextSpan(
                         text: e['SETSAKI_ADDRESS'],
+                      ),
+                      TextSpan(
+                        text: e['NAIYO'],
                       ),
                     ]),
               ),

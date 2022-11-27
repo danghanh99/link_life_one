@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/api/Login/login_api.dart';
 import 'package:link_life_one/screen/menu_page/menu_page.dart';
 import '../components/custom_text_field.dart';
+import '../components/toast.dart';
 import '../shared/assets.dart';
 import '../shared/custom_button.dart';
 import '../shared/validator.dart';
@@ -95,7 +96,10 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                       );
                                     },
-                                    onFailed: () {});
+                                    onFailed: () {
+                                      CustomToast.show(context,
+                                          message: "担当者コードまたはパスワードが正しくありません");
+                                    });
                               }
                             },
                             child: SizedBox(
@@ -112,11 +116,16 @@ class _LoginPageState extends State<LoginPage> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => MenuPage(),
+                                              builder: (context) =>
+                                                  const MenuPage(),
                                             ),
                                           );
                                         },
-                                        onFailed: () {});
+                                        onFailed: () {
+                                          CustomToast.show(context,
+                                              message:
+                                                  "担当者コードまたはパスワードが正しくありません");
+                                        });
                                   }
                                 },
                                 name: 'ログイン',
@@ -148,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
     if (Validator.password(input!)) {
       return null;
     } else {
-      return 'パスワードが正しくあしません。';
+      return 'パスワードが正しくありません。';
     }
   }
 }

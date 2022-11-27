@@ -12,7 +12,7 @@ import '../../page6/danh_sach_dat_hang_cac_bo_phan_6_1_page.dart';
 import '../../page6/page6_quan_ly/page_6_quan_ly_thanh_vien.dart';
 import '../../page6/page631/phe_duyet_don_dat_hang_6_3_1_page.dart';
 import '../../page7/page_7_so_tai_khoan_page.dart';
-import '../../page7/quan_ly_lich_bieu_7_1_page.dart';
+import '../../page7/page7_1/quan_ly_lich_bieu_7_1_page.dart';
 
 class CustomMenuButton extends StatefulWidget {
   final String name;
