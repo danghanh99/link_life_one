@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../components/custom_text_field.dart';
-import '../../shared/assets.dart';
-import '../../shared/validator.dart';
+import '../../../components/custom_text_field.dart';
+import '../../../shared/assets.dart';
+import '../../../shared/validator.dart';
 
 class Page722 extends StatefulWidget {
   const Page722({

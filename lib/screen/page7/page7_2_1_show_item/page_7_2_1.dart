@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:link_life_one/screen/page7/page_7_2_2.dart';
+import 'package:link_life_one/screen/page7/page_7_2_2_edit_item/page_7_2_2.dart';
 
-import '../../components/custom_text_field.dart';
-import '../../shared/assets.dart';
-import '../page6/danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
+import '../../../components/custom_text_field.dart';
+import '../../../shared/assets.dart';
+import '../../page6/danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
 class Page721 extends StatefulWidget {
+  // final DateTime datetime;
+  // final String jikanKara;
+  // final String jikanMade;
+  // final int hito;
+  // final int jikan;
+  // final String memo;
+  // final String sanKaSha;
+  // final String file;
+  // final String comment;
   const Page721({
     Key? key,
   }) : super(key: key);

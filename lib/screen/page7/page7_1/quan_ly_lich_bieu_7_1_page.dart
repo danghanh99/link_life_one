@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/get_list_sukejuuru.dart';
 import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page7/page_7_2_1.dart';
-import 'package:link_life_one/screen/page7/page_7_2_3.dart';
-import 'package:link_life_one/screen/page7/page_7_2_4.dart';
+import 'package:link_life_one/screen/page7/page7_2_3_create_item/page_7_2_3.dart';
+import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/page_7_2_4.dart';
 import '../../../api/sukejuuru_page_api/get_anken_cua_mot_phong_ban.dart';
 import '../../../api/sukejuuru_page_api/get_du_lieu_cua_mot_nhan_vien_trong_phong_ban.dart';
 import '../../../api/sukejuuru_page_api/get_list_nhan_vien_cua_phong_ban.dart';
@@ -15,6 +14,7 @@ import '../../../shared/custom_button.dart';
 import '../../menu_page/menu_page.dart';
 import '../component/dialog.dart';
 import '../component/popup_hien_thi.dart';
+import '../page7_2_1_show_item/page_7_2_1.dart';
 
 class QuanLyLichBieu71Page extends StatefulWidget {
   const QuanLyLichBieu71Page({
