@@ -6,7 +6,6 @@ import 'package:link_life_one/screen/page7/page7_2_3_create_item/page_7_2_3.dart
 import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/page_7_2_4.dart';
 import '../../../api/sukejuuru_page_api/get_anken_cua_mot_phong_ban.dart';
 import '../../../api/sukejuuru_page_api/get_du_lieu_cua_mot_nhan_vien_trong_phong_ban.dart';
-import '../../../api/sukejuuru_page_api/get_list_nhan_vien_cua_phong_ban.dart';
 import '../../../api/sukejuuru_page_api/get_list_phong_ban.dart';
 import '../../../components/text_line_down.dart';
 import '../../../shared/assets.dart';
@@ -36,13 +35,15 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
   List<dynamic> listAnkenPhongBan = [];
 
-  List<dynamic> sukejuuru = [];
+  List<dynamic> sukejuuruAllUser = [];
 
   dynamic sukejuuruPhongBan;
 
+  dynamic sukejuuruSelectedUser;
+
   List<dynamic> listPhongBan = [];
 
-  String nhanVien = '';
+  String selectedNhanVienName = '';
 
   String value1nguoi = 'グループ';
   DateTime date = DateTime.parse('2022-11-11');
@@ -50,16 +51,19 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   String phongBanName = '';
   String phongBanId = '';
 
+  Future? geAnkenCuaMotPhongBanFuture;
+
   @override
   void initState() {
-    callGetListSukejuuru(date);
-
-    callGetListPhongBan();
+    callGetListPhongBan(() {
+      geAnkenCuaMotPhongBanFuture = callGetAnkenCuaMotPhongBan(
+          kojiGyoSyaCd: listPhongBan[0]["KOJIGYOSYA_CD"], date: date);
+    });
 
     super.initState();
   }
 
-  Future<List<dynamic>> callGetListPhongBan() async {
+  Future<List<dynamic>> callGetListPhongBan(Function onSuccess) async {
     final result = await GetListPhongBan().getListPhongBan(onSuccess: (list) {
       setState(() {
         listPhongBan = list;
@@ -67,27 +71,12 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
       if (listPhongBan[0]["KOJIGYOSYA_CD"] != null &&
           listPhongBan[0]["KOJIGYOSYA_CD"] != "") {
-        callGetAnkenCuaMotPhongBan(
-            kojiGyoSyaCd: listPhongBan[0]["KOJIGYOSYA_CD"], date: date);
         setState(() {
           phongBanId = listPhongBan[0]["KOJIGYOSYA_CD"];
           phongBanName = listPhongBan[0]["KOJIGYOSYA_NAME"];
         });
+        onSuccess.call();
       }
-    });
-
-    return result;
-  }
-
-  Future<List<dynamic>> callGetListNhanVienCuaPhongBan(
-      {required String kojiGyoSyaCd}) async {
-    final result = await GetListNhanVienCuaPhongBan()
-        .getListNhanVienCuaPhongBan("11009", (response) {
-      print(response);
-      setState(() {
-        listNhanVien = response;
-        nhanVien = listNhanVien.first["TANT_NAME"];
-      });
     });
 
     return result;
@@ -100,9 +89,23 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     final dynamic result = await GetAnkenCuaMotPhongBan()
         .getAnkenCuaMotPhongBan(kojiGyoSyaCd, date, (response) {
       setState(() {
-        sukejuuru = response["PERSON"][0];
+        sukejuuruAllUser = response["PERSON"][0];
         sukejuuruPhongBan = response["OFFICE"];
       });
+
+      List<dynamic> listPerson = response["PERSON"][0];
+      List<dynamic> listPersonTemp = [];
+      listPerson.forEach((element) {
+        listPersonTemp.add(
+            {"TANT_NAME": element["TANT_NAME"], "TANT_CD": element["TANT_CD"]});
+      });
+      setState(() {
+        listNhanVien = listPersonTemp;
+        sukejuuruSelectedUser = response["PERSON"][0][0];
+        selectedNhanVienName = listNhanVien[0]["TANT_NAME"];
+        print("111");
+      });
+
       onsuccess?.call();
     });
 
@@ -284,8 +287,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                           value1nguoi = '個人';
                         });
 
-                        callGetListNhanVienCuaPhongBan(
-                            kojiGyoSyaCd: phongBanId);
+                        // callGetListNhanVienCuaPhongBan(
+                        //     kojiGyoSyaCd: phongBanId);
                       },
                       child: Text(
                         '個人',
@@ -457,8 +460,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: FutureBuilder<dynamic>(
-                                future: callGetAnkenCuaMotPhongBan(
-                                    kojiGyoSyaCd: phongBanId, date: date),
+                                future: geAnkenCuaMotPhongBanFuture,
                                 builder: (context, response) {
                                   return response.data == null
                                       ? Column(
@@ -471,7 +473,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: _buildRows(
-                                              sukejuuru.length + 2,
+                                              value1nguoi == '個人'
+                                                  ? 3
+                                                  : sukejuuruAllUser.length + 2,
                                               scrollController2),
                                         );
                                 }),
@@ -633,18 +637,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             callGetAnkenCuaMotPhongBan(
                 kojiGyoSyaCd: listPhongBan[index]["KOJIGYOSYA_CD"],
                 date: date,
-                onsuccess: () {
-//                   WidgetsBinding.instance.addPostFrameCallback((_) {
-//                     try {
-//                       Future.delayed(const Duration(milliseconds: 2000), () {
-// // Here you can write your code
-
-//                         callGetListNhanVienCuaPhongBan(
-//                             kojiGyoSyaCd: listPhongBan[index]["KOJIGYOSYA_CD"]);
-//                       });
-//                     } catch (_) {}
-//                   });
-                });
+                onsuccess: () {});
             setState(() {
               phongBanName = listPhongBan[index]["KOJIGYOSYA_NAME"];
               phongBanId = listPhongBan[index]["KOJIGYOSYA_CD"];
@@ -721,13 +714,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         int index = listNhanVien.indexOf(item);
         return PopupMenuItem(
           onTap: () {
-            // int index = listNhanVien.indexOf(item);
-            // callGetDuLieuCuaMotNhanVienTrongPhongBan(
-            //     kojiGyoSyaCd: listNhanVien[index]["TANT_CD"], date: date);
-
-            // setState(() {
-            //   nhanVien = listNhanVien[index]["TANT_NAME"];
-            // });
+            setState(() {
+              sukejuuruSelectedUser = sukejuuruAllUser[index];
+              selectedNhanVienName = sukejuuruAllUser[index]["TANT_NAME"];
+            });
           },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
@@ -766,7 +756,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              nhanVien,
+              selectedNhanVienName,
               style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 15,
@@ -902,17 +892,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             width: colWidth()[col],
             height: 400,
             child: GestureDetector(
-              onTap: () {
-                CustomDialog.showCustomDialog(
-                  context: context,
-                  title: '',
-                  body: const Page721(),
-                );
-              },
+              onTap: () {},
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: kojiItemsPhongBan(row - 1, col),
-                // children: [Text("phong ban")],
               ),
             ),
           );
@@ -937,7 +920,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         child: SizedBox(
                           width: colWidth()[col],
                           child: Text(
-                            sukejuuru[row - 2]["TANT_NAME"],
+                            value1nguoi == '個人'
+                                ? sukejuuruSelectedUser["TANT_NAME"]
+                                : sukejuuruAllUser[row - 2]["TANT_NAME"],
                             style: const TextStyle(
                                 color: Color(0xFF042C5C),
                                 fontSize: 20,
@@ -974,12 +959,15 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 CustomDialog.showCustomDialog(
                   context: context,
                   title: '',
-                  body: const Page721(),
+                  // body: const Page721(),
+                  body: Container(),
                 );
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: kojiItems(row - 1, col),
+                children: value1nguoi == '個人'
+                    ? kojiItems1Persion(row - 1, col)
+                    : kojiItems(row - 1, col),
               ),
             ),
           );
@@ -1007,13 +995,31 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     List<Widget> xxx = [];
     _listDay().forEach(
       (element) {
-        if (sukejuuru.isNotEmpty &&
-            sukejuuru[row - 1] != null &&
-            sukejuuru[row - 1][element] != null &&
-            sukejuuru[row - 1][element].isNotEmpty &&
+        if (sukejuuruAllUser.isNotEmpty &&
+            sukejuuruAllUser[row - 1] != null &&
+            sukejuuruAllUser[row - 1][element] != null &&
+            sukejuuruAllUser[row - 1][element].isNotEmpty &&
             element.split('-').last == listDayOfWeek()[col].split(' ').first) {
-          sukejuuru[row - 1][element].forEach(
-            (e) => xxx.addAll([kojiItemWithType(row - 1, col, e)]),
+          sukejuuruAllUser[row - 1][element].forEach(
+            (e) => xxx.addAll([kojiItemWithType(row - 1, col, e, false)]),
+          );
+        }
+      },
+    );
+    xxx.add(insert());
+    return xxx;
+  }
+
+  List<Widget> kojiItems1Persion(int row, int col) {
+    List<Widget> xxx = [];
+    _listDay().forEach(
+      (element) {
+        if (sukejuuruSelectedUser.isNotEmpty &&
+            sukejuuruSelectedUser[element] != null &&
+            sukejuuruSelectedUser[element].isNotEmpty &&
+            element.split('-').last == listDayOfWeek()[col].split(' ').first) {
+          sukejuuruSelectedUser[element].forEach(
+            (e) => xxx.addAll([kojiItemWithType(row - 1, col, e, false)]),
           );
         }
       },
@@ -1032,7 +1038,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             sukejuuruPhongBan[element].isNotEmpty &&
             element.split('-').last == listDayOfWeek()[col].split(' ').first) {
           sukejuuruPhongBan[element].forEach(
-            (e) => xxx.addAll([kojiItemWithType(row, col, e)]),
+            (e) => xxx.addAll([kojiItemWithType(row, col, e, true)]),
           );
         }
       },
@@ -1166,67 +1172,199 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     }
   }
 
-  Widget kojiItemWithType(int row, int col, e) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
-      child: Container(
-        width: colWidth()[col],
-        color: getBackgroundColorByText(
-          text: e["KBNMSAI_NAME"],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(3),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              e['SITAMIHOMONJIKAN'] != '' &&
-                      e['SITAMIHOMONJIKAN_END'] != '' &&
-                      e['SITAMIHOMONJIKAN'] != null &&
-                      e['SITAMIHOMONJIKAN_END'] != null
-                  ? Text(
-                      "${e['SITAMIHOMONJIKAN']} - ${e['SITAMIHOMONJIKAN_END']}",
-                      style: const TextStyle(fontSize: 10),
-                    )
-                  : (e['START_TIME'] != null && e['END_TIME'] != null)
-                      ? Text(
-                          "${e['START_TIME']} - ${e['END_TIME']}",
-                          style: const TextStyle(fontSize: 10),
-                        )
-                      : Container(),
-              RichText(
-                text: TextSpan(
-                    style: const TextStyle(color: Colors.black),
-                    children: [
-                      WidgetSpan(
-                        child: Container(
-                          // color: backgroundKojiItem(e),
-                          color: getColorByText(
-                            text: e["KBNMSAI_NAME"],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              bottom: 2,
+  String getTypeItemLichTrinh(String type) {
+    if (type == "ネット工事" ||
+        type == "ネット下見" ||
+        type == "法人工事" ||
+        type == "法人下見" ||
+        type == "工事打診" ||
+        type == "下見打診") {
+      return 'lichtrinh';
+    }
+    if (type == "営業工事" || type == "営業下見") {
+      return 'anken';
+    }
+    if (type == "メモ" ||
+        type == "追加STOP" ||
+        type == "追加希望" ||
+        type == "休み" ||
+        type == "月次" ||
+        type == "重要") {
+      return 'memo';
+    }
+    return 'none';
+  }
+
+  Widget kojiItemWithType(int row, int col, e, bool isPhongBanData) {
+    return GestureDetector(
+      onTap: () {
+        if (isPhongBanData) {
+          String type = getTypeItemLichTrinh(e["KBNMSAI_NAME"]);
+
+          switch (type) {
+            case ("lichtrinh"):
+              {
+                sukejuuruAllUser;
+
+                sukejuuruPhongBan;
+
+                sukejuuruSelectedUser;
+                isPhongBanData;
+                e;
+
+                CustomDialog.showCustomDialog(
+                  context: context,
+                  title: '',
+                  body: Page721(
+                    JYUCYU_ID: e["JYUCYU_ID"],
+                    KBNMSAI_NAME: e["KBNMSAI_NAME"],
+                    onSuccessUpdate: () {
+                      callGetAnkenCuaMotPhongBan(
+                        kojiGyoSyaCd: phongBanId,
+                        date: date,
+                      );
+                    },
+                  ),
+                );
+              }
+              break;
+            case ("anken"):
+              {
+                CustomDialog.showCustomDialog(
+                  context: context,
+                  title: '',
+                  body: Page723(
+                    initialDate: date,
+                  ),
+                );
+              }
+              break;
+            case ("memo"):
+              {
+                CustomDialog.showCustomDialog(
+                  context: context,
+                  title: '',
+                  body: Page724(
+                    initialDate: date,
+                  ),
+                );
+              }
+              break;
+
+            default:
+              {}
+          }
+        } else {
+          String type = getTypeItemLichTrinh(e["KBNMSAI_NAME"]);
+
+          switch (type) {
+            case ("lichtrinh"):
+              {
+                CustomDialog.showCustomDialog(
+                  context: context,
+                  title: '',
+                  body: Page721(
+                    JYUCYU_ID: e["JYUCYU_ID"],
+                    KBNMSAI_NAME: e["KBNMSAI_NAME"],
+                    onSuccessUpdate: () {
+                      callGetAnkenCuaMotPhongBan(
+                        kojiGyoSyaCd: phongBanId,
+                        date: date,
+                      );
+                    },
+                  ),
+                );
+              }
+              break;
+            case ("anken"):
+              {
+                CustomDialog.showCustomDialog(
+                  context: context,
+                  title: '',
+                  body: Page723(
+                    initialDate: date,
+                  ),
+                );
+              }
+              break;
+            case ("memo"):
+              {
+                CustomDialog.showCustomDialog(
+                  context: context,
+                  title: '',
+                  body: Page724(
+                    initialDate: date,
+                  ),
+                );
+              }
+              break;
+
+            default:
+              {}
+          }
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 2),
+        child: Container(
+          width: colWidth()[col],
+          color: getBackgroundColorByText(
+            text: e["KBNMSAI_NAME"],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(3),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                e['SITAMIHOMONJIKAN'] != '' &&
+                        e['SITAMIHOMONJIKAN_END'] != '' &&
+                        e['SITAMIHOMONJIKAN'] != null &&
+                        e['SITAMIHOMONJIKAN_END'] != null
+                    ? Text(
+                        "${e['SITAMIHOMONJIKAN']} - ${e['SITAMIHOMONJIKAN_END']}",
+                        style: const TextStyle(fontSize: 10),
+                      )
+                    : (e['START_TIME'] != null && e['END_TIME'] != null)
+                        ? Text(
+                            "${e['START_TIME']} - ${e['END_TIME']}",
+                            style: const TextStyle(fontSize: 10),
+                          )
+                        : Container(),
+                RichText(
+                  text: TextSpan(
+                      style: const TextStyle(color: Colors.black),
+                      children: [
+                        WidgetSpan(
+                          child: Container(
+                            // color: backgroundKojiItem(e),
+                            color: getColorByText(
+                              text: e["KBNMSAI_NAME"],
                             ),
-                            child: Text(
-                              e['KBNMSAI_NAME'],
-                              style: const TextStyle(
-                                // color: kojiColorWithType(e),
-                                color: Colors.white,
-                                fontSize: 14,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: 2,
+                              ),
+                              child: Text(
+                                e['KBNMSAI_NAME'],
+                                style: const TextStyle(
+                                  // color: kojiColorWithType(e),
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      TextSpan(
-                        text: e['SETSAKI_ADDRESS'],
-                      ),
-                      TextSpan(
-                        text: e['NAIYO'],
-                      ),
-                    ]),
-              ),
-            ],
+                        TextSpan(
+                          text: e['SETSAKI_ADDRESS'],
+                        ),
+                        TextSpan(
+                          text: e['NAIYO'],
+                        ),
+                      ]),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -1329,14 +1467,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     );
   }
 
-  Future<List<dynamic>> callGetListSukejuuru(DateTime date) async {
-    final result = await GetListSukejuuru().getListSukejuuru(date);
-    setState(() {
-      sukejuuru = result;
-    });
+  // Future<List<dynamic>> callGetListSukejuuru(DateTime date) async {
+  //   final result = await GetListSukejuuru().getListSukejuuru(date);
+  //   setState(() {
+  //     sukejuuru = result;
+  //   });
 
-    return result;
-  }
+  //   return result;
+  // }
 
   Future<List<dynamic>> callGetListSukejuuruWithoutState(DateTime date) async {
     return await GetListSukejuuru().getListSukejuuru(date);

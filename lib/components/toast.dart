@@ -6,6 +6,8 @@ class CustomToast {
   static show(
     BuildContext context, {
     required String message,
+    Color? backGround,
+    TextStyle? textStyle,
     Widget? icon,
   }) {
     FToast fToast = FToast();
@@ -14,12 +16,12 @@ class CustomToast {
       padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.0),
-        color: Colors.red,
+        color: backGround ?? Colors.red,
       ),
       child: Text(
         message,
         textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.white, fontSize: 18.sp),
+        style: textStyle ?? TextStyle(color: Colors.white, fontSize: 18.sp),
       ),
     );
     fToast.showToast(

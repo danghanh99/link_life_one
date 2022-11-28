@@ -1,11 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
+import '../../../api/sukejuuru_page_api/update_anken/update_anken.dart';
 import '../../../components/custom_text_field.dart';
+import '../../../components/toast.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/validator.dart';
 
 class Page722 extends StatefulWidget {
+  final String JYUCYU_ID;
+  final String KBNMSAI_NAME;
+
+  final String title;
+  final List<dynamic> listPullDown;
+  final bool checkAppoint;
+  final DateTime datetime;
+  final String jikanKara;
+  final String jikanMade;
+  final bool checkAllDay;
+  final int jinNumber;
+  final int jikanNumber;
+  final String comment;
+
+  final Function onSuccessUpdate;
   const Page722({
+    required this.JYUCYU_ID,
+    required this.KBNMSAI_NAME,
+    required this.title,
+    required this.listPullDown,
+    required this.checkAppoint,
+    required this.datetime,
+    required this.jikanKara,
+    required this.jikanMade,
+    required this.checkAllDay,
+    required this.jinNumber,
+    required this.jikanNumber,
+    required this.comment,
+    required this.onSuccessUpdate,
     Key? key,
   }) : super(key: key);
 
@@ -14,20 +45,96 @@ class Page722 extends StatefulWidget {
 }
 
 class _Page722State extends State<Page722> {
+  List<dynamic> listDateTime1 = [
+    "01:00",
+    "02:00",
+    "03:00",
+    "04:00",
+    "05:00",
+    "06:00",
+    "07:00",
+    "08:00",
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00",
+    "22:00",
+    "23:00",
+    "00:00",
+  ];
+  List<dynamic> listDateTime2 = [
+    "01:00",
+    "02:00",
+    "03:00",
+    "04:00",
+    "05:00",
+    "06:00",
+    "07:00",
+    "08:00",
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00",
+    "22:00",
+    "23:00",
+    "00:00",
+  ];
   final GlobalKey<FormState> _formKey = GlobalKey();
-  late bool checkedValue;
 
-  late String nettoKouJi;
-  late String kaigiKara;
-  late String kaigiMade;
+  late String titleEditPage;
+  late List<dynamic> listPullDownEditPage;
+  late bool checkAppointEditPage;
+  late DateTime datetimeEditPage;
+  late String jikanKaraEditPage;
+  late String jikanMadeEditPage;
+  late bool checkAllDayEditPage;
+  late String jinNumberEditPage;
+  late String jikanNumberEditPage;
+  late String commentEditPage;
+  int selectedPullDownIndex = 0;
+
+  late String KBNMSAI_NAME;
+
+  bool validKaraMade = true;
 
   @override
   void initState() {
-    checkedValue = true;
-    nettoKouJi = 'ネット工事';
-    kaigiKara = '10：00';
-    kaigiMade = '12：00';
+    KBNMSAI_NAME = widget.KBNMSAI_NAME;
+
+    titleEditPage = widget.title;
+    listPullDownEditPage = widget.listPullDown;
+    checkAppointEditPage = widget.checkAppoint;
+    datetimeEditPage = widget.datetime;
+    jikanKaraEditPage = widget.jikanKara;
+    jikanMadeEditPage = widget.jikanMade;
+    checkAllDayEditPage = widget.checkAllDay;
+    jinNumberEditPage = widget.jinNumber.toString();
+    jikanNumberEditPage = widget.jikanNumber.toString();
+    commentEditPage = widget.comment;
+
     super.initState();
+  }
+
+  DateTime convertDateTime(String date) {
+    return DateFormat("yyyy-MM-dd hh:mm:ss").parse(date);
   }
 
   @override
@@ -70,12 +177,12 @@ class _Page722State extends State<Page722> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                 child: Column(
-                  children: const [
+                  children: [
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '更新情報：神奈川営業所事務　テキスト氏名　2022/01/19(水) HH:MM',
-                        style: TextStyle(
+                        '更新情報： ${widget.title}',
+                        style: const TextStyle(
                           color: Color(0xFF042C5C),
                           fontSize: 15,
                           fontWeight: FontWeight.w400,
@@ -120,10 +227,10 @@ class _Page722State extends State<Page722> {
                           Checkbox(
                             activeColor: Colors.blue,
                             checkColor: Colors.white,
-                            value: checkedValue,
+                            value: checkAppointEditPage,
                             onChanged: (newValue) {
                               setState(() {
-                                checkedValue = newValue ?? true;
+                                checkAppointEditPage = newValue ?? true;
                               });
                             },
                           ),
@@ -163,11 +270,13 @@ class _Page722State extends State<Page722> {
                           ),
                         ),
                       ),
-                      const Align(
+                      Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '2022年01月19日(水)',
-                          style: TextStyle(
+                          DateFormat('yyyy年MM月dd日(E)', 'ja')
+                              .format(datetimeEditPage)
+                              .toString(),
+                          style: const TextStyle(
                             color: Color(0xFF000000),
                             fontSize: 15,
                             fontWeight: FontWeight.w300,
@@ -180,16 +289,29 @@ class _Page722State extends State<Page722> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _moreButton2(context),
+                          Column(
+                            children: [
+                              _moreButton2(context),
+                              validKaraMade
+                                  ? Container()
+                                  : const Padding(
+                                      padding: EdgeInsets.only(top: 5),
+                                      child: Text(
+                                        "Invalid",
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+                            ],
+                          ),
                           Row(
                             children: [
                               Checkbox(
                                 activeColor: Colors.blue,
                                 checkColor: Colors.white,
-                                value: checkedValue,
+                                value: checkAllDayEditPage,
                                 onChanged: (newValue) {
                                   setState(() {
-                                    checkedValue = newValue ?? true;
+                                    checkAllDayEditPage = newValue ?? true;
                                   });
                                 },
                               ),
@@ -214,7 +336,20 @@ class _Page722State extends State<Page722> {
                       const SizedBox(
                         width: 10,
                       ),
-                      _moreButton3(context),
+                      Column(
+                        children: [
+                          _moreButton3(context),
+                          validKaraMade
+                              ? Container()
+                              : const Padding(
+                                  padding: EdgeInsets.only(top: 5),
+                                  child: Text(
+                                    "Invalid",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                        ],
+                      ),
                     ],
                   ),
                   Row(
@@ -246,9 +381,13 @@ class _Page722State extends State<Page722> {
                             child: CustomTextField(
                               validator: _validateNumber,
                               fillColor: const Color(0xFFF5F6F8),
-                              hint: '',
+                              hint: jinNumberEditPage.toString(),
                               type: TextInputType.number,
-                              onChanged: (text) {},
+                              onChanged: (text) {
+                                setState(() {
+                                  jinNumberEditPage = text;
+                                });
+                              },
                               maxLines: 1,
                             ),
                           ),
@@ -281,9 +420,13 @@ class _Page722State extends State<Page722> {
                             child: CustomTextField(
                               validator: _validateNumber2,
                               fillColor: const Color(0xFFF5F6F8),
-                              hint: '',
+                              hint: jikanNumberEditPage.toString(),
                               type: TextInputType.number,
-                              onChanged: (text) {},
+                              onChanged: (text) {
+                                setState(() {
+                                  jikanNumberEditPage = text;
+                                });
+                              },
                               maxLines: 1,
                             ),
                           ),
@@ -321,9 +464,13 @@ class _Page722State extends State<Page722> {
                   ),
                   CustomTextField(
                     fillColor: const Color(0xFFF5F6F8),
-                    hint: '',
+                    hint: commentEditPage,
                     type: TextInputType.emailAddress,
-                    onChanged: (text) {},
+                    onChanged: (text) {
+                      setState(() {
+                        commentEditPage = text;
+                      });
+                    },
                     maxLines: 5,
                   ),
                   const SizedBox(
@@ -332,8 +479,7 @@ class _Page722State extends State<Page722> {
                 ],
               ),
             ),
-            // Expanded(child: Container()),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Row(
@@ -348,8 +494,51 @@ class _Page722State extends State<Page722> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      if (_formKey.currentState?.validate() == true) {
-                        print("okkkkkk");
+                      if (jikanKaraEditPage == null ||
+                          jikanMadeEditPage == null) {
+                        setState(() {
+                          validKaraMade = false;
+                        });
+                      }
+                      if (int.parse(jikanKaraEditPage.split(":")[0]) >=
+                          int.parse(jikanMadeEditPage.split(":")[0])) {
+                        setState(() {
+                          validKaraMade = false;
+                        });
+                      } else {
+                        setState(() {
+                          validKaraMade = true;
+                        });
+                      }
+                      if (_formKey.currentState?.validate() == true &&
+                          validKaraMade) {
+                        UpdateAnken().updateAnken(
+                            JYUCYU_ID: widget.JYUCYU_ID,
+                            TAG_KBN: '0' + selectedPullDownIndex.toString(),
+                            KBN: checkAppointEditPage ? "1" : "0",
+                            JIKAN: DateFormat(('yyyy-MM-dd'))
+                                    .format(datetimeEditPage)
+                                    .toString() +
+                                " " +
+                                jikanKaraEditPage +
+                                ":00",
+                            JIKAN_END: DateFormat(('yyyy-MM-dd'))
+                                    .format(datetimeEditPage)
+                                    .toString() +
+                                " " +
+                                jikanMadeEditPage +
+                                ":00",
+                            JININ: jinNumberEditPage,
+                            KANSAN_POINT: '',
+                            ALL_DAY_FLG: checkAllDayEditPage ? "1" : "0",
+                            MEMO: commentEditPage,
+                            onSuccess: () {
+                              Navigator.pop(context);
+                              CustomToast.show(context,
+                                  message: "Update successfull",
+                                  backGround: Colors.green);
+                              widget.onSuccessUpdate.call();
+                            });
                       }
                     },
                     child: const Text(
@@ -403,138 +592,43 @@ class _Page722State extends State<Page722> {
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {
-          setState(() {
-            nettoKouJi = 'ネット工事';
-          });
-        }
-        if (number == 2) {
-          setState(() {
-            nettoKouJi = 'ネット下見';
-          });
-        }
-        if (number == 3) {
-          setState(() {
-            nettoKouJi = '法人工事';
-          });
-        }
-        if (number == 4) {
-          setState(() {
-            nettoKouJi = '法人下見';
-          });
-        }
-        if (number == 5) {
-          setState(() {
-            nettoKouJi = '工事打診';
-          });
-        }
-        if (number == 6) {
-          setState(() {
-            nettoKouJi = '下見打診';
-          });
-        }
-      },
+      onSelected: (number) {},
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      itemBuilder: (context) => listPullDownEditPage.map((item) {
+        int index = listPullDownEditPage.indexOf(item);
+        return PopupMenuItem(
+          onTap: () {
+            setState(() {
+              KBNMSAI_NAME = listPullDownEditPage[index]["KBNMSAI_NAME"];
+              selectedPullDownIndex = index;
+            });
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
           value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Text(
+                      item["KBNMSAI_NAME"].toString(),
+                      style: TextStyle(color: Color(0xFF999999)),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "ネット工事",
-              ),
+              const Divider(),
             ],
           ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "ネット下見",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 3,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "法人工事",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 4,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "法人下見",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 5,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "工事打診",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 6,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "下見打診",
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      }).toList(),
       offset: const Offset(0, 30),
       child: Container(
         width: 130,
@@ -547,7 +641,7 @@ class _Page722State extends State<Page722> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              nettoKouJi,
+              KBNMSAI_NAME,
               style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
@@ -569,138 +663,42 @@ class _Page722State extends State<Page722> {
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {
-          setState(() {
-            kaigiKara = '9:00';
-          });
-        }
-        if (number == 2) {
-          setState(() {
-            kaigiKara = '9:30';
-          });
-        }
-        if (number == 3) {
-          setState(() {
-            kaigiKara = '10:00';
-          });
-        }
-        if (number == 4) {
-          setState(() {
-            kaigiKara = '10:30';
-          });
-        }
-        if (number == 5) {
-          setState(() {
-            kaigiKara = '11:00';
-          });
-        }
-        if (number == 6) {
-          setState(() {
-            kaigiKara = '11:30';
-          });
-        }
-      },
+      onSelected: (number) {},
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      itemBuilder: (context) => listDateTime1.map((item) {
+        int index = listDateTime1.indexOf(item);
+        return PopupMenuItem(
+          onTap: () {
+            setState(() {
+              jikanKaraEditPage = listDateTime1[index];
+            });
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
           value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Text(
+                      item.toString(),
+                      style: const TextStyle(color: Color(0xFF999999)),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "9:00",
-              ),
+              const Divider(),
             ],
           ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "9:30",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 3,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "10:00",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 4,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "10:30",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 5,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "11:00",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 6,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "11:30",
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      }).toList(),
       offset: const Offset(0, 30),
       child: Container(
         width: 130,
@@ -713,7 +711,7 @@ class _Page722State extends State<Page722> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              kaigiKara,
+              jikanKaraEditPage,
               style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
@@ -735,138 +733,42 @@ class _Page722State extends State<Page722> {
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {
-          setState(() {
-            kaigiMade = '9:00';
-          });
-        }
-        if (number == 2) {
-          setState(() {
-            kaigiMade = '9:30';
-          });
-        }
-        if (number == 3) {
-          setState(() {
-            kaigiMade = '10:00';
-          });
-        }
-        if (number == 4) {
-          setState(() {
-            kaigiMade = '10:30';
-          });
-        }
-        if (number == 5) {
-          setState(() {
-            kaigiMade = '11:00';
-          });
-        }
-        if (number == 6) {
-          setState(() {
-            kaigiMade = '11:30';
-          });
-        }
-      },
+      onSelected: (number) {},
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      itemBuilder: (context) => listDateTime2.map((item) {
+        int index = listDateTime2.indexOf(item);
+        return PopupMenuItem(
+          onTap: () {
+            setState(() {
+              jikanMadeEditPage = listDateTime2[index];
+            });
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
           value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Text(
+                      item.toString(),
+                      style: const TextStyle(color: Color(0xFF999999)),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "9:00",
-              ),
+              const Divider(),
             ],
           ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "9:30",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 3,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "10:00",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 4,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "10:30",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 5,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "11:00",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 6,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "11:30",
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      }).toList(),
       offset: const Offset(0, 30),
       child: Container(
         width: 130,
@@ -879,7 +781,7 @@ class _Page722State extends State<Page722> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              kaigiMade,
+              jikanMadeEditPage,
               style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
@@ -898,6 +800,9 @@ class _Page722State extends State<Page722> {
   }
 
   String? _validateNumber(String? input) {
+    if (input == null || input == '') {
+      return 'Required';
+    }
     if (Validator.onlyNumber(input!)) {
       return null;
     } else {
@@ -906,6 +811,9 @@ class _Page722State extends State<Page722> {
   }
 
   String? _validateNumber2(String? input) {
+    if (input == null || input == '') {
+      return 'Required';
+    }
     if (Validator.onlyNumber(input!)) {
       return null;
     } else {
