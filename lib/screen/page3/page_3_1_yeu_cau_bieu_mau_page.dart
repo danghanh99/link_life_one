@@ -4,6 +4,7 @@ import 'package:link_life_one/screen/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/screen/page3/shitami_houkoku_page.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../components/custom_text_field.dart';
 
 import '../../components/text_line_down.dart';
@@ -32,6 +33,7 @@ class Page31YeuCauBieuMauPage extends StatefulWidget {
 }
 
 class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
+  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   List<String> listNames = [
     '入出庫管理',
     '部材管理',
@@ -132,52 +134,12 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  padding: const EdgeInsets.only(right: 15, left: 15),
-                  itemCount: widget.listKoji.length,
-                  itemBuilder: (ctx, index) {
-                    final item = widget.listKoji[index];
-                    bool isShitami = item.homonSbt == '01';
-                    return GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: !isShitami
-                              ? const Color.fromARGB(255, 216, 181, 111)
-                              : const Color.fromARGB(255, 111, 177, 224),
-                          border: Border.all(
-                            color: !isShitami
-                                ? const Color.fromARGB(255, 216, 181, 111)
-                                : const Color.fromARGB(255, 111, 177, 224),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                isShitami
-                                    ? '訪問時間：${formatJikan(jikan: item.sitamiHomonJikan)}　　報告：未'
-                                    : '訪問時間：${formatJikan(jikan: item.kojiHomonJikan)}   報告：済',
-                              ),
-                              Text(
-                                  '受注ID： ${item.jyucyuId}　人数：${item.shitamiJinin}人　目安作業時間：${item.shitamiJikan ?? ''}(m)'),
-                              Text('工事アイテム： ${item.kojiItem}'),
-                              Text('住所： ${item.setsakiAddress}'),
-                              Text('氏名： ${item.setsakiName}'),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const SizedBox(
-                    height: 5,
+                child: Container(
+                  width: 1000.w,
+                  height: 800.w,
+                  child: SfPdfViewer.network(
+                    'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
+                    key: _pdfViewerKey,
                   ),
                 ),
               ),
