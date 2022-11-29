@@ -1027,7 +1027,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       },
     );
     xxx.add(insert(listDayOfWeek()[col].split(' ').first,
-        sukejuuruSelectedUser[row - 1], false));
+        sukejuuruSelectedUser['TANT_NAME'], false));
     return xxx;
   }
 
