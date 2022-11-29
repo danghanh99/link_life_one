@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/create_anken/create_anken.dart';
 import 'package:link_life_one/components/toast.dart';
-import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/page_7_2_4.dart';
+import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/create/page_7_2_4_create.dart';
 
 import '../../../api/sukejuuru_page_api/pull_down_anken/get_pull_down_anken.dart';
 import '../../../components/custom_text_field.dart';
