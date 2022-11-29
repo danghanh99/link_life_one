@@ -1001,12 +1001,28 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             sukejuuruAllUser[row - 1][element].isNotEmpty &&
             element.split('-').last == listDayOfWeek()[col].split(' ').first) {
           sukejuuruAllUser[row - 1][element].forEach(
-            (e) => xxx.addAll([kojiItemWithType(row - 1, col, e, false)]),
+            (e) => xxx.addAll([
+              kojiItemWithType(
+                row - 1,
+                col,
+                e,
+                false,
+                sukejuuruAllUser[row - 1] == null
+                    ? null
+                    : sukejuuruAllUser[row - 1]["TANT_CD"],
+              )
+            ]),
           );
         }
       },
     );
-    xxx.add(insert());
+    xxx.add(
+      insert(
+        dateSelected: listDayOfWeek()[col].split(' ').first,
+        tantCd: sukejuuruAllUser[row - 1]["TANT_CD"],
+        isPhongBanData: false,
+      ),
+    );
     return xxx;
   }
 
@@ -1019,12 +1035,26 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             sukejuuruSelectedUser[element].isNotEmpty &&
             element.split('-').last == listDayOfWeek()[col].split(' ').first) {
           sukejuuruSelectedUser[element].forEach(
-            (e) => xxx.addAll([kojiItemWithType(row - 1, col, e, false)]),
+            (e) => xxx.addAll([
+              kojiItemWithType(
+                row - 1,
+                col,
+                e,
+                false,
+                sukejuuruSelectedUser[row - 1]["TANT_CD"],
+              )
+            ]),
           );
         }
       },
     );
-    xxx.add(insert());
+    xxx.add(
+      insert(
+        dateSelected: listDayOfWeek()[col].split(' ').first,
+        tantCd: sukejuuruSelectedUser[row - 1]["TANT_CD"],
+        isPhongBanData: false,
+      ),
+    );
     return xxx;
   }
 
@@ -1038,12 +1068,28 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             sukejuuruPhongBan[element].isNotEmpty &&
             element.split('-').last == listDayOfWeek()[col].split(' ').first) {
           sukejuuruPhongBan[element].forEach(
-            (e) => xxx.addAll([kojiItemWithType(row, col, e, true)]),
+            (e) => xxx.addAll([
+              kojiItemWithType(
+                row,
+                col,
+                e,
+                true,
+                sukejuuruPhongBan[row - 1] == null
+                    ? null
+                    : sukejuuruPhongBan[row - 1]["TANT_CD"],
+              )
+            ]),
           );
         }
       },
     );
-    xxx.add(insert());
+    xxx.add(
+      insert(
+        dateSelected: listDayOfWeek()[col].split(' ').first,
+        tantCd: sukejuuruPhongBan["KOJIGYOSYA_CD"],
+        isPhongBanData: true,
+      ),
+    );
     return xxx;
   }
 
@@ -1195,7 +1241,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     return 'none';
   }
 
-  Widget kojiItemWithType(int row, int col, e, bool isPhongBanData) {
+  Widget kojiItemWithType(
+      int row, int col, e, bool isPhongBanData, String? tantCd) {
     return GestureDetector(
       onTap: () {
         if (isPhongBanData) {
@@ -1234,7 +1281,15 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   context: context,
                   title: '',
                   body: Page723(
+                    onCreateAnkenSuccessfull: () {
+                      callGetAnkenCuaMotPhongBan(
+                        kojiGyoSyaCd: phongBanId,
+                        date: date,
+                      );
+                    },
                     initialDate: date,
+                    TANT_CD: tantCd ?? '',
+                    isPhongBan: isPhongBanData,
                   ),
                 );
               }
@@ -1283,6 +1338,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   title: '',
                   body: Page723(
                     initialDate: date,
+                    TANT_CD: tantCd ?? '',
+                    isPhongBan: isPhongBanData,
+                    onCreateAnkenSuccessfull: () {
+                      callGetAnkenCuaMotPhongBan(
+                        kojiGyoSyaCd: phongBanId,
+                        date: date,
+                      );
+                    },
                   ),
                 );
               }
@@ -1371,7 +1434,13 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     );
   }
 
-  Widget insert() {
+  Widget insert({
+    required String dateSelected,
+    String? tantCd,
+    required bool isPhongBanData,
+  }) {
+    DateTime newDate = DateFormat("yyyy-MM-dd")
+        .parse("${date.year}-${date.month}-$dateSelected");
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Row(
@@ -1382,7 +1451,15 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 context: context,
                 title: '',
                 body: Page723(
-                  initialDate: date,
+                  initialDate: newDate,
+                  TANT_CD: tantCd ?? "",
+                  isPhongBan: isPhongBanData,
+                  onCreateAnkenSuccessfull: () {
+                    callGetAnkenCuaMotPhongBan(
+                      kojiGyoSyaCd: phongBanId,
+                      date: date,
+                    );
+                  },
                 ),
               );
             },
@@ -1466,15 +1543,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       ),
     );
   }
-
-  // Future<List<dynamic>> callGetListSukejuuru(DateTime date) async {
-  //   final result = await GetListSukejuuru().getListSukejuuru(date);
-  //   setState(() {
-  //     sukejuuru = result;
-  //   });
-
-  //   return result;
-  // }
 
   Future<List<dynamic>> callGetListSukejuuruWithoutState(DateTime date) async {
     return await GetListSukejuuru().getListSukejuuru(date);
