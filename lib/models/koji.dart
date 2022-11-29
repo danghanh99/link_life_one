@@ -12,30 +12,31 @@ class Koji {
   final String kojiItem;
   final String setsakiAddress;
   final String setsakiName;
+  final String kojiSt;
 
-  Koji({
-    this.kojiHomonJikan,
-    this.sitamiHomonJikan,
-    required this.homonSbt,
-    required this.jyucyuId,
-    required this.shitamiJinin,
-    this.shitamiJikan,
-    required this.kojiItem,
-    required this.setsakiAddress,
-    required this.setsakiName,
-  });
+  Koji(
+      {this.kojiHomonJikan,
+      this.sitamiHomonJikan,
+      required this.homonSbt,
+      required this.jyucyuId,
+      required this.shitamiJinin,
+      this.shitamiJikan,
+      required this.kojiItem,
+      required this.setsakiAddress,
+      required this.setsakiName,
+      required this.kojiSt});
 
   factory Koji.fromJson(Map<String, dynamic> json) {
     return Koji(
-      kojiHomonJikan: json["KOJIHOMONJIKAN"],
-      sitamiHomonJikan: json["SITAMIHOMONJIKAN"],
-      homonSbt: json["HOMON_SBT"],
-      jyucyuId: json["JYUCYU_ID"],
-      shitamiJinin: json["SITAMI_JININ"],
-      shitamiJikan: json["SITAMI_JIKAN"],
-      kojiItem: json["KOJI_ITEM"],
-      setsakiAddress: json["SETSAKI_ADDRESS"],
-      setsakiName: json["SETSAKI_NAME"],
-    );
+        kojiHomonJikan: json["KOJIHOMONJIKAN"],
+        sitamiHomonJikan: json["SITAMIHOMONJIKAN"],
+        homonSbt: json["HOMON_SBT"],
+        jyucyuId: json["JYUCYU_ID"],
+        shitamiJinin: json["SITAMI_JININ"],
+        shitamiJikan: json["SITAMI_JIKAN"],
+        kojiItem: json["KOJI_ITEM"],
+        setsakiAddress: json["SETSAKI_ADDRESS"],
+        setsakiName: json["SETSAKI_NAME"],
+        kojiSt: json['KOJI_ST']);
   }
 }

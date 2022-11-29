@@ -135,11 +135,11 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                   future: callGetListKojiApi(),
                   builder: (context, response) {
                     if (response.data == null) {
-                      return Center(child: Text("Loading..."));
+                      return const Center(child: Text("Loading..."));
                     }
                     return ListView.separated(
                       shrinkWrap: true,
-                      physics: ClampingScrollPhysics(),
+                      physics: const ClampingScrollPhysics(),
                       padding: const EdgeInsets.only(right: 15, left: 15),
                       itemCount: response.data!.length,
                       itemBuilder: (ctx, index) {
@@ -268,11 +268,13 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: !isShitami
+                              color: (item.kojiSt == '01' ||
+                                      item.kojiSt == '02')
                                   ? const Color.fromARGB(255, 216, 181, 111)
                                   : const Color.fromARGB(255, 111, 177, 224),
                               border: Border.all(
-                                color: !isShitami
+                                color: (item.kojiSt == '01' ||
+                                        item.kojiSt == '02')
                                     ? const Color.fromARGB(255, 216, 181, 111)
                                     : const Color.fromARGB(255, 111, 177, 224),
                               ),
@@ -283,9 +285,7 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    isShitami
-                                        ? '訪問時間：${formatJikan(jikan: item.sitamiHomonJikan)}　　報告：未'
-                                        : '訪問時間：${formatJikan(jikan: item.kojiHomonJikan)}   報告：済',
+                                    "訪問時間：${formatJikan(jikan: item.kojiHomonJikan)}   報告： ${item.kojiSt == '03' ? '済' : '未'}",
                                   ),
                                   Text(
                                       '受注ID： ${item.jyucyuId}　人数：${item.shitamiJinin}人　目安作業時間：${item.shitamiJikan ?? ''}(m)'),

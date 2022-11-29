@@ -23,16 +23,16 @@ class GetListKojiApi {
       final List<Koji> list = body
           .map(
             (e) => Koji(
-              sitamiHomonJikan: e["SITAMIHOMONJIKAN"],
-              kojiHomonJikan: e["KOJIHOMONJIKAN"],
-              homonSbt: e["HOMON_SBT"],
-              jyucyuId: e["JYUCYU_ID"],
-              shitamiJinin: 1,
-              shitamiJikan: e["SITAMI_JIKAN"],
-              kojiItem: e["KOJI_ITEM"],
-              setsakiAddress: e["SETSAKI_ADDRESS"],
-              setsakiName: e["SETSAKI_NAME"],
-            ),
+                sitamiHomonJikan: e["SITAMIHOMONJIKAN"],
+                kojiHomonJikan: e["KOJIHOMONJIKAN"],
+                homonSbt: e["HOMON_SBT"],
+                jyucyuId: e["JYUCYU_ID"],
+                shitamiJinin: 1,
+                shitamiJikan: e["SITAMI_JIKAN"],
+                kojiItem: e["KOJI_ITEM"],
+                setsakiAddress: e["SETSAKI_ADDRESS"],
+                setsakiName: e["SETSAKI_NAME"],
+                kojiSt: e['KOJI_ST']),
           )
           .toList();
       return list;

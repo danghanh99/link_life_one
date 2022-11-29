@@ -328,28 +328,6 @@ class _Page724CreateState extends State<Page724Create> {
               const SizedBox(
                 width: 10,
               ),
-              Container(
-                width: 120,
-                height: 37,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF96265),
-                  borderRadius: BorderRadius.circular(26),
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    '削除',
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
               const SizedBox(
                 width: 10,
               ),

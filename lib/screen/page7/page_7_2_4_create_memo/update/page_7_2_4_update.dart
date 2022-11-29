@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:link_life_one/api/sukejuuru_page_api/delete_memo.dart';
 
 import '../../../../api/sukejuuru_page_api/create_memo.dart';
 import '../../../../components/custom_text_field.dart';
@@ -353,7 +354,18 @@ class _Page724UpdateState extends State<Page724Update> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    DeleteMemo().deleteMemo(
+                      JYOKEN_CD: widget.JYOKEN_CD,
+                      JYOKEN_SYBET_FLG: widget.isPhongBan ? '1' : '0',
+                      YMD: widget.initialDate,
+                      onSuccess: () {
+                        Navigator.pop(context);
+                        CustomToast.show(context,
+                            message: "Delete memo successfull",
+                            backGround: Colors.green);
+                        widget.onSuccess.call();
+                      },
+                    );
                   },
                   child: const Text(
                     '削除',
