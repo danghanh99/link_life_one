@@ -11,8 +11,8 @@ class LoginApi {
       required Function onSuccess,
       required onFailed}) async {
     String url = "https://koji-app.starboardasiavn.com/requestLogin.php";
-    final response = await http
-        .post(Uri.parse(url), body: {'LOGIN_ID': id, 'PASSWORD': password});
+    final response = await http.post(Uri.parse(url),
+        body: {'LOGIN_ID': '00000', 'PASSWORD': 'lifeone0000'});
 
     if (response.body == "{\"error_message\":Unauthorized}[]") {
       onFailed.call();

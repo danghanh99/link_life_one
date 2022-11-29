@@ -1,7 +1,7 @@
 import 'package:check_points/check_point.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/page_7_2_4.dart';
+import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/create/page_7_2_4_create.dart';
 
 import '../../../components/custom_text_field.dart';
 import '../../../shared/assets.dart';

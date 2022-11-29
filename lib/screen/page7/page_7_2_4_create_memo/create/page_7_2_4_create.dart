@@ -1,39 +1,108 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:link_life_one/api/sukejuuru_page_api/create_memo.dart';
 
-import '../../../components/custom_text_field.dart';
-import '../../../shared/assets.dart';
+import '../../../../components/custom_text_field.dart';
+import '../../../../components/toast.dart';
+import '../../../../shared/assets.dart';
 
-class Page724 extends StatefulWidget {
+class Page724Create extends StatefulWidget {
   final DateTime initialDate;
-  const Page724({
+  final String JYOKEN_CD;
+  final bool isPhongBan;
+  final Function() onSuccess;
+  const Page724Create({
     required this.initialDate,
+    required this.JYOKEN_CD,
+    required this.isPhongBan,
+    required this.onSuccess,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<Page724> createState() => _Page724State();
+  State<Page724Create> createState() => _Page724CreateState();
 }
 
-class _Page724State extends State<Page724> {
+class _Page724CreateState extends State<Page724Create> {
+  TextEditingController dateinput = TextEditingController();
+  List<String> listDateTime1 = [
+    "01:00",
+    "02:00",
+    "03:00",
+    "04:00",
+    "05:00",
+    "06:00",
+    "07:00",
+    "08:00",
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00",
+    "22:00",
+    "23:00",
+    "00:00",
+  ];
+  List<String> listDateTime2 = [
+    "01:00",
+    "02:00",
+    "03:00",
+    "04:00",
+    "05:00",
+    "06:00",
+    "07:00",
+    "08:00",
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00",
+    "22:00",
+    "23:00",
+    "00:00",
+  ];
+  late DateTime date;
   late bool checkedValue;
-  late String memo;
-  late String kaigiKara;
-  late String kaigiMade;
+  String kara = "01:00";
+  String made = "23:00";
+  List<dynamic> pullDownMemo = [];
+  dynamic pullDownSelected;
 
   @override
   void initState() {
-    memo = 'メモ';
-    kaigiKara = '10：00';
-    kaigiMade = '12：00';
+    date = widget.initialDate;
     checkedValue = false;
+    callGetListPullDownMemo();
     super.initState();
+  }
+
+  Future<void> callGetListPullDownMemo() async {
+    final result =
+        await CreateMemo().pullDownMemo(TAN_CAL_ID: '', onSuccess: () {});
+    setState(() {
+      pullDownMemo = result['pullDown'];
+      pullDownSelected = pullDownMemo.first;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return SizedBox(
       width: 650,
       child: Column(
@@ -70,9 +139,9 @@ class _Page724State extends State<Page724> {
               children: [
                 Row(
                   children: [
-                    Container(
+                    const SizedBox(
                       width: 130,
-                      child: const Align(
+                      child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           '概要',
@@ -97,9 +166,9 @@ class _Page724State extends State<Page724> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
+                    const SizedBox(
                       width: 130,
-                      child: const Align(
+                      child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           '日時',
@@ -179,9 +248,9 @@ class _Page724State extends State<Page724> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
+                    const SizedBox(
                       width: 130,
-                      child: const Align(
+                      child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           '内容',
@@ -198,7 +267,8 @@ class _Page724State extends State<Page724> {
                       child: CustomTextField(
                         fillColor: const Color(0xFFF5F6F8),
                         hint: '',
-                        type: TextInputType.emailAddress,
+                        type: TextInputType.text,
+                        controller: dateinput,
                         onChanged: (text) {},
                         maxLines: 6,
                       ),
@@ -225,7 +295,25 @@ class _Page724State extends State<Page724> {
                   borderRadius: BorderRadius.circular(26),
                 ),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    CreateMemo().createMemo(
+                        JYOKEN_CD: widget.JYOKEN_CD,
+                        JYOKEN_SYBET_FLG: widget.isPhongBan ? '1' : '0',
+                        YMD: widget.initialDate,
+                        TAG_KBN: '06',
+                        MEMO_CD: pullDownSelected['KBNMSAI_CD'],
+                        NAIYO: dateinput.text,
+                        START_TIME: kara,
+                        END_TIME: made,
+                        ALL_DAY_FLG: checkedValue ? '1' : '0',
+                        onSuccess: () {
+                          Navigator.pop(context);
+                          CustomToast.show(context,
+                              message: "Create successfull",
+                              backGround: Colors.green);
+                          widget.onSuccess.call();
+                        });
+                  },
                   child: const Text(
                     '登録',
                     style: TextStyle(
@@ -301,142 +389,40 @@ class _Page724State extends State<Page724> {
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {
-          setState(() {
-            memo = 'メモ';
-          });
-        }
-        if (number == 2) {
-          setState(() {
-            memo = '追加STOP';
-          });
-        }
-        if (number == 3) {
-          setState(() {
-            memo = '追加希望';
-          });
-        }
-        if (number == 4) {
-          setState(() {
-            memo = '休み';
-          });
-        }
-        if (number == 5) {
-          setState(() {
-            memo = '月次';
-          });
-        }
-        if (number == 6) {
-          setState(() {
-            memo = '重要';
-          });
-        }
-      },
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      itemBuilder: (context) => pullDownMemo.map((item) {
+        return PopupMenuItem(
+          onTap: () {
+            setState(() {
+              pullDownSelected = item;
+            });
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
           value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Text(
+                      item['KBNMSAI_NAME'],
+                      style: const TextStyle(color: Color(0xFF999999)),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "メモ",
-              ),
+              const Divider(),
             ],
           ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "追加STOP",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 3,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "追加希望",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 4,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "休み",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 5,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "月次",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 6,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "重要",
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      }).toList(),
       offset: const Offset(0, 30),
       child: Container(
         width: 130,
@@ -449,7 +435,7 @@ class _Page724State extends State<Page724> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              memo,
+              pullDownSelected != null ? pullDownSelected['KBNMSAI_NAME'] : '',
               style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
@@ -471,138 +457,41 @@ class _Page724State extends State<Page724> {
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {
-          setState(() {
-            kaigiKara = '9:00';
-          });
-        }
-        if (number == 2) {
-          setState(() {
-            kaigiKara = '9:30';
-          });
-        }
-        if (number == 3) {
-          setState(() {
-            kaigiKara = '10:00';
-          });
-        }
-        if (number == 4) {
-          setState(() {
-            kaigiKara = '10:30';
-          });
-        }
-        if (number == 5) {
-          setState(() {
-            kaigiKara = '11:00';
-          });
-        }
-        if (number == 6) {
-          setState(() {
-            kaigiKara = '11:30';
-          });
-        }
-      },
+      onSelected: (number) {},
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      itemBuilder: (context) => listDateTime1.map((item) {
+        return PopupMenuItem(
+          onTap: () {
+            setState(() {
+              kara = item;
+            });
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
           value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Text(
+                      item.toString(),
+                      style: const TextStyle(color: Color(0xFF999999)),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "9:00",
-              ),
+              const Divider(),
             ],
           ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "9:30",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 3,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "10:00",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 4,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "10:30",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 5,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "11:00",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 6,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "11:30",
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      }).toList(),
       offset: const Offset(0, 30),
       child: Container(
         width: 130,
@@ -615,7 +504,7 @@ class _Page724State extends State<Page724> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              kaigiKara,
+              kara,
               style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
@@ -637,138 +526,41 @@ class _Page724State extends State<Page724> {
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {
-          setState(() {
-            kaigiMade = '9:00';
-          });
-        }
-        if (number == 2) {
-          setState(() {
-            kaigiMade = '9:30';
-          });
-        }
-        if (number == 3) {
-          setState(() {
-            kaigiMade = '10:00';
-          });
-        }
-        if (number == 4) {
-          setState(() {
-            kaigiMade = '10:30';
-          });
-        }
-        if (number == 5) {
-          setState(() {
-            kaigiMade = '11:00';
-          });
-        }
-        if (number == 6) {
-          setState(() {
-            kaigiMade = '11:30';
-          });
-        }
-      },
+      onSelected: (number) {},
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      itemBuilder: (context) => listDateTime2.map((item) {
+        return PopupMenuItem(
+          onTap: () {
+            setState(() {
+              made = item;
+            });
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
           value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Text(
+                      item.toString(),
+                      style: const TextStyle(color: Color(0xFF999999)),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "9:00",
-              ),
+              const Divider(),
             ],
           ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "9:30",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 3,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "10:00",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 4,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "10:30",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 5,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "11:00",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 6,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "11:30",
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      }).toList(),
       offset: const Offset(0, 30),
       child: Container(
         width: 130,
@@ -781,7 +573,7 @@ class _Page724State extends State<Page724> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              kaigiMade,
+              made,
               style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,

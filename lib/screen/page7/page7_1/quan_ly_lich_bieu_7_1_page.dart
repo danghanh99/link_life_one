@@ -3,7 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/get_list_sukejuuru.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page7/page7_2_3_create_item/page_7_2_3.dart';
-import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/page_7_2_4.dart';
+import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/create/page_7_2_4_create.dart';
+import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/update/page_7_2_4_update.dart';
 import '../../../api/sukejuuru_page_api/get_anken_cua_mot_phong_ban.dart';
 import '../../../api/sukejuuru_page_api/get_du_lieu_cua_mot_nhan_vien_trong_phong_ban.dart';
 import '../../../api/sukejuuru_page_api/get_list_phong_ban.dart';
@@ -1006,7 +1007,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         }
       },
     );
-    xxx.add(insert());
+    xxx.add(insert(listDayOfWeek()[col].split(' ').first,
+        sukejuuruAllUser[row - 1]['TANT_CD'], false));
     return xxx;
   }
 
@@ -1024,7 +1026,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         }
       },
     );
-    xxx.add(insert());
+    xxx.add(insert(listDayOfWeek()[col].split(' ').first,
+        sukejuuruSelectedUser[row - 1], false));
     return xxx;
   }
 
@@ -1043,7 +1046,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         }
       },
     );
-    xxx.add(insert());
+    xxx.add(insert(listDayOfWeek()[col].split(' ').first,
+        sukejuuruPhongBan['KOJIGYOSYA_CD'], true));
     return xxx;
   }
 
@@ -1244,8 +1248,22 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 CustomDialog.showCustomDialog(
                   context: context,
                   title: '',
-                  body: Page724(
-                    initialDate: date,
+                  body: Page724Update(
+                    initialDate: DateFormat("yyyy-MM-dd").parse(e['YMD']),
+                    TAN_CAL_ID: e['TAN_CAL_ID'],
+                    KBNMSAI_NAME: e['KBNMSAI_NAME'],
+                    checkedValue: e['ALL_DAY_FLG'] == '1' ? true : false,
+                    NAIYO: e['NAIYO'],
+                    END_TIME: e['END_TIME'],
+                    START_TIME: e['START_TIME'],
+                    JYOKEN_CD: e['JYOKEN_CD'],
+                    isPhongBan: isPhongBanData,
+                    onSuccess: (() {
+                      callGetAnkenCuaMotPhongBan(
+                        kojiGyoSyaCd: phongBanId,
+                        date: date,
+                      );
+                    }),
                   ),
                 );
               }
@@ -1292,8 +1310,22 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 CustomDialog.showCustomDialog(
                   context: context,
                   title: '',
-                  body: Page724(
-                    initialDate: date,
+                  body: Page724Update(
+                    initialDate: e['YMD'],
+                    TAN_CAL_ID: e['TAN_CAL_ID'],
+                    KBNMSAI_NAME: e['KBNMSAI_NAME'],
+                    checkedValue: e['ALL_DAY_FLG'] == '1' ? true : false,
+                    NAIYO: e['NAIYO'],
+                    END_TIME: e['END_TIME'],
+                    START_TIME: e['START_TIME'],
+                    JYOKEN_CD: e['JYOKEN_CD'],
+                    isPhongBan: isPhongBanData,
+                    onSuccess: (() {
+                      callGetAnkenCuaMotPhongBan(
+                        kojiGyoSyaCd: phongBanId,
+                        date: date,
+                      );
+                    }),
                   ),
                 );
               }
@@ -1371,7 +1403,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     );
   }
 
-  Widget insert() {
+  Widget insert(String dateSelected, String JYOKEN_CD, bool isPhongBan) {
+    DateTime newDate = DateFormat("yyyy-MM-dd")
+        .parse("${date.year}-${date.month}-$dateSelected");
+
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Row(
@@ -1399,8 +1434,16 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               CustomDialog.showCustomDialog(
                 context: context,
                 title: '',
-                body: Page724(
-                  initialDate: date,
+                body: Page724Create(
+                  JYOKEN_CD: JYOKEN_CD,
+                  isPhongBan: isPhongBan,
+                  initialDate: newDate,
+                  onSuccess: () {
+                    callGetAnkenCuaMotPhongBan(
+                      kojiGyoSyaCd: phongBanId,
+                      date: date,
+                    );
+                  },
                 ),
               );
             },
