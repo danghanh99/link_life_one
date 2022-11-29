@@ -1,8 +1,11 @@
 import 'package:check_points/check_point.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:link_life_one/api/sukejuuru_page_api/create_anken/create_anken.dart';
+import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/create/page_7_2_4_create.dart';
 
+import '../../../api/sukejuuru_page_api/pull_down_anken/get_pull_down_anken.dart';
 import '../../../components/custom_text_field.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/validator.dart';
@@ -10,8 +13,14 @@ import '../../page6/danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
 class Page723 extends StatefulWidget {
   final DateTime initialDate;
+  final String TANT_CD;
+  final bool isPhongBan;
+  final Function onCreateAnkenSuccessfull;
   const Page723({
     required this.initialDate,
+    required this.TANT_CD,
+    required this.isPhongBan,
+    required this.onCreateAnkenSuccessfull,
     Key? key,
   }) : super(key: key);
 
@@ -21,17 +30,103 @@ class Page723 extends StatefulWidget {
 
 class _Page723State extends State<Page723> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  late bool checkedValue;
-  late String nettoKoJi;
-  late String kaigiKara;
-  late String kaigiMade;
+  // late bool checkedValue;
+  // late String nettoKoJi;
+  // late String kaigiKara;
+  // late String kaigiMade;
+  bool validKaraMade = true;
+
+  late List<dynamic> listPullDownCreateAnkenPage = [
+    {"KBNMSAI_NAME": "営業工事"},
+    {"KBNMSAI_NAME": "営業下見"}
+  ];
+  late DateTime datetimeCreateAnkenPage = DateTime.now();
+  late String jikanKaraCreateAnkenPage = '';
+  late String jikanMadeCreateAnkenPage = '';
+  late bool checkAllDayCreateAnkenPage = false;
+  late String jinNumberCreateAnkenPage = '0';
+  late String jikanNumberCreateAnkenPage = '0';
+  late String okyakuSamaCreateAnkenPage = '';
+  late String sankasha1CreateAnkenPage = '';
+  late String sankasha2CreateAnkenPage = '';
+  late String sankasha3CreateAnkenPage = '';
+  int selectedPullDownIndex = 0;
+
+  String currentPullDownValue = '';
+
+  List<dynamic> listDateTime1 = [
+    "01:00",
+    "02:00",
+    "03:00",
+    "04:00",
+    "05:00",
+    "06:00",
+    "07:00",
+    "08:00",
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00",
+    "22:00",
+    "23:00",
+    "00:00",
+  ];
+  List<dynamic> listDateTime2 = [
+    "01:00",
+    "02:00",
+    "03:00",
+    "04:00",
+    "05:00",
+    "06:00",
+    "07:00",
+    "08:00",
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00",
+    "22:00",
+    "23:00",
+    "00:00",
+  ];
   @override
   void initState() {
-    nettoKoJi = 'ネット工事';
-    kaigiKara = '10：00';
-    kaigiMade = '12：00';
-    checkedValue = true;
+    checkAllDayCreateAnkenPage = false;
+    jikanKaraCreateAnkenPage = listDateTime1[listDateTime1.length - 1];
+    jikanMadeCreateAnkenPage = listDateTime2[listDateTime1.length - 1];
+    callGetAnken();
     super.initState();
+  }
+
+  Future<dynamic> callGetAnken({Function? onsuccess}) async {
+    final dynamic result =
+        GetPullDownAnken().getPullDownAnken(onSuccess: (result) {
+      setState(() {
+        listPullDownCreateAnkenPage = result["PULLDOWN"];
+        currentPullDownValue = listPullDownCreateAnkenPage[0]["KBNMSAI_NAME"];
+        selectedPullDownIndex = 0;
+      });
+      print(result);
+    });
+
+    return result;
   }
 
   @override
@@ -135,16 +230,30 @@ class _Page723State extends State<Page723> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _moreButton2(context),
+                              Column(
+                                children: [
+                                  _moreButton2(context),
+                                  validKaraMade
+                                      ? Container()
+                                      : const Padding(
+                                          padding: EdgeInsets.only(top: 5),
+                                          child: Text(
+                                            "Invalid",
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
+                                ],
+                              ),
                               Row(
                                 children: [
                                   Checkbox(
                                     activeColor: Colors.blue,
                                     checkColor: Colors.white,
-                                    value: checkedValue,
+                                    value: checkAllDayCreateAnkenPage,
                                     onChanged: (newValue) {
                                       setState(() {
-                                        checkedValue = newValue ?? true;
+                                        checkAllDayCreateAnkenPage =
+                                            newValue ?? true;
                                       });
                                     },
                                   ),
@@ -169,7 +278,20 @@ class _Page723State extends State<Page723> {
                           const SizedBox(
                             width: 10,
                           ),
-                          _moreButton3(context),
+                          Column(
+                            children: [
+                              _moreButton3(context),
+                              validKaraMade
+                                  ? Container()
+                                  : const Padding(
+                                      padding: EdgeInsets.only(top: 5),
+                                      child: Text(
+                                        "Invalid",
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+                            ],
+                          ),
                         ],
                       ),
                     ],
@@ -206,9 +328,13 @@ class _Page723State extends State<Page723> {
                             child: CustomTextField(
                               validator: _validateNumber,
                               fillColor: const Color(0xFFF5F6F8),
-                              hint: '',
+                              hint: jinNumberCreateAnkenPage.toString(),
                               type: TextInputType.number,
-                              onChanged: (text) {},
+                              onChanged: (text) {
+                                setState(() {
+                                  jinNumberCreateAnkenPage = text;
+                                });
+                              },
                               maxLines: 1,
                             ),
                           ),
@@ -241,9 +367,13 @@ class _Page723State extends State<Page723> {
                             child: CustomTextField(
                               validator: _validateNumber2,
                               fillColor: const Color(0xFFF5F6F8),
-                              hint: '',
+                              hint: jikanNumberCreateAnkenPage.toString(),
                               type: TextInputType.number,
-                              onChanged: (text) {},
+                              onChanged: (text) {
+                                setState(() {
+                                  jikanNumberCreateAnkenPage = text;
+                                });
+                              },
                               maxLines: 1,
                             ),
                           ),
@@ -269,6 +399,7 @@ class _Page723State extends State<Page723> {
                     height: 5,
                   ),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         width: 130,
@@ -290,7 +421,11 @@ class _Page723State extends State<Page723> {
                           fillColor: const Color(0xFFF5F6F8),
                           hint: '',
                           type: TextInputType.emailAddress,
-                          onChanged: (text) {},
+                          onChanged: (text) {
+                            setState(() {
+                              okyakuSamaCreateAnkenPage = text;
+                            });
+                          },
                           maxLines: 1,
                         ),
                       ),
@@ -326,7 +461,11 @@ class _Page723State extends State<Page723> {
                               fillColor: const Color(0xFFF5F6F8),
                               hint: '',
                               type: TextInputType.emailAddress,
-                              onChanged: (text) {},
+                              onChanged: (text) {
+                                setState(() {
+                                  sankasha1CreateAnkenPage = text;
+                                });
+                              },
                               maxLines: 1,
                             ),
                           ),
@@ -339,7 +478,11 @@ class _Page723State extends State<Page723> {
                               fillColor: const Color(0xFFF5F6F8),
                               hint: '',
                               type: TextInputType.emailAddress,
-                              onChanged: (text) {},
+                              onChanged: (text) {
+                                setState(() {
+                                  sankasha2CreateAnkenPage = text;
+                                });
+                              },
                               maxLines: 1,
                             ),
                           ),
@@ -352,7 +495,11 @@ class _Page723State extends State<Page723> {
                               fillColor: const Color(0xFFF5F6F8),
                               hint: '',
                               type: TextInputType.emailAddress,
-                              onChanged: (text) {},
+                              onChanged: (text) {
+                                setState(() {
+                                  sankasha3CreateAnkenPage = text;
+                                });
+                              },
                               maxLines: 1,
                             ),
                           ),
@@ -379,8 +526,55 @@ class _Page723State extends State<Page723> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      if (_formKey.currentState?.validate() == true) {
-                        print("okkkkkk");
+                      if (jikanKaraCreateAnkenPage == null ||
+                          jikanMadeCreateAnkenPage == null) {
+                        setState(() {
+                          validKaraMade = false;
+                        });
+                      }
+                      if (int.parse(jikanKaraCreateAnkenPage.split(":")[0]) >=
+                          int.parse(jikanMadeCreateAnkenPage.split(":")[0])) {
+                        setState(() {
+                          validKaraMade = false;
+                        });
+                      } else {
+                        setState(() {
+                          validKaraMade = true;
+                        });
+                      }
+                      if (_formKey.currentState?.validate() == true &&
+                          validKaraMade) {
+                        CreateAnken().createAnken(
+                          YMD: widget.initialDate,
+                          JYOKEN_CD: widget.TANT_CD, // user login id
+                          JYOKEN_SYBET_FLG:
+                              widget.isPhongBan ? '1' : '0', //????
+                          TAG_KBN:
+                              listPullDownCreateAnkenPage[selectedPullDownIndex]
+                                  ["KBN_CD"], // ??
+                          START_TIME: jikanKaraCreateAnkenPage + ":00",
+                          END_TIME: jikanMadeCreateAnkenPage + ":00",
+                          JININ: jinNumberCreateAnkenPage,
+                          JIKAN: jikanNumberCreateAnkenPage,
+                          GUEST_NAME: okyakuSamaCreateAnkenPage,
+                          ATTEND_NAME1: sankasha1CreateAnkenPage,
+                          ATTEND_NAME2: sankasha2CreateAnkenPage,
+                          ATTEND_NAME3: sankasha3CreateAnkenPage,
+                          ALL_DAY_FLG: checkAllDayCreateAnkenPage ? "1" : "0",
+                          KBNMSAI_CD:
+                              listPullDownCreateAnkenPage[selectedPullDownIndex]
+                                  ["KBNMSAI_CD"],
+                          KBN_CD:
+                              listPullDownCreateAnkenPage[selectedPullDownIndex]
+                                  ["KBN_CD"],
+                          onSuccess: () {
+                            Navigator.pop(context);
+                            CustomToast.show(context,
+                                message: "Create Anken Successfull",
+                                backGround: Colors.green);
+                            widget.onCreateAnkenSuccessfull.call();
+                          },
+                        );
                       }
                     },
                     child: const Text(
@@ -434,54 +628,44 @@ class _Page723State extends State<Page723> {
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {
-          setState(() {
-            nettoKoJi = '営業工事';
-          });
-        }
-        if (number == 2) {
-          setState(() {
-            nettoKoJi = '営業下見';
-          });
-        }
-      },
+      onSelected: (number) {},
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      itemBuilder: (context) => listPullDownCreateAnkenPage.map((item) {
+        int index = listPullDownCreateAnkenPage.indexOf(item);
+        return PopupMenuItem(
+          onTap: () {
+            setState(() {
+              currentPullDownValue =
+                  listPullDownCreateAnkenPage[index]["KBNMSAI_NAME"];
+              selectedPullDownIndex = index;
+            });
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
           value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Text(
+                      item["KBNMSAI_NAME"].toString(),
+                      style: TextStyle(color: Color(0xFF999999)),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "営業工事",
-              ),
+              const Divider(),
             ],
           ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "営業下見",
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      }).toList(),
       offset: const Offset(0, 30),
       child: Container(
         width: 130,
@@ -494,7 +678,7 @@ class _Page723State extends State<Page723> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              nettoKoJi,
+              currentPullDownValue,
               style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
@@ -516,138 +700,42 @@ class _Page723State extends State<Page723> {
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {
-          setState(() {
-            kaigiKara = '9:00';
-          });
-        }
-        if (number == 2) {
-          setState(() {
-            kaigiKara = '9:30';
-          });
-        }
-        if (number == 3) {
-          setState(() {
-            kaigiKara = '10:00';
-          });
-        }
-        if (number == 4) {
-          setState(() {
-            kaigiKara = '10:30';
-          });
-        }
-        if (number == 5) {
-          setState(() {
-            kaigiKara = '11:00';
-          });
-        }
-        if (number == 6) {
-          setState(() {
-            kaigiKara = '11:30';
-          });
-        }
-      },
+      onSelected: (number) {},
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      itemBuilder: (context) => listDateTime1.map((item) {
+        int index = listDateTime1.indexOf(item);
+        return PopupMenuItem(
+          onTap: () {
+            setState(() {
+              jikanKaraCreateAnkenPage = listDateTime1[index];
+            });
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
           value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Text(
+                      item.toString(),
+                      style: const TextStyle(color: Color(0xFF999999)),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "9:00",
-              ),
+              const Divider(),
             ],
           ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "9:30",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 3,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "10:00",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 4,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "10:30",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 5,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "11:00",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 6,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "11:30",
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      }).toList(),
       offset: const Offset(0, 30),
       child: Container(
         width: 130,
@@ -660,7 +748,7 @@ class _Page723State extends State<Page723> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              kaigiKara,
+              jikanKaraCreateAnkenPage,
               style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
@@ -682,138 +770,42 @@ class _Page723State extends State<Page723> {
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {
-          setState(() {
-            kaigiMade = '9:00';
-          });
-        }
-        if (number == 2) {
-          setState(() {
-            kaigiMade = '9:30';
-          });
-        }
-        if (number == 3) {
-          setState(() {
-            kaigiMade = '10:00';
-          });
-        }
-        if (number == 4) {
-          setState(() {
-            kaigiMade = '10:30';
-          });
-        }
-        if (number == 5) {
-          setState(() {
-            kaigiMade = '11:00';
-          });
-        }
-        if (number == 6) {
-          setState(() {
-            kaigiMade = '11:30';
-          });
-        }
-      },
+      onSelected: (number) {},
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      itemBuilder: (context) => listDateTime2.map((item) {
+        int index = listDateTime2.indexOf(item);
+        return PopupMenuItem(
+          onTap: () {
+            setState(() {
+              jikanMadeCreateAnkenPage = listDateTime2[index];
+            });
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
           value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Text(
+                      item.toString(),
+                      style: const TextStyle(color: Color(0xFF999999)),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "9:00",
-              ),
+              const Divider(),
             ],
           ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "9:30",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 3,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "10:00",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 4,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "10:30",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 5,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "11:00",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 6,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "11:30",
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      }).toList(),
       offset: const Offset(0, 30),
       child: Container(
         width: 130,
@@ -826,7 +818,7 @@ class _Page723State extends State<Page723> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              kaigiMade,
+              jikanMadeCreateAnkenPage,
               style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
