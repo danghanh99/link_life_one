@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:link_life_one/api/KojiPageApi/get_list_pdf.dart';
 import 'package:link_life_one/components/login_widget.dart';
-import 'package:link_life_one/screen/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/screen/page3/shitami_houkoku_page.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import '../../components/custom_text_field.dart';
-
 import '../../components/text_line_down.dart';
 import '../../models/koji.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../menu_page/menu_page.dart';
+import '../page7/component/dialog.dart';
 import 'koji_houkoku.dart';
 
 class Page31YeuCauBieuMauPage extends StatefulWidget {
   final DateTime? initialDate;
   final bool isShitami;
-  final List<Koji> listKoji;
+  final Koji koji;
   final bool isSendAList;
+  final String single_summarize;
   const Page31YeuCauBieuMauPage({
     required this.isShitami,
     this.initialDate,
     required this.isSendAList,
-    required this.listKoji,
+    required this.koji,
+    required this.single_summarize,
     Key? key,
   }) : super(key: key);
 
@@ -35,6 +36,7 @@ class Page31YeuCauBieuMauPage extends StatefulWidget {
 
 class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
+  List<dynamic> list_pdf = [];
   List<String> listNames = [
     '入出庫管理',
     '部材管理',
@@ -42,7 +44,23 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
   ];
 
   @override
+  void initState() {
+    callGetListPdf();
+    super.initState();
+  }
+
+  Future<void> callGetListPdf() async {
+    List<dynamic> list = await GetListPdf().getListPdf(
+        koji: widget.koji, SINGLE_SUMMARIZE: widget.single_summarize);
+    setState(() {
+      list_pdf = list;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFFFFFFF),
@@ -126,12 +144,78 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Container(
-                  width: 1000.w,
-                  height: 800.w,
-                  child: SfPdfViewer.network(
-                    'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
-                    key: _pdfViewerKey,
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  padding: const EdgeInsets.only(right: 15, left: 15),
+                  itemCount: list_pdf.length,
+                  itemBuilder: (ctx, index) {
+                    final item = list_pdf[index];
+                    return GestureDetector(
+                      onTap: () {
+                        CustomDialog.showCustomDialog(
+                            context: context,
+                            title: '',
+                            body: Container(
+                              // width: size.width * 2 / 3,
+                              // height: size.height * 2 / 3,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black)),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(''),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Container(
+                                          width: 40,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              border: Border.all(
+                                                  color: Colors.red)),
+                                          child: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  // const SizedBox(
+                                  //   height: 10,
+                                  // ),
+                                  Container(
+                                    width: size.width.w * 4 / 5,
+                                    height: size.height.h * 4 / 5,
+                                    child: SfPdfViewer.network(
+                                        "https://koji-app.starboardasiavn.com/${item['FILEPATH']}",
+                                        key: _pdfViewerKey),
+                                  )
+                                ],
+                              ),
+                            ));
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color.fromARGB(255, 111, 177, 224),
+                            border: Border.all(
+                              color: const Color.fromARGB(255, 111, 177, 224),
+                            ),
+                          ),
+                          child: Text("PDF $index")),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const SizedBox(
+                    height: 5,
                   ),
                 ),
               ),
@@ -265,7 +349,9 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const ShitamiHoukoku(),
+                            builder: (context) => ShitamiHoukoku(
+                              JYUCYU_ID: widget.koji.jyucyuId,
+                            ),
                           ),
                         );
                       } else {

@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:link_life_one/api/KojiPageApi/get_riyuu.dart';
+import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../components/text_line_down.dart';
+import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 
 class RiyuuKoNyuuGamen extends StatefulWidget {
+  final String JYUCYU_ID;
+  final int index;
   const RiyuuKoNyuuGamen({
+    required this.JYUCYU_ID,
+    required this.index,
     Key? key,
   }) : super(key: key);
 
@@ -15,6 +23,28 @@ class RiyuuKoNyuuGamen extends StatefulWidget {
 
 class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
+  final TextEditingController controller = TextEditingController();
+  DateTime date = DateTime.now();
+
+  dynamic riyuu = [];
+
+  @override
+  void initState() {
+    callRiyuu();
+    super.initState();
+  }
+
+  Future<void> callRiyuu() async {
+    dynamic result = await GetRiyuu()
+        .getRiyuu(JYUCYU_ID: widget.JYUCYU_ID, onSuccess: () {});
+    setState(
+      () {
+        riyuu = result;
+        controller.text = riyuu[0]['CANCEL_RIYU'] ?? "";
+        date = DateFormat('yyyy-MM-dd').parse(riyuu[0]['MTMORI_YMD']);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,17 +121,18 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
                   child: Container(
                     decoration: BoxDecoration(
                         border: Border.all(width: 1.5, color: Colors.black)),
-                    child: const CustomTextField(
+                    child: CustomTextField(
                       hint: '',
                       type: TextInputType.text,
+                      controller: controller,
                       maxLines: 10,
                     ),
                   ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
-                    Padding(
+                  children: [
+                    const Padding(
                       padding: EdgeInsets.only(left: 20),
                       child: Text(
                         '見積提出予定日：',
@@ -109,16 +140,56 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
                             fontSize: 20, fontWeight: FontWeight.w700),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     SizedBox(
-                      width: 100,
-                      child: TextField(),
-                    ),
+                      width: 200,
+                      child: widget.index == 3
+                          ? Text(
+                              DateFormat('yyyy年 MM月 dd日', 'ja')
+                                  .format(date)
+                                  .toString(),
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w700),
+                            )
+                          : GestureDetector(
+                              onTap: () async {
+                                DateTime? newDate = await showDatePicker(
+                                    context: context,
+                                    initialDate: date,
+                                    firstDate: DateTime(1990),
+                                    lastDate: DateTime(2200));
+
+                                setState(() {
+                                  if (newDate != null) date = newDate;
+                                });
+                              },
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    Assets.icCalendar,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    DateFormat('yyyy /MM / dd (E)', 'ja')
+                                        .format(
+                                          date,
+                                        )
+                                        .toString(),
+                                    style: const TextStyle(
+                                      color: Color(0xFF77869E),
+                                      fontSize: 14.5,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                    )
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
                 Row(
@@ -127,7 +198,19 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
                     const SizedBox(),
                     GestureDetector(
                       onTap: () {
-                        // Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => widget.index == 2
+                                ? ShashinTeishuutsuGamenPage(
+                                    mitmoriYmd: date,
+                                    cancelRiyuu: controller.text,
+                                  )
+                                : ShashinTeishuutsuGamenPage(
+                                    cancelRiyuu: controller.text,
+                                  ),
+                          ),
+                        );
                       },
                       child: Container(
                         decoration: BoxDecoration(

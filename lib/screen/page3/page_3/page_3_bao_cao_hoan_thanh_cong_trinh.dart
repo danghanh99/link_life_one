@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:link_life_one/api/KojiPageApi/show_popup.dart';
 import 'package:link_life_one/models/koji.dart';
 import 'package:link_life_one/screen/page3/page_3/components/logout_widget.dart';
 import 'package:link_life_one/screen/page3/page_3_1_yeu_cau_bieu_mau_page.dart';
@@ -147,123 +148,157 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                         bool isShitami = item.homonSbt == '01';
                         return GestureDetector(
                           onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return CupertinoAlertDialog(
-                                    title: const Text(
-                                      "この工事を設置不可で登録を行います。\n(元に戻せません)",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    content: const Padding(
-                                      padding: EdgeInsets.only(top: 15),
-                                      child: Text(
-                                        "操作は必ず本部へ電話報告後に行ってください。\nまたサイボウズの設置不可アプリ登録は必ず行ってください。",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
+                            ShowPopUp().isShowPopup(
+                              YMD: date,
+                              SETSAKI_ADDRESS: item.setsakiAddress,
+                              JYUCYU_ID: item.jyucyuId,
+                              onSuccess: (count) {
+                                if (count > 0) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return CupertinoAlertDialog(
+                                        title: const Text(
+                                          "この工事を設置不可で登録を行います。\n(元に戻せません)",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                         ),
+                                        content: const Padding(
+                                          padding: EdgeInsets.only(top: 15),
+                                          child: Text(
+                                            "操作は必ず本部へ電話報告後に行ってください。\nまたサイボウズの設置不可アプリ登録は必ず行ってください。",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                        actions: <Widget>[
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                width: 90,
+                                                child: TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: const Text(
+                                                      '戻る',
+                                                      style: TextStyle(
+                                                        color:
+                                                            Color(0xFFEB5757),
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    )),
+                                              ),
+                                              Container(
+                                                width: 90,
+                                                decoration: const BoxDecoration(
+                                                  border: Border(
+                                                    left: BorderSide(
+                                                      //                   <--- left side
+                                                      color: Colors.grey,
+                                                      width: 1.5,
+                                                    ),
+                                                    right: BorderSide(
+                                                      //                    <--- top side
+                                                      color: Colors.grey,
+                                                      width: 1.5,
+                                                    ),
+                                                  ),
+                                                ),
+                                                child: TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(
+                                                          context); //close Dialog
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              Page31YeuCauBieuMauPage(
+                                                            isShitami:
+                                                                isShitami,
+                                                            initialDate: date,
+                                                            koji: item,
+                                                            isSendAList: true,
+                                                            single_summarize:
+                                                                '01',
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: const Text(
+                                                      'いいえ',
+                                                      style: TextStyle(
+                                                        color:
+                                                            Color(0xFFEB5757),
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    )),
+                                              ),
+                                              SizedBox(
+                                                width: 90,
+                                                child: TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(
+                                                        context); //close Dialog
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Page31YeuCauBieuMauPage(
+                                                          isShitami: isShitami,
+                                                          initialDate: date,
+                                                          koji: item,
+                                                          isSendAList: true,
+                                                          single_summarize:
+                                                              '02',
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: const Text(
+                                                    'はい',
+                                                    style: TextStyle(
+                                                      color: Color(0xFF007AFF),
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          Page31YeuCauBieuMauPage(
+                                        single_summarize: '01',
+                                        isShitami: isShitami,
+                                        initialDate: date,
+                                        koji: item,
+                                        isSendAList: true,
                                       ),
                                     ),
-                                    actions: <Widget>[
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 90,
-                                            child: TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: const Text(
-                                                  '戻る',
-                                                  style: TextStyle(
-                                                    color: Color(0xFFEB5757),
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                )),
-                                          ),
-                                          Container(
-                                            width: 90,
-                                            decoration: const BoxDecoration(
-                                              border: Border(
-                                                left: BorderSide(
-                                                  //                   <--- left side
-                                                  color: Colors.grey,
-                                                  width: 1.5,
-                                                ),
-                                                right: BorderSide(
-                                                  //                    <--- top side
-                                                  color: Colors.grey,
-                                                  width: 1.5,
-                                                ),
-                                              ),
-                                            ),
-                                            child: TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(
-                                                      context); //close Dialog
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          Page31YeuCauBieuMauPage(
-                                                        isShitami: isShitami,
-                                                        initialDate: date,
-                                                        listKoji: [item],
-                                                        isSendAList: true,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                                child: const Text(
-                                                  'いいえ',
-                                                  style: TextStyle(
-                                                    color: Color(0xFFEB5757),
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                )),
-                                          ),
-                                          SizedBox(
-                                            width: 90,
-                                            child: TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(
-                                                    context); //close Dialog
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Page31YeuCauBieuMauPage(
-                                                      isShitami: isShitami,
-                                                      initialDate: date,
-                                                      listKoji: response.data!,
-                                                      isSendAList: true,
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              child: const Text(
-                                                'はい',
-                                                style: TextStyle(
-                                                  color: Color(0xFF007AFF),
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
                                   );
-                                });
+                                }
+                              },
+                            );
                           },
                           child: Container(
                             decoration: BoxDecoration(

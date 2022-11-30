@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/screen/page3/page_3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 
 class ShashinTeishuutsuGamenPage extends StatefulWidget {
   final DateTime? initialDate;
-  const ShashinTeishuutsuGamenPage({super.key, this.initialDate});
+  final String? cancelRiyuu;
+  final DateTime? mitmoriYmd;
+  const ShashinTeishuutsuGamenPage(
+      {super.key, this.initialDate, this.cancelRiyuu, this.mitmoriYmd});
 
   @override
   State<ShashinTeishuutsuGamenPage> createState() =>

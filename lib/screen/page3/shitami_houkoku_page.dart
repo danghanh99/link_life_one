@@ -7,7 +7,8 @@ import 'package:link_life_one/shared/custom_button.dart';
 import '../page7/component/dialog.dart';
 
 class ShitamiHoukoku extends StatefulWidget {
-  const ShitamiHoukoku({super.key});
+  final String JYUCYU_ID;
+  const ShitamiHoukoku({super.key, required this.JYUCYU_ID});
 
   @override
   State<ShitamiHoukoku> createState() => _ShitamiHoukokuState();
@@ -122,7 +123,10 @@ class _ShitamiHoukokuState extends State<ShitamiHoukoku> {
                   CustomDialog.showCustomDialog(
                     context: context,
                     title: '',
-                    body: const RiyuuKoNyuuGamen(),
+                    body: RiyuuKoNyuuGamen(
+                      index: 2,
+                      JYUCYU_ID: widget.JYUCYU_ID,
+                    ),
                   );
                 },
                 child: Container(
@@ -146,7 +150,10 @@ class _ShitamiHoukokuState extends State<ShitamiHoukoku> {
                   CustomDialog.showCustomDialog(
                     context: context,
                     title: '',
-                    body: const RiyuuKoNyuuGamen(),
+                    body: RiyuuKoNyuuGamen(
+                      index: 3,
+                      JYUCYU_ID: widget.JYUCYU_ID,
+                    ),
                   );
                 },
                 child: Container(
