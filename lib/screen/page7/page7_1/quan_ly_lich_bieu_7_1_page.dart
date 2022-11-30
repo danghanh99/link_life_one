@@ -966,7 +966,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 CustomDialog.showCustomDialog(
                   context: context,
                   title: '',
-                  // body: const Page721(),
                   body: Container(),
                 );
               },

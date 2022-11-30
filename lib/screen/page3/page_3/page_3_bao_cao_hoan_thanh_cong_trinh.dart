@@ -213,6 +213,9 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                                                     MaterialPageRoute(
                                                       builder: (context) =>
                                                           Page31YeuCauBieuMauPage(
+                                                        JYUCYU_ID:
+                                                            item.jyucyuId,
+                                                        KOJI_ST: item.kojiSt,
                                                         isShitami: isShitami,
                                                         initialDate: date,
                                                         listKoji: [item],
@@ -241,6 +244,8 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         Page31YeuCauBieuMauPage(
+                                                      JYUCYU_ID: item.jyucyuId,
+                                                      KOJI_ST: item.kojiSt,
                                                       isShitami: isShitami,
                                                       initialDate: date,
                                                       listKoji: response.data!,

@@ -1,13 +1,24 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:link_life_one/api/koji/postPhotoSubmissionRegistration/upload_photo_api.dart';
 import 'package:link_life_one/components/text_line_down.dart';
+import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/screen/page3/page_3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 
 class ShashinTeishuutsuGamenPage extends StatefulWidget {
   final DateTime? initialDate;
-  const ShashinTeishuutsuGamenPage({super.key, this.initialDate});
+  final String JYUCYU_ID;
+  const ShashinTeishuutsuGamenPage({
+    super.key,
+    this.initialDate,
+    required this.JYUCYU_ID,
+  });
 
   @override
   State<ShashinTeishuutsuGamenPage> createState() =>
@@ -16,6 +27,23 @@ class ShashinTeishuutsuGamenPage extends StatefulWidget {
 
 class _ShashinTeishuutsuGamenPageState
     extends State<ShashinTeishuutsuGamenPage> {
+  final ImagePicker _picker = ImagePicker();
+  XFile? imageFile;
+
+  void selectImage() async {
+    try {
+      final XFile? selectedImage =
+          await _picker.pickImage(source: ImageSource.gallery);
+      if (selectedImage != null) {
+        setState(() {
+          imageFile = selectedImage;
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -54,7 +82,9 @@ class _ShashinTeishuutsuGamenPageState
                       width: 200,
                       child: CustomButton(
                         color: Colors.white70,
-                        onClick: () {},
+                        onClick: () {
+                          print("object");
+                        },
                         name: '写真提出画面',
                         textStyle: const TextStyle(
                           color: Color(0xFF042C5C),
@@ -70,14 +100,19 @@ class _ShashinTeishuutsuGamenPageState
                 ],
               ),
               const SizedBox(height: 50),
-              Container(
-                color: Colors.black,
-                child: Image.network(
-                    'https://znews-stc.zdn.vn/static/topic/person/trump.jpg',
-                    width: size.width - 50,
-                    height: size.height * 2 / 3,
-                    fit: size.width > size.height ? null : BoxFit.fill),
-              ),
+              imageFile == null
+                  ? Container(
+                      width: size.width - 50,
+                      height: size.height * 2 / 3,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black)),
+                    )
+                  : Image.file(
+                      File(imageFile!.path),
+                      width: size.width - 50,
+                      height: size.height * 2 / 3,
+                      fit: size.width > size.height ? null : BoxFit.fill,
+                    ),
               const SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,7 +120,9 @@ class _ShashinTeishuutsuGamenPageState
                   Padding(
                     padding: const EdgeInsets.only(left: 18),
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        selectImage();
+                      },
                       child: Container(
                         width: 150,
                         height: 40,
@@ -122,17 +159,50 @@ class _ShashinTeishuutsuGamenPageState
                           ),
                         );
                       },
-                      child: Container(
-                        width: 150,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black, width: 1.5),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            '登録',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w300),
+                      child: GestureDetector(
+                        onTap: () async {
+                          final box = await Hive.openBox<String>('user');
+                          String loginID = box.values.last;
+
+                          if (imageFile == null) {
+                            CustomToast.show(
+                              context,
+                              message: "Please select photo",
+                              backGround: Colors.orange,
+                            );
+                          } else {
+                            UploadPhotoApi().uploadPhotoApi(
+                                JYUCYU_ID: widget.JYUCYU_ID,
+                                LOGIN_ID: loginID,
+                                FILE_PATH: imageFile!.path,
+                                onFailed: () {
+                                  CustomToast.show(
+                                    context,
+                                    message: "Upload photo failed ",
+                                    backGround: Colors.red,
+                                  );
+                                },
+                                onSuccess: () {
+                                  CustomToast.show(
+                                    context,
+                                    message: "Upload photo successfull ",
+                                    backGround: Colors.green,
+                                  );
+                                });
+                          }
+                        },
+                        child: Container(
+                          width: 150,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black, width: 1.5),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              '登録',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w300),
+                            ),
                           ),
                         ),
                       ),
