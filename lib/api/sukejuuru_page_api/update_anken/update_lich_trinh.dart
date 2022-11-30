@@ -3,10 +3,10 @@ import 'dart:convert';
 
 import 'package:intl/intl.dart';
 
-class UpdateAnken {
-  UpdateAnken() : super();
+class UpdateLichTrinh {
+  UpdateLichTrinh() : super();
 
-  Future<dynamic> updateAnken(
+  Future<dynamic> updateLichTrinh(
       {required String JYUCYU_ID,
       required String TAG_KBN,
       required String KBN,
@@ -16,6 +16,9 @@ class UpdateAnken {
       required String KANSAN_POINT,
       required String ALL_DAY_FLG,
       required String MEMO,
+      required String HOMON_SBT,
+      required String KBN_CD,
+      required String KBNMSAI_CD,
       required Function() onSuccess}) async {
     final response = await http.post(
         Uri.parse(
@@ -30,6 +33,9 @@ class UpdateAnken {
           "KANSAN_POINT": KANSAN_POINT, // k biet
           "ALL_DAY_FLG": ALL_DAY_FLG, // check all day
           "MEMO": MEMO,
+          "HOMON_SBT": HOMON_SBT,
+          "KBN_CD": KBN_CD,
+          "KBNMSAI_CD": KBNMSAI_CD,
         });
 
     if (response.statusCode == 200) {

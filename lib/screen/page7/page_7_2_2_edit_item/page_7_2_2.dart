@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../api/sukejuuru_page_api/update_anken/update_anken.dart';
+import '../../../api/sukejuuru_page_api/update_anken/update_lich_trinh.dart';
 import '../../../components/custom_text_field.dart';
 import '../../../components/toast.dart';
 import '../../../shared/assets.dart';
@@ -21,6 +21,7 @@ class Page722 extends StatefulWidget {
   final int jinNumber;
   final int jikanNumber;
   final String comment;
+  final String HOMON_SBT;
 
   final Function onSuccessUpdate;
   const Page722({
@@ -36,6 +37,7 @@ class Page722 extends StatefulWidget {
     required this.jinNumber,
     required this.jikanNumber,
     required this.comment,
+    required this.HOMON_SBT,
     required this.onSuccessUpdate,
     Key? key,
   }) : super(key: key);
@@ -123,8 +125,12 @@ class _Page722State extends State<Page722> {
     listPullDownEditPage = widget.listPullDown;
     checkAppointEditPage = widget.checkAppoint;
     datetimeEditPage = widget.datetime;
-    jikanKaraEditPage = widget.jikanKara;
-    jikanMadeEditPage = widget.jikanMade;
+    jikanKaraEditPage = widget.jikanKara != null && widget.jikanKara != ""
+        ? widget.jikanKara
+        : "00:00";
+    jikanMadeEditPage = widget.jikanMade != null && widget.jikanMade != ""
+        ? widget.jikanMade
+        : "00:00";
     checkAllDayEditPage = widget.checkAllDay;
     jinNumberEditPage = widget.jinNumber.toString();
     jikanNumberEditPage = widget.jikanNumber.toString();
@@ -512,7 +518,13 @@ class _Page722State extends State<Page722> {
                       }
                       if (_formKey.currentState?.validate() == true &&
                           validKaraMade) {
-                        UpdateAnken().updateAnken(
+                        UpdateLichTrinh().updateLichTrinh(
+                            KBN_CD: listPullDownEditPage[selectedPullDownIndex]
+                                ["KBN_CD"],
+                            KBNMSAI_CD:
+                                listPullDownEditPage[selectedPullDownIndex]
+                                    ["KBNMSAI_CD"],
+                            HOMON_SBT: widget.HOMON_SBT,
                             JYUCYU_ID: widget.JYUCYU_ID,
                             TAG_KBN: '0' + selectedPullDownIndex.toString(),
                             KBN: checkAppointEditPage ? "1" : "0",
