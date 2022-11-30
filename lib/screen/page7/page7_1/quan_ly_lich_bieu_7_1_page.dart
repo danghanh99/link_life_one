@@ -48,6 +48,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   List<dynamic> listPhongBan = [];
 
   String selectedNhanVienName = '';
+  String selectedNhanVienTantCD = '';
 
   String value1nguoi = 'グループ';
   // DateTime date = DateTime.parse('2022-11-11');
@@ -108,6 +109,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         listNhanVien = listPersonTemp;
         sukejuuruSelectedUser = response["PERSON"][0][0];
         selectedNhanVienName = listNhanVien[0]["TANT_NAME"];
+        selectedNhanVienTantCD = listNhanVien[0]["TANT_CD"];
         print("111");
       });
 
@@ -362,6 +364,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         child: TextButton(
                           onPressed: () {
                             ShowHoliday().showHoliday(
+                              TANT_CD: selectedNhanVienTantCD,
                               date: date,
                               onSuccess: ((body) {
                                 CustomDialog.showCustomDialog(
@@ -718,8 +721,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         return PopupMenuItem(
           onTap: () {
             setState(() {
-              sukejuuruSelectedUser = sukejuuruAllUser[index];
-              selectedNhanVienName = sukejuuruAllUser[index]["TANT_NAME"];
+              sukejuuruSelectedUser = item;
+              selectedNhanVienName = item["TANT_NAME"];
+              selectedNhanVienTantCD = item["TANT_CD"];
             });
           },
           height: 25,
