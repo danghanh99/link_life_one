@@ -2,33 +2,39 @@ import 'package:check_points/check_point.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/create_anken/create_anken.dart';
+import 'package:link_life_one/api/sukejuuru_page_api/update_anken_middle/update_anken_middle.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/create/page_7_2_4_create.dart';
 
 import '../../../api/sukejuuru_page_api/pull_down_anken/get_pull_down_anken.dart';
+import '../../../api/sukejuuru_page_api/show_edit_anken/get_anken_detail.dart';
 import '../../../components/custom_text_field.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/validator.dart';
 import '../../page6/danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
-class Page723 extends StatefulWidget {
+class Page723EditShowAnken extends StatefulWidget {
   final DateTime initialDate;
   final String TANT_CD;
   final bool isPhongBan;
-  final Function onCreateAnkenSuccessfull;
-  const Page723({
+  final String TAN_EIG_ID;
+  final Function onUpdateAnkenSuccessfull;
+  final String KBNMSAI_NAME;
+  const Page723EditShowAnken({
     required this.initialDate,
     required this.TANT_CD,
     required this.isPhongBan,
-    required this.onCreateAnkenSuccessfull,
+    required this.onUpdateAnkenSuccessfull,
+    required this.TAN_EIG_ID,
+    required this.KBNMSAI_NAME,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<Page723> createState() => _Page723State();
+  State<Page723EditShowAnken> createState() => _Page723EditShowAnkenState();
 }
 
-class _Page723State extends State<Page723> {
+class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   // late bool checkedValue;
   // late String nettoKoJi;
@@ -51,6 +57,8 @@ class _Page723State extends State<Page723> {
   late String sankasha2CreateAnkenPage = '';
   late String sankasha3CreateAnkenPage = '';
   int selectedPullDownIndex = 0;
+
+  String TAG_KBN = '';
 
   String currentPullDownValue = '';
 
@@ -108,23 +116,52 @@ class _Page723State extends State<Page723> {
   ];
   @override
   void initState() {
+    widget.TAN_EIG_ID;
     checkAllDayCreateAnkenPage = false;
     jikanKaraCreateAnkenPage = listDateTime1[listDateTime1.length - 1];
     jikanMadeCreateAnkenPage = listDateTime2[listDateTime1.length - 1];
-    callGetPullDownAnken();
+    callGetAnkenDetail();
     super.initState();
   }
 
-  Future<dynamic> callGetPullDownAnken({Function? onsuccess}) async {
-    final dynamic result =
-        GetPullDownAnken().getPullDownAnken(onSuccess: (result) {
-      setState(() {
-        listPullDownCreateAnkenPage = result["PULLDOWN"];
-        currentPullDownValue = listPullDownCreateAnkenPage[0]["KBNMSAI_NAME"];
-        selectedPullDownIndex = 0;
-      });
-      print(result);
-    });
+  Future<dynamic> callGetAnkenDetail({Function? onsuccess}) async {
+    final dynamic result = GetAnkenDetail().getAnkenDetail(
+      onSuccess: (response) {
+        setState(() {
+          listPullDownCreateAnkenPage = response["PULLDOWN"];
+          for (var element in listPullDownCreateAnkenPage) {
+            if (element["KBNMSAI_NAME"] == widget.KBNMSAI_NAME) {
+              selectedPullDownIndex =
+                  listPullDownCreateAnkenPage.indexOf(element);
+              currentPullDownValue = element["KBNMSAI_NAME"];
+            }
+          }
+          ;
+
+          TAG_KBN = response["EIGYO_ANKEN"][0]["TAG_KBN"];
+          datetimeCreateAnkenPage =
+              DateFormat("yyyy-MM-dd").parse(response["EIGYO_ANKEN"][0]["YMD"]);
+          jikanKaraCreateAnkenPage = response["EIGYO_ANKEN"][0]["START_TIME"]
+                  .toString()
+                  .split(":")[0] +
+              ":" +
+              response["EIGYO_ANKEN"][0]["START_TIME"].toString().split(":")[1];
+          jikanMadeCreateAnkenPage = response["EIGYO_ANKEN"][0]["END_TIME"]
+                  .toString()
+                  .split(":")[0] +
+              ":" +
+              response["EIGYO_ANKEN"][0]["END_TIME"].toString().split(":")[1];
+          jinNumberCreateAnkenPage = response["EIGYO_ANKEN"][0]["JININ"];
+          jikanNumberCreateAnkenPage = response["EIGYO_ANKEN"][0]["JIKAN"];
+
+          okyakuSamaCreateAnkenPage = response["EIGYO_ANKEN"][0]["GUEST_NAME"];
+          sankasha1CreateAnkenPage = response["EIGYO_ANKEN"][0]["ATTEND_NAME1"];
+          sankasha2CreateAnkenPage = response["EIGYO_ANKEN"][0]["ATTEND_NAME2"];
+          sankasha3CreateAnkenPage = response["EIGYO_ANKEN"][0]["ATTEND_NAME3"];
+        });
+      },
+      TAN_EIG_ID: widget.TAN_EIG_ID,
+    );
 
     return result;
   }
@@ -544,37 +581,33 @@ class _Page723State extends State<Page723> {
                       }
                       if (_formKey.currentState?.validate() == true &&
                           validKaraMade) {
-                        CreateAnken().createAnken(
-                          YMD: widget.initialDate,
-                          JYOKEN_CD: widget.TANT_CD, // user login id
-                          JYOKEN_SYBET_FLG:
-                              widget.isPhongBan ? '1' : '0', //????
-                          TAG_KBN:
-                              listPullDownCreateAnkenPage[selectedPullDownIndex]
-                                  ["KBN_CD"], // ??
-                          START_TIME: jikanKaraCreateAnkenPage + ":00",
-                          END_TIME: jikanMadeCreateAnkenPage + ":00",
-                          JININ: jinNumberCreateAnkenPage,
-                          JIKAN: jikanNumberCreateAnkenPage,
-                          GUEST_NAME: okyakuSamaCreateAnkenPage,
-                          ATTEND_NAME1: sankasha1CreateAnkenPage,
-                          ATTEND_NAME2: sankasha2CreateAnkenPage,
-                          ATTEND_NAME3: sankasha3CreateAnkenPage,
-                          ALL_DAY_FLG: checkAllDayCreateAnkenPage ? "1" : "0",
-                          KBNMSAI_CD:
-                              listPullDownCreateAnkenPage[selectedPullDownIndex]
-                                  ["KBNMSAI_CD"],
-                          KBN_CD:
-                              listPullDownCreateAnkenPage[selectedPullDownIndex]
-                                  ["KBN_CD"],
-                          onSuccess: () {
-                            Navigator.pop(context);
-                            CustomToast.show(context,
-                                message: "Create Anken Successfull",
-                                backGround: Colors.green);
-                            widget.onCreateAnkenSuccessfull.call();
-                          },
-                        );
+                        UpdateAnkenMiddle().updateAnkenMiddle(
+                            YMD: DateFormat(('yyyy-MM-dd'))
+                                .format(widget.initialDate),
+                            JYOKEN_CD: widget.TANT_CD,
+                            JYOKEN_SYBET_FLG: widget.isPhongBan ? '1' : '0',
+                            TAG_KBN: TAG_KBN,
+                            START_TIME: jikanKaraCreateAnkenPage + ":00",
+                            END_TIME: jikanMadeCreateAnkenPage + ":00",
+                            JININ: jinNumberCreateAnkenPage,
+                            JIKAN: jikanNumberCreateAnkenPage,
+                            GUEST_NAME: okyakuSamaCreateAnkenPage,
+                            ATTEND_NAME1: sankasha1CreateAnkenPage,
+                            ATTEND_NAME2: sankasha2CreateAnkenPage,
+                            ATTEND_NAME3: sankasha3CreateAnkenPage,
+                            ALL_DAY_FLG: checkAllDayCreateAnkenPage ? "1" : "0",
+                            TAN_EIG_ID: widget.TAN_EIG_ID,
+                            KBNMSAI_CD: listPullDownCreateAnkenPage[
+                                selectedPullDownIndex]["KBNMSAI_CD"],
+                            KBN_CD: listPullDownCreateAnkenPage[
+                                selectedPullDownIndex]["KBN_CD"],
+                            onSuccess: () {
+                              Navigator.pop(context);
+                              CustomToast.show(context,
+                                  message: "Update Anken Successfull",
+                                  backGround: Colors.green);
+                              widget.onUpdateAnkenSuccessfull.call();
+                            });
                       }
                     },
                     child: const Text(
