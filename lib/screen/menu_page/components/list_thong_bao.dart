@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ListThongBao extends StatefulWidget {
+  final List<dynamic> listValue;
   const ListThongBao({
     Key? key,
+    required this.listValue,
   }) : super(key: key);
 
   @override
@@ -11,10 +13,10 @@ class ListThongBao extends StatefulWidget {
 
 class _ListThongBaoState extends State<ListThongBao> {
   List<String> listThongBao = [
-    '未処理の入庫が 10 件あります。',
-    '未処理の完了報告が 5 件あります。',
-    '未処理の下見が 3 件あります。',
-    '未処理の部材発注申請が 5 件あります。',
+    '未処理の入庫が 件あります。',
+    '未処理の完了報告が 件あります。',
+    '未処理の下見が 件あります。',
+    '未処理の部材発注申請が 件あります。',
   ];
 
   @override
@@ -37,7 +39,11 @@ class _ListThongBaoState extends State<ListThongBao> {
             itemCount: listThongBao.length,
             itemBuilder: (context, index) {
               return Text(
-                listThongBao[index],
+                listThongBao[index].split(" ")[0] +
+                    " " +
+                    widget.listValue[index] +
+                    " " +
+                    listThongBao[index].split(" ")[1],
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
