@@ -14,19 +14,23 @@ class PopupHienThi extends StatefulWidget {
 }
 
 class _PopupHienThiState extends State<PopupHienThi> {
-  String tongNgayNghiCuaNam = "";
-  String soNgayDaNghiTrongNam = "";
-  String soNgayNghiConLaiTrongNam = "";
+  String tongNgayNghiCuaNam = "0";
+  String soNgayDaNghiTrongNam = "0";
+  String soNgayNghiConLaiTrongNam = "0";
 
-  String tongNgayNghiCuaThang = "";
-  String soNgayDaNghiTrongThang = "";
-  String soNgayNghiConLaiTrongThang = "";
-  String soNgayNghiVuotQuaTrongThang = "";
+  String tongNgayNghiCuaThang = "0";
+  String soNgayDaNghiTrongThang = "0";
+  String soNgayNghiConLaiTrongThang = "0";
+  String soNgayNghiVuotQuaTrongThang = "0";
 
   @override
   void initState() {
-    tongNgayNghiCuaNam = widget.body["totalHolidays"].toString();
-    soNgayDaNghiTrongNam = widget.body["totalHolidaysPerYear"].toString();
+    tongNgayNghiCuaNam = widget.body["totalHolidays"] == null
+        ? "0"
+        : widget.body["totalHolidays"].toString();
+    soNgayDaNghiTrongNam = widget.body["totalHolidaysPerYear"] == null
+        ? "0"
+        : widget.body["totalHolidaysPerYear"].toString();
     soNgayNghiConLaiTrongNam =
         ((int.parse(tongNgayNghiCuaNam) - int.parse(soNgayDaNghiTrongNam)))
             .toString();

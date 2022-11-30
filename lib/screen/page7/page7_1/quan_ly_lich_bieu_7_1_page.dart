@@ -5,6 +5,7 @@ import 'package:link_life_one/api/sukejuuru_page_api/show_holiday.dart';
 import 'package:link_life_one/components/login_widget.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page7/page7_2_3_create_item/page_7_2_3.dart';
+import 'package:link_life_one/screen/page7/page7_2_3_edit_show_anken/page_7_2_3_edit_show_anken.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/create/page_7_2_4_create.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/update/page_7_2_4_update.dart';
 import '../../../api/sukejuuru_page_api/get_anken_cua_mot_phong_ban.dart';
@@ -47,9 +48,11 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   List<dynamic> listPhongBan = [];
 
   String selectedNhanVienName = '';
+  String selectedNhanVienTantCD = '';
 
   String value1nguoi = 'グループ';
-  DateTime date = DateTime.parse('2022-11-11');
+  // DateTime date = DateTime.parse('2022-11-11');
+  DateTime date = DateTime.now();
 
   String phongBanName = '';
   String phongBanId = '';
@@ -106,6 +109,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         listNhanVien = listPersonTemp;
         sukejuuruSelectedUser = response["PERSON"][0][0];
         selectedNhanVienName = listNhanVien[0]["TANT_NAME"];
+        selectedNhanVienTantCD = listNhanVien[0]["TANT_CD"];
         print("111");
       });
 
@@ -360,6 +364,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         child: TextButton(
                           onPressed: () {
                             ShowHoliday().showHoliday(
+                              TANT_CD: selectedNhanVienTantCD,
                               date: date,
                               onSuccess: ((body) {
                                 CustomDialog.showCustomDialog(
@@ -621,16 +626,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   }
 
   Widget _moreButton(BuildContext context) {
-    List<String> list = [
-      "営業所を選択 1",
-      "営業所を選択 2",
-      "営業所を選択 3",
-      "営業所を選択 4",
-      "営業所を選択 5",
-      "営業所を選択 6",
-      "営業所を選択 3",
-      "営業所を選択 2"
-    ];
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
@@ -726,8 +721,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         return PopupMenuItem(
           onTap: () {
             setState(() {
-              sukejuuruSelectedUser = sukejuuruAllUser[index];
-              selectedNhanVienName = sukejuuruAllUser[index]["TANT_NAME"];
+              sukejuuruSelectedUser = item;
+              selectedNhanVienName = item["TANT_NAME"];
+              selectedNhanVienTantCD = item["TANT_CD"];
             });
           },
           height: 25,
@@ -1021,6 +1017,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 sukejuuruAllUser[row - 1] == null
                     ? null
                     : sukejuuruAllUser[row - 1]["TANT_CD"],
+                e["TAN_EIG_ID"],
               )
             ]),
           );
@@ -1053,6 +1050,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 e,
                 false,
                 sukejuuruSelectedUser["TANT_CD"],
+                e["TAN_EIG_ID"],
               )
             ]),
           );
@@ -1085,9 +1083,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 col,
                 e,
                 true,
-                sukejuuruPhongBan[row - 1] == null
+                sukejuuruPhongBan == null
                     ? null
-                    : sukejuuruPhongBan[row - 1]["TANT_CD"],
+                    : sukejuuruPhongBan["KOJIGYOSYA_CD"],
+                e["TAN_EIG_ID"],
               )
             ]),
           );
@@ -1252,8 +1251,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     return 'none';
   }
 
-  Widget kojiItemWithType(
-      int row, int col, e, bool isPhongBanData, String? tantCd) {
+  Widget kojiItemWithType(int row, int col, e, bool isPhongBanData,
+      String? tantCd, String? TAN_EIG_ID) {
     return GestureDetector(
       onTap: () {
         if (isPhongBanData) {
@@ -1291,8 +1290,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 CustomDialog.showCustomDialog(
                   context: context,
                   title: '',
-                  body: Page723(
-                    onCreateAnkenSuccessfull: () {
+                  body: Page723EditShowAnken(
+                    KBNMSAI_NAME: e["KBNMSAI_NAME"],
+                    TAN_EIG_ID: TAN_EIG_ID ?? '',
+                    onUpdateAnkenSuccessfull: () {
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
                         date: date,
@@ -1361,11 +1362,13 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 CustomDialog.showCustomDialog(
                   context: context,
                   title: '',
-                  body: Page723(
+                  body: Page723EditShowAnken(
+                    KBNMSAI_NAME: e["KBNMSAI_NAME"],
+                    TAN_EIG_ID: TAN_EIG_ID ?? '',
                     initialDate: date,
                     TANT_CD: tantCd ?? '',
                     isPhongBan: isPhongBanData,
-                    onCreateAnkenSuccessfull: () {
+                    onUpdateAnkenSuccessfull: () {
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
                         date: date,
