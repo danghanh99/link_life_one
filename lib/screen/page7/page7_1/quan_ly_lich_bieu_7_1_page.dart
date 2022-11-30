@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/get_list_sukejuuru.dart';
+import 'package:link_life_one/api/sukejuuru_page_api/show_holiday.dart';
+import 'package:link_life_one/components/login_widget.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page7/page7_2_3_create_item/page_7_2_3.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/create/page_7_2_4_create.dart';
@@ -357,10 +359,18 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         ),
                         child: TextButton(
                           onPressed: () {
-                            CustomDialog.showCustomDialog(
-                              context: context,
-                              title: '',
-                              body: const PopupHienThi(),
+                            ShowHoliday().showHoliday(
+                              date: date,
+                              onSuccess: ((body) {
+                                CustomDialog.showCustomDialog(
+                                  context: context,
+                                  title: '',
+                                  body: PopupHienThi(
+                                    month: date.month.toString(),
+                                    body: body,
+                                  ),
+                                );
+                              }),
                             );
                           },
                           child: const Text(
@@ -1042,7 +1052,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 col,
                 e,
                 false,
-                sukejuuruSelectedUser[row - 1]["TANT_CD"],
+                sukejuuruSelectedUser["TANT_CD"],
               )
             ]),
           );
@@ -1052,7 +1062,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     xxx.add(
       insert(
         dateSelected: listDayOfWeek()[col].split(' ').first,
-        JYOKEN_CD: sukejuuruSelectedUser[row - 1]["TANT_CD"],
+        JYOKEN_CD: sukejuuruSelectedUser["TANT_CD"],
         isPhongBan: false,
       ),
     );
@@ -1586,15 +1596,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   }
 
   Widget logout() {
-    return TextLineDown(
-        text: 'ログアウト',
-        onTap: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const LoginPage(),
-            ),
-          );
-        });
+    return LoginWidget();
   }
 }

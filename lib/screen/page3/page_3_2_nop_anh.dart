@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:link_life_one/components/login_widget.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page3/page_3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 
@@ -61,16 +63,7 @@ class _Page32NopAnhState extends State<Page32NopAnh> {
                 ),
                 Column(
                   children: [
-                    TextLineDown(
-                        text: 'ログアウト',
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginPage(),
-                            ),
-                          );
-                        }),
+                    LoginWidget(),
                   ],
                 ),
               ],

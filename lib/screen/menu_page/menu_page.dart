@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:link_life_one/components/login_widget.dart';
 import 'package:link_life_one/screen/page5/page5_quan_ly/quan_ly_nhap_xuat_page.dart';
 import 'package:link_life_one/screen/page6/page6_quan_ly/page_6_quan_ly_thanh_vien.dart';
 import 'package:link_life_one/screen/page7/page7_1/quan_ly_lich_bieu_7_1_page.dart';
@@ -87,14 +88,7 @@ class _MenuPageState extends State<MenuPage> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: const Text(
-                        'ログアウト',
-                        style: TextStyle(
-                          color: Color(0xFF042C5C),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      child: LoginWidget(),
                     ),
                   ),
                 ],

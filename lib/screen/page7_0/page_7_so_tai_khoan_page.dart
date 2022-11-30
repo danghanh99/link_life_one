@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:link_life_one/components/login_widget.dart';
 import 'package:link_life_one/screen/login_page.dart';
 
 import '../../components/custom_text_field.dart';
@@ -57,16 +58,7 @@ class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
                 ),
                 Column(
                   children: [
-                    TextLineDown(
-                        text: 'ログアウト',
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginPage(),
-                            ),
-                          );
-                        }),
+                    LoginWidget(),
                     const SizedBox(
                       height: 10,
                     ),
