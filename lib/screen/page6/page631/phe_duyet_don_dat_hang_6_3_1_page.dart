@@ -3,6 +3,7 @@ import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
 
 import '../../../components/custom_text_field.dart';
+import '../../../components/login_widget.dart';
 import '../../../components/text_line_down.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/custom_button.dart';
@@ -344,16 +345,7 @@ class _PheDuyetDonDatHang631PageState extends State<PheDuyetDonDatHang631Page> {
         ),
         Column(
           children: [
-            TextLineDown(
-                text: 'ログアウト',
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginPage(),
-                    ),
-                  );
-                }),
+            LoginWidget(),
             const SizedBox(
               height: 10,
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:link_life_one/components/login_widget.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
@@ -74,16 +75,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                 ),
                 Column(
                   children: [
-                    TextLineDown(
-                        text: 'ログアウト',
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LoginPage(),
-                            ),
-                          );
-                        }),
+                    LoginWidget(),
                     const SizedBox(
                       height: 10,
                     ),

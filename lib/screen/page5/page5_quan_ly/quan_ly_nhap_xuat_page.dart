@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/page5/page5_quan_ly/components/menu_page5.dart';
 
+import '../../../components/login_widget.dart';
 import '../../../components/text_line_down.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/custom_button.dart';
@@ -74,16 +75,7 @@ class _QuanLyNhapXuatPageState extends State<QuanLyNhapXuatPage> {
         ),
         Column(
           children: [
-            TextLineDown(
-                text: 'ログアウト',
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginPage(),
-                    ),
-                  );
-                }),
+            LoginWidget(),
             const SizedBox(
               height: 10,
             ),

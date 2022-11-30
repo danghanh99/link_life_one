@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page5/page_5_2_1_danh_sach_ton_kho.dart';
+import '../../components/login_widget.dart';
 import '../../components/text_line_down.dart';
 import '../../shared/date_formatter copy.dart';
 import '../../shared/assets.dart';
@@ -429,16 +430,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
         ),
         Column(
           children: [
-            TextLineDown(
-                text: 'ログアウト',
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoginPage(),
-                    ),
-                  );
-                }),
+            LoginWidget(),
             const SizedBox(
               height: 20,
             ),

@@ -4,6 +4,7 @@ import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/menu_page/menu_page.dart';
 import 'package:link_life_one/screen/page3/page_3_1_yeu_cau_bieu_mau_page.dart';
 
+import '../../../../components/login_widget.dart';
 import '../../../../components/text_line_down.dart';
 import '../../../../shared/assets.dart';
 
@@ -54,16 +55,7 @@ class _LogoutWidgetState extends State<LogoutWidget> {
         ),
         Column(
           children: [
-            TextLineDown(
-                text: 'ログアウト',
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoginPage(),
-                    ),
-                  );
-                }),
+            LoginWidget(),
             const SizedBox(
               height: 10,
             ),
