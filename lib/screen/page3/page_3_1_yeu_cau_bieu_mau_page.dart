@@ -128,7 +128,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Container(
                   width: 1000.w,
-                  height: 800.w,
+                  height: 750.w,
                   child: SfPdfViewer.network(
                     'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
                     key: _pdfViewerKey,
