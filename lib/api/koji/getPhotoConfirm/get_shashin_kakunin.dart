@@ -15,7 +15,7 @@ class GetShashinKakunin {
   }) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/requestGetPhotoConfirm.php?JYUCYU_ID=0301416579&SINGLE_SUMMARIZE=02"),
+          "https://koji-app.starboardasiavn.com/requestGetPhotoConfirm.php?JYUCYU_ID=${JYUCYU_ID}&SINGLE_SUMMARIZE=${SINGLE_SUMMARIZE}"),
     );
 
     if (response.statusCode == 200) {
