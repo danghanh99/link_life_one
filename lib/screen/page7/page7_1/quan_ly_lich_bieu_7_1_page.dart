@@ -209,11 +209,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      // CustomDialog.showCustomDialog(
-                      //   context: context,
-                      //   title: '',
-                      //   body: const PopupHienThi(),
-                      // );
+                   
                     },
                     child: const Text(
                       '表示',

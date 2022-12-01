@@ -382,6 +382,10 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                           MaterialPageRoute(
                             builder: (context) => KojiHoukoku(
                               initialDate: widget.initialDate,
+                              SINGLE_SUMMARIZE: SINGLE_SUMMARIZE,
+                              JYUCYU_ID: widget.JYUCYU_ID,
+                              KOJI_ST: widget.KOJI_ST,
+                              SYUYAKU_JYUCYU_ID: widget.JYUCYU_ID,
                             ),
                           ),
                         );
