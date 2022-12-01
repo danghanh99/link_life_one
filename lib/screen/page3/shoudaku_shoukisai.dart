@@ -1,13 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:link_life_one/components/text_line_down.dart';
-import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/screen/page3/shoudakusho.dart';
 import 'package:link_life_one/shared/custom_button.dart';
-
 import '../../shared/assets.dart';
-import 'houjin_kanryousho.dart';
 
 class ShoudakuShoukisai extends StatefulWidget {
   final DateTime? initialDate;
@@ -20,7 +16,6 @@ class ShoudakuShoukisai extends StatefulWidget {
 class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -466,7 +461,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
     if (col == 1 || col == 2) {
       return TextFormField(
         inputFormatters: [
-          new LengthLimitingTextInputFormatter(4),
+          LengthLimitingTextInputFormatter(4),
         ],
         onChanged: (value) {
           // onChange.call(value);
@@ -501,24 +496,24 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         GestureDetector(
           onTap: () {
             // go to top
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => ShoudakuSho(
-            //       initialDate: widget.initialDate,
-            //     ),
-            //   ),
-            // );
-
-            // go to bottom
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => HoujinKanryousho(
+                builder: (context) => ShoudakuSho(
                   initialDate: widget.initialDate,
                 ),
               ),
             );
+
+            // go to bottom
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => HoujinKanryousho(
+            //       initialDate: widget.initialDate,
+            //     ),
+            //   ),
+            // );
           },
           child: Container(
             decoration: BoxDecoration(

@@ -1,10 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:developer';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:link_life_one/components/text_line_down.dart';
-import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/shared/custom_button.dart';
-
-import '../../shared/assets.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:signature/signature.dart';
 
 class ShoudakuSho extends StatefulWidget {
   final DateTime? initialDate;
@@ -15,6 +16,16 @@ class ShoudakuSho extends StatefulWidget {
 }
 
 class _ShoudakuShoState extends State<ShoudakuSho> {
+  final SignatureController _controller = SignatureController(
+    penStrokeWidth: 4,
+    penColor: Colors.blue,
+    exportBackgroundColor: Colors.blue,
+    exportPenColor: Colors.black,
+    onDrawStart: () => log('onDrawStart called!'),
+    onDrawEnd: () => log('onDrawEnd called!'),
+  );
+
+  File? file;
   late bool checkedValue1;
   late bool checkedValue2;
   late bool checkedValue3;
@@ -34,7 +45,68 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
     checkedValue6 = false;
     checkedValue7 = false;
     checkedValue8 = false;
+    file = null;
+    _controller.addListener(() => log('Value changed'));
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  // Future<void> exportSVG(BuildContext context) async {
+  //   if (_controller.isEmpty) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(
+  //         key: Key('snackbarSVG'),
+  //         content: Text('No content'),
+  //       ),
+  //     );
+  //     return;
+  //   }
+
+  //   final SvgPicture data = _controller.toSVG()!;
+
+  //   if (!mounted) return;
+
+  //   await push(
+  //     context,
+  //     Scaffold(
+  //       appBar: AppBar(
+  //         title: const Text('SVG Image'),
+  //       ),
+  //       body: Center(
+  //         child: Container(
+  //           color: Colors.grey[300],
+  //           child: data,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  Future<Uint8List?> exportImage(BuildContext context) async {
+    if (_controller.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          key: Key('snackbarPNG'),
+          content: Text('No content'),
+        ),
+      );
+      return null;
+    }
+
+    final Uint8List? data =
+        await _controller.toPngBytes(height: 1000, width: 1000);
+    if (data == null) {
+      return null;
+    }
+
+    if (!mounted) return null;
+
+    return data;
   }
 
   @override
@@ -327,20 +399,35 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                               children: [
                                 Container(
                                   width: size.width - 100,
-                                  height: 150,
+                                  height: 210,
                                   decoration: BoxDecoration(
                                       border: Border.all(color: Colors.black)),
-                                  child: const Padding(
-                                    padding: EdgeInsets.only(
-                                      top: 30,
-                                      left: 40,
-                                    ),
-                                    child: Text(
-                                      'サイン記載スペース',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700),
-                                    ),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 30,
+                                          left: 40,
+                                        ),
+                                        child: Container(
+                                          alignment: Alignment.centerLeft,
+                                          child: const Text(
+                                            'サイン記載スペース',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                        ),
+                                      ),
+                                      SingleChildScrollView(
+                                        child: Signature(
+                                          key: const Key('signature'),
+                                          controller: _controller,
+                                          height: 150,
+                                          backgroundColor: Colors.white,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -402,13 +489,22 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
     );
   }
 
+  Future<File> exportFile() async {
+    var bytes = await exportImage(context);
+    Uint8List imageInUnit8List = bytes!;
+    final tempDir = await getTemporaryDirectory();
+    File file = await File('${tempDir.path}/image.png').create();
+    file.writeAsBytesSync(imageInUnit8List);
+    return file;
+  }
+
   Widget sendButton2() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
           onTap: () {
-            // Navigator.pop(context);
+            setState(() => _controller.clear());
           },
           child: Container(
             decoration: BoxDecoration(
@@ -428,8 +524,18 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
           width: 50,
         ),
         GestureDetector(
-          onTap: () {
-            // Navigator.pop(context);
+          onTap: () async {
+            // Export to File
+            final fileExport = await exportFile();
+
+            // Export to Image
+            var bytes = await exportImage(context);
+            var y = Image.memory(bytes!);
+            setState(
+              () {
+                file = fileExport;
+              },
+            );
           },
           child: Container(
             decoration: BoxDecoration(
