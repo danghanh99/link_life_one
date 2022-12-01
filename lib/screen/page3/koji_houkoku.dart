@@ -2,20 +2,117 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
+import 'package:link_life_one/screen/page3/shashin_teishuutsu_houkoku_page.dart';
 import 'package:link_life_one/screen/page3/shoudaku_shoukisai.dart';
+import 'package:link_life_one/screen/page7/component/dialog.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 
+import '../../api/koji/requestConstructionReport/get_koji_houkoku.dart';
 import '../../shared/assets.dart';
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:link_life_one/api/koji/postPhotoSubmissionRegistration/upload_photo_api.dart';
+import 'package:link_life_one/components/text_line_down.dart';
+import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/screen/page3/page_3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
+import 'package:link_life_one/shared/custom_button.dart';
+
+import '../../api/koji/getPhotoConfirm/get_shashin_kakunin.dart';
 
 class KojiHoukoku extends StatefulWidget {
   final DateTime? initialDate;
-  const KojiHoukoku({super.key, this.initialDate});
+  final String JYUCYU_ID;
+  final String SINGLE_SUMMARIZE;
+  final String KOJI_ST;
+  final String SYUYAKU_JYUCYU_ID;
+  const KojiHoukoku({
+    super.key,
+    this.initialDate,
+    required this.JYUCYU_ID,
+    required this.SINGLE_SUMMARIZE,
+    required this.KOJI_ST,
+    required this.SYUYAKU_JYUCYU_ID,
+  });
 
   @override
   State<KojiHoukoku> createState() => _KojiHoukokuState();
 }
 
 class _KojiHoukokuState extends State<KojiHoukoku> {
+  List<dynamic> listPullDown = [];
+  List<dynamic> listKojiHoukoku = [];
+  List<dynamic> listStateIndexDropdown = [];
+  int currentIndexPullDown = 0;
+  String currentPullDownValue = '';
+  XFile? imageFile;
+  @override
+  void initState() {
+    super.initState();
+    callGetKojiHoukoku();
+  }
+
+  Future<dynamic> callGetKojiHoukoku() async {
+    final dynamic result = await GetKojiHoukoku().getKojiHoukoku(
+        JYUCYU_ID: widget.JYUCYU_ID,
+        SINGLE_SUMMARIZE: widget.SINGLE_SUMMARIZE,
+        KOJI_ST: widget.KOJI_ST,
+        SYUYAKU_JYUCYU_ID:
+            widget.SINGLE_SUMMARIZE == "02" ? widget.SYUYAKU_JYUCYU_ID : null,
+        onSuccess: (res) {
+          print(res);
+
+          if (res["PULLDOWN"] != null) {
+            setState(() {
+              listPullDown = res["PULLDOWN"];
+              currentPullDownValue = listPullDown[0]["KBNMSAI_NAME"];
+              currentIndexPullDown = 0;
+            });
+          }
+          if (res["constructionNotReport"] != null) {
+            if (res["constructionNotReport"]["SINGLE"] != null) {
+              setState(() {
+                listKojiHoukoku = res["constructionNotReport"]["SINGLE"];
+              });
+            }
+            if (res["constructionNotReport"]["SUMMARIZE"] != null) {
+              setState(() {
+                listKojiHoukoku = res["constructionNotReport"]["SUMMARIZE"];
+              });
+            }
+            if (listKojiHoukoku.isNotEmpty) {
+              setState(() {
+                List<dynamic> tmp = List<dynamic>.filled(
+                    listKojiHoukoku.length, currentIndexPullDown);
+
+                listStateIndexDropdown = tmp;
+              });
+            }
+          } else {
+            setState(() {
+              listKojiHoukoku = [
+                {
+                  "MAKER_CD": "",
+                  "HINBAN": "",
+                }
+              ];
+              listStateIndexDropdown = [0];
+            });
+          }
+        },
+        onFailed: () {});
+  }
+
+  //  "MAKER_CD": "★弊社★オ",
+  // "HINBAN": "KOJ-3318"
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -76,21 +173,6 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 ),
                 const SizedBox(
                   height: 40,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    leftSide(),
-                    rightSide(),
-                  ],
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Divider(
-                    color: Colors.black,
-                    thickness: 2,
-                  ),
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,114 +284,102 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
   }
 
   Widget leftSide() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          '【施工商品情報】',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+    return Container(
+      height: 400.h,
+      width: 300.w,
+      child: ListView.separated(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: listKojiHoukoku.length,
+        itemBuilder: (context, index) {
+          return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'メーカー: ',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-              ),
-              SizedBox(
-                width: 100,
-                height: 50,
-                child: textUnderline(),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                '品番: ',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-              ),
-              SizedBox(
-                width: 100,
-                height: 50,
-                child: textUnderline(),
-              ),
-            ],
-          ),
-        ),
-        const Text(
-          '【施工商品情報】',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'メーカー: ',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-              ),
-              SizedBox(
-                width: 100,
-                height: 50,
-                child: textUnderline(),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                '品番: ',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-              ),
-              SizedBox(
-                width: 100,
-                height: 50,
-                child: textUnderline(),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Row(
-            children: [
-              const Text(
-                '建築形態',
+                '【施工商品情報】',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
               const SizedBox(
-                width: 10,
+                height: 10,
               ),
-              _dropDownButton(context, "戶建て"),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'メーカー: ',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(
+                      width: 100,
+                      height: 50,
+                      child: textUnderline(
+                        initial: listKojiHoukoku[index]["MAKER_CD"],
+                        onChange: (value) {
+                          setState(() {
+                            listKojiHoukoku[index]["MAKER_CD"] = value;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '品番: ',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(
+                      width: 100,
+                      height: 50,
+                      child: textUnderline(
+                        initial: listKojiHoukoku[index]["HINBAN"],
+                        onChange: (value) {
+                          setState(() {
+                            listKojiHoukoku[index]["HINBAN"] = value;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                  children: [
+                    const Text(
+                      '建築形態',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    _dropDownButton(context, index),
+                  ],
+                ),
+              ),
             ],
-          ),
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) => const SizedBox(
+          height: 5,
         ),
-      ],
+      ),
     );
   }
 
@@ -319,71 +389,84 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
       children: [
         GestureDetector(
           onTap: () {
-            showDialog(
+            CustomDialog.showCustomDialog(
               context: context,
-              builder: (context) {
-                return Container(
-                  width: double.infinity,
-                  child: CupertinoAlertDialog(
-                    title: const Text(
-                      "この工事を設置不可で登録を行います。\n(元に戻せません)",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    content: const Padding(
-                      padding: EdgeInsets.only(top: 15),
-                      child: Text(
-                        "操作は必ず本部へ電話報告後に行ってください。\nまたサイボウズの設置不可アプリ登録は必ず行ってください。",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                          onPressed: () {
-                            Navigator.pop(context); //close Dialog
-                          },
-                          child: const Text(
-                            '戻る',
-                            style: TextStyle(
-                              color: Color(0xFFEB5757),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          )),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context); //close Dialog
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ShashinTeishuutsuGamenPage(
-                                initialDate: widget.initialDate,
-                                JYUCYU_ID: '',
-                              ),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          'はい',
-                          style: TextStyle(
-                            color: Color(0xFF007AFF),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              },
+              title: "",
+              body: ShashinTeishuutsuHoukokuPage(
+                initialDate: widget.initialDate,
+                JYUCYU_ID: '',
+                onSelectedImage: (file) {
+                  setState(() {
+                    imageFile = file;
+                  });
+                },
+              ),
             );
+            // showDialog(
+            //   context: context,
+            //   builder: (context) {
+            //     return Container(
+            //       width: double.infinity,
+            //       child: CupertinoAlertDialog(
+            //         title: const Text(
+            //           "この工事を設置不可で登録を行います。\n(元に戻せません)",
+            //           style: TextStyle(
+            //             color: Colors.black,
+            //             fontSize: 16,
+            //             fontWeight: FontWeight.w600,
+            //           ),
+            //         ),
+            //         content: const Padding(
+            //           padding: EdgeInsets.only(top: 15),
+            //           child: Text(
+            //             "操作は必ず本部へ電話報告後に行ってください。\nまたサイボウズの設置不可アプリ登録は必ず行ってください。",
+            //             style: TextStyle(
+            //               color: Colors.black,
+            //               fontSize: 16,
+            //               fontWeight: FontWeight.w600,
+            //             ),
+            //           ),
+            //         ),
+            //         actions: <Widget>[
+            //           TextButton(
+            //               onPressed: () {
+            //                 Navigator.pop(context); //close Dialog
+            //               },
+            //               child: const Text(
+            //                 '戻る',
+            //                 style: TextStyle(
+            //                   color: Color(0xFFEB5757),
+            //                   fontSize: 16,
+            //                   fontWeight: FontWeight.w600,
+            //                 ),
+            //               )),
+            //           TextButton(
+            //             onPressed: () {
+            //               Navigator.pop(context); //close Dialog
+            //               Navigator.push(
+            //                 context,
+            //                 MaterialPageRoute(
+            //                   builder: (context) => ShashinTeishuutsuGamenPage(
+            //                     initialDate: widget.initialDate,
+            //                     JYUCYU_ID: '',
+            //                   ),
+            //                 ),
+            //               );
+            //             },
+            //             child: const Text(
+            //               'はい',
+            //               style: TextStyle(
+            //                 color: Color(0xFF007AFF),
+            //                 fontSize: 16,
+            //                 fontWeight: FontWeight.w600,
+            //               ),
+            //             ),
+            //           )
+            //         ],
+            //       ),
+            //     );
+            //   },
+            // );
           },
           child: Container(
             decoration: BoxDecoration(
@@ -428,11 +511,18 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
     );
   }
 
-  Widget textUnderline() {
-    return const TextField(
+  Widget textUnderline({
+    required Function(String) onChange,
+    String? initial,
+  }) {
+    return TextFormField(
+      onChanged: (value) {
+        onChange.call(value);
+      },
+      initialValue: initial,
       minLines: 1,
       maxLines: 1,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         contentPadding: EdgeInsets.only(top: 5, bottom: 5),
         isDense: true,
         enabledBorder: UnderlineInputBorder(
@@ -446,7 +536,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
     );
   }
 
-  Widget _dropDownButton(BuildContext context, String value) {
+  Widget _dropDownButton(BuildContext context, int indexInsideListHoukoku) {
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
@@ -456,40 +546,40 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
       },
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      itemBuilder: (context) => listPullDown.map((item) {
+        int index = listPullDown.indexOf(item);
+        return PopupMenuItem(
+          onTap: () {
+            setState(() {
+              // currentPullDownValue = item["KBNMSAI_NAME"];
+              // currentIndexPullDown = index;
+              listStateIndexDropdown[indexInsideListHoukoku] = index;
+            });
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
           value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Text(
+                      item["KBNMSAI_NAME"],
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "戶建て",
-              ),
+              const Divider(),
             ],
           ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "戶建て",
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      }).toList(),
       offset: const Offset(5, 32),
       child: Container(
         width: 130,
@@ -501,7 +591,11 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                value,
+                listPullDown.isNotEmpty && listStateIndexDropdown.isNotEmpty
+                    ? listPullDown[
+                            listStateIndexDropdown[indexInsideListHoukoku]]
+                        ["KBNMSAI_NAME"]
+                    : '',
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 18,

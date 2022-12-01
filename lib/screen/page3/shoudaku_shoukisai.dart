@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/screen/page3/shoudakusho.dart';
@@ -456,12 +457,36 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         alignment: Alignment.center,
         width: colwidth[col],
         height: 30,
-        child: contentTable(col, row),
+        child: contentTable(col: col, row: row),
       );
     });
   }
 
-  Widget contentTable(int col, int row) {
+  Widget contentTable({required int col, required int row, String? initial}) {
+    if (col == 1 || col == 2) {
+      return TextFormField(
+        inputFormatters: [
+          new LengthLimitingTextInputFormatter(4),
+        ],
+        onChanged: (value) {
+          // onChange.call(value);
+        },
+        initialValue: initial,
+        minLines: 1,
+        maxLines: 1,
+        decoration: const InputDecoration(
+          contentPadding: EdgeInsets.only(top: 5, bottom: 5),
+          isDense: true,
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black),
+          ),
+        ),
+        cursorColor: Colors.black,
+      );
+    }
     return const Text(
       '',
       style: TextStyle(color: Colors.black),
