@@ -1,11 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:link_life_one/api/koji/postPhotoSubmissionRegistration/upload_photo_api.dart';
+import 'package:link_life_one/api/KojiPageApi/create_riyuu.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/screen/page3/page_3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
@@ -16,13 +13,14 @@ class ShashinTeishuutsuGamenPage2 extends StatefulWidget {
   final String JYUCYU_ID;
   final String? cancelRiyuu;
   final DateTime? mitmoriYmd;
-  const ShashinTeishuutsuGamenPage2({
-    super.key,
-    this.initialDate,
-    this.cancelRiyuu,
-    required this.JYUCYU_ID,
-    this.mitmoriYmd,
-  });
+  final int index;
+  const ShashinTeishuutsuGamenPage2(
+      {super.key,
+      this.initialDate,
+      this.cancelRiyuu,
+      required this.JYUCYU_ID,
+      this.mitmoriYmd,
+      required this.index});
 
   @override
   State<ShashinTeishuutsuGamenPage2> createState() =>
@@ -43,9 +41,7 @@ class _ShashinTeishuutsuGamenPage2State
           imageFile = selectedImage;
         });
       }
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 
   @override
@@ -86,9 +82,7 @@ class _ShashinTeishuutsuGamenPage2State
                       width: 200,
                       child: CustomButton(
                         color: Colors.white70,
-                        onClick: () {
-                          print("object");
-                        },
+                        onClick: () {},
                         name: '写真提出画面',
                         textStyle: const TextStyle(
                           color: Color(0xFF042C5C),
@@ -109,7 +103,8 @@ class _ShashinTeishuutsuGamenPage2State
                       width: size.width - 50,
                       height: size.height * 2 / 3,
                       decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black)),
+                        border: Border.all(color: Colors.black),
+                      ),
                     )
                   : Image.file(
                       File(imageFile!.path),
@@ -165,24 +160,21 @@ class _ShashinTeishuutsuGamenPage2State
                       },
                       child: GestureDetector(
                         onTap: () async {
-                          final box = await Hive.openBox<String>('user');
-                          String loginID = box.values.last;
-
                           if (imageFile == null) {
+                            // ignore: use_build_context_synchronously
                             CustomToast.show(
                               context,
                               message: "Please select photo",
                               backGround: Colors.orange,
                             );
                           } else {
-                            UploadPhotoApi().uploadPhotoApi(
+                            CreateRiyuu().createRiyuu(
                                 JYUCYU_ID: widget.JYUCYU_ID,
-                                LOGIN_ID: loginID,
                                 FILE_PATH: imageFile!.path,
-                                onFailed: () {
+                                onFailed: (error) {
                                   CustomToast.show(
                                     context,
-                                    message: "Upload photo failed ",
+                                    message: error ?? "Upload photo failed ",
                                     backGround: Colors.red,
                                   );
                                 },
@@ -192,7 +184,16 @@ class _ShashinTeishuutsuGamenPage2State
                                     message: "Upload photo successfull ",
                                     backGround: Colors.green,
                                   );
-                                });
+                                  if (widget.index == 1 || widget.index == 4) {
+                                    Navigator.pop(context);
+                                  } else {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  }
+                                },
+                                SHITAMI_MENU: widget.index.toString(),
+                                CANCEL_RIYU: widget.cancelRiyuu,
+                                MTMORI_YMD: widget.mitmoriYmd.toString());
                           }
                         },
                         child: Container(

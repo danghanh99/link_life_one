@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/KojiPageApi/get_riyuu.dart';
-import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page_2.dart';
 
 import '../../components/custom_text_field.dart';
@@ -204,11 +203,13 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
                           MaterialPageRoute(
                             builder: (context) => widget.index == 2
                                 ? ShashinTeishuutsuGamenPage2(
+                                    index: widget.index,
                                     JYUCYU_ID: widget.JYUCYU_ID,
                                     mitmoriYmd: date,
                                     cancelRiyuu: controller.text,
                                   )
                                 : ShashinTeishuutsuGamenPage2(
+                                    index: widget.index,
                                     JYUCYU_ID: widget.JYUCYU_ID,
                                     cancelRiyuu: controller.text,
                                   ),

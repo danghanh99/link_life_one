@@ -7,6 +7,7 @@ import 'package:link_life_one/models/koji.dart';
 import 'package:link_life_one/screen/page3/page_3/components/logout_widget.dart';
 import 'package:link_life_one/screen/page3/page_3_1_yeu_cau_bieu_mau_page.dart';
 import '../../../api/KojiPageApi/get_list_koji_api.dart';
+import '../../../api/KojiPageApi/request_post_count.dart';
 import '../../../shared/assets.dart';
 import 'components/title_widget.dart';
 
@@ -252,25 +253,36 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                                                 width: 90,
                                                 child: TextButton(
                                                   onPressed: () {
-                                                    Navigator.pop(
-                                                        context); //close Dialog
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            Page31YeuCauBieuMauPage(
-                                                          isShitami: isShitami,
-                                                          initialDate: date,
-                                                          koji: item,
-                                                          isSendAList: true,
-                                                          single_summarize:
-                                                              '02',
-                                                          JYUCYU_ID:
-                                                              item.jyucyuId,
-                                                          KOJI_ST: item.kojiSt,
-                                                        ),
-                                                      ),
-                                                    );
+                                                    RequestPostCount()
+                                                        .requestPostCount(
+                                                            koji: item,
+                                                            date: date,
+                                                            onSuccess: () {
+                                                              Navigator.pop(
+                                                                  context); //close Dialog
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          Page31YeuCauBieuMauPage(
+                                                                    isShitami:
+                                                                        isShitami,
+                                                                    initialDate:
+                                                                        date,
+                                                                    koji: item,
+                                                                    isSendAList:
+                                                                        true,
+                                                                    single_summarize:
+                                                                        '02',
+                                                                    JYUCYU_ID: item
+                                                                        .jyucyuId,
+                                                                    KOJI_ST: item
+                                                                        .kojiSt,
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            });
                                                   },
                                                   child: const Text(
                                                     'はい',

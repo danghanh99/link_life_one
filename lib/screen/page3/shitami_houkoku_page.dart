@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/screen/page3/riyuu_ko_nyuu_gamen.dart';
-import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
+import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page_2.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 import '../page7/component/dialog.dart';
 
@@ -88,8 +88,12 @@ class _ShitamiHoukokuState extends State<ShitamiHoukoku> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          ShashinTeishuutsuGamenPage(JYUCYU_ID: ''),
+                      builder: (context) => ShashinTeishuutsuGamenPage2(
+                        index: 1,
+                        JYUCYU_ID: widget.JYUCYU_ID,
+                        mitmoriYmd: null,
+                        cancelRiyuu: '',
+                      ),
                     ),
                   );
                 },
@@ -212,8 +216,11 @@ class _ShitamiHoukokuState extends State<ShitamiHoukoku> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        ShashinTeishuutsuGamenPage(
-                                      JYUCYU_ID: '',
+                                        ShashinTeishuutsuGamenPage2(
+                                      index: 4,
+                                      JYUCYU_ID: widget.JYUCYU_ID,
+                                      mitmoriYmd: null,
+                                      cancelRiyuu: '',
                                     ),
                                   ),
                                 );

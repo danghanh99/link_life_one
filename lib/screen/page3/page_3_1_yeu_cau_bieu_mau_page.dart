@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/api/KojiPageApi/get_list_pdf.dart';
 import 'package:link_life_one/components/login_widget.dart';
 import 'package:link_life_one/components/toast.dart';
-import 'package:link_life_one/screen/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:link_life_one/screen/page3/shashin_kakinin_page.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
@@ -15,7 +14,6 @@ import '../../models/koji.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../menu_page/menu_page.dart';
-import '../page7/component/dialog.dart';
 import 'koji_houkoku.dart';
 
 class Page31YeuCauBieuMauPage extends StatefulWidget {
@@ -200,14 +198,10 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                                       ),
                                     ],
                                   ),
-                                  // const SizedBox(
-                                  //   height: 10,
-                                  // ),
                                   Container(
                                     width: size.width.w * 4 / 5,
                                     height: size.height.h * 4 / 5,
-                                    child: SfPdfViewer.network(
-                                        "https://koji-app.starboardasiavn.com/${item['FILEPATH']}",
+                                    child: SfPdfViewer.network(item['FILEPATH'],
                                         key: _pdfViewerKey),
                                   )
                                 ],

@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/get_list_sukejuuru.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/show_holiday.dart';
 import 'package:link_life_one/components/login_widget.dart';
-import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page7/page7_2_3_create_item/page_7_2_3.dart';
 import 'package:link_life_one/screen/page7/page7_2_3_edit_show_anken/page_7_2_3_edit_show_anken.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/create/page_7_2_4_create.dart';
@@ -664,7 +663,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     ),
                     Text(
                       item["KOJIGYOSYA_NAME"].toString(),
-                      style: TextStyle(color: Color(0xFF999999)),
+                      style: const TextStyle(color: Color(0xFF999999)),
                     ),
                   ],
                 ),
@@ -741,7 +740,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     ),
                     Text(
                       item["TANT_NAME"].toString(),
-                      style: TextStyle(color: Color(0xFF999999)),
+                      style: const TextStyle(color: Color(0xFF999999)),
                     ),
                   ],
                 ),
@@ -1152,14 +1151,16 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     switch (text) {
       case '!! 重要 !!':
         return Colors.red;
+      case '重要':
+        return Colors.red;
       case 'ネット工事':
-        return Color.fromARGB(255, 46, 196, 51);
+        return const Color.fromARGB(255, 46, 196, 51);
       case '工事打診':
-        return Color.fromARGB(255, 84, 218, 22);
+        return const Color.fromARGB(255, 84, 218, 22);
       case '営業下見':
         return Colors.purple;
       case '営業工事':
-        return Color.fromARGB(255, 176, 39, 73);
+        return const Color.fromARGB(255, 176, 39, 73);
       case '日予実':
         return Colors.blue;
       case '計予実':
@@ -1167,9 +1168,11 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       case 'ネット下見':
         return Colors.red;
       case '下見打診':
-        return Color.fromARGB(255, 232, 105, 147);
+        return const Color.fromARGB(255, 232, 105, 147);
       case 'メモ':
-        return Color(0xFFF6B704);
+        return const Color(0xFFF6B704);
+      case '追加希望':
+        return Colors.orange;
       default:
         return Colors.grey;
     }
@@ -1178,29 +1181,33 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   Color getBackgroundColorByText({required String text}) {
     switch (text) {
       case '!! 重要 !!':
-        return Color.fromARGB(255, 229, 165, 160);
+        return const Color.fromARGB(255, 229, 165, 160);
+      case '重要':
+        return const Color.fromARGB(255, 229, 165, 160);
       case 'ネット工事':
-        return Color.fromARGB(255, 174, 224, 177);
+        return const Color.fromARGB(255, 174, 224, 177);
       case '工事打診':
-        return Color.fromARGB(255, 173, 228, 144);
+        return const Color.fromARGB(255, 173, 228, 144);
       case '営業下見':
-        return Color.fromARGB(255, 174, 133, 181);
+        return const Color.fromARGB(255, 174, 133, 181);
       case '営業工事':
-        return Color.fromARGB(255, 182, 140, 150);
+        return const Color.fromARGB(255, 182, 140, 150);
       case '日予実':
-        return Color.fromARGB(255, 145, 184, 215);
+        return const Color.fromARGB(255, 145, 184, 215);
       case '計予実':
-        return Color.fromARGB(255, 233, 225, 153);
+        return const Color.fromARGB(255, 233, 225, 153);
       case 'ネット下見':
-        return Color.fromARGB(255, 229, 165, 160);
+        return const Color.fromARGB(255, 229, 165, 160);
       case '下見打診':
-        return Color.fromARGB(255, 224, 192, 203);
+        return const Color.fromARGB(255, 224, 192, 203);
       case 'メモ':
-        return Color.fromARGB(255, 239, 206, 115);
+        return const Color.fromARGB(255, 239, 206, 115);
+      case '追加希望':
+        return const Color(0xffF6B704);
       case '月次':
-        return Color(0xFF2F8FAD);
+        return const Color(0xFF2F8FAD);
       default:
-        return Color.fromARGB(255, 227, 223, 223);
+        return const Color.fromARGB(255, 227, 223, 223);
     }
   }
 
@@ -1598,6 +1605,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   }
 
   Widget logout() {
-    return LoginWidget();
+    return const LoginWidget();
   }
 }
