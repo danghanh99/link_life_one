@@ -52,7 +52,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   String value1nguoi = 'グループ';
   // DateTime date = DateTime.parse('2022-11-11');
   DateTime date = DateTime.now();
-
+  ScrollController scrollControllerItem = ScrollController();
+  ScrollController scrollController = ScrollController();
+  ScrollController scrollController2 = ScrollController();
   String phongBanName = '';
   String phongBanId = '';
 
@@ -63,6 +65,20 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     callGetListPhongBan(() {
       geAnkenCuaMotPhongBanFuture = callGetAnkenCuaMotPhongBan(
           kojiGyoSyaCd: listPhongBan[0]["KOJIGYOSYA_CD"], date: date);
+    });
+
+    scrollController2.addListener(() {
+      // if (scrollController2. .position.atEdge) {
+      //   bool isTop = _controller.position.pixels == 0;
+      //   if (isTop) {
+      //     print('At the top');
+      //   } else {
+      //     print('At the bottom');
+      //   }
+      // }
+
+      print('scrolling.... ${scrollController2.position.pixels}');
+      scrollController.jumpTo(scrollController2.position.pixels);
     });
 
     super.initState();
@@ -130,8 +146,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
   @override
   Widget build(BuildContext context) {
-    ScrollController scrollController = ScrollController();
-    ScrollController scrollController2 = ScrollController();
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       body: Padding(
@@ -460,35 +474,60 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     Expanded(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
-                        child: NotificationListener<ScrollNotification>(
-                          onNotification: (ScrollNotification scrollInfo) {
-                            print('scrolling.... ${scrollInfo.metrics.pixels}');
-                            scrollController.jumpTo(scrollInfo.metrics.pixels);
-                            return false;
-                          },
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: FutureBuilder<dynamic>(
-                                future: geAnkenCuaMotPhongBanFuture,
-                                builder: (context, response) {
-                                  return response.data == null
-                                      ? Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children:
-                                              _buildRows(1, scrollController2),
-                                        )
-                                      : Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: _buildRows(
-                                              value1nguoi == '個人'
-                                                  ? 3
-                                                  : sukejuuruAllUser.length + 2,
-                                              scrollController2),
-                                        );
-                                }),
-                          ),
+                        // child: NotificationListener<ScrollNotification>(
+                        //   onNotification: (ScrollNotification scrollInfo) {
+                        //     scrollInfo.context;
+                        //     print('scrolling.... ${scrollInfo.metrics.pixels}');
+                        //     scrollController.jumpTo(scrollInfo.metrics.pixels);
+                        //     return false;
+                        //   },
+                        //   child: SingleChildScrollView(
+                        //     controller: scrollController2,
+                        //     scrollDirection: Axis.horizontal,
+                        //     child: FutureBuilder<dynamic>(
+                        //         future: geAnkenCuaMotPhongBanFuture,
+                        //         builder: (context, response) {
+                        //           return response.data == null
+                        //               ? Column(
+                        //                   crossAxisAlignment:
+                        //                       CrossAxisAlignment.start,
+                        //                   children:
+                        //                       _buildRows(1, scrollController2),
+                        //                 )
+                        //               : Column(
+                        //                   crossAxisAlignment:
+                        //                       CrossAxisAlignment.start,
+                        //                   children: _buildRows(
+                        //                       value1nguoi == '個人'
+                        //                           ? 3
+                        //                           : sukejuuruAllUser.length + 2,
+                        //                       scrollController2),
+                        //                 );
+                        //         }),
+                        //   ),
+                        child: SingleChildScrollView(
+                          controller: scrollController2,
+                          scrollDirection: Axis.horizontal,
+                          child: FutureBuilder<dynamic>(
+                              future: geAnkenCuaMotPhongBanFuture,
+                              builder: (context, response) {
+                                return response.data == null
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children:
+                                            _buildRows(1, scrollController2),
+                                      )
+                                    : Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: _buildRows(
+                                            value1nguoi == '個人'
+                                                ? 3
+                                                : sukejuuruAllUser.length + 2,
+                                            scrollController2),
+                                      );
+                              }),
                         ),
                       ),
                     ),
@@ -962,11 +1001,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   body: Container(),
                 );
               },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: value1nguoi == '個人'
-                    ? kojiItems1Persion(row - 1, col)
-                    : kojiItems(row - 1, col),
+              child: SingleChildScrollView(
+                controller: scrollControllerItem,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: value1nguoi == '個人'
+                      ? kojiItems1Persion(row - 1, col)
+                      : kojiItems(row - 1, col),
+                ),
               ),
             ),
           );
