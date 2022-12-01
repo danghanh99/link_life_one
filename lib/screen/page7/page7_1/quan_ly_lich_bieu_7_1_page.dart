@@ -208,9 +208,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {
-                   
-                    },
+                    onPressed: () {},
                     child: const Text(
                       '表示',
                       style: TextStyle(
@@ -1143,7 +1141,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     }
   }
 
-  Color getColorByText({required String text}) {
+  Color getTitleColorByText({required String text}) {
     switch (text) {
       case '!! 重要 !!':
         return Colors.red;
@@ -1169,6 +1167,12 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         return const Color(0xFFF6B704);
       case '追加希望':
         return Colors.orange;
+      case '追加STOP':
+        return Colors.red;
+      case '休み':
+        return Colors.red;
+      case '月次':
+        return Color(0xFF2F8FAD);
       default:
         return Colors.grey;
     }
@@ -1202,6 +1206,12 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         return const Color(0xffF6B704);
       case '月次':
         return const Color(0xFF2F8FAD);
+      case '追加STOP':
+        return Color.fromARGB(255, 229, 165, 160);
+      case '追加希望':
+        return Color.fromARGB(255, 229, 165, 160);
+      case '休み':
+        return Color.fromARGB(255, 229, 165, 160);
       default:
         return const Color.fromARGB(255, 227, 223, 223);
     }
@@ -1275,8 +1285,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   context: context,
                   title: '',
                   body: Page721(
+                    HOMON_SBT: e["HOMON_SBT"],
                     JYUCYU_ID: e["JYUCYU_ID"],
-                    KBNMSAI_NAME: e["KBNMSAI_NAME"],
+                    // KBNMSAI_NAME: e["KBNMSAI_NAME"],
                     onSuccessUpdate: () {
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
@@ -1348,7 +1359,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   title: '',
                   body: Page721(
                     JYUCYU_ID: e["JYUCYU_ID"],
-                    KBNMSAI_NAME: e["KBNMSAI_NAME"],
+                    // KBNMSAI_NAME: e["KBNMSAI_NAME"],
+                    HOMON_SBT: e["HOMON_SBT"],
                     onSuccessUpdate: () {
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
@@ -1444,7 +1456,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         WidgetSpan(
                           child: Container(
                             // color: backgroundKojiItem(e),
-                            color: getColorByText(
+                            color: getTitleColorByText(
                               text: e["KBNMSAI_NAME"],
                             ),
                             child: Padding(

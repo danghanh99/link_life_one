@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../api/sukejuuru_page_api/show_anken/get_lich_trinh_item_edit_page.dart';
 import '../../../api/sukejuuru_page_api/update_anken/update_lich_trinh.dart';
 import '../../../components/custom_text_field.dart';
 import '../../../components/toast.dart';
@@ -9,35 +10,14 @@ import '../../../shared/validator.dart';
 
 class Page722 extends StatefulWidget {
   final String JYUCYU_ID;
-  final String KBNMSAI_NAME;
-
-  final String title;
-  final List<dynamic> listPullDown;
-  final bool checkAppoint;
-  final DateTime datetime;
-  final String jikanKara;
-  final String jikanMade;
-  final bool checkAllDay;
-  final int jinNumber;
-  final int jikanNumber;
-  final String comment;
   final String HOMON_SBT;
+  final String KBNMSAI_NAME;
 
   final Function onSuccessUpdate;
   const Page722({
     required this.JYUCYU_ID,
-    required this.KBNMSAI_NAME,
-    required this.title,
-    required this.listPullDown,
-    required this.checkAppoint,
-    required this.datetime,
-    required this.jikanKara,
-    required this.jikanMade,
-    required this.checkAllDay,
-    required this.jinNumber,
-    required this.jikanNumber,
-    required this.comment,
     required this.HOMON_SBT,
+    required this.KBNMSAI_NAME,
     required this.onSuccessUpdate,
     Key? key,
   }) : super(key: key);
@@ -117,26 +97,123 @@ class _Page722State extends State<Page722> {
 
   bool validKaraMade = true;
 
+  String TAG_KBN = '';
+  String HOMONJIKAN = '00:00';
+  String HOMONJIKAN_END = '00:00';
+  String JININ = '';
+  String JIKAN = '';
+  String KOJIAPO_KBN = '';
+  String UPD_TANTNM = '';
+  String UPD_YMD = '';
+  String KOJI_KANSAN_POINT = '';
+  String JYUCYU_ID = '';
+  String HOMON_SBT = '';
+  String COMMENT = '';
+  String MEMO = '';
+  String ALL_DAY_FLG = '';
+
   @override
   void initState() {
     KBNMSAI_NAME = widget.KBNMSAI_NAME;
 
-    titleEditPage = widget.title;
-    listPullDownEditPage = widget.listPullDown;
-    checkAppointEditPage = widget.checkAppoint;
-    datetimeEditPage = widget.datetime;
-    jikanKaraEditPage = widget.jikanKara != null && widget.jikanKara != ""
-        ? widget.jikanKara
-        : "00:00";
-    jikanMadeEditPage = widget.jikanMade != null && widget.jikanMade != ""
-        ? widget.jikanMade
-        : "00:00";
-    checkAllDayEditPage = widget.checkAllDay;
-    jinNumberEditPage = widget.jinNumber.toString();
-    jikanNumberEditPage = widget.jikanNumber.toString();
-    commentEditPage = widget.comment;
+    titleEditPage = UPD_TANTNM + "  " + UPD_YMD;
+    listPullDownEditPage = [];
+    checkAppointEditPage = false;
+    datetimeEditPage = DateTime.now();
+    jikanKaraEditPage = "00:00";
+    jikanMadeEditPage = "00:00";
+    checkAllDayEditPage = false;
+    jinNumberEditPage = "0";
+    jikanNumberEditPage = "0";
+    commentEditPage = "";
 
+    callGetLichTrinhItemEditPage();
     super.initState();
+  }
+
+  Future<dynamic> callGetLichTrinhItemEditPage() async {
+    final dynamic result =
+        await GetLichTrinhItemEditPage().getLichTrinhItemEditPage(
+            JYUCYU_ID: widget.JYUCYU_ID,
+            HOMON_SBT: widget.HOMON_SBT,
+            onSuccess: (data) {
+              print(data);
+
+              if (data["PULLDOWN"] != null) {
+                setState(() {
+                  listPullDownEditPage = data["PULLDOWN"];
+                });
+              }
+              if (data["DATA"] != null) {
+                setState(() {
+                  if (data["DATA"][0]["TAG_KBN"] != null)
+                    TAG_KBN = data["DATA"][0]["TAG_KBN"];
+
+                  if (data["DATA"][0]["HOMONJIKAN"] != null) {
+                    if (data["DATA"][0]["HOMONJIKAN"]
+                            .toString()
+                            .split(" ")
+                            .length >=
+                        2) {
+                      HOMONJIKAN = data["DATA"][0]["HOMONJIKAN"];
+                      final String tmp1 = HOMONJIKAN.split(" ")[1];
+                      jikanKaraEditPage = tmp1.split(":")[0] + ":00";
+                    }
+                  }
+                  if (data["DATA"][0]["HOMONJIKAN_END"] != null) {
+                    if (data["DATA"][0]["HOMONJIKAN_END"]
+                            .toString()
+                            .split(" ")
+                            .length >=
+                        2) {
+                      HOMONJIKAN_END = data["DATA"][0]["HOMONJIKAN_END"];
+                      final String tmp2 = HOMONJIKAN_END.split(" ")[1];
+                      jikanMadeEditPage = tmp2.split(":")[0] + ":00";
+                    }
+                  }
+
+                  if (data["DATA"][0]["JININ"] != null)
+                    JININ = data["DATA"][0]["JININ"];
+                  if (data["DATA"][0]["JIKAN"] != null)
+                    JIKAN = data["DATA"][0]["JIKAN"];
+                  if (data["DATA"][0]["KOJIAPO_KBN"] != null)
+                    KOJIAPO_KBN = data["DATA"][0]["KOJIAPO_KBN"];
+                  if (data["DATA"][0]["UPD_TANTNM"] != null)
+                    UPD_TANTNM = data["DATA"][0]["UPD_TANTNM"];
+
+                  if (data["DATA"][0]["UPD_YMD"] != null)
+                    UPD_YMD = data["DATA"][0]["UPD_YMD"];
+
+                  if (data["DATA"][0]["KOJI_KANSAN_POINT"] != null)
+                    KOJI_KANSAN_POINT =
+                        data["DATA"][0]["KOJI_KANSAN_POINT"].toString();
+
+                  if (data["DATA"][0]["JYUCYU_ID"] != null)
+                    JYUCYU_ID = data["DATA"][0]["JYUCYU_ID"];
+                  if (data["DATA"][0]["HOMON_SBT"] != null)
+                    HOMON_SBT = data["DATA"][0]["HOMON_SBT"];
+
+                  if (data["DATA"][0]["COMMENT"] != null)
+                    COMMENT = data["DATA"][0]["COMMENT"];
+                  if (data["DATA"][0]["MEMO"] != null)
+                    MEMO = data["DATA"][0]["MEMO"];
+
+                  if (data["DATA"][0]["ALL_DAY_FLG"] != null)
+                    ALL_DAY_FLG = data["DATA"][0]["ALL_DAY_FLG"];
+
+                  titleEditPage = UPD_TANTNM + "  " + UPD_YMD;
+                  checkAppointEditPage = KOJIAPO_KBN == "01" ? true : false;
+                  checkAllDayEditPage = ALL_DAY_FLG == "1" ? true : false;
+                  jinNumberEditPage = JININ;
+                  jikanNumberEditPage = JIKAN;
+                  commentEditPage = COMMENT;
+                  datetimeEditPage =
+                      DateFormat("yyyy-MM-dd hh:mm:ss").parse(UPD_YMD);
+                });
+              }
+            });
+
+    return result;
   }
 
   DateTime convertDateTime(String date) {
@@ -187,7 +264,7 @@ class _Page722State extends State<Page722> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '更新情報： ${widget.title}',
+                        '更新情報： ${titleEditPage}',
                         style: const TextStyle(
                           color: Color(0xFF042C5C),
                           fontSize: 15,
@@ -385,9 +462,10 @@ class _Page722State extends State<Page722> {
                             // width: size.width / 2 - 80,
                             width: 80,
                             child: CustomTextField(
+                              initValue: jinNumberEditPage.toString(),
                               validator: _validateNumber,
                               fillColor: const Color(0xFFF5F6F8),
-                              hint: jinNumberEditPage.toString(),
+                              // hint: jinNumberEditPage.toString(),
                               type: TextInputType.number,
                               onChanged: (text) {
                                 setState(() {
@@ -424,9 +502,10 @@ class _Page722State extends State<Page722> {
                             // width: size.width / 2 - 80,
                             width: 80,
                             child: CustomTextField(
+                              initValue: jikanNumberEditPage.toString(),
                               validator: _validateNumber2,
                               fillColor: const Color(0xFFF5F6F8),
-                              hint: jikanNumberEditPage.toString(),
+                              // hint: jikanNumberEditPage.toString(),
                               type: TextInputType.number,
                               onChanged: (text) {
                                 setState(() {
@@ -519,6 +598,10 @@ class _Page722State extends State<Page722> {
                       if (_formKey.currentState?.validate() == true &&
                           validKaraMade) {
                         UpdateLichTrinh().updateLichTrinh(
+                            onFailed: () {
+                              CustomToast.show(context,
+                                  message: "Update failed");
+                            },
                             KBN_CD: listPullDownEditPage[selectedPullDownIndex]
                                 ["KBN_CD"],
                             KBNMSAI_CD:
@@ -528,7 +611,7 @@ class _Page722State extends State<Page722> {
                             JYUCYU_ID: widget.JYUCYU_ID,
                             TAG_KBN: '0' + selectedPullDownIndex.toString(),
                             KBN: checkAppointEditPage ? "1" : "0",
-                            JIKAN: DateFormat(('yyyy-MM-dd'))
+                            JIKAN_START: DateFormat(('yyyy-MM-dd'))
                                     .format(datetimeEditPage)
                                     .toString() +
                                 " " +
@@ -541,6 +624,7 @@ class _Page722State extends State<Page722> {
                                 jikanMadeEditPage +
                                 ":00",
                             JININ: jinNumberEditPage,
+                            JIKAN: jikanNumberEditPage,
                             KANSAN_POINT: '',
                             ALL_DAY_FLG: checkAllDayEditPage ? "1" : "0",
                             MEMO: commentEditPage,

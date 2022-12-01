@@ -2,19 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/screen/page7/page_7_2_2_edit_item/page_7_2_2.dart';
 
-import '../../../api/sukejuuru_page_api/show_anken/get_anken.dart';
+import '../../../api/sukejuuru_page_api/show_anken/get_lich_trinh_item_edit_page.dart';
+import '../../../api/sukejuuru_page_api/show_anken/get_lich_trinh_item.dart';
 import '../../../components/custom_text_field.dart';
 import '../../../shared/assets.dart';
 import '../../page6/danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
 class Page721 extends StatefulWidget {
   final String JYUCYU_ID;
-  final String KBNMSAI_NAME;
+  // final String KBNMSAI_NAME;
+  final String HOMON_SBT;
+
   final Function onSuccessUpdate;
   const Page721({
     Key? key,
     required this.JYUCYU_ID,
-    required this.KBNMSAI_NAME,
+    // required this.KBNMSAI_NAME,
+    required this.HOMON_SBT,
     required this.onSuccessUpdate,
   }) : super(key: key);
 
@@ -25,58 +29,58 @@ class Page721 extends StatefulWidget {
 class _Page721State extends State<Page721> {
   late bool showUpdatePage;
 
-  late bool checkedValue;
-  late bool checkedValueAllDay;
+  // late bool checkedValue;
+  // late bool checkedValueAllDay;
   String titleDateTime1 = '';
   String titleDateTime2 = '';
   String titleDateTime3 = '';
-  String jinninNumber = '';
-  String jikanNumber = '';
-  String comment = '';
+  // String jinninNumber = '';
+  // String jikanNumber = '';
+  // String comment = '';
   String jikanKara = '';
   String jikanMade = '';
-  DateTime datetime = DateTime.now();
+  String datetime = '';
+  // DateTime datetime = DateTime.now();
 
-  String KBNMSAI_NAME = '';
+  // String KBNMSAI_NAME = '';
 
   Future? getLichTrinhDetail;
 
-  dynamic responseShitami;
-  dynamic responseKoji;
-  List<dynamic> listPulldown = [];
+  // dynamic responseShitami;
+  // dynamic responseKoji;
+  // List<dynamic> listPulldown = [];
 
-  String TAG_KBN = '';
-
-  String SITAMIHOMONJIKAN = '';
-  String SITAMIHOMONJIKAN_END = '';
-  String SITAMI_JININ = '';
-  String SITAMI_JIKAN = '';
-  String SITAMIAPO_KBN = '';
-  String SITAMI_KANSAN_POINT = '';
-
+  String JININ = '';
+  String JIKAN = '';
+  String HOMONJIKAN = '00:00';
+  String HOMONJIKAN_END = '00:00';
+  String SETSAKI_ADDRESS = '';
+  String KOJI_ITEM = '';
+  String SETSAKI_NAME = '';
+  String HOMON_TANT_NAME1 = '';
+  String HOMON_TANT_NAME2 = '';
+  String HOMON_TANT_NAME3 = '';
+  String HOMON_TANT_NAME4 = '';
+  String ADD_TANTNM = '';
+  String ADD_YMD = '';
   String UPD_TANTNM = '';
   String UPD_YMD = '';
-  String JYUCYU_ID = '';
+  String SITAMIIRAISYO_FILEPATH = '';
   String MEMO = '';
-  String COMMENT = '';
   String HOMON_SBT = '';
-
-  String KOJIHOMONJIKAN = '';
-  String KOJIHOMONJIKAN_END = '';
-  String KOJI_JININ = '';
-  String KOJI_JIKAN = '';
-  String KOJIAPO_KBN = '';
-  String KOJI_KANSAN_POINT = '';
+  String KBNMSAI_NAME = '';
+  String COMMENT = '';
+  List<dynamic> FILEPATH = [];
 
   @override
   void initState() {
     showUpdatePage = false;
 
-    checkedValue = false;
-    checkedValueAllDay = false;
-    KBNMSAI_NAME = widget.KBNMSAI_NAME;
+    // checkedValue = false;
+    // checkedValueAllDay = false;
+    // KBNMSAI_NAME = widget.KBNMSAI_NAME;
 
-    getLichTrinhDetail = callGetAnken(JYUCYU_ID: widget.JYUCYU_ID);
+    getLichTrinhDetail = callGetLichTrinhItem();
 
     super.initState();
   }
@@ -86,118 +90,60 @@ class _Page721State extends State<Page721> {
     return false;
   }
 
-  Future<dynamic> callGetAnken(
-      {required String JYUCYU_ID, Function? onsuccess}) async {
-    final dynamic result = await GetAnken().getAnken(
-        JYUCYU_ID: JYUCYU_ID,
-        onSuccess: (response) {
+  Future<dynamic> callGetLichTrinhItem() async {
+    final dynamic result = await GetLichTrinhItem().getLichTrinhItem(
+        JYUCYU_ID: widget.JYUCYU_ID,
+        HOMON_SBT: widget.HOMON_SBT,
+        onSuccess: (data) {
+          print(data);
           setState(() {
-            responseShitami = response["SITAMI"][0];
-            responseKoji = response["KOJI"][0];
-            listPulldown = response["PULLDOWN"];
-
-            if (isShitami(KBNMSAI_NAME)) {
-              if (responseShitami["SITAMIHOMONJIKAN"].split(" ").length >= 2) {
-                jikanKara = responseShitami["SITAMIHOMONJIKAN"].split(" ")[1];
+            if (data[0]["JININ"] != null) JININ = data[0]["JININ"];
+            if (data[0]["JIKAN"] != null) JIKAN = data[0]["JIKAN"];
+            if (data[0]["HOMONJIKAN"] != null) {
+              if (data[0]["HOMONJIKAN"].toString().split(" ").length >= 2) {
+                HOMONJIKAN = data[0]["HOMONJIKAN"];
+                jikanKara = HOMONJIKAN.split(" ")[1];
+                datetime = HOMONJIKAN.split(" ")[0];
               }
-              if (responseShitami["SITAMIHOMONJIKAN_END"].split(" ").length >=
-                  2) {
-                jikanMade =
-                    responseShitami["SITAMIHOMONJIKAN_END"].split(" ")[1];
-              }
-
-              checkedValue = responseShitami["SITAMIAPO_KBN"] == "1"
-                  ? true
-                  : false; // checkbox appoint
-              checkedValueAllDay = responseShitami["SITAMI_KANSAN_POINT"] == "1"
-                  ? true
-                  : false; // checkbox all day
-              titleDateTime1 = responseShitami["UPD_TANTNM"] +
-                  " " +
-                  responseShitami["SITAMIHOMONJIKAN"]; // title + datetime
-              titleDateTime2 = responseShitami["UPD_TANTNM"] +
-                  " " +
-                  responseShitami["SITAMIHOMONJIKAN_END"]; // title + datetime
-              jinninNumber =
-                  responseShitami["SITAMI_JININ"] ?? ''; //jinninNumber
-              jikanNumber = responseShitami["SITAMI_JIKAN"] ?? ''; //jikanNumber
-              comment = responseShitami["COMMENT"] ?? ''; //comment
-              datetime = convertDateTime(responseShitami["UPD_YMD"]); //datetime
-              titleDateTime3 = DateFormat('yyyy年MM月dd日(E)', 'ja')
-                      .format(datetime)
-                      .toString() +
-                  "   " +
-                  jikanKara +
-                  "  〜  " +
-                  jikanMade;
-
-              TAG_KBN = responseShitami["TAG_KBN"];
-
-              SITAMIHOMONJIKAN = responseShitami["SITAMIHOMONJIKAN"];
-              SITAMIHOMONJIKAN_END = responseShitami["SITAMIHOMONJIKAN_END"];
-              SITAMI_JININ = responseShitami["SITAMI_JININ"] ?? '';
-              SITAMI_JIKAN = responseShitami["SITAMI_JIKAN"] ?? '';
-              SITAMIAPO_KBN = responseShitami["SITAMIAPO_KBN"] ?? '';
-              SITAMI_KANSAN_POINT =
-                  responseShitami["SITAMI_KANSAN_POINT"].toString() ?? '';
-
-              UPD_TANTNM = responseShitami["UPD_TANTNM"] ?? '';
-              UPD_YMD = responseShitami["UPD_YMD"] ?? '';
-              JYUCYU_ID = responseShitami["JYUCYU_ID"] ?? '';
-              MEMO = responseShitami["MEMO"] ?? '';
-              COMMENT = responseShitami["COMMENT"] ?? '';
-              HOMON_SBT = responseShitami["HOMON_SBT"] ?? '';
-            } else {
-              if (responseShitami["KOJIHOMONJIKAN"] != null &&
-                  responseShitami["KOJIHOMONJIKAN"].split(" ").length >= 2) {
-                jikanKara = responseShitami["KOJIHOMONJIKAN"].split(" ")[1];
-              }
-              if (responseShitami["KOJIHOMONJIKAN_END"] != null &&
-                  responseShitami["KOJIHOMONJIKAN_END"].split(" ").length >=
-                      2) {
-                jikanMade = responseShitami["KOJIHOMONJIKAN_END"].split(" ")[1];
-              }
-              checkedValue = responseKoji["KOJIAPO_KBN"] == "1"
-                  ? true
-                  : false; // checkbox appoint
-              checkedValueAllDay = responseKoji["KOJI_KANSAN_POINT"] == "1"
-                  ? true
-                  : false; // checkbox all day
-              titleDateTime1 = responseKoji["UPD_TANTNM"] +
-                  " " +
-                  responseKoji["KOJIHOMONJIKAN"]; // title + datetime
-              titleDateTime2 = responseKoji["UPD_TANTNM"] +
-                  " " +
-                  responseKoji["KOJIHOMONJIKAN_END"]; // title + datetime
-
-              jinninNumber = responseKoji["KOJI_JININ"]; //jinninNumber
-              jikanNumber = responseKoji["KOJI_JIKAN"]; //jikanNumber
-              comment = responseKoji["COMMENT"]; //comment
-              datetime = convertDateTime(responseKoji["UPD_YMD"]); //datetime
-              titleDateTime3 = DateFormat('yyyy年MM月dd日(E)', 'ja')
-                      .format(datetime)
-                      .toString() +
-                  "   " +
-                  jikanKara +
-                  "  〜  " +
-                  jikanMade;
-
-              TAG_KBN = responseKoji["TAG_KBN"];
-
-              KOJIHOMONJIKAN = responseKoji["KOJIHOMONJIKAN"];
-              KOJIHOMONJIKAN_END = responseKoji["KOJIHOMONJIKAN_END"];
-              KOJI_JININ = responseKoji["KOJI_JININ"];
-              KOJI_JIKAN = responseKoji["KOJI_JIKAN"];
-              KOJIAPO_KBN = responseKoji["KOJIAPO_KBN"];
-              KOJI_KANSAN_POINT = responseKoji["KOJI_KANSAN_POINT"].toString();
-
-              UPD_TANTNM = responseKoji["UPD_TANTNM"];
-              UPD_YMD = responseKoji["UPD_YMD"];
-              JYUCYU_ID = responseKoji["JYUCYU_ID"];
-              MEMO = responseKoji["MEMO"];
-              COMMENT = responseKoji["COMMENT"];
-              HOMON_SBT = responseShitami["HOMON_SBT"] ?? '';
             }
+            if (data[0]["HOMONJIKAN_END"] != null) {
+              if (data[0]["HOMONJIKAN_END"].toString().split(" ").length >= 2) {
+                HOMONJIKAN_END = data[0]["HOMONJIKAN_END"];
+                jikanMade = HOMONJIKAN_END.split(" ")[1];
+                datetime = HOMONJIKAN_END.split(" ")[0];
+              }
+            }
+            if (data[0]["SETSAKI_ADDRESS"] != null)
+              SETSAKI_ADDRESS = data[0]["SETSAKI_ADDRESS"];
+            if (data[0]["KOJI_ITEM"] != null) KOJI_ITEM = data[0]["KOJI_ITEM"];
+            if (data[0]["SETSAKI_NAME"] != null)
+              SETSAKI_NAME = data[0]["SETSAKI_NAME"];
+            if (data[0]["HOMON_TANT_NAME1"] != null)
+              HOMON_TANT_NAME1 = data[0]["HOMON_TANT_NAME1"];
+            if (data[0]["HOMON_TANT_NAME2"] != null)
+              HOMON_TANT_NAME2 = data[0]["HOMON_TANT_NAME2"];
+            if (data[0]["HOMON_TANT_NAME3"] != null)
+              HOMON_TANT_NAME3 = data[0]["HOMON_TANT_NAME3"];
+            if (data[0]["HOMON_TANT_NAME4"] != null)
+              HOMON_TANT_NAME4 = data[0]["HOMON_TANT_NAME4"];
+            if (data[0]["ADD_TANTNM"] != null)
+              ADD_TANTNM = data[0]["ADD_TANTNM"];
+            if (data[0]["ADD_YMD"] != null) ADD_YMD = data[0]["ADD_YMD"];
+            if (data[0]["UPD_TANTNM"] != null)
+              UPD_TANTNM = data[0]["UPD_TANTNM"];
+            if (data[0]["UPD_YMD"] != null) UPD_YMD = data[0]["UPD_YMD"];
+            if (data[0]["SITAMIIRAISYO_FILEPATH"] != null)
+              SITAMIIRAISYO_FILEPATH = data[0]["SITAMIIRAISYO_FILEPATH"];
+            if (data[0]["MEMO"] != null) MEMO = data[0]["MEMO"];
+            if (data[0]["HOMON_SBT"] != null) HOMON_SBT = data[0]["HOMON_SBT"];
+            if (data[0]["KBNMSAI_NAME"] != null)
+              KBNMSAI_NAME = data[0]["KBNMSAI_NAME"];
+            if (data[0]["COMMENT"] != null) COMMENT = data[0]["COMMENT"];
+            if (data[0]["FILEPATH"] != null) FILEPATH = data[0]["FILEPATH"];
+
+            titleDateTime1 = ADD_TANTNM + "   " + ADD_YMD;
+            titleDateTime2 = UPD_TANTNM + "   " + UPD_YMD;
+            titleDateTime3 = datetime + " " + jikanKara + " " + jikanMade;
           });
         });
 
@@ -214,21 +160,11 @@ class _Page721State extends State<Page721> {
 
     return showUpdatePage
         ? Page722(
+            KBNMSAI_NAME: KBNMSAI_NAME,
             onSuccessUpdate: () {
               widget.onSuccessUpdate.call();
             },
             JYUCYU_ID: widget.JYUCYU_ID,
-            KBNMSAI_NAME: widget.KBNMSAI_NAME,
-            title: titleDateTime2,
-            listPullDown: listPulldown,
-            checkAppoint: checkedValue,
-            datetime: datetime,
-            jikanKara: jikanKara,
-            jikanMade: jikanMade,
-            checkAllDay: checkedValueAllDay,
-            jinNumber: jinninNumber == '' ? 0 : int.parse(jinninNumber),
-            jikanNumber: jikanNumber == '' ? 0 : int.parse(jikanNumber),
-            comment: comment,
             HOMON_SBT: HOMON_SBT,
           )
         : Column(
@@ -448,7 +384,7 @@ class _Page721State extends State<Page721> {
                               Row(
                                 children: [
                                   Text(
-                                    jinninNumber,
+                                    JININ,
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -478,7 +414,7 @@ class _Page721State extends State<Page721> {
                               Row(
                                 children: [
                                   Text(
-                                    jikanNumber,
+                                    JIKAN,
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,

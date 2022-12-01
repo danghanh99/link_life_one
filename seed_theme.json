@@ -1,0 +1,36 @@
+{
+    "data": [
+        {
+            "title": "Nature Sounds",
+            "duration": 15,
+            "intervalSound": "Singing Bowl 1",
+            "intervalVolumn": 0.5,
+            "musicUrl": "https://mediation-music.s3.amazonaws.com/Boost%20Your%20Mind%20%20Meditative%20Flute%20Music.mp3",
+            "mainVolumn": 50
+        },
+        {
+            "title": "Om Mantra Chanting",
+            "duration": 30,
+            "intervalSound": "Singing Bowl 1",
+            "intervalVolumn": 0.5,
+            "musicUrl": "https://mediation-music.s3.amazonaws.com/15%20Minutes%20OM%20Meditation.mp3",
+            "mainVolumn": 50
+        },
+        {
+            "title": "Nature Healing Music",
+            "duration": 60,
+            "intervalSound": "Singing Bowl 2",
+            "intervalVolumn": 0.3,
+            "musicUrl": "https://mediation-music.s3.amazonaws.com/Chinese%20Buddha%20Chants%20%20Best%20for%20Meditation.mp3",
+            "mainVolumn": 50
+        },
+        {
+            "title": "Deep Healing Sleep",
+            "duration": 60,
+            "intervalSound": "Singing Bowl 2",
+            "intervalVolumn": 0.3,
+            "musicUrl": "https://mediation-music.s3.amazonaws.com/The%20DEEPEST%20Healing%20Sleep%20_%203.2Hz%20Delta%20Brain%20Waves%20_%20REM%20Sleep%20Music%20-%20Binaural%20Beats.mp3",
+            "mainVolumn": 50
+        }
+    ]
+}

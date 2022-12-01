@@ -9,7 +9,7 @@ import '../shared/text_style.dart';
 
 class CustomTextField extends StatefulWidget {
   final Key? keyMessage;
-  final String hint;
+  final String? hint;
   final Color? textColor;
   final Color? fillColor;
   final TextInputType type;
@@ -36,9 +36,11 @@ class CustomTextField extends StatefulWidget {
   final bool isReadOnly;
   final bool showCursor;
   final DateTime? initialDate;
+  final String? initValue;
   const CustomTextField({
     this.initialDate,
-    required this.hint,
+    this.initValue,
+    this.hint,
     required this.type,
     this.keyMessage,
     this.isReadOnly = false,
@@ -86,6 +88,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: widget.initValue,
       key: widget.keyMessage,
       onTap: () async {
         widget.onTap?.call();

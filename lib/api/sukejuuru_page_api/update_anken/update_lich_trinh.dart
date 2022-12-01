@@ -6,20 +6,23 @@ import 'package:intl/intl.dart';
 class UpdateLichTrinh {
   UpdateLichTrinh() : super();
 
-  Future<dynamic> updateLichTrinh(
-      {required String JYUCYU_ID,
-      required String TAG_KBN,
-      required String KBN,
-      required String JIKAN,
-      required String JIKAN_END,
-      required String JININ,
-      required String KANSAN_POINT,
-      required String ALL_DAY_FLG,
-      required String MEMO,
-      required String HOMON_SBT,
-      required String KBN_CD,
-      required String KBNMSAI_CD,
-      required Function() onSuccess}) async {
+  Future<dynamic> updateLichTrinh({
+    required String JYUCYU_ID,
+    required String TAG_KBN,
+    required String KBN,
+    required String JIKAN_START,
+    required String JIKAN_END,
+    required String JININ,
+    required String KANSAN_POINT,
+    required String ALL_DAY_FLG,
+    required String MEMO,
+    required String HOMON_SBT,
+    required String KBN_CD,
+    required String KBNMSAI_CD,
+    required String JIKAN,
+    required Function() onSuccess,
+    required Function() onFailed,
+  }) async {
     final response = await http.post(
         Uri.parse(
             "https://koji-app.starboardasiavn.com/requestNetConstructionNetPreviewContentsUpdate.php"),
@@ -27,15 +30,16 @@ class UpdateLichTrinh {
           "JYUCYU_ID": JYUCYU_ID,
           "TAG_KBN": TAG_KBN,
           "KBN": KBN, // appoint check
-          "JIKAN": JIKAN, // kara
+          "HOMONJIKAN": JIKAN_START, // kara
           "JIKAN_END": JIKAN_END, // made
           "JININ": JININ,
           "KANSAN_POINT": KANSAN_POINT, // k biet
           "ALL_DAY_FLG": ALL_DAY_FLG, // check all day
           "MEMO": MEMO,
           "HOMON_SBT": HOMON_SBT,
-          "KBN_CD": KBN_CD,
+          // "KBN_CD": KBN_CD,
           "KBNMSAI_CD": KBNMSAI_CD,
+          "JIKAN": JIKAN,
         });
 
     if (response.statusCode == 200) {
@@ -43,7 +47,8 @@ class UpdateLichTrinh {
       onSuccess.call();
       // return body;
     } else {
-      throw Exception('Failed to getAnken');
+      // throw Exception('Failed to getAnken');
+      onFailed.call();
     }
   }
 }
