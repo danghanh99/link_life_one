@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:link_life_one/api/menu/get_thong_bao_menu_api.dart';
 import 'package:link_life_one/components/login_widget.dart';
+import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/screen/page5/page5_quan_ly/quan_ly_nhap_xuat_page.dart';
 import 'package:link_life_one/screen/page6/page6_quan_ly/page_6_quan_ly_thanh_vien.dart';
 import 'package:link_life_one/screen/page7/page7_1/quan_ly_lich_bieu_7_1_page.dart';
 import 'package:link_life_one/screen/page7_0/page_7_so_tai_khoan_page.dart';
 import 'package:link_life_one/screen/page4/xac_nhan_thanh_tich_page.dart';
 
+import '../../api/menu/post_update_koji_read_flg.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../page3/page_3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
@@ -33,20 +36,68 @@ class _MenuPageState extends State<MenuPage> {
     '出納帳',
   ];
 
-  List<String> listComments = [
-    '2022 / 11 / 11　工事のテスト様に新着コメントがあります。',
+  List<dynamic> listComments = [
+    // '2022 / 11 / 11　工事のテスト様に新着コメントがあります。',
   ];
 
-  List<String> listThongBao = [
+  String NYUKOYOTEI_TOTAL = "0";
+  String KOJI_TOTAL = "0";
+  String SITAMI_TOTAL = "0";
+  String BUZAIHACYU_TOTAL = "0";
+
+  List<dynamic> listThongBao = [
     '未処理の入庫が 10 件あります。',
     '未処理の完了報告が 5 件あります。',
     '未処理の下見が 3 件あります。',
     '未処理の部材発注申請が 5 件あります。',
   ];
 
+  List<dynamic> listValue = [
+    "0",
+    "0",
+    "0",
+    "0",
+  ];
+
+  List<dynamic> listJYUCYU_ID = [];
+
+  Future? callGetThongBaoMenuApiFuture;
+
   @override
   void initState() {
+    callGetThongBaoMenuApiFuture = callGetThongBaoMenuApi();
     super.initState();
+  }
+
+  Future<dynamic> callGetThongBaoMenuApi() async {
+    final dynamic result =
+        await GetThongBaoMenuApi().getThongBaoMenuApi(onSuccess: (res) {
+      print(res);
+
+      if (res["COMMENT"] != null) {
+        setState(() {
+          listComments = res["COMMENT"];
+        });
+
+        List<dynamic> tmp = [];
+        for (var element in res["COMMENT"]) {
+          tmp.add(element["JYUCYU_ID"]);
+        }
+        setState(() {
+          listJYUCYU_ID = tmp;
+        });
+      }
+      if (res["TOTAL"] != null) {
+        setState(() {
+          listValue[0] = res["TOTAL"][0]["NYUKOYOTEI_TOTAL"];
+          listValue[1] = res["TOTAL"][1]["KOJI_TOTAL"];
+          listValue[2] = res["TOTAL"][2]["SITAMI_TOTAL"];
+          listValue[3] = res["TOTAL"][3]["BUZAIHACYU_TOTAL"];
+        });
+      }
+    });
+
+    return result;
   }
 
   @override
@@ -110,12 +161,25 @@ class _MenuPageState extends State<MenuPage> {
                     ),
                   ),
                   const Spacer(),
-                  const Text(
-                    '既読にする',
-                    style: TextStyle(
-                      color: Color(0xFF042C5C),
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
+                  GestureDetector(
+                    onTap: () {
+                      PostUpdateKojiReadFlg().postUpdateKojiReadFlg(
+                          listJYUCYU_ID: listJYUCYU_ID,
+                          onSuccess: () {
+                            CustomToast.show(
+                              context,
+                              message: "既読ができました。",
+                              backGround: Colors.green,
+                            );
+                          });
+                    },
+                    child: const Text(
+                      '既読にする',
+                      style: TextStyle(
+                        color: Color(0xFF042C5C),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                 ],
@@ -123,7 +187,9 @@ class _MenuPageState extends State<MenuPage> {
               const SizedBox(
                 height: 5,
               ),
-              const ListComment(),
+              ListComment(
+                listComments: listComments,
+              ),
               const SizedBox(
                 height: 5,
               ),
@@ -148,7 +214,9 @@ class _MenuPageState extends State<MenuPage> {
               const SizedBox(
                 height: 5,
               ),
-              const ListThongBao(),
+              ListThongBao(
+                listValue: listValue,
+              ),
               const SizedBox(
                 height: 10,
               ),

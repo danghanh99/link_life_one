@@ -59,6 +59,7 @@ class _Page721State extends State<Page721> {
   String JYUCYU_ID = '';
   String MEMO = '';
   String COMMENT = '';
+  String HOMON_SBT = '';
 
   String KOJIHOMONJIKAN = '';
   String KOJIHOMONJIKAN_END = '';
@@ -145,12 +146,15 @@ class _Page721State extends State<Page721> {
               JYUCYU_ID = responseShitami["JYUCYU_ID"] ?? '';
               MEMO = responseShitami["MEMO"] ?? '';
               COMMENT = responseShitami["COMMENT"] ?? '';
+              HOMON_SBT = responseShitami["HOMON_SBT"] ?? '';
             } else {
-              if (responseShitami["KOJIHOMONJIKAN"].split(" ").length >= 2) {
+              if (responseShitami["KOJIHOMONJIKAN"] != null &&
+                  responseShitami["KOJIHOMONJIKAN"].split(" ").length >= 2) {
                 jikanKara = responseShitami["KOJIHOMONJIKAN"].split(" ")[1];
               }
-              if (responseShitami["KOJIHOMONJIKAN_END"].split(" ").length >=
-                  2) {
+              if (responseShitami["KOJIHOMONJIKAN_END"] != null &&
+                  responseShitami["KOJIHOMONJIKAN_END"].split(" ").length >=
+                      2) {
                 jikanMade = responseShitami["KOJIHOMONJIKAN_END"].split(" ")[1];
               }
               checkedValue = responseKoji["KOJIAPO_KBN"] == "1"
@@ -192,6 +196,7 @@ class _Page721State extends State<Page721> {
               JYUCYU_ID = responseKoji["JYUCYU_ID"];
               MEMO = responseKoji["MEMO"];
               COMMENT = responseKoji["COMMENT"];
+              HOMON_SBT = responseShitami["HOMON_SBT"] ?? '';
             }
           });
         });
@@ -224,6 +229,7 @@ class _Page721State extends State<Page721> {
             jinNumber: jinninNumber == '' ? 0 : int.parse(jinninNumber),
             jikanNumber: jikanNumber == '' ? 0 : int.parse(jikanNumber),
             comment: comment,
+            HOMON_SBT: HOMON_SBT,
           )
         : Column(
             children: [

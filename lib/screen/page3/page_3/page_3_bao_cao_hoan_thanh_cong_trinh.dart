@@ -229,6 +229,10 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                                                             isSendAList: true,
                                                             single_summarize:
                                                                 '01',
+                                                            JYUCYU_ID:
+                                                                item.jyucyuId,
+                                                            KOJI_ST:
+                                                                item.kojiSt,
                                                           ),
                                                         ),
                                                       );
@@ -261,6 +265,9 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                                                           isSendAList: true,
                                                           single_summarize:
                                                               '02',
+                                                          JYUCYU_ID:
+                                                              item.jyucyuId,
+                                                          KOJI_ST: item.kojiSt,
                                                         ),
                                                       ),
                                                     );
@@ -289,10 +296,12 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                                       builder: (context) =>
                                           Page31YeuCauBieuMauPage(
                                         single_summarize: '01',
+                                        JYUCYU_ID: item.jyucyuId,
                                         isShitami: isShitami,
                                         initialDate: date,
                                         koji: item,
                                         isSendAList: true,
+                                        KOJI_ST: item.kojiSt,
                                       ),
                                     ),
                                   );

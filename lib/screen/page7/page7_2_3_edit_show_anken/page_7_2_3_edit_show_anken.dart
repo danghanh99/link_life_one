@@ -1,52 +1,67 @@
+import 'package:check_points/check_point.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:link_life_one/api/sukejuuru_page_api/create_anken/create_anken.dart';
+import 'package:link_life_one/api/sukejuuru_page_api/update_anken_middle/update_anken_middle.dart';
+import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/create/page_7_2_4_create.dart';
 
-import '../../../api/sukejuuru_page_api/update_anken/update_lich_trinh.dart';
+import '../../../api/sukejuuru_page_api/pull_down_anken/get_pull_down_anken.dart';
+import '../../../api/sukejuuru_page_api/show_edit_anken/get_anken_detail.dart';
 import '../../../components/custom_text_field.dart';
-import '../../../components/toast.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/validator.dart';
+import '../../page6/danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
-class Page722 extends StatefulWidget {
-  final String JYUCYU_ID;
+class Page723EditShowAnken extends StatefulWidget {
+  final DateTime initialDate;
+  final String TANT_CD;
+  final bool isPhongBan;
+  final String TAN_EIG_ID;
+  final Function onUpdateAnkenSuccessfull;
   final String KBNMSAI_NAME;
-
-  final String title;
-  final List<dynamic> listPullDown;
-  final bool checkAppoint;
-  final DateTime datetime;
-  final String jikanKara;
-  final String jikanMade;
-  final bool checkAllDay;
-  final int jinNumber;
-  final int jikanNumber;
-  final String comment;
-  final String HOMON_SBT;
-
-  final Function onSuccessUpdate;
-  const Page722({
-    required this.JYUCYU_ID,
+  const Page723EditShowAnken({
+    required this.initialDate,
+    required this.TANT_CD,
+    required this.isPhongBan,
+    required this.onUpdateAnkenSuccessfull,
+    required this.TAN_EIG_ID,
     required this.KBNMSAI_NAME,
-    required this.title,
-    required this.listPullDown,
-    required this.checkAppoint,
-    required this.datetime,
-    required this.jikanKara,
-    required this.jikanMade,
-    required this.checkAllDay,
-    required this.jinNumber,
-    required this.jikanNumber,
-    required this.comment,
-    required this.HOMON_SBT,
-    required this.onSuccessUpdate,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<Page722> createState() => _Page722State();
+  State<Page723EditShowAnken> createState() => _Page723EditShowAnkenState();
 }
 
-class _Page722State extends State<Page722> {
+class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
+  // late bool checkedValue;
+  // late String nettoKoJi;
+  // late String kaigiKara;
+  // late String kaigiMade;
+  bool validKaraMade = true;
+
+  late List<dynamic> listPullDownCreateAnkenPage = [
+    {"KBNMSAI_NAME": "営業工事"},
+    {"KBNMSAI_NAME": "営業下見"}
+  ];
+  late DateTime datetimeCreateAnkenPage = DateTime.now();
+  late String jikanKaraCreateAnkenPage = '';
+  late String jikanMadeCreateAnkenPage = '';
+  late bool checkAllDayCreateAnkenPage = false;
+  late String jinNumberCreateAnkenPage = '0';
+  late String jikanNumberCreateAnkenPage = '0';
+  late String okyakuSamaCreateAnkenPage = '';
+  late String sankasha1CreateAnkenPage = '';
+  late String sankasha2CreateAnkenPage = '';
+  late String sankasha3CreateAnkenPage = '';
+  int selectedPullDownIndex = 0;
+
+  String TAG_KBN = '';
+
+  String currentPullDownValue = '';
+
   List<dynamic> listDateTime1 = [
     "01:00",
     "02:00",
@@ -99,54 +114,60 @@ class _Page722State extends State<Page722> {
     "23:00",
     "00:00",
   ];
-  final GlobalKey<FormState> _formKey = GlobalKey();
-
-  late String titleEditPage;
-  late List<dynamic> listPullDownEditPage;
-  late bool checkAppointEditPage;
-  late DateTime datetimeEditPage;
-  late String jikanKaraEditPage;
-  late String jikanMadeEditPage;
-  late bool checkAllDayEditPage;
-  late String jinNumberEditPage;
-  late String jikanNumberEditPage;
-  late String commentEditPage;
-  int selectedPullDownIndex = 0;
-
-  late String KBNMSAI_NAME;
-
-  bool validKaraMade = true;
-
   @override
   void initState() {
-    KBNMSAI_NAME = widget.KBNMSAI_NAME;
-
-    titleEditPage = widget.title;
-    listPullDownEditPage = widget.listPullDown;
-    checkAppointEditPage = widget.checkAppoint;
-    datetimeEditPage = widget.datetime;
-    jikanKaraEditPage = widget.jikanKara != null && widget.jikanKara != ""
-        ? widget.jikanKara
-        : "00:00";
-    jikanMadeEditPage = widget.jikanMade != null && widget.jikanMade != ""
-        ? widget.jikanMade
-        : "00:00";
-    checkAllDayEditPage = widget.checkAllDay;
-    jinNumberEditPage = widget.jinNumber.toString();
-    jikanNumberEditPage = widget.jikanNumber.toString();
-    commentEditPage = widget.comment;
-
+    widget.TAN_EIG_ID;
+    checkAllDayCreateAnkenPage = false;
+    jikanKaraCreateAnkenPage = listDateTime1[listDateTime1.length - 1];
+    jikanMadeCreateAnkenPage = listDateTime2[listDateTime1.length - 1];
+    callGetAnkenDetail();
     super.initState();
   }
 
-  DateTime convertDateTime(String date) {
-    return DateFormat("yyyy-MM-dd hh:mm:ss").parse(date);
+  Future<dynamic> callGetAnkenDetail({Function? onsuccess}) async {
+    final dynamic result = GetAnkenDetail().getAnkenDetail(
+      onSuccess: (response) {
+        setState(() {
+          listPullDownCreateAnkenPage = response["PULLDOWN"];
+          for (var element in listPullDownCreateAnkenPage) {
+            if (element["KBNMSAI_NAME"] == widget.KBNMSAI_NAME) {
+              selectedPullDownIndex =
+                  listPullDownCreateAnkenPage.indexOf(element);
+              currentPullDownValue = element["KBNMSAI_NAME"];
+            }
+          }
+          ;
+
+          TAG_KBN = response["EIGYO_ANKEN"][0]["TAG_KBN"];
+          datetimeCreateAnkenPage =
+              DateFormat("yyyy-MM-dd").parse(response["EIGYO_ANKEN"][0]["YMD"]);
+          jikanKaraCreateAnkenPage = response["EIGYO_ANKEN"][0]["START_TIME"]
+                  .toString()
+                  .split(":")[0] +
+              ":" +
+              response["EIGYO_ANKEN"][0]["START_TIME"].toString().split(":")[1];
+          jikanMadeCreateAnkenPage = response["EIGYO_ANKEN"][0]["END_TIME"]
+                  .toString()
+                  .split(":")[0] +
+              ":" +
+              response["EIGYO_ANKEN"][0]["END_TIME"].toString().split(":")[1];
+          jinNumberCreateAnkenPage = response["EIGYO_ANKEN"][0]["JININ"];
+          jikanNumberCreateAnkenPage = response["EIGYO_ANKEN"][0]["JIKAN"];
+
+          okyakuSamaCreateAnkenPage = response["EIGYO_ANKEN"][0]["GUEST_NAME"];
+          sankasha1CreateAnkenPage = response["EIGYO_ANKEN"][0]["ATTEND_NAME1"];
+          sankasha2CreateAnkenPage = response["EIGYO_ANKEN"][0]["ATTEND_NAME2"];
+          sankasha3CreateAnkenPage = response["EIGYO_ANKEN"][0]["ATTEND_NAME3"];
+        });
+      },
+      TAN_EIG_ID: widget.TAN_EIG_ID,
+    );
+
+    return result;
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return SizedBox(
       width: 650,
       child: Form(
@@ -155,7 +176,7 @@ class _Page722State extends State<Page722> {
           children: [
             Container(
               height: 50,
-              color: const Color(0xFF6F86D6),
+              color: const Color.fromARGB(255, 229, 164, 68),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
@@ -164,34 +185,11 @@ class _Page722State extends State<Page722> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'ネット工事(アポ済み)',
+                        '営業案件登録',
                         style: TextStyle(
                           color: Color(0xFF042C5C),
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              height: 40,
-              color: const Color(0xFF91B1F9),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                child: Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '更新情報： ${widget.title}',
-                        style: const TextStyle(
-                          color: Color(0xFF042C5C),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
@@ -205,7 +203,6 @@ class _Page722State extends State<Page722> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
@@ -224,47 +221,18 @@ class _Page722State extends State<Page722> {
                         ),
                       ),
                       _moreButton(context),
-                      // const Spacer(),
-                      const SizedBox(
-                        width: 160,
-                      ),
-                      Row(
-                        children: [
-                          Checkbox(
-                            activeColor: Colors.blue,
-                            checkColor: Colors.white,
-                            value: checkAppointEditPage,
-                            onChanged: (newValue) {
-                              setState(() {
-                                checkAppointEditPage = newValue ?? true;
-                              });
-                            },
-                          ),
-                          const Text(
-                            'アポイント済み',
-                            style: TextStyle(
-                              color: Color(0xFF000000),
-                              fontSize: 15,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                        ],
-                      ),
                     ],
                   ),
                   const SizedBox(
-                    height: 5,
-                  ),
-                  const SizedBox(
-                    height: 5,
+                    height: 10,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const SizedBox(
+                      Container(
                         width: 130,
-                        child: Align(
+                        child: const Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
                             '日時',
@@ -279,25 +247,77 @@ class _Page722State extends State<Page722> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          DateFormat('yyyy年MM月dd日(E)', 'ja')
-                              .format(datetimeEditPage)
+                          DateFormat('yyyy今MM月dd日(E)', 'ja')
+                              .format(widget.initialDate)
                               .toString(),
                           style: const TextStyle(
                             color: Color(0xFF000000),
-                            fontSize: 15,
+                            fontSize: 14,
                             fontWeight: FontWeight.w300,
                           ),
                         ),
                       ),
                       const SizedBox(
+                        height: 5,
                         width: 5,
                       ),
-                      Column(
+                      Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _moreButton2(context),
+                              Column(
+                                children: [
+                                  _moreButton2(context),
+                                  validKaraMade
+                                      ? Container()
+                                      : const Padding(
+                                          padding: EdgeInsets.only(top: 5),
+                                          child: Text(
+                                            "Invalid",
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Checkbox(
+                                    activeColor: Colors.blue,
+                                    checkColor: Colors.white,
+                                    value: checkAllDayCreateAnkenPage,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        checkAllDayCreateAnkenPage =
+                                            newValue ?? true;
+                                      });
+                                    },
+                                  ),
+                                  const Text(
+                                    '終日',
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Text(
+                            '~',
+                            style: TextStyle(
+                              color: Color(0xFF000000),
+                              fontSize: 17,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            children: [
+                              _moreButton3(context),
                               validKaraMade
                                   ? Container()
                                   : const Padding(
@@ -309,54 +329,12 @@ class _Page722State extends State<Page722> {
                                     ),
                             ],
                           ),
-                          Row(
-                            children: [
-                              Checkbox(
-                                activeColor: Colors.blue,
-                                checkColor: Colors.white,
-                                value: checkAllDayEditPage,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    checkAllDayEditPage = newValue ?? true;
-                                  });
-                                },
-                              ),
-                              const Text(
-                                '終日',
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Text(
-                        '~',
-                        style: TextStyle(
-                          color: Color(0xFF000000),
-                          fontSize: 17,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        children: [
-                          _moreButton3(context),
-                          validKaraMade
-                              ? Container()
-                              : const Padding(
-                                  padding: EdgeInsets.only(top: 5),
-                                  child: Text(
-                                    "Invalid",
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                ),
                         ],
                       ),
                     ],
+                  ),
+                  const SizedBox(
+                    height: 5,
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -387,11 +365,11 @@ class _Page722State extends State<Page722> {
                             child: CustomTextField(
                               validator: _validateNumber,
                               fillColor: const Color(0xFFF5F6F8),
-                              hint: jinNumberEditPage.toString(),
+                              hint: jinNumberCreateAnkenPage.toString(),
                               type: TextInputType.number,
                               onChanged: (text) {
                                 setState(() {
-                                  jinNumberEditPage = text;
+                                  jinNumberCreateAnkenPage = text;
                                 });
                               },
                               maxLines: 1,
@@ -426,11 +404,11 @@ class _Page722State extends State<Page722> {
                             child: CustomTextField(
                               validator: _validateNumber2,
                               fillColor: const Color(0xFFF5F6F8),
-                              hint: jikanNumberEditPage.toString(),
+                              hint: jikanNumberCreateAnkenPage.toString(),
                               type: TextInputType.number,
                               onChanged: (text) {
                                 setState(() {
-                                  jikanNumberEditPage = text;
+                                  jikanNumberCreateAnkenPage = text;
                                 });
                               },
                               maxLines: 1,
@@ -455,38 +433,123 @@ class _Page722State extends State<Page722> {
                     ],
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'コメント',
-                      style: TextStyle(
-                        color: Color(0xFF042C5C),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 130,
+                        child: const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'お客様名',
+                            style: TextStyle(
+                              color: Color(0xFF042C5C),
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  CustomTextField(
-                    fillColor: const Color(0xFFF5F6F8),
-                    hint: commentEditPage,
-                    type: TextInputType.emailAddress,
-                    onChanged: (text) {
-                      setState(() {
-                        commentEditPage = text;
-                      });
-                    },
-                    maxLines: 5,
+                      Container(
+                        width: 420,
+                        child: CustomTextField(
+                          fillColor: const Color(0xFFF5F6F8),
+                          hint: '',
+                          type: TextInputType.emailAddress,
+                          onChanged: (text) {
+                            setState(() {
+                              okyakuSamaCreateAnkenPage = text;
+                            });
+                          },
+                          maxLines: 1,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 5,
                   ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 130,
+                        child: const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            '参加者',
+                            style: TextStyle(
+                              color: Color(0xFF042C5C),
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                            width: 420,
+                            child: CustomTextField(
+                              fillColor: const Color(0xFFF5F6F8),
+                              hint: '',
+                              type: TextInputType.emailAddress,
+                              onChanged: (text) {
+                                setState(() {
+                                  sankasha1CreateAnkenPage = text;
+                                });
+                              },
+                              maxLines: 1,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Container(
+                            width: 420,
+                            child: CustomTextField(
+                              fillColor: const Color(0xFFF5F6F8),
+                              hint: '',
+                              type: TextInputType.emailAddress,
+                              onChanged: (text) {
+                                setState(() {
+                                  sankasha2CreateAnkenPage = text;
+                                });
+                              },
+                              maxLines: 1,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Container(
+                            width: 420,
+                            child: CustomTextField(
+                              fillColor: const Color(0xFFF5F6F8),
+                              hint: '',
+                              type: TextInputType.emailAddress,
+                              onChanged: (text) {
+                                setState(() {
+                                  sankasha3CreateAnkenPage = text;
+                                });
+                              },
+                              maxLines: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
-            const SizedBox(
-              height: 20,
+            // Expanded(child: Container()),
+            SizedBox(
+              height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -500,14 +563,14 @@ class _Page722State extends State<Page722> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      if (jikanKaraEditPage == null ||
-                          jikanMadeEditPage == null) {
+                      if (jikanKaraCreateAnkenPage == null ||
+                          jikanMadeCreateAnkenPage == null) {
                         setState(() {
                           validKaraMade = false;
                         });
                       }
-                      if (int.parse(jikanKaraEditPage.split(":")[0]) >=
-                          int.parse(jikanMadeEditPage.split(":")[0])) {
+                      if (int.parse(jikanKaraCreateAnkenPage.split(":")[0]) >=
+                          int.parse(jikanMadeCreateAnkenPage.split(":")[0])) {
                         setState(() {
                           validKaraMade = false;
                         });
@@ -518,38 +581,32 @@ class _Page722State extends State<Page722> {
                       }
                       if (_formKey.currentState?.validate() == true &&
                           validKaraMade) {
-                        UpdateLichTrinh().updateLichTrinh(
-                            KBN_CD: listPullDownEditPage[selectedPullDownIndex]
-                                ["KBN_CD"],
-                            KBNMSAI_CD:
-                                listPullDownEditPage[selectedPullDownIndex]
-                                    ["KBNMSAI_CD"],
-                            HOMON_SBT: widget.HOMON_SBT,
-                            JYUCYU_ID: widget.JYUCYU_ID,
-                            TAG_KBN: '0' + selectedPullDownIndex.toString(),
-                            KBN: checkAppointEditPage ? "1" : "0",
-                            JIKAN: DateFormat(('yyyy-MM-dd'))
-                                    .format(datetimeEditPage)
-                                    .toString() +
-                                " " +
-                                jikanKaraEditPage +
-                                ":00",
-                            JIKAN_END: DateFormat(('yyyy-MM-dd'))
-                                    .format(datetimeEditPage)
-                                    .toString() +
-                                " " +
-                                jikanMadeEditPage +
-                                ":00",
-                            JININ: jinNumberEditPage,
-                            KANSAN_POINT: '',
-                            ALL_DAY_FLG: checkAllDayEditPage ? "1" : "0",
-                            MEMO: commentEditPage,
+                        UpdateAnkenMiddle().updateAnkenMiddle(
+                            YMD: DateFormat(('yyyy-MM-dd'))
+                                .format(widget.initialDate),
+                            JYOKEN_CD: widget.TANT_CD,
+                            JYOKEN_SYBET_FLG: widget.isPhongBan ? '1' : '0',
+                            TAG_KBN: TAG_KBN,
+                            START_TIME: jikanKaraCreateAnkenPage + ":00",
+                            END_TIME: jikanMadeCreateAnkenPage + ":00",
+                            JININ: jinNumberCreateAnkenPage,
+                            JIKAN: jikanNumberCreateAnkenPage,
+                            GUEST_NAME: okyakuSamaCreateAnkenPage,
+                            ATTEND_NAME1: sankasha1CreateAnkenPage,
+                            ATTEND_NAME2: sankasha2CreateAnkenPage,
+                            ATTEND_NAME3: sankasha3CreateAnkenPage,
+                            ALL_DAY_FLG: checkAllDayCreateAnkenPage ? "1" : "0",
+                            TAN_EIG_ID: widget.TAN_EIG_ID,
+                            KBNMSAI_CD: listPullDownCreateAnkenPage[
+                                selectedPullDownIndex]["KBNMSAI_CD"],
+                            KBN_CD: listPullDownCreateAnkenPage[
+                                selectedPullDownIndex]["KBN_CD"],
                             onSuccess: () {
                               Navigator.pop(context);
                               CustomToast.show(context,
-                                  message: "Update successfull",
+                                  message: "Update Anken Successfull",
                                   backGround: Colors.green);
-                              widget.onSuccessUpdate.call();
+                              widget.onUpdateAnkenSuccessfull.call();
                             });
                       }
                     },
@@ -607,12 +664,13 @@ class _Page722State extends State<Page722> {
       onSelected: (number) {},
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => listPullDownEditPage.map((item) {
-        int index = listPullDownEditPage.indexOf(item);
+      itemBuilder: (context) => listPullDownCreateAnkenPage.map((item) {
+        int index = listPullDownCreateAnkenPage.indexOf(item);
         return PopupMenuItem(
           onTap: () {
             setState(() {
-              KBNMSAI_NAME = listPullDownEditPage[index]["KBNMSAI_NAME"];
+              currentPullDownValue =
+                  listPullDownCreateAnkenPage[index]["KBNMSAI_NAME"];
               selectedPullDownIndex = index;
             });
           },
@@ -653,7 +711,7 @@ class _Page722State extends State<Page722> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              KBNMSAI_NAME,
+              currentPullDownValue,
               style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
@@ -683,7 +741,7 @@ class _Page722State extends State<Page722> {
         return PopupMenuItem(
           onTap: () {
             setState(() {
-              jikanKaraEditPage = listDateTime1[index];
+              jikanKaraCreateAnkenPage = listDateTime1[index];
             });
           },
           height: 25,
@@ -723,7 +781,7 @@ class _Page722State extends State<Page722> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              jikanKaraEditPage,
+              jikanKaraCreateAnkenPage,
               style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
@@ -753,7 +811,7 @@ class _Page722State extends State<Page722> {
         return PopupMenuItem(
           onTap: () {
             setState(() {
-              jikanMadeEditPage = listDateTime2[index];
+              jikanMadeCreateAnkenPage = listDateTime2[index];
             });
           },
           height: 25,
@@ -793,7 +851,7 @@ class _Page722State extends State<Page722> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              jikanMadeEditPage,
+              jikanMadeCreateAnkenPage,
               style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
@@ -812,9 +870,6 @@ class _Page722State extends State<Page722> {
   }
 
   String? _validateNumber(String? input) {
-    if (input == null || input == '') {
-      return 'Required';
-    }
     if (Validator.onlyNumber(input!)) {
       return null;
     } else {
@@ -823,9 +878,6 @@ class _Page722State extends State<Page722> {
   }
 
   String? _validateNumber2(String? input) {
-    if (input == null || input == '') {
-      return 'Required';
-    }
     if (Validator.onlyNumber(input!)) {
       return null;
     } else {

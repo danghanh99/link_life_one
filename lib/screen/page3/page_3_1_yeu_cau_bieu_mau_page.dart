@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/api/KojiPageApi/get_list_pdf.dart';
 import 'package:link_life_one/components/login_widget.dart';
+import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/screen/login_page.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:link_life_one/screen/page3/shashin_kakinin_page.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/screen/page3/shitami_houkoku_page.dart';
+import 'package:link_life_one/screen/page7/component/dialog.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../components/text_line_down.dart';
 import '../../models/koji.dart';
@@ -20,12 +24,17 @@ class Page31YeuCauBieuMauPage extends StatefulWidget {
   final Koji koji;
   final bool isSendAList;
   final String single_summarize;
+  final String JYUCYU_ID;
+  final String KOJI_ST;
+
   const Page31YeuCauBieuMauPage({
     required this.isShitami,
     this.initialDate,
     required this.isSendAList,
     required this.koji,
     required this.single_summarize,
+    required this.JYUCYU_ID,
+    required this.KOJI_ST,
     Key? key,
   }) : super(key: key);
 
@@ -43,8 +52,11 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
     '出納帳',
   ];
 
+  String SINGLE_SUMMARIZE = "01";
+
   @override
   void initState() {
+    SINGLE_SUMMARIZE = widget.isSendAList ? "02" : "01";
     callGetListPdf();
     super.initState();
   }
@@ -235,71 +247,78 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Container(
-                            width: double.infinity,
-                            child: CupertinoAlertDialog(
-                              title: const Text(
-                                "この工事を設置不可で登録を行います。\n(元に戻せません)",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              content: const Padding(
-                                padding: EdgeInsets.only(top: 15),
-                                child: Text(
-                                  "操作は必ず本部へ電話報告後に行ってください。\nまたサイボウズの設置不可アプリ登録は必ず行ってください。",
+                      if (widget.KOJI_ST == "03") {
+                        CustomToast.show(context,
+                            message: "工事報告が未報告の場合は、写真提出が不可となります。");
+                      } else {
+                        // 01 || 02
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Container(
+                              width: double.infinity,
+                              child: CupertinoAlertDialog(
+                                title: const Text(
+                                  "この工事を設置不可で登録を行います。\n(元に戻せません)",
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context); //close Dialog
-                                    },
-                                    child: const Text(
-                                      '戻る',
-                                      style: TextStyle(
-                                        color: Color(0xFFEB5757),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    )),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context); //close Dialog
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            ShashinTeishuutsuGamenPage(
-                                          initialDate: widget.initialDate,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: const Text(
-                                    'はい',
+                                content: const Padding(
+                                  padding: EdgeInsets.only(top: 15),
+                                  child: Text(
+                                    "操作は必ず本部へ電話報告後に行ってください。\nまたサイボウズの設置不可アプリ登録は必ず行ってください。",
                                     style: TextStyle(
-                                      color: Color(0xFF007AFF),
+                                      color: Colors.black,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                      );
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context); //close Dialog
+                                      },
+                                      child: const Text(
+                                        '戻る',
+                                        style: TextStyle(
+                                          color: Color(0xFFEB5757),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      )),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context); //close Dialog
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ShashinTeishuutsuGamenPage(
+                                            JYUCYU_ID: widget.JYUCYU_ID,
+                                            initialDate: widget.initialDate,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text(
+                                      'はい',
+                                      style: TextStyle(
+                                        color: Color(0xFF007AFF),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      }
                     },
                     child: const Text(
                       '設置不可',
@@ -323,7 +342,16 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      CustomDialog.showCustomDialog(
+                        context: context,
+                        title: '',
+                        body: ShashinKakuninPage(
+                          JYUCYU_ID: widget.JYUCYU_ID,
+                          SINGLE_SUMMARIZE: SINGLE_SUMMARIZE,
+                        ),
+                      );
+                    },
                     child: const Text(
                       '写真確認',
                       style: TextStyle(

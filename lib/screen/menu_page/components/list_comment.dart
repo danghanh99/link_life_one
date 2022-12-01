@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ListComment extends StatefulWidget {
+  final List<dynamic> listComments;
   const ListComment({
     Key? key,
+    required this.listComments,
   }) : super(key: key);
 
   @override
@@ -10,10 +12,6 @@ class ListComment extends StatefulWidget {
 }
 
 class _ListCommentState extends State<ListComment> {
-  List<String> listComments = [
-    '2022 / 11 / 11　工事のテスト様に新着コメントがあります。',
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,10 +29,10 @@ class _ListCommentState extends State<ListComment> {
           context: context,
           removeTop: true,
           child: ListView.separated(
-            itemCount: listComments.length,
+            itemCount: widget.listComments.length,
             itemBuilder: (context, index) {
               return Text(
-                listComments[index],
+                widget.listComments[index]["COMMENT"],
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,

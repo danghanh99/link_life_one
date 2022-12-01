@@ -6,15 +6,17 @@ class ShowHoliday {
   ShowHoliday() : super();
 
   Future<dynamic> showHoliday(
-      {required DateTime date, required Function(dynamic) onSuccess}) async {
+      {required String TANT_CD,
+      required DateTime date,
+      required Function(dynamic) onSuccess}) async {
     try {
-      final box = Hive.box<String>('user');
-      final id = box.values.first.toString();
+      // final box = Hive.box<String>('user');
+      // final id = box.values.first.toString();
       final year = date.year.toString();
       final month = date.month.toString();
       final response = await http.get(
         Uri.parse(
-            "https://koji-app.starboardasiavn.com/requestShowHoliday.php?TANT_CD=${id}&HOLIDAY_YEAR=${year}&GET_MONTH=${month}&GET_YEAR=${year}"),
+            "https://koji-app.starboardasiavn.com/requestShowHoliday.php?TANT_CD=${TANT_CD}&HOLIDAY_YEAR=${year}&GET_MONTH=${month}&GET_YEAR=${year}"),
       );
 
       if (response.statusCode == 200) {

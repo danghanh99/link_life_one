@@ -11,12 +11,12 @@ import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/screen/page3/page_3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 
-class ShashinTeishuutsuGamenPage extends StatefulWidget {
+class ShashinTeishuutsuGamenPage2 extends StatefulWidget {
   final DateTime? initialDate;
   final String JYUCYU_ID;
   final String? cancelRiyuu;
   final DateTime? mitmoriYmd;
-  const ShashinTeishuutsuGamenPage({
+  const ShashinTeishuutsuGamenPage2({
     super.key,
     this.initialDate,
     this.cancelRiyuu,
@@ -25,12 +25,12 @@ class ShashinTeishuutsuGamenPage extends StatefulWidget {
   });
 
   @override
-  State<ShashinTeishuutsuGamenPage> createState() =>
-      _ShashinTeishuutsuGamenPageState();
+  State<ShashinTeishuutsuGamenPage2> createState() =>
+      _ShashinTeishuutsuGamenPage2State();
 }
 
-class _ShashinTeishuutsuGamenPageState
-    extends State<ShashinTeishuutsuGamenPage> {
+class _ShashinTeishuutsuGamenPage2State
+    extends State<ShashinTeishuutsuGamenPage2> {
   final ImagePicker _picker = ImagePicker();
   XFile? imageFile;
 

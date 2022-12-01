@@ -88,7 +88,8 @@ class _ShitamiHoukokuState extends State<ShitamiHoukoku> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ShashinTeishuutsuGamenPage(),
+                      builder: (context) =>
+                          ShashinTeishuutsuGamenPage(JYUCYU_ID: ''),
                     ),
                   );
                 },
@@ -211,7 +212,9 @@ class _ShitamiHoukokuState extends State<ShitamiHoukoku> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        const ShashinTeishuutsuGamenPage(),
+                                        ShashinTeishuutsuGamenPage(
+                                      JYUCYU_ID: '',
+                                    ),
                                   ),
                                 );
                               },

@@ -111,11 +111,11 @@ class _Page723State extends State<Page723> {
     checkAllDayCreateAnkenPage = false;
     jikanKaraCreateAnkenPage = listDateTime1[listDateTime1.length - 1];
     jikanMadeCreateAnkenPage = listDateTime2[listDateTime1.length - 1];
-    callGetAnken();
+    callGetPullDownAnken();
     super.initState();
   }
 
-  Future<dynamic> callGetAnken({Function? onsuccess}) async {
+  Future<dynamic> callGetPullDownAnken({Function? onsuccess}) async {
     final dynamic result =
         GetPullDownAnken().getPullDownAnken(onSuccess: (result) {
       setState(() {
