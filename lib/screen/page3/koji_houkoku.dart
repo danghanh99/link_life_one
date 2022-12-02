@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:link_life_one/components/text_line_down.dart';
+import 'package:link_life_one/screen/page3/houjin_kanryousho.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_houkoku_page.dart';
 import 'package:link_life_one/screen/page3/shoudaku_shoukisai.dart';
@@ -53,6 +54,9 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
   int currentIndexPullDown = 0;
   String currentPullDownValue = '';
   XFile? imageFile;
+
+  String HOJIN_FLG = '0';
+  String? KBN_BIKO;
   @override
   void initState() {
     super.initState();
@@ -64,10 +68,25 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
         JYUCYU_ID: widget.JYUCYU_ID,
         SINGLE_SUMMARIZE: widget.SINGLE_SUMMARIZE,
         KOJI_ST: widget.KOJI_ST,
-        SYUYAKU_JYUCYU_ID:
-            widget.SINGLE_SUMMARIZE == "02" ? widget.SYUYAKU_JYUCYU_ID : null,
+        SYUYAKU_JYUCYU_ID: widget.SYUYAKU_JYUCYU_ID,
         onSuccess: (res) {
           print(res);
+          if (res["HOJIN_FLG"] == null || res["HOJIN_FLG"] == "0") {
+            setState(() {
+              HOJIN_FLG = "0";
+            });
+          } else {
+            setState(() {
+              HOJIN_FLG = "1";
+            });
+          }
+
+          if (res["KBN_BIKO"] == null) {
+          } else {
+            setState(() {
+              KBN_BIKO = res["KBN_BIKO"];
+            });
+          }
 
           if (res["PULLDOWN"] != null) {
             setState(() {
@@ -76,15 +95,16 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
               currentIndexPullDown = 0;
             });
           }
-          if (res["constructionNotReport"] != null) {
-            if (res["constructionNotReport"]["SINGLE"] != null) {
+          if (res["constructionReportSUMMARIZE"] != null ||
+              res["constructionReportSINGLE"] != null) {
+            if (res["constructionReportSUMMARIZE"] != null) {
               setState(() {
-                listKojiHoukoku = res["constructionNotReport"]["SINGLE"];
+                listKojiHoukoku = res["constructionReportSUMMARIZE"];
               });
             }
-            if (res["constructionNotReport"]["SUMMARIZE"] != null) {
+            if (res["constructionReportSINGLE"] != null) {
               setState(() {
-                listKojiHoukoku = res["constructionNotReport"]["SUMMARIZE"];
+                listKojiHoukoku = res["constructionReportSINGLE"];
               });
             }
             if (listKojiHoukoku.isNotEmpty) {
@@ -101,6 +121,11 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 {
                   "MAKER_CD": "",
                   "HINBAN": "",
+                  "KISETU_MAKER_CD": "",
+                  "KISETU_HINBAN": "",
+                  "BEF_SEKO_PHOTO_FILEPATH": "",
+                  "AFT_SEKO_PHOTO_FILEPATH": "",
+                  "OTHER_PHOTO_FOLDERPATH": ""
                 }
               ];
               listStateIndexDropdown = [0];
@@ -111,7 +136,12 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
   }
 
   //  "MAKER_CD": "★弊社★オ",
-  // "HINBAN": "KOJ-3318"
+  //           "HINBAN": "KOJ-3318",
+  //           "KISETU_MAKER_CD": null,
+  //           "KISETU_HINBAN": null,
+  //           "BEF_SEKO_PHOTO_FILEPATH": "img/honey_spice_at_hyper_japan_summer_2015.jpeg",
+  //           "AFT_SEKO_PHOTO_FILEPATH": "img/honey_spice_at_hyper_japan_summer_2015.jpeg",
+  //           "OTHER_PHOTO_FOLDERPATH": null
 
   @override
   Widget build(BuildContext context) {
@@ -174,14 +204,47 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 const SizedBox(
                   height: 40,
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    leftSide(),
-                    rightSide(),
-                  ],
-                ),
+                widget.SINGLE_SUMMARIZE == "0" ||
+                        widget.SINGLE_SUMMARIZE == "00"
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment
+                            .start, // k gop: 1 doi tuong - gom nhieu item
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          leftSide(),
+                          rightSide(),
+                        ],
+                      )
+                    : ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis
+                            .vertical, // gop lai: nhieu doi tuong - 1 doi tuong  = 1 item
+                        shrinkWrap: true,
+                        itemCount: listKojiHoukoku.length,
+                        itemBuilder: (context, index) {
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              leftSide1Item(index),
+                              rightSide(),
+                            ],
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) =>
+                            Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          child: SizedBox(
+                            height: 5,
+                            width: 100.w,
+                            child: Divider(
+                              height: 2,
+                              color: Colors.black,
+                              thickness: 2,
+                            ),
+                          ),
+                        ),
+                      ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Divider(
@@ -357,6 +420,73 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
               const SizedBox(
                 height: 10,
               ),
+              const Text(
+                '【既設品情報】',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'メーカー: ',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(
+                      width: 100,
+                      height: 50,
+                      child: textUnderline(
+                        initial: listKojiHoukoku[index]["KISETU_MAKER_CD"],
+                        onChange: (value) {
+                          if (listKojiHoukoku[index]["KISETU_MAKER_CD"] !=
+                              null) {
+                            setState(() {
+                              listKojiHoukoku[index]["KISETU_MAKER_CD"] = value;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '品番: ',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(
+                      width: 100,
+                      height: 50,
+                      child: textUnderline(
+                        initial: listKojiHoukoku[index]["KISETU_HINBAN"] ?? '',
+                        onChange: (value) {
+                          if (listKojiHoukoku[index]["KISETU_HINBAN"] != null) {
+                            setState(() {
+                              listKojiHoukoku[index]["KISETU_HINBAN"] = value;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: Row(
@@ -376,9 +506,185 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
             ],
           );
         },
-        separatorBuilder: (BuildContext context, int index) => const SizedBox(
-          height: 5,
+        separatorBuilder: (BuildContext context, int index) => Padding(
+          padding: const EdgeInsets.only(top: 10, bottom: 10),
+          child: SizedBox(
+            height: 5,
+            width: 100.w,
+            child: Divider(
+              height: 2,
+              color: Colors.black,
+              thickness: 2,
+            ),
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget leftSide1Item(int index) {
+    return Container(
+      height: widget.KOJI_ST == "3" || widget.KOJI_ST == "03" ? 400.h : 200.h,
+      width: 300.w,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '【施工商品情報】',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'メーカー: ',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                ),
+                SizedBox(
+                  width: 100,
+                  height: 50,
+                  child: textUnderline(
+                    initial: listKojiHoukoku[index]["MAKER_CD"],
+                    onChange: (value) {
+                      setState(() {
+                        listKojiHoukoku[index]["MAKER_CD"] = value;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '品番: ',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                ),
+                SizedBox(
+                  width: 100,
+                  height: 50,
+                  child: textUnderline(
+                    initial: listKojiHoukoku[index]["HINBAN"],
+                    onChange: (value) {
+                      setState(() {
+                        listKojiHoukoku[index]["HINBAN"] = value;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          widget.KOJI_ST == "3" || widget.KOJI_ST == "03"
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '【既設品情報】',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'メーカー: ',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w700),
+                          ),
+                          SizedBox(
+                            width: 100,
+                            height: 50,
+                            child: textUnderline(
+                              initial: listKojiHoukoku[index]
+                                  ["KISETU_MAKER_CD"],
+                              onChange: (value) {
+                                if (listKojiHoukoku[index]["KISETU_MAKER_CD"] !=
+                                    null) {
+                                  setState(() {
+                                    listKojiHoukoku[index]["KISETU_MAKER_CD"] =
+                                        value;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '品番: ',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w700),
+                          ),
+                          SizedBox(
+                            width: 100,
+                            height: 50,
+                            child: textUnderline(
+                              initial:
+                                  listKojiHoukoku[index]["KISETU_HINBAN"] ?? '',
+                              onChange: (value) {
+                                if (listKojiHoukoku[index]["KISETU_HINBAN"] !=
+                                    null) {
+                                  setState(() {
+                                    listKojiHoukoku[index]["KISETU_HINBAN"] =
+                                        value;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                )
+              : Container(),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Row(
+              children: [
+                const Text(
+                  '建築形態',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                _dropDownButton(context, index),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -484,14 +790,32 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ShoudakuShoukisai(
-                  initialDate: widget.initialDate,
+            if (HOJIN_FLG == null ||
+                HOJIN_FLG == "0" ||
+                HOJIN_FLG == "00" ||
+                HOJIN_FLG == '') {
+              // go to top
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ShoudakuShoukisai(
+                    JYUCYU_ID: widget.JYUCYU_ID,
+                    KOJI_ST: widget.KOJI_ST,
+                    initialDate: widget.initialDate,
+                  ),
                 ),
-              ),
-            );
+              );
+            } else {
+              // go to bottom
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HoujinKanryousho(
+                    initialDate: widget.initialDate,
+                  ),
+                ),
+              );
+            }
           },
           child: Container(
             decoration: BoxDecoration(
