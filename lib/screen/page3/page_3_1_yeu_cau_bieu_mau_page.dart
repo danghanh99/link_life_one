@@ -372,6 +372,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ShitamiHoukoku(
+                              KOJI_ST: widget.KOJI_ST,
                               JYUCYU_ID: widget.koji.jyucyuId,
                             ),
                           ),

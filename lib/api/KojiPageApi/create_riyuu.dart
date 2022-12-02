@@ -39,7 +39,7 @@ class CreateRiyuu {
         onFailed.call(errorMessage);
       }
     } catch (e) {
-      onFailed.call(e.toString());
+      onFailed.call("Update image failed");
     }
   }
 
@@ -69,8 +69,8 @@ class CreateRiyuu {
       case '1':
         return {
           'FILE_IMAGE': await MultipartFile.fromFile(FILE_PATH),
-          'JYUCYU_ID': JYUCYU_ID,
-          'SHITAMI_MENU': SHITAMI_MENU,
+          'JYUCYU_ID': '0301447771',
+          'SHITAMI_MENU': '1',
         };
       case '2':
         return {

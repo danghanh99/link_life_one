@@ -8,7 +8,9 @@ import '../page7/component/dialog.dart';
 
 class ShitamiHoukoku extends StatefulWidget {
   final String JYUCYU_ID;
-  const ShitamiHoukoku({super.key, required this.JYUCYU_ID});
+  final String KOJI_ST;
+  const ShitamiHoukoku(
+      {super.key, required this.JYUCYU_ID, required this.KOJI_ST});
 
   @override
   State<ShitamiHoukoku> createState() => _ShitamiHoukokuState();
@@ -89,6 +91,7 @@ class _ShitamiHoukokuState extends State<ShitamiHoukoku> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ShashinTeishuutsuGamenPage2(
+                        KOJI_ST: widget.KOJI_ST,
                         index: 1,
                         JYUCYU_ID: widget.JYUCYU_ID,
                         mitmoriYmd: null,
@@ -131,6 +134,7 @@ class _ShitamiHoukokuState extends State<ShitamiHoukoku> {
                     body: RiyuuKoNyuuGamen(
                       index: 2,
                       JYUCYU_ID: widget.JYUCYU_ID,
+                      KOJI_ST: widget.KOJI_ST,
                     ),
                   );
                 },
@@ -156,6 +160,7 @@ class _ShitamiHoukokuState extends State<ShitamiHoukoku> {
                     context: context,
                     title: '',
                     body: RiyuuKoNyuuGamen(
+                      KOJI_ST: widget.KOJI_ST,
                       index: 3,
                       JYUCYU_ID: widget.JYUCYU_ID,
                     ),
@@ -217,6 +222,7 @@ class _ShitamiHoukokuState extends State<ShitamiHoukoku> {
                                   MaterialPageRoute(
                                     builder: (context) =>
                                         ShashinTeishuutsuGamenPage2(
+                                      KOJI_ST: widget.KOJI_ST,
                                       index: 4,
                                       JYUCYU_ID: widget.JYUCYU_ID,
                                       mitmoriYmd: null,

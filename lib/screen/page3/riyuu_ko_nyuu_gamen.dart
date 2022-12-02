@@ -11,9 +11,11 @@ import '../../shared/custom_button.dart';
 class RiyuuKoNyuuGamen extends StatefulWidget {
   final String JYUCYU_ID;
   final int index;
+  final String KOJI_ST;
   const RiyuuKoNyuuGamen({
     required this.JYUCYU_ID,
     required this.index,
+    required this.KOJI_ST,
     Key? key,
   }) : super(key: key);
 
@@ -203,12 +205,14 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
                           MaterialPageRoute(
                             builder: (context) => widget.index == 2
                                 ? ShashinTeishuutsuGamenPage2(
+                                    KOJI_ST: widget.KOJI_ST,
                                     index: widget.index,
                                     JYUCYU_ID: widget.JYUCYU_ID,
                                     mitmoriYmd: date,
                                     cancelRiyuu: controller.text,
                                   )
                                 : ShashinTeishuutsuGamenPage2(
+                                    KOJI_ST: widget.KOJI_ST,
                                     index: widget.index,
                                     JYUCYU_ID: widget.JYUCYU_ID,
                                     cancelRiyuu: controller.text,
