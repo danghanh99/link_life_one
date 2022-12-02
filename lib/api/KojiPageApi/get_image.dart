@@ -13,6 +13,7 @@ class GetImage {
       Uri.parse(
           "https://koji-app.starboardasiavn.com/requestPhotoSubmissionPreview.php?KOJI_ST=$KOJI_ST&SHITAMI_MENU=$SHITAMI_MENU&JYUCYU_ID=$JYUCYU_ID"),
     );
+    // oke
 
     if (response.statusCode == 200) {
       final dynamic result = jsonDecode(response.body);
