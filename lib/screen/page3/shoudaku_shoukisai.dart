@@ -7,7 +7,15 @@ import '../../shared/assets.dart';
 
 class ShoudakuShoukisai extends StatefulWidget {
   final DateTime? initialDate;
-  const ShoudakuShoukisai({super.key, this.initialDate});
+  final String JYUCYU_ID;
+  final String KOJI_ST;
+
+  const ShoudakuShoukisai({
+    super.key,
+    this.initialDate,
+    required this.JYUCYU_ID,
+    required this.KOJI_ST,
+  });
 
   @override
   State<ShoudakuShoukisai> createState() => _ShoudakuShoukisaiState();

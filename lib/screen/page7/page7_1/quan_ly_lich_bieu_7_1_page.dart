@@ -68,15 +68,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     });
 
     scrollController2.addListener(() {
-      // if (scrollController2. .position.atEdge) {
-      //   bool isTop = _controller.position.pixels == 0;
-      //   if (isTop) {
-      //     print('At the top');
-      //   } else {
-      //     print('At the bottom');
-      //   }
-      // }
-
       print('scrolling.... ${scrollController2.position.pixels}');
       scrollController.jumpTo(scrollController2.position.pixels);
     });
