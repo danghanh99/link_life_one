@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/screen/page3/shoudakusho.dart';
 import 'package:link_life_one/shared/custom_button.dart';
+import '../../api/shoudakusho/get_shoudakusho.dart';
+import '../../components/toast.dart';
 import '../../shared/assets.dart';
 
 class ShoudakuShoukisai extends StatefulWidget {
   final DateTime? initialDate;
   final String JYUCYU_ID;
   final String KOJI_ST;
+  final String SINGLE_SUMMARIZE;
 
   const ShoudakuShoukisai({
     super.key,
     this.initialDate,
     required this.JYUCYU_ID,
+    required this.SINGLE_SUMMARIZE,
     required this.KOJI_ST,
   });
 
@@ -22,6 +28,37 @@ class ShoudakuShoukisai extends StatefulWidget {
 }
 
 class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
+  dynamic KOJI_DATA = {};
+  List<dynamic> TABLE_DATA = [];
+  @override
+  void initState() {
+    super.initState();
+    callGetKojiHoukoku();
+  }
+
+  Future<dynamic> callGetKojiHoukoku() async {
+    final dynamic result = await GetShoudakusho().getShoudakusho(
+        JYUCYU_ID: widget.JYUCYU_ID,
+        KOJI_ST: widget.KOJI_ST,
+        onSuccess: (body) {
+          print(body);
+          if (body["KOJI_DATA"] != null) {
+            setState(() {
+              KOJI_DATA = body["KOJI_DATA"][0];
+            });
+          }
+
+          if (body["TABLE_DATA"] != null) {
+            setState(() {
+              TABLE_DATA = body["TABLE_DATA"];
+            });
+          }
+        },
+        onFailed: () {
+          CustomToast.show(context, message: "Failed to get Shoudakusho");
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,13 +150,16 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                         const SizedBox(
                           height: 10,
                         ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
+                        Container(
+                          height: 400.h,
                           child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: _buildRows(10),
+                            scrollDirection: Axis.vertical,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: _buildRows(20),
+                              ),
                             ),
                           ),
                         ),
@@ -265,133 +305,302 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
   }
 
   Widget title2() {
-    return Container(
-      decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              border: Border(
-                right: BorderSide(
-                  //                   <--- left side
-                  color: Colors.black,
-                  width: 1.2,
-                ),
-              ),
-            ),
-            child: const Padding(
-              padding: EdgeInsets.only(left: 30, right: 30, top: 7, bottom: 7),
-              child: Text(
-                '受注ID',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-              ),
-            ),
-          ),
-          Container(
-            decoration: const BoxDecoration(
-              border: Border(
-                right: BorderSide(
-                  //                   <--- left side
-                  color: Colors.black,
-                  width: 1.2,
-                ),
-                left: BorderSide(
-                  //                   <--- left side
-                  color: Colors.black,
-                  width: 1.2,
-                ),
-              ),
-            ),
-            child: const Padding(
-              padding: EdgeInsets.only(left: 30, right: 30, top: 7, bottom: 7),
-              child: Text(
-                'お客様名',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-              ),
-            ),
-          ),
-          Container(
-            decoration: const BoxDecoration(
-              border: Border(
-                left: BorderSide(
-                  //                   <--- left side
-                  color: Colors.black,
-                  width: 1.2,
-                ),
-              ),
-            ),
-            child: const Padding(
-              padding: EdgeInsets.only(left: 30, right: 30, top: 7, bottom: 7),
-              child: Text(
-                'ご訪問日',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-              ),
-            ),
-          ),
-        ],
-      ),
+    // return Container(
+    //   width: 1000.w,
+    //   decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+    //   child: Row(
+    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //     children: [
+    //       Container(
+    //         width: 1000.w / 8,
+    //         decoration: const BoxDecoration(
+    //           border: Border(
+    //             right: BorderSide(
+    //               //                   <--- left side
+    //               color: Colors.black,
+    //               width: 1.2,
+    //             ),
+    //           ),
+    //         ),
+    //         child: const Padding(
+    //           padding: EdgeInsets.only(left: 30, right: 30, top: 7, bottom: 7),
+    //           child: Text(
+    //             '受注ID',
+    //             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+    //           ),
+    //         ),
+    //       ),
+    //       SizedBox(
+    //         width: 1000.w / 8,
+    //         child: Text(
+    //           '受注ID',
+    //           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+    //         ),
+    //       ),
+    //       Container(
+    //         width: 1000.w / ,
+    //         decoration: const BoxDecoration(
+    //           border: Border(
+    //             right: BorderSide(
+    //               //                   <--- left side
+    //               color: Colors.black,
+    //               width: 1.2,
+    //             ),
+    //             left: BorderSide(
+    //               //                   <--- left side
+    //               color: Colors.black,
+    //               width: 1.2,
+    //             ),
+    //           ),
+    //         ),
+    //         child: const Padding(
+    //           padding: EdgeInsets.only(left: 30, right: 30, top: 7, bottom: 7),
+    //           child: Text(
+    //             'お客様名',
+    //             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+    //           ),
+    //         ),
+    //       ),
+    //       Text(
+    //         '受注ID',
+    //         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+    //       ),
+    //       Container(
+    //         decoration: const BoxDecoration(
+    //           border: Border(
+    //             left: BorderSide(
+    //               //                   <--- left side
+    //               color: Colors.black,
+    //               width: 1.2,
+    //             ),
+    //             right: BorderSide(
+    //               //                   <--- left side
+    //               color: Colors.black,
+    //               width: 1.2,
+    //             ),
+    //           ),
+    //         ),
+    //         child: const Padding(
+    //           padding: EdgeInsets.only(left: 30, right: 30, top: 7, bottom: 7),
+    //           child: Text(
+    //             'ご訪問日',
+    //             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+    //           ),
+    //         ),
+    //       ),
+    //       Text(
+    //         '受注ID',
+    //         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+    //       )
+    //     ],
+    //   ),
+    // );
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: _buildLastRowCells(6),
     );
   }
 
+  List<Widget> _buildLastRowCells(int count) {
+    Size size = MediaQuery.of(context).size;
+    List<double> colwidth =
+        MediaQuery.of(context).orientation == Orientation.portrait
+            ? [
+                125.w,
+                125.w,
+                125.w,
+                125.w,
+                125.w,
+                125.w,
+                125.w,
+                125.w,
+                125.w,
+                125.w,
+                125.w,
+                125.w,
+              ]
+            : [
+                30,
+                (size.width - 33) * 2 / 7 + -30,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+              ];
+
+    return List.generate(count, (col) {
+      String text = '';
+      if (col == 0) {
+        text = "受注ID";
+      }
+      if (col == 1) {
+        text = KOJI_DATA["JYUCYU_ID"] ?? "";
+      }
+      if (col == 2) {
+        text = "お客様名";
+      }
+      if (col == 3) {
+        text = KOJI_DATA["SETSAKI_NAME"] ?? "";
+      }
+      if (col == 4) {
+        text = "ご訪問日";
+      }
+      if (col == 5) {
+        text = KOJI_DATA["KOJI_YMD"] ?? "";
+      }
+
+      return Container(
+        decoration: BoxDecoration(
+          border: Border.all(width: 1),
+          color: Colors.white,
+        ),
+        alignment: Alignment.center,
+        width: colwidth[col],
+        height: 40,
+        child: Text(
+          text,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      );
+    });
+  }
+
+  List<Widget> _buildLastRowCells2(int? count) {
+    count = 4;
+    Size size = MediaQuery.of(context).size;
+    List<double> colwidth =
+        MediaQuery.of(context).orientation == Orientation.portrait
+            ? [
+                150.w,
+                220.w,
+                130.w,
+                220.w,
+              ]
+            : [
+                30,
+                (size.width - 33) * 2 / 7 + -30,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+              ];
+
+    return List.generate(count, (col) {
+      String text = '';
+      if (col == 0) {
+        text = "担当営業所・担当店";
+      }
+      if (col == 1) {
+        text = KOJI_DATA["KOJIGYOSYA_NAME"] ?? "";
+      }
+      if (col == 2) {
+        text = "担当者名";
+      }
+      if (col == 3) {
+        text = KOJI_DATA["HOMON_TANT_NAME1"] ?? "";
+      }
+      if (col == 4) {
+        text = "ご訪問日";
+      }
+      if (col == 5) {
+        text = KOJI_DATA["KOJI_YMD"] ?? "";
+      }
+
+      return Container(
+        decoration: BoxDecoration(
+          border: Border.all(width: 1),
+          color: Colors.white,
+        ),
+        alignment: Alignment.center,
+        width: colwidth[col],
+        height: 40,
+        child: Text(
+          text,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      );
+    });
+  }
+
   Widget title3() {
-    return Container(
-      decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              border: Border(
-                right: BorderSide(
-                  //                   <--- left side
-                  color: Colors.black,
-                  width: 1.2,
-                ),
-              ),
-            ),
-            child: const Padding(
-              padding: EdgeInsets.only(left: 30, right: 30, top: 7, bottom: 7),
-              child: Text(
-                '担当営業所・担当店',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-              ),
-            ),
-          ),
-          Container(
-            decoration: const BoxDecoration(
-              border: Border(
-                right: BorderSide(
-                  //                   <--- left side
-                  color: Colors.black,
-                  width: 1.2,
-                ),
-                left: BorderSide(
-                  //                   <--- left side
-                  color: Colors.black,
-                  width: 1.2,
-                ),
-              ),
-            ),
-            child: const Padding(
-              padding: EdgeInsets.only(left: 30, right: 30, top: 7, bottom: 7),
-              child: Text(
-                '担当者名',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-              ),
-            ),
-          ),
-          Container(
-            child: const Padding(
-              padding: EdgeInsets.only(left: 30, right: 30, top: 7, bottom: 7),
-              child: Text(
-                '',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-              ),
-            ),
-          ),
-        ],
-      ),
+    // return Container(
+    //   decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+    //   child: Row(
+    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //     children: [
+    //       Container(
+    //         decoration: const BoxDecoration(
+    //           border: Border(
+    //             right: BorderSide(
+    //               //                   <--- left side
+    //               color: Colors.black,
+    //               width: 1.2,
+    //             ),
+    //           ),
+    //         ),
+    //         child: const Padding(
+    //           padding: EdgeInsets.only(left: 30, right: 30, top: 7, bottom: 7),
+    //           child: Text(
+    //             '担当営業所・担当店',
+    //             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+    //           ),
+    //         ),
+    //       ),
+    //       Container(
+    //         decoration: const BoxDecoration(
+    //           border: Border(
+    //             right: BorderSide(
+    //               //                   <--- left side
+    //               color: Colors.black,
+    //               width: 1.2,
+    //             ),
+    //             left: BorderSide(
+    //               //                   <--- left side
+    //               color: Colors.black,
+    //               width: 1.2,
+    //             ),
+    //           ),
+    //         ),
+    //         child: const Padding(
+    //           padding: EdgeInsets.only(left: 30, right: 30, top: 7, bottom: 7),
+    //           child: Text(
+    //             '担当者名',
+    //             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+    //           ),
+    //         ),
+    //       ),
+    //       Container(
+    //         child: const Padding(
+    //           padding: EdgeInsets.only(left: 30, right: 30, top: 7, bottom: 7),
+    //           child: Text(
+    //             '',
+    //             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+    //           ),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: _buildLastRowCells2(4),
     );
   }
 
@@ -466,6 +675,19 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
   }
 
   Widget contentTable({required int col, required int row, String? initial}) {
+    if (row <= TABLE_DATA.length) {
+      List<String> list = [
+        "TUIKA_SYOHIN_NAME",
+        "TUIKA_JISYA_CD",
+        "SURYO",
+        "HANBAI_TANKA",
+        "KINGAK",
+      ];
+      return Text(
+        TABLE_DATA[row - 1][list[col]] ?? '',
+        style: TextStyle(color: Colors.black),
+      );
+    }
     if (col == 1 || col == 2) {
       return TextFormField(
         inputFormatters: [
@@ -508,6 +730,9 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
               context,
               MaterialPageRoute(
                 builder: (context) => ShoudakuSho(
+                  DATA_TABLE: TABLE_DATA,
+                  JYUCYU_ID: widget.JYUCYU_ID,
+                  SINGLE_SUMMARIZE: widget.SINGLE_SUMMARIZE,
                   initialDate: widget.initialDate,
                 ),
               ),
