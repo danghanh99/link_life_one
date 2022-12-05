@@ -744,7 +744,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         return PopupMenuItem(
           onTap: () {
             setState(() {
-              sukejuuruSelectedUser = item;
+              sukejuuruSelectedUser = sukejuuruAllUser[index];
               selectedNhanVienName = item["TANT_NAME"];
               selectedNhanVienTantCD = item["TANT_CD"];
             });

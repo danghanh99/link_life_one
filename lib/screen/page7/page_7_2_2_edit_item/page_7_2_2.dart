@@ -462,6 +462,7 @@ class _Page722State extends State<Page722> {
                             // width: size.width / 2 - 80,
                             width: 80,
                             child: CustomTextField(
+                              maxLength: 2,
                               initValue: jinNumberEditPage.toString(),
                               validator: _validateNumber,
                               fillColor: const Color(0xFFF5F6F8),
@@ -502,6 +503,7 @@ class _Page722State extends State<Page722> {
                             // width: size.width / 2 - 80,
                             width: 80,
                             child: CustomTextField(
+                              maxLength: 10,
                               initValue: jikanNumberEditPage.toString(),
                               validator: _validateNumber2,
                               fillColor: const Color(0xFFF5F6F8),

@@ -201,8 +201,18 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                                   Container(
                                     width: size.width.w * 4 / 5,
                                     height: size.height.h * 4 / 5,
-                                    child: SfPdfViewer.network(item['FILEPATH'],
-                                        key: _pdfViewerKey),
+                                    child: SfPdfViewer.network(
+                                      item['FILEPATH'],
+                                      key: _pdfViewerKey,
+                                      onDocumentLoaded: (details) {
+                                        // CustomToast.show(context,
+                                        //     message: "Load failed");
+                                      },
+                                      onDocumentLoadFailed: (detail) {
+                                        CustomToast.show(context,
+                                            message: detail.description);
+                                      },
+                                    ),
                                   )
                                 ],
                               ),

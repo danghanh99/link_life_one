@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/KojiPageApi/show_popup.dart';
+import 'package:link_life_one/components/custom_text_field.dart';
 import 'package:link_life_one/models/koji.dart';
 import 'package:link_life_one/screen/page3/page_3/components/logout_widget.dart';
 import 'package:link_life_one/screen/page3/page_3_1_yeu_cau_bieu_mau_page.dart';
 import '../../../api/KojiPageApi/get_list_koji_api.dart';
 import '../../../api/KojiPageApi/request_post_count.dart';
 import '../../../shared/assets.dart';
+import '../../../shared/validator.dart';
 import 'components/title_widget.dart';
 
 class Page3BaoCaoHoanThanhCongTrinh extends StatefulWidget {
@@ -25,6 +27,7 @@ class Page3BaoCaoHoanThanhCongTrinh extends StatefulWidget {
 
 class _Page3BaoCaoHoanThanhCongTrinhState
     extends State<Page3BaoCaoHoanThanhCongTrinh> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
   List<String> listNames = [
     '入出庫管理',
     '部材管理',
@@ -33,6 +36,9 @@ class _Page3BaoCaoHoanThanhCongTrinhState
     '1234',
   ];
   DateTime date = DateTime.now();
+
+  String tiraru = '';
+  bool isValid = true;
 
   @override
   void initState() {
@@ -385,40 +391,73 @@ class _Page3BaoCaoHoanThanhCongTrinhState
               ),
             ),
             Expanded(child: Container()),
-            Row(
-              children: [
-                const Text(
-                  'チラシ投函数',
-                  style: TextStyle(
-                    color: Color(0xFF042C5C),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: _moreButton(context),
-                ),
-                Container(
-                  width: 70,
-                  height: 37,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFA800),
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      '更新',
+            Container(
+              height: 80.h,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: Text(
+                      'チラシ投函数',
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
+                        color: const Color(0xFF042C5C),
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    // child: _moreButton(context),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: 100.w,
+                          height: 60.h,
+                          child: CustomTextField(
+                            maxLength: 10,
+                            hint: '',
+                            type: TextInputType.phone,
+                            // validator: _validateNumber,
+                            onChanged: (text) {
+                              // _validateNumber(text);
+                              // _formKey.currentState?.validate();
+                              validateNumber(text);
+                            },
+                          ),
+                        ),
+                        !isValid
+                            ? Text(
+                                "Only number",
+                                style: TextStyle(
+                                    color: Colors.red, fontSize: 14.sp),
+                              )
+                            : Container(),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: 70.w,
+                    height: 37.h,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFA800),
+                      borderRadius: BorderRadius.circular(26),
+                    ),
+                    child: TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        '更新',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               height: 10,
@@ -475,6 +514,20 @@ class _Page3BaoCaoHoanThanhCongTrinhState
         )
       ],
     );
+  }
+
+  bool validateNumber(String? input) {
+    if (Validator.onlyNumber(input!)) {
+      setState(() {
+        isValid = true;
+      });
+      return true;
+    } else {
+      setState(() {
+        isValid = false;
+      });
+      return false;
+    }
   }
 
   Widget rightNextButton(String text) {

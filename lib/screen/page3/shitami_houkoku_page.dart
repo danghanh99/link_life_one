@@ -76,10 +76,10 @@ class _ShitamiHoukokuState extends State<ShitamiHoukoku> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
                   Text(
-                    '簡易的に下見報告在を行う',
+                    '簡易的に下見報告を行います。',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
                   ),
-                  Text('見積書作成は新基幹システムから作成を行ってください',
+                  Text('見積書作成は新基幹システムから作成を行ってください。',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.w900))
                 ],
@@ -146,7 +146,7 @@ class _ShitamiHoukokuState extends State<ShitamiHoukoku> {
                   width: 400,
                   child: const Center(
                     child: Text(
-                      '見積作成逕延報告在を行う',
+                      '見積作成延長報告を行う',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
                     ),
@@ -174,7 +174,7 @@ class _ShitamiHoukokuState extends State<ShitamiHoukoku> {
                   width: 400,
                   child: const Center(
                     child: Text(
-                      '下見の桔果、キャンセル の報告',
+                      '下見結果、キャンセルの報告',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
                     ),
@@ -254,7 +254,7 @@ class _ShitamiHoukokuState extends State<ShitamiHoukoku> {
                   width: 400,
                   child: const Center(
                     child: Text(
-                      '見積書なしで、工事へ進める報告',
+                      '見積書なしで工事へ進める報告',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
                     ),

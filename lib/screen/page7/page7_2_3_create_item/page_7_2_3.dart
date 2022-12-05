@@ -326,6 +326,7 @@ class _Page723State extends State<Page723> {
                             // width: size.width / 2 - 80,
                             width: 80,
                             child: CustomTextField(
+                              maxLength: 2,
                               validator: _validateNumber,
                               fillColor: const Color(0xFFF5F6F8),
                               hint: jinNumberCreateAnkenPage.toString(),
@@ -365,6 +366,7 @@ class _Page723State extends State<Page723> {
                             // width: size.width / 2 - 80,
                             width: 80,
                             child: CustomTextField(
+                              maxLength: 10,
                               validator: _validateNumber2,
                               fillColor: const Color(0xFFF5F6F8),
                               hint: jikanNumberCreateAnkenPage.toString(),
