@@ -9,6 +9,8 @@ class Koji {
   final String jyucyuId;
   final int shitamiJinin;
   final int? shitamiJikan;
+  final int? kojiJinin;
+  final int? kojiJikan;
   final String kojiItem;
   final String setsakiAddress;
   final String setsakiName;
@@ -21,6 +23,8 @@ class Koji {
       required this.jyucyuId,
       required this.shitamiJinin,
       this.shitamiJikan,
+      this.kojiJinin,
+      this.kojiJikan,
       required this.kojiItem,
       required this.setsakiAddress,
       required this.setsakiName,

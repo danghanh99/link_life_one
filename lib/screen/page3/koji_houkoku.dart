@@ -56,6 +56,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
   XFile? imageFile;
 
   String HOJIN_FLG = '0';
+  String? TENPO_CD = '00000';
   String? KBN_BIKO;
   @override
   void initState() {
@@ -73,11 +74,17 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
           print(res);
           if (res["HOJIN_FLG"] == null || res["HOJIN_FLG"] == "0") {
             setState(() {
-              HOJIN_FLG = "0";
+              HOJIN_FLG = "1";
             });
           } else {
             setState(() {
               HOJIN_FLG = "1";
+            });
+          }
+
+          if (res["TENPO_CD"] != null) {
+            setState(() {
+              TENPO_CD = res['TENPO_CD'];
             });
           }
 
@@ -790,32 +797,35 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
         ),
         GestureDetector(
           onTap: () {
-            if (HOJIN_FLG == null ||
-                HOJIN_FLG == "0" ||
-                HOJIN_FLG == "00" ||
-                HOJIN_FLG == '') {
-              // go to top
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ShoudakuShoukisai(
-                    SINGLE_SUMMARIZE: widget.SINGLE_SUMMARIZE,
-                    JYUCYU_ID: widget.JYUCYU_ID,
-                    KOJI_ST: widget.KOJI_ST,
-                    initialDate: widget.initialDate,
-                  ),
-                ),
-              );
+            if (TENPO_CD == null) {
+              CustomToast.show(context, message: "Tenpo CD null");
             } else {
-              // go to bottom
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HoujinKanryousho(
-                    initialDate: widget.initialDate,
+              if (HOJIN_FLG == null ||
+                  HOJIN_FLG == "0" ||
+                  HOJIN_FLG == "00" ||
+                  HOJIN_FLG == '') {
+                // go to top
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShoudakuShoukisai(
+                      SINGLE_SUMMARIZE: widget.SINGLE_SUMMARIZE,
+                      JYUCYU_ID: widget.JYUCYU_ID,
+                      KOJI_ST: widget.KOJI_ST,
+                      initialDate: widget.initialDate,
+                    ),
                   ),
-                ),
-              );
+                );
+              } else {
+                // go to bottom
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HoujinKanryousho(
+                        JYUCYU_ID: widget.JYUCYU_ID, TENPO_CD: TENPO_CD!),
+                  ),
+                );
+              }
             }
           },
           child: Container(

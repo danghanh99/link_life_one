@@ -324,13 +324,11 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: (item.kojiSt == '01' ||
-                                      item.kojiSt == '02')
+                              color: isShitami
                                   ? const Color.fromARGB(255, 216, 181, 111)
                                   : const Color.fromARGB(255, 111, 177, 224),
                               border: Border.all(
-                                color: (item.kojiSt == '01' ||
-                                        item.kojiSt == '02')
+                                color: isShitami
                                     ? const Color.fromARGB(255, 216, 181, 111)
                                     : const Color.fromARGB(255, 111, 177, 224),
                               ),
@@ -343,8 +341,11 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                                   Text(
                                     "訪問時間：${formatJikan(jikan: item.kojiHomonJikan)}   報告： ${item.kojiSt == '03' ? '済' : '未'}",
                                   ),
-                                  Text(
-                                      '受注ID： ${item.jyucyuId}　人数：${item.shitamiJinin}人　目安作業時間：${item.shitamiJikan ?? ''}(m)'),
+                                  isShitami
+                                      ? Text(
+                                          '受注ID： ${item.jyucyuId}　人数：${item.shitamiJinin}人　目安作業時間：${item.shitamiJikan ?? ''}(m)')
+                                      : Text(
+                                          '受注ID： ${item.jyucyuId}　人数：${item.kojiJinin}人　目安作業時間：${item.kojiJikan ?? ''}(m)'),
                                   Text('工事アイテム： ${item.kojiItem}'),
                                   Text('住所： ${item.setsakiAddress}'),
                                   Text('氏名： ${item.setsakiName}'),
