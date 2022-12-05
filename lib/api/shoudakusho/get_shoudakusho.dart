@@ -7,7 +7,7 @@ import 'dart:convert';
 class GetShoudakusho {
   GetShoudakusho() : super();
 
-  Future<List<dynamic>> getShoudakusho({
+  Future<dynamic> getShoudakusho({
     required String JYUCYU_ID,
     required String KOJI_ST,
     required Function(dynamic) onSuccess,

@@ -799,6 +799,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ShoudakuShoukisai(
+                    SINGLE_SUMMARIZE: widget.SINGLE_SUMMARIZE,
                     JYUCYU_ID: widget.JYUCYU_ID,
                     KOJI_ST: widget.KOJI_ST,
                     initialDate: widget.initialDate,

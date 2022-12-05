@@ -3,13 +3,25 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:link_life_one/components/text_line_down.dart';
+import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
 
+import '../../api/shoudakusho/submit_last_page.dart';
+
 class ShoudakuSho extends StatefulWidget {
   final DateTime? initialDate;
-  const ShoudakuSho({super.key, this.initialDate});
+  final List<dynamic> DATA_TABLE;
+  final String SINGLE_SUMMARIZE;
+  final String JYUCYU_ID;
+  const ShoudakuSho({
+    super.key,
+    this.initialDate,
+    required this.DATA_TABLE,
+    required this.SINGLE_SUMMARIZE,
+    required this.JYUCYU_ID,
+  });
 
   @override
   State<ShoudakuSho> createState() => _ShoudakuShoState();
@@ -470,6 +482,28 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
         GestureDetector(
           onTap: () {
             // Navigator.pop(context);
+            SubmitLastPage().submitLastPage(
+              SINGLE_SUMMARIZE: widget.SINGLE_SUMMARIZE,
+              JYUCYU_ID: widget.JYUCYU_ID,
+              CHECK_FLG1: checkedValue1 ? "1" : "0",
+              CHECK_FLG2: checkedValue2 ? "1" : "0",
+              CHECK_FLG3: checkedValue3 ? "1" : "0",
+              CHECK_FLG4: checkedValue4 ? "1" : "0",
+              CHECK_FLG5: checkedValue5 ? "1" : "0",
+              CHECK_FLG6: checkedValue6 ? "1" : "0",
+              CHECK_FLG7: checkedValue7 ? "1" : "0",
+              list: widget.DATA_TABLE,
+              onSuccess: () {
+                CustomToast.show(context,
+                    message: "Submit Successfull", backGround: Colors.green);
+              },
+              onFailed: () {
+                CustomToast.show(
+                  context,
+                  message: "Submit failed",
+                );
+              },
+            );
           },
           child: Container(
             decoration: BoxDecoration(
