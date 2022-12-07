@@ -14,11 +14,10 @@ class GetListKojiApi {
 
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/requestConstructionList.php?YMD=${DateFormat(('yyyy-MM-dd')).format(date2)}&LOGIN_ID=${id}"),
+          "https://koji-app.starboardasiavn.com/Request/Koji/requestGetConstructionList.php?YMD=${DateFormat(('yyyy-MM-dd')).format(date2)}&LOGIN_ID=${id}"),
     );
 
     if (response.statusCode == 200) {
-      response.statusCode;
       final List<dynamic> body = jsonDecode(response.body);
       final List<Koji> list = body
           .map(

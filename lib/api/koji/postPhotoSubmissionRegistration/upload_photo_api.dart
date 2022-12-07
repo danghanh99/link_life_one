@@ -16,7 +16,7 @@ class UploadPhotoApi {
     try {
       var dio = Dio();
       String url =
-          "https://koji-app.starboardasiavn.com/requestPostPhotoSubmissionRegistration.php";
+          "https://koji-app.starboardasiavn.com/Request/Koji/requestPostPhotoSubmissionRegistration.php";
       FormData formData = FormData.fromMap(
         {
           'FILE_NAME': await MultipartFile.fromFile(FILE_PATH),

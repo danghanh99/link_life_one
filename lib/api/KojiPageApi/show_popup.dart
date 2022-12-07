@@ -12,7 +12,7 @@ class ShowPopUp {
       required Function(int count) onSuccess}) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/requestCheckCount.php?YMD=${DateFormat(('yyyy-MM-dd')).format(YMD)}&SETSAKI_ADDRESS=${SETSAKI_ADDRESS}&JYUCYU_ID=${JYUCYU_ID}"),
+          "https://koji-app.starboardasiavn.com/Request/Koji/requestCheckCount.php?YMD=${DateFormat(('yyyy-MM-dd')).format(YMD)}&SETSAKI_ADDRESS=${SETSAKI_ADDRESS}&JYUCYU_ID=${JYUCYU_ID}"),
     );
 
     if (response.statusCode == 200) {

@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:link_life_one/api/KojiPageApi/hou_jin_kan_ryo_sho_api.dart';
+import 'package:link_life_one/api/KojiPageApi/request_corporate_completion.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/shared/custom_button.dart';
@@ -339,7 +340,20 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
         ),
         GestureDetector(
           onTap: () {
-            // Navigator.pop(context);
+            RequestCorporateCompletion().requestCorporateCompletion(
+                JYUCYU_ID: widget.JYUCYU_ID,
+                onSuccess: () {
+                  CustomToast.show(
+                    context,
+                    message: 'Created success',
+                    backGround: Colors.green,
+                  );
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                onFailed: () {
+                  CustomToast.show(context, message: 'Create failed');
+                });
           },
           child: Container(
             decoration: BoxDecoration(

@@ -1,7 +1,4 @@
-import 'package:hive_flutter/hive_flutter.dart';
 import "package:http/http.dart" as http;
-import 'package:intl/intl.dart';
-import 'package:link_life_one/models/koji.dart';
 import 'dart:convert';
 
 class GetKojiHoukoku {
@@ -20,24 +17,24 @@ class GetKojiHoukoku {
     if (KOJI_ST == "01" || KOJI_ST == "02") {
       if (SINGLE_SUMMARIZE == "01") {
         url =
-            "https://koji-app.starboardasiavn.com/requestConstructionReport.php?JYUCYU_ID=${JYUCYU_ID}&KOJI_ST=${KOJI_ST}&SINGLE_SUMMARIZE=${SINGLE_SUMMARIZE}";
+            "https://koji-app.starboardasiavn.com/Request/Koji/requestConstructionReport.php?JYUCYU_ID=${JYUCYU_ID}&KOJI_ST=${KOJI_ST}&SINGLE_SUMMARIZE=${SINGLE_SUMMARIZE}";
         // url =
         // "https://koji-app.starboardasiavn.com/requestConstructionReport.php?JYUCYU_ID=0301416579&KOJI_ST=1&SINGLE_SUMMARIZE=1";
       } else {
         url =
-            "https://koji-app.starboardasiavn.com/requestConstructionReport.php?JYUCYU_ID=${JYUCYU_ID}&KOJI_ST=${KOJI_ST}&SINGLE_SUMMARIZE=${SINGLE_SUMMARIZE}&SYUYAKU_JYUCYU_ID=${SYUYAKU_JYUCYU_ID}";
+            "https://koji-app.starboardasiavn.com/Request/Koji/requestConstructionReport.php?JYUCYU_ID=${JYUCYU_ID}&KOJI_ST=${KOJI_ST}&SINGLE_SUMMARIZE=${SINGLE_SUMMARIZE}&SYUYAKU_JYUCYU_ID=${SYUYAKU_JYUCYU_ID}";
         //   url =
         // "https://koji-app.starboardasiavn.com/requestConstructionReport.php?JYUCYU_ID=0301416579&KOJI_ST=1&SINGLE_SUMMARIZE=2&SYUYAKU_JYUCYU_ID=0301416580";
       }
     } else {
       if (SINGLE_SUMMARIZE == "01") {
         url =
-            "https://koji-app.starboardasiavn.com/requestConstructionReport.php?JYUCYU_ID=${JYUCYU_ID}&KOJI_ST=${KOJI_ST}&SINGLE_SUMMARIZE=${SINGLE_SUMMARIZE}";
+            "https://koji-app.starboardasiavn.com/Request/Koji/requestConstructionReport.php?JYUCYU_ID=${JYUCYU_ID}&KOJI_ST=${KOJI_ST}&SINGLE_SUMMARIZE=${SINGLE_SUMMARIZE}";
         //  url =
         // "https://koji-app.starboardasiavn.com/requestConstructionReport.php?JYUCYU_ID=0301416579&KOJI_ST=3&SINGLE_SUMMARIZE=1";
       } else {
         url =
-            "https://koji-app.starboardasiavn.com/requestConstructionReport.php?JYUCYU_ID=${JYUCYU_ID}&KOJI_ST=${KOJI_ST}&SINGLE_SUMMARIZE=${SINGLE_SUMMARIZE}&SYUYAKU_JYUCYU_ID=${SYUYAKU_JYUCYU_ID}";
+            "https://koji-app.starboardasiavn.com/Request/Koji/requestConstructionReport.php?JYUCYU_ID=${JYUCYU_ID}&KOJI_ST=${KOJI_ST}&SINGLE_SUMMARIZE=${SINGLE_SUMMARIZE}&SYUYAKU_JYUCYU_ID=${SYUYAKU_JYUCYU_ID}";
         //    url =
         // "https://koji-app.starboardasiavn.com/requestConstructionReport.php?JYUCYU_ID=0301416579&KOJI_ST=3&SINGLE_SUMMARIZE=2&SYUYAKU_JYUCYU_ID=0301416580";
       }

@@ -14,7 +14,7 @@ class RequestPostCount {
     String loginID = box.values.last;
     final response = await http.post(
         Uri.parse(
-          "https://koji-app.starboardasiavn.com/requestPostCount.php",
+          "https://koji-app.starboardasiavn.com/Request/Koji/requestPostUpdateSummarize.php",
         ),
         body: {
           'YMD': DateFormat(('yyyy-MM-dd')).format(date),

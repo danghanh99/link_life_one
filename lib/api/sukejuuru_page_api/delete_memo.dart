@@ -13,7 +13,8 @@ class DeleteMemo {
       required Function() onSuccess}) async {
     try {
       final response = await http.post(
-        Uri.parse("https://koji-app.starboardasiavn.com/requestMemoDelete.php"),
+        Uri.parse(
+            "https://koji-app.starboardasiavn.com/Request/Schedule/requestMemoDelete.php"),
         body: {
           'JYOKEN_CD': JYOKEN_CD,
           'JYOKEN_SYBET_FLG': JYOKEN_SYBET_FLG,

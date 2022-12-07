@@ -20,7 +20,8 @@ class CreateMemo {
       required Function() onSuccess}) async {
     try {
       final response = await http.post(
-        Uri.parse("https://koji-app.starboardasiavn.com/requestMemoUpdate.php"),
+        Uri.parse(
+            "https://koji-app.starboardasiavn.com/Request/Schedule/requestMemoUpdate.php"),
         body: {
           'JYOKEN_CD': JYOKEN_CD,
           'JYOKEN_SYBET_FLG': JYOKEN_SYBET_FLG,

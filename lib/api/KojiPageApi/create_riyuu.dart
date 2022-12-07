@@ -44,14 +44,14 @@ class CreateRiyuu {
   }
 
   String _getUrl(String SHITAMI_MENU) {
-    String domain = "https://koji-app.starboardasiavn.com/";
+    String domain = "https://koji-app.starboardasiavn.com/Request/Koji/";
     switch (SHITAMI_MENU) {
       case '1':
         return '${domain}requestPhotoSubmissionRegistrationFromSendPhoto.php';
       case '2':
         return '${domain}requestPhotoSubmissionRegistrationFromReportDelayed.php';
       case '3':
-        return "https://koji-app.starboardasiavn.com/requestPhotoSubmissionRegistrationFromCancel.php";
+        return "${domain}requestPhotoSubmissionRegistrationFromCancel.php";
       case '4':
         return '${domain}requestPhotoSubmissionRegistrationFromReportNoQuoation.php';
       default:

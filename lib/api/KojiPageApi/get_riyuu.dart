@@ -8,7 +8,7 @@ class GetRiyuu {
       {required String JYUCYU_ID, required Function() onSuccess}) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/requestEnterReason.php?JYUCYU_ID=$JYUCYU_ID"),
+          "https://koji-app.starboardasiavn.com/Request/Koji/requestEnterReason.php?JYUCYU_ID=$JYUCYU_ID"),
     );
 
     if (response.statusCode == 200) {

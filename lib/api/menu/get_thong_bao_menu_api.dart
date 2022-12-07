@@ -1,7 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import "package:http/http.dart" as http;
-import 'package:intl/intl.dart';
-import 'package:link_life_one/models/koji.dart';
 import 'dart:convert';
 
 class GetThongBaoMenuApi {
@@ -14,10 +12,8 @@ class GetThongBaoMenuApi {
     final id = box.values.last;
 
     final response = await http.get(
-      // Uri.parse(
-      //     "https://koji-app.starboardasiavn.com/requestGetMenu.php?LOGIN_ID=01010"),
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/requestGetMenu.php?LOGIN_ID=${id}"),
+          "https://koji-app.starboardasiavn.com/Request/Menu/requestGetMenu.php?LOGIN_ID=${id}"),
     );
 
     if (response.statusCode == 200) {

@@ -11,7 +11,7 @@ class GetImage {
       required Function() onSuccess}) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/requestPhotoSubmissionPreview.php?KOJI_ST=$KOJI_ST&SHITAMI_MENU=$SHITAMI_MENU&JYUCYU_ID=$JYUCYU_ID"),
+          "https://koji-app.starboardasiavn.com/Request/Koji/requestPhotoSubmissionPreview.php?KOJI_ST=$KOJI_ST&SHITAMI_MENU=$SHITAMI_MENU&JYUCYU_ID=$JYUCYU_ID"),
     );
     // oke
 

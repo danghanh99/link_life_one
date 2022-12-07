@@ -1,7 +1,4 @@
-import 'package:hive_flutter/hive_flutter.dart';
 import "package:http/http.dart" as http;
-import 'package:intl/intl.dart';
-import 'package:link_life_one/models/koji.dart';
 import 'dart:convert';
 
 class GetShashinKakunin {
@@ -15,7 +12,7 @@ class GetShashinKakunin {
   }) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/requestGetPhotoConfirm.php?JYUCYU_ID=${JYUCYU_ID}&SINGLE_SUMMARIZE=${SINGLE_SUMMARIZE}"),
+          "https://koji-app.starboardasiavn.com/Request/Koji/requestGetPhotoConfirm.php?JYUCYU_ID=${JYUCYU_ID}&SINGLE_SUMMARIZE=${SINGLE_SUMMARIZE}"),
     );
 
     if (response.statusCode == 200) {
