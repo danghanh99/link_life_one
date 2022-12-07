@@ -13,7 +13,7 @@ class GetLichTrinhItemEditPage {
   }) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/requestNetConstructionNetPreviewContentsDetails.php?JYUCYU_ID=${JYUCYU_ID}&HOMON_SBT=${HOMON_SBT}"),
+          "https://koji-app.starboardasiavn.com/Request/Schedule/requestNetConstructionNetPreviewContentsDetails.php?JYUCYU_ID=${JYUCYU_ID}&HOMON_SBT=${HOMON_SBT}"),
     );
 
     if (response.statusCode == 200) {

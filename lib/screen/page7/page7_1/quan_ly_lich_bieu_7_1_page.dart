@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:link_life_one/api/sukejuuru_page_api/get_list_sukejuuru.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/show_holiday.dart';
 import 'package:link_life_one/components/login_widget.dart';
 import 'package:link_life_one/screen/page7/page7_2_3_create_item/page_7_2_3.dart';
@@ -8,7 +7,6 @@ import 'package:link_life_one/screen/page7/page7_2_3_edit_show_anken/page_7_2_3_
 import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/create/page_7_2_4_create.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/update/page_7_2_4_update.dart';
 import '../../../api/sukejuuru_page_api/get_anken_cua_mot_phong_ban.dart';
-import '../../../api/sukejuuru_page_api/get_du_lieu_cua_mot_nhan_vien_trong_phong_ban.dart';
 import '../../../api/sukejuuru_page_api/get_list_phong_ban.dart';
 import '../../../components/text_line_down.dart';
 import '../../../shared/assets.dart';
@@ -121,16 +119,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
       onsuccess?.call();
     });
-
-    return result;
-  }
-
-  Future<List<dynamic>> callGetDuLieuCuaMotNhanVienTrongPhongBan(
-      {required String kojiGyoSyaCd,
-      required DateTime date,
-      Function? onsuccess}) async {
-    final List<dynamic> result = await GetDuLieuCuaMotNhanVienTrongPhongBan()
-        .getDuLieuCuaMotNhanVienTrongPhongBan(kojiGyoSyaCd, date, (body) {});
 
     return result;
   }
@@ -1639,10 +1627,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         height: 100,
       ),
     );
-  }
-
-  Future<List<dynamic>> callGetListSukejuuruWithoutState(DateTime date) async {
-    return await GetListSukejuuru().getListSukejuuru(date);
   }
 
   Widget logout() {

@@ -25,7 +25,7 @@ class CreateAnken {
       required Function() onSuccess}) async {
     final response = await http.post(
         Uri.parse(
-            "https://koji-app.starboardasiavn.com/requestSalesConstructionSalesPreviewUpdate.php"),
+            "https://koji-app.starboardasiavn.com/Request/Schedule/requestSalesConstructionSalesPreviewUpdate.php"),
         body: {
           "YMD": DateFormat(('yyyy-MM-dd')).format(YMD),
           "JYOKEN_CD": JYOKEN_CD,

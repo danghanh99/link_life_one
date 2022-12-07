@@ -16,7 +16,7 @@ class ShowHoliday {
       final month = date.month.toString();
       final response = await http.get(
         Uri.parse(
-            "https://koji-app.starboardasiavn.com/requestShowHoliday.php?TANT_CD=${TANT_CD}&HOLIDAY_YEAR=${year}&GET_MONTH=${month}&GET_YEAR=${year}"),
+            "https://koji-app.starboardasiavn.com/Request/Schedule/requestShowHoliday.php?TANT_CD=${TANT_CD}&HOLIDAY_YEAR=${year}&GET_MONTH=${month}&GET_YEAR=${year}"),
       );
 
       if (response.statusCode == 200) {

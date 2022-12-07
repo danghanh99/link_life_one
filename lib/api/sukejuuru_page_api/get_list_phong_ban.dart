@@ -8,7 +8,7 @@ class GetListPhongBan {
       {required Function(List<dynamic>) onSuccess}) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/requestGetListDepartment.php"),
+          "https://koji-app.starboardasiavn.com/Request/Schedule/requestGetListOffice.php"),
     );
 
     if (response.statusCode == 200) {

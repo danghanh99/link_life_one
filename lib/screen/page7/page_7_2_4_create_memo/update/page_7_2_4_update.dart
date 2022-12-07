@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:link_life_one/api/sukejuuru_page_api/delete_memo.dart';
+import 'package:link_life_one/api/sukejuuru_page_api/memo/delete_memo.dart';
 
-import '../../../../api/sukejuuru_page_api/create_memo.dart';
+import '../../../../api/sukejuuru_page_api/memo/create_memo.dart';
 import '../../../../components/custom_text_field.dart';
 import '../../../../components/toast.dart';
 import '../../../../shared/assets.dart';

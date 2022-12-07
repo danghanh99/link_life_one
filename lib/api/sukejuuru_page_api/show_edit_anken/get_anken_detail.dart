@@ -10,7 +10,7 @@ class GetAnkenDetail {
   }) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/requestSalesConstructionSalesPreviewContents.php?TAN_EIG_ID=${TAN_EIG_ID}"),
+          "https://koji-app.starboardasiavn.com/Request/Schedule/requestSalesConstructionSalesPreviewContents.php?TAN_EIG_ID=${TAN_EIG_ID}"),
     );
 
     if (response.statusCode == 200) {

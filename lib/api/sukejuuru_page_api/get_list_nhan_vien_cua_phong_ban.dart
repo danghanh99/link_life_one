@@ -8,7 +8,7 @@ class GetListNhanVienCuaPhongBan {
       String KOJIGYOSYA_CD, Function(List<dynamic>) onSuccess) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/requestGetListPeople.php?KOJIGYOSYA_CD=${KOJIGYOSYA_CD}"),
+          "https://koji-app.starboardasiavn.com/Request/Schedule/requestGetListPeople.php?KOJIGYOSYA_CD=${KOJIGYOSYA_CD}"),
     );
 
     if (response.statusCode == 200) {

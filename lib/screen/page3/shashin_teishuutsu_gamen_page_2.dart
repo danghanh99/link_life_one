@@ -10,6 +10,16 @@ import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/screen/page3/page_3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 import 'package:link_life_one/shared/custom_button.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:link_life_one/components/text_line_down.dart';
+import 'package:link_life_one/screen/page3/shoudakusho.dart';
+import 'package:link_life_one/shared/custom_button.dart';
+import '../../api/shoudakusho/get_shoudakusho.dart';
+import '../../components/toast.dart';
+import '../../shared/assets.dart';
 
 class ShashinTeishuutsuGamenPage2 extends StatefulWidget {
   final DateTime? initialDate;
@@ -81,6 +91,7 @@ class _ShashinTeishuutsuGamenPage2State
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: Container(
         color: Colors.white,
@@ -135,7 +146,7 @@ class _ShashinTeishuutsuGamenPage2State
               listImage.isEmpty
                   ? Container(
                       width: size.width - 50,
-                      height: size.height * 2 / 3,
+                      height: size.height.h * 2 / 3,
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black),
                       ),
@@ -145,7 +156,7 @@ class _ShashinTeishuutsuGamenPage2State
                       options: CarouselOptions(
                         initialPage: listImage.length - 1,
                         viewportFraction: 1,
-                        height: size.height * 0.7,
+                        height: size.height.h * 0.7 - 50,
                         enableInfiniteScroll: false,
                         onPageChanged: (index, reason) {},
                       ),

@@ -25,7 +25,7 @@ class UpdateLichTrinh {
   }) async {
     final response = await http.post(
         Uri.parse(
-            "https://koji-app.starboardasiavn.com/requestNetConstructionNetPreviewContentsUpdate.php"),
+            "https://koji-app.starboardasiavn.com/Request/Schedule/requestNetConstructionNetPreviewContentsUpdate.php"),
         body: {
           "JYUCYU_ID": JYUCYU_ID,
           "TAG_KBN": TAG_KBN,
