@@ -453,37 +453,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     Expanded(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
-                        // child: NotificationListener<ScrollNotification>(
-                        //   onNotification: (ScrollNotification scrollInfo) {
-                        //     scrollInfo.context;
-                        //     print('scrolling.... ${scrollInfo.metrics.pixels}');
-                        //     scrollController.jumpTo(scrollInfo.metrics.pixels);
-                        //     return false;
-                        //   },
-                        //   child: SingleChildScrollView(
-                        //     controller: scrollController2,
-                        //     scrollDirection: Axis.horizontal,
-                        //     child: FutureBuilder<dynamic>(
-                        //         future: geAnkenCuaMotPhongBanFuture,
-                        //         builder: (context, response) {
-                        //           return response.data == null
-                        //               ? Column(
-                        //                   crossAxisAlignment:
-                        //                       CrossAxisAlignment.start,
-                        //                   children:
-                        //                       _buildRows(1, scrollController2),
-                        //                 )
-                        //               : Column(
-                        //                   crossAxisAlignment:
-                        //                       CrossAxisAlignment.start,
-                        //                   children: _buildRows(
-                        //                       value1nguoi == '個人'
-                        //                           ? 3
-                        //                           : sukejuuruAllUser.length + 2,
-                        //                       scrollController2),
-                        //                 );
-                        //         }),
-                        //   ),
                         child: SingleChildScrollView(
                           controller: scrollController2,
                           scrollDirection: Axis.horizontal,

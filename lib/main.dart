@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:link_life_one/hive.dart';
+import 'package:link_life_one/models/user.dart';
 import 'package:path_provider/path_provider.dart';
 import 'screen/login_page.dart';
 
@@ -13,6 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   Hive.initFlutter();
+  Hive.registerAdapter(UserAdapter());
   runApp(const MyApp());
 }
 

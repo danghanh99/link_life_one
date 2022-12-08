@@ -30,6 +30,7 @@ dependencies:
   carousel_slider: ^4.1.1
   signature: ^5.3.0
   pdf: ^3.8.4
+  equatable:
 
 dev_dependencies:
   flutter_test:
@@ -43,6 +44,7 @@ dev_dependencies:
   dalocale: ^2.0.0
   build_runner: ^2.0.6
   auto_size_text: ^3.0.0
+  hive_generator:
 
 flutter:
   uses-material-design: true

@@ -8,7 +8,7 @@ import '../../page5/page_5_1_lich_kiem_ke.dart';
 import '../../page5/page_5_2_danh_sach_nguyen_lieu.dart';
 import '../../page5/page_5_3_danh_sach_nhan_lai_vat_lieu.dart';
 import '../../page6/danh_muc_hang_ton_kho_6_2_page.dart';
-import '../../page6/danh_sach_dat_hang_cac_bo_phan_6_1_page.dart';
+import '../../page6/saibuhachuu/saibuhachuu_danh_sach_dat_hang_cac_bo_phan_6_1_page.dart';
 import '../../page6/page6_quan_ly/page_6_quan_ly_thanh_vien.dart';
 import '../../page6/page631/phe_duyet_don_dat_hang_6_3_1_page.dart';
 import '../../page7_0/page_7_so_tai_khoan_page.dart';
@@ -143,7 +143,8 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const DanhSachDatHangCacBoPhan61Page(),
+            builder: (context) =>
+                const SaibuhachuuDanhSachDatHangCacBoPhan61Page(),
           ),
         );
         break;

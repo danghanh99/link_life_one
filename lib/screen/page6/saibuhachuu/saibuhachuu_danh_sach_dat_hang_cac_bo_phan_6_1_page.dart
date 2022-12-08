@@ -1,39 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/models/user.dart';
 import 'package:link_life_one/screen/login_page.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../api/order/get_part_order_list.dart';
+import '../../../api/order/get_pull_down_status.dart';
+import '../../../components/custom_text_field.dart';
+import '../../../components/login_widget.dart';
+import '../../../components/text_line_down.dart';
+import '../../../shared/assets.dart';
+import '../../../shared/custom_button.dart';
+import '../../menu_page/menu_page.dart';
+import '../danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
-import '../../components/custom_text_field.dart';
-import '../../components/login_widget.dart';
-import '../../components/text_line_down.dart';
-import '../../shared/assets.dart';
-import '../../shared/custom_button.dart';
-import '../menu_page/menu_page.dart';
-import 'danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
-
-class DanhSachDatHangCacBoPhan61Page extends StatefulWidget {
-  const DanhSachDatHangCacBoPhan61Page({
+class SaibuhachuuDanhSachDatHangCacBoPhan61Page extends StatefulWidget {
+  const SaibuhachuuDanhSachDatHangCacBoPhan61Page({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<DanhSachDatHangCacBoPhan61Page> createState() =>
-      _DanhSachDatHangCacBoPhan61PageState();
+  State<SaibuhachuuDanhSachDatHangCacBoPhan61Page> createState() =>
+      _SaibuhachuuDanhSachDatHangCacBoPhan61PageState();
 }
 
-class _DanhSachDatHangCacBoPhan61PageState
-    extends State<DanhSachDatHangCacBoPhan61Page> {
-  List<String> listNames = [
-    '入出庫管理',
-    '部材管理',
-    '出納帳',
-  ];
-
+class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
+    extends State<SaibuhachuuDanhSachDatHangCacBoPhan61Page> {
   late int currentRadioRow;
+
+  List<dynamic> listOrder = [];
+  List<dynamic> listOrderByStatus = [];
+  List<dynamic> listPullDown = [];
+
+  String currentPullDownValue = 'カテゴリを選択';
 
   @override
   void initState() {
     currentRadioRow = -1;
 
     super.initState();
+    callGetPullDownStatus();
+    callGetLichTrinhItem();
+  }
+
+  Future<dynamic> callGetLichTrinhItem() async {
+    final box = Hive.box<User>('userBox');
+    final User user = box.values.first;
+
+    final dynamic result = await GetPartOrderList().getPartOrderList(
+        SYOZOKU_CD: user.SYOZOKU_CD,
+        onSuccess: (data) {
+          print(data);
+          setState(() {
+            listOrder = data;
+          });
+        },
+        onFailed: () {
+          CustomToast.show(context, message: "Failed to get part order list");
+        });
+  }
+
+  Future<dynamic> callGetPullDownStatus() async {
+    final dynamic result =
+        await GetPullDownStatus().getPartOrderList(onSuccess: (data) {
+      print(data);
+      setState(() {
+        listPullDown = data;
+      });
+    }, onFailed: () {
+      CustomToast.show(context, message: "Failed to get pull down");
+    });
   }
 
   @override
@@ -149,20 +185,24 @@ class _DanhSachDatHangCacBoPhan61PageState
             const SizedBox(
               height: 10,
             ),
-            SingleChildScrollView(
-              scrollDirection: Axis.vertical,
+            Expanded(
               child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _buildRows(4),
+                scrollDirection: Axis.vertical,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: _buildRows(currentPullDownValue == 'カテゴリを選択'
+                        ? listOrder.length + 1
+                        : listOrderByStatus.length + 1),
+                  ),
                 ),
               ),
             ),
             const SizedBox(
               height: 10,
             ),
-            Expanded(child: Container()),
+            // Expanded(child: Container()),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -235,46 +275,53 @@ class _DanhSachDatHangCacBoPhan61PageState
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {}
-        if (number == 2) {}
-      },
+      onSelected: (number) {},
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      itemBuilder: (context) => listPullDown.map((item) {
+        return PopupMenuItem(
+          onTap: () {
+            if (currentPullDownValue == item["KBNMSAI_NAME"]) {
+              setState(() {
+                currentPullDownValue = 'カテゴリを選択';
+                listOrderByStatus = [];
+              });
+            } else {
+              setState(() {
+                List<dynamic> tmp = listOrder
+                    .where(
+                        (element) => element["element"] == item["KBNMSAI_NAME"])
+                    .toList();
+                listOrderByStatus = tmp;
+                currentPullDownValue = item["KBNMSAI_NAME"];
+              });
+            }
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
           value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Text(
+                      item["KBNMSAI_NAME"].toString(),
+                      style: const TextStyle(color: Color(0xFF999999)),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "Dropdown item1",
-              ),
+              const Divider(),
             ],
           ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "Dropdown item2",
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      }).toList(),
       offset: const Offset(-0, 50),
       child: Container(
         width: width - 4,
@@ -289,7 +336,7 @@ class _DanhSachDatHangCacBoPhan61PageState
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                value,
+                currentPullDownValue,
                 style: const TextStyle(
                   color: Color(0xFF999999),
                   fontSize: 14,
@@ -427,6 +474,37 @@ class _DanhSachDatHangCacBoPhan61PageState
   }
 
   Widget contentTable(int col, int row) {
+    listOrder;
+    List<dynamic> tmp = [];
+    tmp = currentPullDownValue == 'カテゴリを選択' ? listOrder : listOrderByStatus;
+    if (row != 0 && col != 0) {
+      String value = '';
+
+      if (col == 1) {
+        value = tmp[row - 1]["BUZAI_HACYU_ID"];
+      }
+      if (col == 2) {
+        value = tmp[row - 1]["KBNMSAI_NAME"] ?? '';
+      }
+      if (col == 3) {
+        value = tmp[row - 1]["HACYU_YMD"];
+      }
+      if (col == 4) {
+        value = tmp[row - 1]["TANT_NAME"];
+      }
+      if (col == 5) {
+        value = tmp[row - 1]["JISYA_CD"];
+      }
+      if (col == 6) {
+        value = tmp[row - 1]["SYOHIN_NAME"];
+      }
+
+      return Text(
+        value,
+        style: TextStyle(color: Colors.black),
+      );
+    }
+
     return col == 0
         ? RadioListTile(
             value: row,
