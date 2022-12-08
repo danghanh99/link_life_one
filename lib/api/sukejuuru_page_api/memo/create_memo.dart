@@ -51,7 +51,7 @@ class CreateMemo {
       {required String TAN_CAL_ID, required Function() onSuccess}) async {
     try {
       String url =
-          "https://koji-app.starboardasiavn.com/requestMemoRegistration.php?TAN_CAL_ID=";
+          "https://koji-app.starboardasiavn.com/Request/Schedule/requestMemoRegistration.php?TAN_CAL_ID=";
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
