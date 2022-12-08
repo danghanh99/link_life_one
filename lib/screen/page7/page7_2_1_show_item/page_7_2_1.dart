@@ -31,8 +31,8 @@ class _Page721State extends State<Page721> {
 
   // late bool checkedValue;
   // late bool checkedValueAllDay;
-  String titleDateTime1 = '';
-  String titleDateTime2 = '';
+  String titleDateTimeADD_YMD = '';
+  String titleDateTimeUPD_YMD = '';
   String titleDateTime3 = '';
   // String jinninNumber = '';
   // String jikanNumber = '';
@@ -141,8 +141,16 @@ class _Page721State extends State<Page721> {
             if (data[0]["COMMENT"] != null) COMMENT = data[0]["COMMENT"];
             if (data[0]["FILEPATH"] != null) FILEPATH = data[0]["FILEPATH"];
 
-            titleDateTime1 = ADD_TANTNM + "   " + ADD_YMD;
-            titleDateTime2 = UPD_TANTNM + "   " + UPD_YMD;
+            titleDateTimeADD_YMD = ADD_TANTNM +
+                "   " +
+                DateFormat('yyyy/MM/dd(日) hh:mm', 'ja')
+                    .format(convertDateTime(ADD_YMD))
+                    .toString();
+            titleDateTimeUPD_YMD = UPD_TANTNM +
+                "   " +
+                DateFormat('yyyy/MM/dd(日) hh:mm', 'ja')
+                    .format(convertDateTime(UPD_YMD))
+                    .toString();
             titleDateTime3 = datetime + " " + jikanKara + " " + jikanMade;
           });
         });
@@ -204,7 +212,7 @@ class _Page721State extends State<Page721> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '登録情報: ${titleDateTime1}',
+                          '登録情報: ${titleDateTimeADD_YMD}',
                           style: const TextStyle(
                             color: Color(0xFF042C5C),
                             fontSize: 15,
@@ -218,7 +226,7 @@ class _Page721State extends State<Page721> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '更新情報：${titleDateTime2}',
+                          '更新情報：${titleDateTimeUPD_YMD}',
                           style: const TextStyle(
                             color: Color(0xFF042C5C),
                             fontSize: 15,

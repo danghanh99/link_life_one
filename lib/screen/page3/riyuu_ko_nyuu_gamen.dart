@@ -87,7 +87,7 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
                         child: CustomButton(
                           color: Colors.white70,
                           onClick: () {},
-                          name: '写真提出画面',
+                          name: '理由記入画面',
                           textStyle: const TextStyle(
                             color: Color(0xFF042C5C),
                             fontSize: 18,
@@ -110,7 +110,7 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
                     Padding(
                       padding: EdgeInsets.only(left: 20),
                       child: Text(
-                        '写真のみシステムに送信する',
+                        '遅延理由／キャンセル理由',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w700),
                       ),

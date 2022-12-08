@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/KojiPageApi/show_popup.dart';
 import 'package:link_life_one/components/custom_text_field.dart';
+import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/models/koji.dart';
 import 'package:link_life_one/screen/page3/page_3/components/logout_widget.dart';
 import 'package:link_life_one/screen/page3/page_3_1_yeu_cau_bieu_mau_page.dart';
 import '../../../api/KojiPageApi/get_list_koji_api.dart';
 import '../../../api/KojiPageApi/request_post_count.dart';
+import '../../../api/koji/tirasu/post_tirasi_update_api.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/validator.dart';
 import 'components/title_widget.dart';
@@ -397,7 +400,7 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 5),
+                    padding: const EdgeInsets.only(top: 2),
                     child: Text(
                       'チラシ投函数',
                       style: TextStyle(
@@ -414,7 +417,7 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                       children: [
                         SizedBox(
                           width: 100.w,
-                          height: 60.h,
+                          height: 100.h,
                           child: CustomTextField(
                             maxLength: 10,
                             hint: '',
@@ -431,21 +434,40 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                             ? Text(
                                 "Only number",
                                 style: TextStyle(
-                                    color: Colors.red, fontSize: 14.sp),
+                                    color: Colors.red, fontSize: 12.sp),
                               )
                             : Container(),
                       ],
                     ),
                   ),
                   Container(
-                    width: 70.w,
-                    height: 37.h,
+                    width: 70,
+                    height: 40,
                     decoration: BoxDecoration(
                       color: const Color(0xFFFFA800),
                       borderRadius: BorderRadius.circular(26),
                     ),
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        final box = await Hive.openBox<String>('user');
+                        String loginID = box.values.last;
+
+                        PostTirasiUpdateApi().postTirasiUpdateApi(
+                            YMD: DateFormat('yyyy-MM-dd', 'ja')
+                                .format(date)
+                                .toString(),
+                            LOGIN_ID: loginID,
+                            KOJI_TIRASISU: tiraru,
+                            onFailed: () {
+                              CustomToast.show(context,
+                                  message: "エラー!!!投稿数更新ができませんでした。");
+                            },
+                            onSuccess: () {
+                              CustomToast.show(context,
+                                  message: "投稿数更新ができました。",
+                                  backGround: Colors.green);
+                            });
+                      },
                       child: const Text(
                         '更新',
                         style: TextStyle(
@@ -520,11 +542,13 @@ class _Page3BaoCaoHoanThanhCongTrinhState
     if (Validator.onlyNumber(input!)) {
       setState(() {
         isValid = true;
+        tiraru = input;
       });
       return true;
     } else {
       setState(() {
         isValid = false;
+        tiraru = '';
       });
       return false;
     }
