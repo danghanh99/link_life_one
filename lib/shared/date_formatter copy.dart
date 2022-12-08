@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 abstract class DateFormats {
-  static const String yearMonthDay = 'yyyy/MM/dd';
+  static const String yearMonthDay = 'yyyy / MM / dd';
   static const monthYear = 'MMM yyyy';
 }
 

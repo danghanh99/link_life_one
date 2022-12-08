@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:link_life_one/api/result/default.dart';
+import 'package:link_life_one/api/result/get_pulldown_list_month.dart';
+import 'package:link_life_one/api/result/get_pulldown_list_people.dart';
+import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/models/month.dart';
+import 'package:link_life_one/models/people.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
-import 'package:link_life_one/screen/login_page.dart';
-
 import '../../components/login_widget.dart';
 import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
@@ -25,263 +30,7 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
     '出納帳',
   ];
 
-  List<ThanhTich> listThanhTich = [
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-01'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-02'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-03'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-04'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-05'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-06'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-07'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-08'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-09'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-10'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-11'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-12'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-13'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-14'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-15'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-16'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-17'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-18'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-19'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-20'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-21'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-22'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-23'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-24'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-25'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-    ThanhTich(
-      ngayThang: DateTime.parse('2022-09-26'),
-      chiPhiKyGuiChuaXacNhan: 0,
-      chiPhiKyGuiDaXacNhan: 0,
-      soLuongCongTrinh: 0,
-      soLuongXemTruoc: 0,
-      soLuongBoSung: 0,
-      soLuongBanHang: 0,
-    ),
-  ];
-
-  List<Widget> _buildCells(int count) {
-    return List.generate(
-      count,
-      (index) => Container(
-        decoration: BoxDecoration(
-          border: Border.all(),
-          color: Colors.black,
-        ),
-        alignment: Alignment.center,
-        width: 50,
-        height: 50,
-        // color: Colors.white,
-        margin: EdgeInsets.all(1.0),
-        child: Text(
-          "col ${index + 1}",
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-    );
-  }
+  List<DateTime> dates = [];
 
   List<Widget> _buildCells2(int count, int row) {
     List<String> colNames = [
@@ -342,7 +91,42 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
         if (row == 1 && col == 0) {
           text = '合計';
         } else {
-          text = '';
+          if (col == 1) {
+            text = listThanhTich
+                .map((e) => e.chiPhiKyGuiChuaXacNhan ?? 0)
+                .reduce((value, element) => value + element)
+                .toString();
+          }
+          if (col == 2) {
+            text = listThanhTich
+                .map((e) => e.chiPhiKyGuiDaXacNhan ?? 0)
+                .reduce((value, element) => value + element)
+                .toString();
+          }
+          if (col == 3) {
+            text = listThanhTich
+                .map((e) => e.soLuongCongTrinh ?? 0)
+                .reduce((value, element) => value + element)
+                .toString();
+          }
+          if (col == 4) {
+            text = listThanhTich
+                .map((e) => e.soLuongXemTruoc ?? 0)
+                .reduce((value, element) => value + element)
+                .toString();
+          }
+          if (col == 5) {
+            text = listThanhTich
+                .map((e) => e.soLuongBoSung ?? 0)
+                .reduce((value, element) => value + element)
+                .toString();
+          }
+          if (col == 6) {
+            text = listThanhTich
+                .map((e) => e.soLuongBanHang ?? 0)
+                .reduce((value, element) => value + element)
+                .toString();
+          }
         }
 
         return Container(
@@ -353,8 +137,6 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
           alignment: Alignment.center,
           width: colwidth[col],
           height: 40,
-          // color: Colors.white,
-          // margin: const EdgeInsets.all(1.0),
           child: Text(
             text,
             style: const TextStyle(
@@ -366,15 +148,19 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
         );
       }
       String text = '';
+      var y = NumberFormat("###,###");
       switch (col) {
         case (0):
           text = DateFormatter.yearMonthDay2(listThanhTich[row - 2].ngayThang);
           break;
         case (1):
-          text = listThanhTich[row - 2].chiPhiKyGuiChuaXacNhan.toString();
+          text = y
+              .format(listThanhTich[row - 2].chiPhiKyGuiChuaXacNhan)
+              .toString();
           break;
         case (2):
-          text = listThanhTich[row - 2].chiPhiKyGuiDaXacNhan.toString();
+          text =
+              y.format(listThanhTich[row - 2].chiPhiKyGuiDaXacNhan).toString();
           break;
         case (3):
           text = listThanhTich[row - 2].soLuongCongTrinh.toString();
@@ -416,9 +202,93 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
     });
   }
 
+  List<People> listPeople = [];
+  People? peopleSelected;
+  List<Month> listMonth = [];
+  Month? monthSelected;
+  List<ThanhTich> listThanhTich = [];
+
+  @override
+  void initState() {
+    getPullDownListPeople();
+    super.initState();
+  }
+
+  Future<void> getPullDownListPeople() async {
+    await GetPullDownListPeople().getPullDownListPeople(
+        onSuccess: (list) async {
+      await GetPullDownListMonth().getPullDownListMonth(
+        TANT_CD: list.first.tantoCd,
+        onSuccess: (listMonthResponse) async {
+          setState(
+            () {
+              listPeople = list;
+              peopleSelected = listPeople.first;
+              listMonth = listMonthResponse;
+              monthSelected = listMonth.first;
+            },
+          );
+          if (monthSelected != null) {
+            String year = monthSelected!.formatedDate.split("/").first;
+            String month = monthSelected!.formatedDate.split("/").last;
+            int day = _getLastDayOfMonth(int.parse(month), int.parse(year));
+            int count = 1;
+            List<ThanhTich> tmp = [];
+            while (count <= day) {
+              DateTime date =
+                  DateTime(int.parse(year), int.parse(month), count);
+              ThanhTich a = ThanhTich(
+                  ngayThang: date,
+                  soLuongBanHang: 0,
+                  soLuongBoSung: 0,
+                  soLuongCongTrinh: 0,
+                  soLuongXemTruoc: 0,
+                  chiPhiKyGuiChuaXacNhan: 0,
+                  chiPhiKyGuiDaXacNhan: 0,
+                  tantoCd: '');
+              tmp.add(a);
+              count += 1;
+            }
+            setState(() {
+              listThanhTich = tmp;
+            });
+          }
+          if (listMonthResponse.isNotEmpty) {
+            await Default().getDefault(
+                JISEKI_YMD: listMonthResponse.first.formatedDate,
+                TANT_CD: listMonthResponse.first.tantoCd,
+                onSuccess: ((listThanhTichResponse) {
+                  List<ThanhTich> tam = [];
+                  listThanhTich.forEach((elementA) {
+                    ThanhTich thanhTichA = elementA;
+                    listThanhTichResponse.forEach((elementB) {
+                      if (elementA.ngayThang == elementB.ngayThang) {
+                        thanhTichA = elementB;
+                      }
+                    });
+                    tam.add(thanhTichA);
+                  });
+                  setState(() {
+                    listThanhTich = tam;
+                  });
+                }),
+                onFailed: () {});
+          }
+        },
+        onFailed: () {
+          CustomToast.show(context, message: 'Load pulldown error');
+        },
+      );
+    });
+  }
+
+  _getLastDayOfMonth(int month, int year) {
+    DateTime date = DateTime(year, month + 1, 1);
+    return date.subtract(const Duration(days: 1)).day;
+  }
+
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       body: Padding(
@@ -451,7 +321,7 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
                 const SizedBox(
                   width: 5,
                 ),
-                _dropDownButton(context, '担当者を選択'),
+                _dropDownListPeople(context),
               ],
             ),
             const SizedBox(
@@ -474,7 +344,7 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
                 const SizedBox(
                   width: 5,
                 ),
-                _dropDownButton(context, '2022 / 09'),
+                _dropDownListMonth(context),
               ],
             ),
             const SizedBox(
@@ -515,7 +385,6 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
                 ),
               ),
             ),
-            // Expanded(child: Container()),
             const SizedBox(
               height: 10,
             ),
@@ -525,50 +394,215 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
     );
   }
 
-  Widget _dropDownButton(BuildContext context, String value) {
-    return PopupMenuButton<int>(
+  Widget _dropDownListMonth(BuildContext context) {
+    return PopupMenuButton<Month>(
       color: Colors.white,
       padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {}
-        if (number == 2) {}
-      },
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      itemBuilder: (context) => listMonth.map((e) {
+        return PopupMenuItem(
+          onTap: () async {
+            setState(() {
+              monthSelected = e;
+            });
+            if (monthSelected != null) {
+              String year = monthSelected!.formatedDate.split("/").first;
+              String month = monthSelected!.formatedDate.split("/").last;
+              int day = _getLastDayOfMonth(int.parse(month), int.parse(year));
+              int count = 1;
+              List<ThanhTich> tmp = [];
+              while (count <= day) {
+                DateTime date =
+                    DateTime(int.parse(year), int.parse(month), count);
+                ThanhTich a = ThanhTich(
+                    ngayThang: date,
+                    soLuongBanHang: 0,
+                    soLuongBoSung: 0,
+                    soLuongCongTrinh: 0,
+                    soLuongXemTruoc: 0,
+                    chiPhiKyGuiChuaXacNhan: 0,
+                    chiPhiKyGuiDaXacNhan: 0,
+                    tantoCd: '');
+                tmp.add(a);
+                count += 1;
+              }
+              setState(() {
+                listThanhTich = tmp;
+              });
+              await Default().getDefault(
+                  TANT_CD: monthSelected!.tantoCd,
+                  JISEKI_YMD: monthSelected!.formatedDate,
+                  onSuccess: (list) {
+                    List<ThanhTich> tam = [];
+                    listThanhTich.forEach((elementA) {
+                      ThanhTich thanhTichA = elementA;
+                      list.forEach((elementB) {
+                        if (elementA.ngayThang == elementB.ngayThang) {
+                          thanhTichA = elementB;
+                        }
+                      });
+                      tam.add(thanhTichA);
+                    });
+                    setState(() {
+                      listThanhTich = tam;
+                      tam = [];
+                    });
+                  },
+                  onFailed: () {
+                    CustomToast.show(context,
+                        message: 'Get list thanh tich error');
+                  });
+            } else {
+              CustomToast.show(context, message: 'Please select month');
+            }
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
+          value: e,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 14,
+                  ),
+                  Text(e.formatedDate),
+                ],
               ),
-              Text(
-                "投函数を選択",
-              ),
+              const Divider(
+                color: Colors.black,
+              )
             ],
           ),
+        );
+      }).toList(),
+      offset: const Offset(0, 30),
+      child: Container(
+        width: 130,
+        height: 30,
+        decoration: BoxDecoration(
+          color: const Color(0xFFF5F6F8),
+          borderRadius: BorderRadius.circular(8),
         ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              listMonth.isEmpty ? '' : monthSelected!.formatedDate,
+              style: const TextStyle(
+                color: Color(0xFF999999),
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            Image.asset(
+              Assets.icDown,
+              width: 13,
+              height: 13,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _dropDownListPeople(BuildContext context) {
+    return PopupMenuButton<People>(
+      color: Colors.white,
+      padding: EdgeInsets.zero,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0))),
+      itemBuilder: (context) => listPeople.map((e) {
+        return PopupMenuItem(
+          onTap: () async {
+            await GetPullDownListMonth().getPullDownListMonth(
+                TANT_CD: e.tantoCd,
+                onSuccess: (list) async {
+                  setState(
+                    () {
+                      peopleSelected = e;
+                      listMonth = list;
+                      monthSelected =
+                          listMonth.isEmpty ? null : listMonth.first;
+                    },
+                  );
+                  if (monthSelected == null) {
+                    setState(() {
+                      listThanhTich = [];
+                    });
+                  } else {
+                    String year = monthSelected!.formatedDate.split("/").first;
+                    String month = monthSelected!.formatedDate.split("/").last;
+                    int day =
+                        _getLastDayOfMonth(int.parse(month), int.parse(year));
+                    int count = 1;
+                    List<ThanhTich> tmp = [];
+                    while (count <= day) {
+                      DateTime date =
+                          DateTime(int.parse(year), int.parse(month), count);
+                      ThanhTich a = ThanhTich(
+                          ngayThang: date,
+                          soLuongBanHang: 0,
+                          soLuongBoSung: 0,
+                          soLuongCongTrinh: 0,
+                          soLuongXemTruoc: 0,
+                          chiPhiKyGuiChuaXacNhan: 0,
+                          chiPhiKyGuiDaXacNhan: 0,
+                          tantoCd: '');
+                      tmp.add(a);
+                      count += 1;
+                    }
+                    setState(() {
+                      listThanhTich = tmp;
+                    });
+                    await Default().getDefault(
+                        TANT_CD: monthSelected!.tantoCd,
+                        JISEKI_YMD: monthSelected!.formatedDate,
+                        onSuccess: (list) {
+                          List<ThanhTich> tam = [];
+                          listThanhTich.forEach((elementA) {
+                            ThanhTich thanhTichA = elementA;
+                            list.forEach((elementB) {
+                              if (elementA.ngayThang == elementB.ngayThang) {
+                                thanhTichA = elementB;
+                              }
+                            });
+                            tam.add(thanhTichA);
+                          });
+                          setState(() {
+                            listThanhTich = tam;
+                            tam = [];
+                          });
+                        },
+                        onFailed: () {
+                          CustomToast.show(context,
+                              message: 'Get list thanh tich error');
+                        });
+                  }
+                },
+                onFailed: () {});
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
+          value: e,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 14,
+                  ),
+                  Text(e.tantoName),
+                ],
               ),
-              Text(
-                "投函数を選択",
-              ),
+              const Divider(
+                color: Colors.black,
+              )
             ],
           ),
-        ),
-      ],
+        );
+      }).toList(),
       offset: const Offset(-35, -90),
       child: Container(
         width: 130,
@@ -581,7 +615,7 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              value,
+              listPeople.isEmpty ? '' : peopleSelected!.tantoName,
               style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 14,
