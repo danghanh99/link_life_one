@@ -72,6 +72,8 @@ class _Page721State extends State<Page721> {
   String COMMENT = '';
   List<dynamic> FILEPATH = [];
 
+  DateTime? time;
+
   @override
   void initState() {
     showUpdatePage = false;
@@ -97,21 +99,25 @@ class _Page721State extends State<Page721> {
         onSuccess: (data) {
           print(data);
           setState(() {
+            time = DateFormat("yyyy-MM-dd").parse(data[0]["YMD"]);
+
             if (data[0]["JININ"] != null) JININ = data[0]["JININ"];
             if (data[0]["JIKAN"] != null) JIKAN = data[0]["JIKAN"];
             if (data[0]["HOMONJIKAN"] != null) {
-              if (data[0]["HOMONJIKAN"].toString().split(" ").length >= 2) {
-                HOMONJIKAN = data[0]["HOMONJIKAN"];
-                jikanKara = HOMONJIKAN.split(" ")[1];
-                datetime = HOMONJIKAN.split(" ")[0];
-              }
+              jikanKara = data[0]["HOMONJIKAN"];
+              // if (data[0]["HOMONJIKAN"].toString().split(" ").length >= 2) {
+              //   HOMONJIKAN = data[0]["HOMONJIKAN"];
+              //   jikanKara = HOMONJIKAN.split(" ")[1];
+              //   datetime = HOMONJIKAN.split(" ")[0];
+              // }
             }
             if (data[0]["HOMONJIKAN_END"] != null) {
-              if (data[0]["HOMONJIKAN_END"].toString().split(" ").length >= 2) {
-                HOMONJIKAN_END = data[0]["HOMONJIKAN_END"];
-                jikanMade = HOMONJIKAN_END.split(" ")[1];
-                datetime = HOMONJIKAN_END.split(" ")[0];
-              }
+              jikanMade = data[0]["HOMONJIKAN_END"];
+              // if (data[0]["HOMONJIKAN_END"].toString().split(" ").length >= 2) {
+              //   HOMONJIKAN_END = data[0]["HOMONJIKAN_END"];
+              //   jikanMade = HOMONJIKAN_END.split(" ")[1];
+              //   datetime = HOMONJIKAN_END.split(" ")[0];
+              // }
             }
             if (data[0]["SETSAKI_ADDRESS"] != null)
               SETSAKI_ADDRESS = data[0]["SETSAKI_ADDRESS"];
@@ -151,7 +157,15 @@ class _Page721State extends State<Page721> {
                 DateFormat('yyyy/MM/dd(日) hh:mm', 'ja')
                     .format(convertDateTime(UPD_YMD))
                     .toString();
-            titleDateTime3 = datetime + " " + jikanKara + " " + jikanMade;
+            titleDateTime3 = time == null
+                ? ''
+                : DateFormat('yyyy今MM月dd日(E)', 'ja').format(time!).toString() +
+                    " " +
+                    jikanKara +
+                    " " +
+                    "〜" +
+                    " " +
+                    jikanMade;
           });
         });
 
