@@ -12,7 +12,7 @@ import '../../../components/text_line_down.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/custom_button.dart';
 import '../../menu_page/menu_page.dart';
-import '../danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
+import '../saibuhachuulist_danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
 class SaibuhachuuDanhSachDatHangCacBoPhan61Page extends StatefulWidget {
   const SaibuhachuuDanhSachDatHangCacBoPhan61Page({
@@ -214,7 +214,18 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                SaibuhacchuulistDanhSachDatHangVatLieu611Page(
+                              SYOZOKU_CD: null,
+                              JISYA_CD: null,
+                              BUZAI_HACYU_ID: null,
+                            ),
+                          ));
+                    },
                     child: const Text(
                       '新規部材発注',
                       style: TextStyle(
@@ -237,13 +248,27 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const DanhSachDatHangVatLieu611Page(),
-                        ),
-                      );
+                      if (currentRadioRow - 1 >= 0) {
+                        List<dynamic> tmp = currentPullDownValue == 'カテゴリを選択'
+                            ? listOrder
+                            : listOrderByStatus;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                SaibuhacchuulistDanhSachDatHangVatLieu611Page(
+                                    SYOZOKU_CD: tmp[currentRadioRow - 1]
+                                        ["SYOZOKU_CD"],
+                                    JISYA_CD: tmp[currentRadioRow - 1]
+                                        ["JISYA_CD"],
+                                    BUZAI_HACYU_ID: tmp[currentRadioRow - 1]
+                                        ["BUZAI_HACYU_ID"]),
+                          ),
+                        );
+                      } else {
+                        CustomToast.show(context,
+                            message: "Please select an order");
+                      }
                     },
                     child: const Text(
                       'リスト確認',

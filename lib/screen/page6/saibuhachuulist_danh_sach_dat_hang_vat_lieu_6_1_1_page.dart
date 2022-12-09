@@ -2,39 +2,118 @@ import 'package:flutter/material.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
 
+import '../../api/order/saibuhachuu_list/get_check_list.dart';
+import '../../api/order/saibuhachuu_list/get_material_ordering_list.dart';
 import '../../components/custom_text_field.dart';
 import '../../components/login_widget.dart';
 import '../../components/text_line_down.dart';
+import '../../components/toast.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../menu_page/menu_page.dart';
 import 'danh_sach_cac_bo_phan_5_1_2_page.dart';
 
-class DanhSachDatHangVatLieu611Page extends StatefulWidget {
-  const DanhSachDatHangVatLieu611Page({
+class SaibuhacchuulistDanhSachDatHangVatLieu611Page extends StatefulWidget {
+  String? SYOZOKU_CD;
+  String? JISYA_CD;
+  String? BUZAI_HACYU_ID;
+  SaibuhacchuulistDanhSachDatHangVatLieu611Page({
+    this.SYOZOKU_CD,
+    this.JISYA_CD,
+    this.BUZAI_HACYU_ID,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<DanhSachDatHangVatLieu611Page> createState() =>
-      _DanhSachDatHangVatLieu611PageState();
+  State<SaibuhacchuulistDanhSachDatHangVatLieu611Page> createState() =>
+      _SaibuhacchuulistDanhSachDatHangVatLieu611PageState();
 }
 
-class _DanhSachDatHangVatLieu611PageState
-    extends State<DanhSachDatHangVatLieu611Page> {
-  List<String> listNames = [
-    '入出庫管理',
-    '部材管理',
-    '出納帳',
-  ];
-
+class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
+    extends State<SaibuhacchuulistDanhSachDatHangVatLieu611Page> {
   late int currentRadioRow;
+
+  dynamic first = {
+    "MAKER_NAME": "",
+    "BUNRUI": '',
+    "JISYA_CD": "",
+    "SYOHIN_NAME": "",
+    "LOT": "",
+    "HACYU_TANKA": "",
+    "SURYO": "",
+    "TANI_CD": "",
+    "KINGAK": "",
+    "HINBAN": "",
+    "BUZAI_HACYU_ID": "",
+    "BUZAI_HACYUMSAI_ID": "",
+    "status": false,
+  };
+  List<dynamic> saibuList = [];
 
   @override
   void initState() {
     currentRadioRow = -1;
 
     super.initState();
+    if (widget.JISYA_CD != null && widget.SYOZOKU_CD != null) {
+      call2ApiGetList();
+    } else {
+      saibuList.add(first);
+    }
+  }
+
+  Future<dynamic> call2ApiGetList() async {
+    final dynamic result =
+        await GetMaterialOrderingList().getMaterialOrderingList(
+            SYOZOKU_CD: widget.SYOZOKU_CD!,
+            JISYA_CD: widget.JISYA_CD!,
+            onSuccess: (data) {
+              if (data.isEmpty && saibuList.isEmpty) {
+                setState(() {
+                  saibuList.add(first);
+                });
+              } else {
+                for (var element in data) {
+                  element["status"] = false;
+                }
+
+                setState(() {
+                  saibuList.addAll(data);
+                });
+
+                if (widget.BUZAI_HACYU_ID != null) {
+                  callGetCheckList((res) {
+                    if (res.isEmpty && saibuList.isEmpty) {
+                      setState(() {
+                        saibuList.add(first);
+                      });
+                    } else {
+                      for (var element in res) {
+                        element["status"] = false;
+                      }
+                      setState(() {
+                        saibuList.addAll(res);
+                      });
+                    }
+                  });
+                }
+              }
+            },
+            onFailed: () {
+              CustomToast.show(context,
+                  message: "Failed to get material order list");
+            });
+  }
+
+  Future<dynamic> callGetCheckList(Function(List<dynamic>) onSccess) async {
+    final dynamic result = await GetCheckList().getCheckList(
+        BUZAI_HACYU_ID: widget.BUZAI_HACYU_ID!,
+        onSuccess: (data) {
+          onSccess.call(data);
+        },
+        onFailed: () {
+          CustomToast.show(context, message: "Failed to get check list");
+        });
   }
 
   @override
@@ -63,36 +142,28 @@ class _DanhSachDatHangVatLieu611PageState
                   const SizedBox(
                     height: 10,
                   ),
-
                   const SizedBox(
                     height: 25,
                   ),
-
-                  SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        // SingleChildScrollView(
-                        //   scrollDirection: Axis.vertical,
-                        //   child: Column(
-                        //     crossAxisAlignment: CrossAxisAlignment.start,
-                        //     children: _buildCells(20),
-                        //   ),
-                        // ),
-                        Flexible(
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: _buildRows(4),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Flexible(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: _buildRows(saibuList.length + 1),
+                              ),
                             ),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                  // Expanded(child: Container()),
                   const SizedBox(
                     height: 10,
                   ),
@@ -190,6 +261,38 @@ class _DanhSachDatHangVatLieu611PageState
                           onPressed: () {},
                           child: const Text(
                             '削除',
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Container(
+                        width: 140,
+                        height: 37,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFA1A1A1),
+                          borderRadius: BorderRadius.circular(26),
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            // print("object");
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) =>
+                            //         const DanhSachCacBoPhan512Page(),
+                            //   ),
+                            // );
+                          },
+                          child: const Text(
+                            'リスト複製',
                             style: TextStyle(
                               decoration: TextDecoration.underline,
                               color: Colors.white,
@@ -365,43 +468,81 @@ class _DanhSachDatHangVatLieu611PageState
   }
 
   Widget contentTable(int col, int row) {
-    if (col == 7) {
-      return Row(
-        children: [
-          const Text(''),
-          const Spacer(),
-          Container(
-            decoration: const BoxDecoration(
-              border: Border(
-                left: BorderSide(
-                  color: Colors.black,
-                  width: 0.7,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 7, left: 7),
-            child: _moreButton(context),
-          ),
-        ],
+    if (col == 0) {
+      return Checkbox(
+        activeColor: Colors.blue,
+        checkColor: Colors.white,
+        value: saibuList[row - 1]["status"],
+        onChanged: (newValue) {
+          setState(() {
+            saibuList[row - 1]["status"] = newValue ?? false;
+          });
+        },
       );
     }
 
-    return col == 0
-        ? RadioListTile(
-            value: row,
-            groupValue: currentRadioRow,
-            onChanged: (e) {
-              setState(() {
-                currentRadioRow = row;
-              });
-            },
-          )
-        : const Text(
-            '',
-            style: TextStyle(color: Colors.black),
-          );
+    if (row != 0 && col != 0) {
+      String value = '';
+      saibuList;
+
+      if (col == 1) {
+        value = saibuList[row - 1]["MAKER_NAME"] ?? '';
+      }
+      if (col == 2) {
+        value = saibuList[row - 1]["BUNRUI"] ?? '';
+      }
+      if (col == 3) {
+        value = saibuList[row - 1]["HINBAN"] ?? '';
+      }
+      if (col == 4) {
+        value = saibuList[row - 1]["SYOHIN_NAME"] ?? '';
+      }
+      if (col == 5) {
+        value = saibuList[row - 1]["LOT"] ?? '';
+      }
+      if (col == 6) {
+        value = saibuList[row - 1]["HACYU_TANKA"] ?? '';
+      }
+
+      if (col == 7) {
+        return Row(
+          children: [
+            Text(saibuList[row - 1]["SURYO"] ?? ''),
+            const Spacer(),
+            Container(
+              decoration: const BoxDecoration(
+                border: Border(
+                  left: BorderSide(
+                    color: Colors.black,
+                    width: 0.7,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 7, left: 7),
+              child: _moreButton(context),
+            ),
+          ],
+        );
+      }
+      if (col == 8) {
+        value = saibuList[row - 1]["TANI_CD"] ?? '';
+      }
+      if (col == 9) {
+        value = saibuList[row - 1]["KINGAK"] ?? '';
+      }
+
+      return Text(
+        value,
+        style: TextStyle(color: Colors.black),
+      );
+    }
+
+    return const Text(
+      '',
+      style: TextStyle(color: Colors.black),
+    );
   }
 
   Widget _moreButton(BuildContext context) {
@@ -485,7 +626,7 @@ class _DanhSachDatHangVatLieu611PageState
   List<Widget> _buildCells2(int count, int row) {
     List<String> colNames = [
       '',
-      'カテゴリ',
+      'メーカ',
       '分類',
       '品番',
       '商品名',
