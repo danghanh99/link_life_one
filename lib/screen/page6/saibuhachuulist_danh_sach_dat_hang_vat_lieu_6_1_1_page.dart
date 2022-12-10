@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
 
+import '../../api/order/post_add_material_ordering.dart';
 import '../../api/order/saibuhachuu_list/get_check_list.dart';
 import '../../api/order/saibuhachuu_list/get_material_ordering_list.dart';
 import '../../components/custom_text_field.dart';
@@ -313,7 +314,34 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                       borderRadius: BorderRadius.circular(26),
                     ),
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        List<dynamic> list = saibuList
+                            .where((element) => element["status"] == true)
+                            .toList();
+                        list;
+                        print(list);
+                        if (list.isEmpty) {
+                          CustomToast.show(context,
+                              message: "Please select an order",
+                              backGround: Colors.yellow);
+                        }
+
+                        list.forEach((item) => item..remove("status"));
+
+                        PostAddMaterialOrdering().postAddMaterialOrdering(
+                            list: list,
+                            onSuccess: () {
+                              CustomToast.show(
+                                context,
+                                message: "Add material ordering successfull",
+                                backGround: Colors.green,
+                              );
+                            },
+                            onFailed: () {
+                              CustomToast.show(context,
+                                  message: "Add material ordering failed");
+                            });
+                      },
                       child: const Text(
                         '発注申請',
                         style: TextStyle(
