@@ -11,7 +11,7 @@ import '../../../api/sukejuuru_page_api/show_edit_anken/get_anken_detail.dart';
 import '../../../components/custom_text_field.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/validator.dart';
-import '../../page6/danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
+import '../../page6/saibuhachuulist_danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
 class Page723EditShowAnken extends StatefulWidget {
   final DateTime initialDate;

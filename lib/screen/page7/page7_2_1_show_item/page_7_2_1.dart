@@ -6,7 +6,7 @@ import '../../../api/sukejuuru_page_api/show_anken/get_lich_trinh_item_edit_page
 import '../../../api/sukejuuru_page_api/show_anken/get_lich_trinh_item.dart';
 import '../../../components/custom_text_field.dart';
 import '../../../shared/assets.dart';
-import '../../page6/danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
+import '../../page6/saibuhachuulist_danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
 class Page721 extends StatefulWidget {
   final String JYUCYU_ID;

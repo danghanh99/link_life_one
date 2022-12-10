@@ -107,10 +107,14 @@ class _Page724UpdateState extends State<Page724Update> {
   }
 
   Future<void> callGetListPullDownMemo(String TAN_CAL_ID) async {
-    final result = await CreateMemo()
-        .pullDownMemo(TAN_CAL_ID: TAN_CAL_ID, onSuccess: () {});
+    final result = await CreateMemo().pullDownMemo(
+        TAN_CAL_ID: TAN_CAL_ID,
+        onSuccess: () {},
+        onFailed: () {
+          CustomToast.show(context, message: "Failed to get memo pulldown");
+        });
     setState(() {
-      pullDownMemo = result['pullDown'];
+      pullDownMemo = result == null ? [] : result['pullDown'];
       pullDownSelected = pullDownMemo.firstWhere(
           (element) => element['KBNMSAI_NAME'] == widget.KBNMSAI_NAME);
     });

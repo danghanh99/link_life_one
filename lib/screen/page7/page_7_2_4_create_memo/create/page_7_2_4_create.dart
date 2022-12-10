@@ -93,10 +93,14 @@ class _Page724CreateState extends State<Page724Create> {
   }
 
   Future<void> callGetListPullDownMemo() async {
-    final result =
-        await CreateMemo().pullDownMemo(TAN_CAL_ID: '', onSuccess: () {});
+    final result = await CreateMemo().pullDownMemo(
+        TAN_CAL_ID: '',
+        onSuccess: () {},
+        onFailed: () {
+          CustomToast.show(context, message: "Failed to get memo pulldown");
+        });
     setState(() {
-      pullDownMemo = result['pullDown'];
+      pullDownMemo = result == null ? [] : result['pullDown'];
       pullDownSelected = pullDownMemo.first;
     });
   }
