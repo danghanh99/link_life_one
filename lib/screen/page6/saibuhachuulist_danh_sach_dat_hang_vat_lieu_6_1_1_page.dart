@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:link_life_one/api/order/get_qr.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../api/order/post_add_material_ordering.dart';
 import '../../api/order/saibuhachuu_list/get_check_list.dart';
@@ -34,6 +39,11 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
     extends State<SaibuhacchuulistDanhSachDatHangVatLieu611Page> {
   late int currentRadioRow;
 
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  Barcode? result;
+  QRViewController? controller;
+  bool isShowScandQR = false;
+
   dynamic first = {
     "MAKER_NAME": "",
     "BUNRUI": '',
@@ -50,6 +60,22 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
     "status": false,
   };
   List<dynamic> saibuList = [];
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      controller!.pauseCamera();
+    } else if (Platform.isIOS) {
+      controller!.resumeCamera();
+    }
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -185,6 +211,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                     height: 5,
                   ),
                   CustomTextField(
+                    isReadOnly: true,
                     fillColor: const Color(0xFFA5A7A9),
                     hint: 'テキストテキストテキスト',
                     type: TextInputType.emailAddress,
@@ -194,6 +221,68 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                   const SizedBox(
                     height: 10,
                   ),
+                  isShowScandQR
+                      ? Container(
+                          height: 300.h,
+                          child: Column(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 5,
+                                child: QRView(
+                                  key: qrKey,
+                                  onQRViewCreated: (controller) {
+                                    this.controller = controller;
+                                    controller.scannedDataStream
+                                        .listen((scanData) {
+                                      setState(() {
+                                        result = scanData;
+                                        isShowScandQR = false;
+                                      });
+
+                                      GetQR().getQrApi(onSuccess: (data) {
+                                        print(data);
+
+                                        if (data.isNotEmpty) {
+                                          List<dynamic> mtp = [];
+
+                                          for (var item in data) {
+                                            var itemConvert = {
+                                              "MAKER_NAME": item["MAKER_NAME"],
+                                              "BUNRUI": item["BUZAI_BUNRUI"],
+                                              "JISYA_CD": item["MAKER_NAME"],
+                                              "SYOHIN_NAME":
+                                                  item["SYOHIN_NAME"],
+                                              "LOT": item["LOT"],
+                                              "HACYU_TANKA":
+                                                  item["SIIRE_TANKA"],
+                                              "SURYO": "",
+                                              "TANI_CD": item["TANI"],
+                                              "KINGAK": "",
+                                              "HINBAN": item["HINBAN"],
+                                              "BUZAI_HACYU_ID": "",
+                                              "BUZAI_HACYUMSAI_ID": "",
+                                              "status": false,
+                                            };
+                                            mtp.add(itemConvert);
+                                          }
+                                          setState(() {
+                                            // list;
+                                            saibuList.addAll(mtp);
+                                          });
+                                        }
+                                      }, onFailed: () {
+                                        CustomToast.show(context,
+                                            message:
+                                                "Failed to get data from QR code");
+                                      });
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container(),
                   Row(
                     children: [
                       Container(
@@ -204,7 +293,11 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                           borderRadius: BorderRadius.circular(26),
                         ),
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              isShowScandQR = true;
+                            });
+                          },
                           child: const Text(
                             'QR読取',
                             style: TextStyle(
