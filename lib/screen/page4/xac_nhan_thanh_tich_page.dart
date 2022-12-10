@@ -92,37 +92,47 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
           text = '合計';
         } else {
           if (col == 1) {
-            text = listThanhTich
+            text = listThanhTich.isEmpty ? '0' : listThanhTich
                 .map((e) => e.chiPhiKyGuiChuaXacNhan ?? 0)
                 .reduce((value, element) => value + element)
                 .toString();
           }
           if (col == 2) {
-            text = listThanhTich
+            text = listThanhTich.isEmpty
+                ? '0'
+                : listThanhTich
                 .map((e) => e.chiPhiKyGuiDaXacNhan ?? 0)
                 .reduce((value, element) => value + element)
                 .toString();
           }
           if (col == 3) {
-            text = listThanhTich
+            text = listThanhTich.isEmpty
+                ? '0'
+                : listThanhTich
                 .map((e) => e.soLuongCongTrinh ?? 0)
                 .reduce((value, element) => value + element)
                 .toString();
           }
           if (col == 4) {
-            text = listThanhTich
+            text = listThanhTich.isEmpty
+                ? '0'
+                : listThanhTich
                 .map((e) => e.soLuongXemTruoc ?? 0)
                 .reduce((value, element) => value + element)
                 .toString();
           }
           if (col == 5) {
-            text = listThanhTich
+            text = listThanhTich.isEmpty
+                ? '0'
+                : listThanhTich
                 .map((e) => e.soLuongBoSung ?? 0)
                 .reduce((value, element) => value + element)
                 .toString();
           }
           if (col == 6) {
-            text = listThanhTich
+            text = listThanhTich.isEmpty
+                ? '0'
+                : listThanhTich
                 .map((e) => e.soLuongBanHang ?? 0)
                 .reduce((value, element) => value + element)
                 .toString();

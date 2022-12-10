@@ -62,6 +62,8 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
 
   String currentPullDownValue = '';
 
+  DateTime? time;
+
   List<dynamic> listDateTime1 = [
     "01:00",
     "02:00",
@@ -139,6 +141,8 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
           ;
 
           TAG_KBN = response["EIGYO_ANKEN"][0]["TAG_KBN"];
+          time =
+              DateFormat("yyyy-MM-dd").parse(response["EIGYO_ANKEN"][0]["YMD"]);
           datetimeCreateAnkenPage =
               DateFormat("yyyy-MM-dd").parse(response["EIGYO_ANKEN"][0]["YMD"]);
           jikanKaraCreateAnkenPage = response["EIGYO_ANKEN"][0]["START_TIME"]
@@ -247,9 +251,11 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          DateFormat('yyyy今MM月dd日(E)', 'ja')
-                              .format(widget.initialDate)
-                              .toString(),
+                          time == null
+                              ? ''
+                              : DateFormat('yyyy今MM月dd日(E)', 'ja')
+                                  .format(time!)
+                                  .toString(),
                           style: const TextStyle(
                             color: Color(0xFF000000),
                             fontSize: 14,

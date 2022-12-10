@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:intl/intl.dart';
+import 'package:link_life_one/api/account_book/account_book_api.dart';
 import 'package:link_life_one/components/login_widget.dart';
-import 'package:link_life_one/screen/login_page.dart';
-
-import '../../components/custom_text_field.dart';
+import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/models/account_book.dart';
 import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
@@ -24,8 +26,32 @@ class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
     '出納帳',
   ];
 
+  AccountBook? accountBook;
+
+  @override
+  void initState() {
+    getAccountBook();
+    super.initState();
+  }
+
+  Future<void> getAccountBook() async {
+    final box = Hive.box<String>('user');
+    final TANT_CD = box.values.first;
+    await AccountBookApi().getAccountBook(
+        TANT_CD: TANT_CD,
+        onSuccess: (accoutBookResponse) {
+          setState(() {
+            accountBook = accoutBookResponse;
+          });
+        },
+        onFailed: () {
+          CustomToast.show(context, message: 'Get data error');
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
+    var y = NumberFormat("###,###");
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
@@ -58,7 +84,7 @@ class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
                 ),
                 Column(
                   children: [
-                    LoginWidget(),
+                    const LoginWidget(),
                     const SizedBox(
                       height: 10,
                     ),
@@ -74,8 +100,8 @@ class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
             Center(
               child: Container(
                 decoration: BoxDecoration(
-                    border:
-                        Border.all(color: Color.fromARGB(255, 247, 240, 240))),
+                    border: Border.all(
+                        color: const Color.fromARGB(255, 247, 240, 240))),
                 width: 200,
                 child: CustomButton(
                   color: Colors.white70,
@@ -111,26 +137,7 @@ class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: _moreButton(context),
-                      ),
-                      Container(
-                        width: 70,
-                        height: 37,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFA800),
-                          borderRadius: BorderRadius.circular(26),
-                        ),
-                        child: TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            '表示',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
+                        child: Text(accountBook?.tantoName ?? ''),
                       ),
                     ],
                   ),
@@ -176,26 +183,26 @@ class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
-                            '￥ 1,000,000',
-                            style: TextStyle(
+                            "￥ ${y.format(int.parse(accountBook?.kaisyuRuikei ?? '0')).toString()}",
+                            style: const TextStyle(
                               color: Color(0xFF042C5C),
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           Text(
-                            '￥ 800,000',
-                            style: TextStyle(
+                            "￥ ${y.format(int.parse(accountBook?.nyukinGak ?? '0')).toString()}",
+                            style: const TextStyle(
                               color: Color(0xFF042C5C),
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           Text(
-                            '￥ 200,000',
-                            style: TextStyle(
+                            "￥ ${y.format(accountBook?.total ?? 0).toString()}",
+                            style: const TextStyle(
                               color: Color(0xFF042C5C),
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
