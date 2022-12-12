@@ -157,13 +157,13 @@ class _DanhSachDatHangVatLieu611PageState
                         child: TextButton(
                           onPressed: () {
                             print("object");
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const DanhSachCacBoPhan512Page(),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) =>
+                            //         const DanhSachCacBoPhan512Page(),
+                            //   ),
+                            // );
                           },
                           child: const Text(
                             'リストから選択',

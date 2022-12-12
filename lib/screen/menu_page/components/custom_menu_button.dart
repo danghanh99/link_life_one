@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../shared/custom_button.dart';
@@ -150,12 +151,69 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
         break;
 
       case ('棚卸'):
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const DanhMucHangTonKho62Page(),
-          ),
+        showDialog(
+          context: context,
+          builder: (context) {
+            return SizedBox(
+              width: double.infinity,
+              child: CupertinoAlertDialog(
+                content: const Padding(
+                  padding: EdgeInsets.only(top: 15),
+                  child: Text(
+                    "前回編集途中のリストがあります。",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const DanhMucHangTonKho62Page(
+                              isContinue: true,
+                            ),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        '続きから編集する',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context); //close Dialog
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DanhMucHangTonKho62Page(
+                            isContinue: false,
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      '破壊して新規リスト作成',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
         );
+
         break;
 
       case ('発注承認'):
