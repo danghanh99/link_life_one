@@ -460,11 +460,11 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                             KOJI_TIRASISU: tiraru,
                             onFailed: () {
                               CustomToast.show(context,
-                                  message: "エラー!!!投稿数更新ができませんでした。");
+                                  message: "エラー!!!投函数更新ができませんでした。");
                             },
                             onSuccess: () {
                               CustomToast.show(context,
-                                  message: "投稿数更新ができました。",
+                                  message: "投函数更新ができました。",
                                   backGround: Colors.green);
                             });
                       },

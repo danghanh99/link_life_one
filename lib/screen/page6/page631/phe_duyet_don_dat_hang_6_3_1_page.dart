@@ -229,7 +229,9 @@ class _PheDuyetDonDatHang631PageState extends State<PheDuyetDonDatHang631Page> {
                       borderRadius: BorderRadius.circular(26),
                     ),
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        print("object");
+                      },
                       child: const Text(
                         '発注承認',
                         style: TextStyle(
@@ -369,7 +371,9 @@ class _PheDuyetDonDatHang631PageState extends State<PheDuyetDonDatHang631Page> {
         width: 200,
         child: CustomButton(
           color: Colors.white70,
-          onClick: () {},
+          onClick: () {
+            print("x");
+          },
           name: '発注承認',
           textStyle: const TextStyle(
             color: Color(0xFF042C5C),

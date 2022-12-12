@@ -116,15 +116,20 @@ class _Page723State extends State<Page723> {
   }
 
   Future<dynamic> callGetPullDownAnken({Function? onsuccess}) async {
-    final dynamic result =
-        GetPullDownAnken().getPullDownAnken(onSuccess: (result) {
-      setState(() {
-        listPullDownCreateAnkenPage = result["PULLDOWN"];
-        currentPullDownValue = listPullDownCreateAnkenPage[0]["KBNMSAI_NAME"];
-        selectedPullDownIndex = 0;
-      });
-      print(result);
-    });
+    final dynamic result = GetPullDownAnken().getPullDownAnken(
+      onSuccess: (result) {
+        setState(() {
+          listPullDownCreateAnkenPage = result["PULLDOWN"];
+          currentPullDownValue = listPullDownCreateAnkenPage[0]["KBNMSAI_NAME"];
+          selectedPullDownIndex = 0;
+        });
+        print(result);
+      },
+      onFailed: () {
+        CustomToast.show(context,
+            message: "Failed to get list pulldown eigyoanken");
+      },
+    );
 
     return result;
   }
@@ -210,7 +215,7 @@ class _Page723State extends State<Page723> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          DateFormat('yyyy今MM月dd日(E)', 'ja')
+                          DateFormat('yyyy年MM月dd日(E)', 'ja')
                               .format(widget.initialDate)
                               .toString(),
                           style: const TextStyle(
@@ -553,7 +558,8 @@ class _Page723State extends State<Page723> {
                               widget.isPhongBan ? '1' : '0', //????
                           TAG_KBN:
                               listPullDownCreateAnkenPage[selectedPullDownIndex]
-                                  ["KBN_CD"], // ??
+                                      ["KBN_CD"] ??
+                                  '', // ??
                           START_TIME: jikanKaraCreateAnkenPage + ":00",
                           END_TIME: jikanMadeCreateAnkenPage + ":00",
                           JININ: jinNumberCreateAnkenPage,
@@ -565,10 +571,12 @@ class _Page723State extends State<Page723> {
                           ALL_DAY_FLG: checkAllDayCreateAnkenPage ? "1" : "0",
                           KBNMSAI_CD:
                               listPullDownCreateAnkenPage[selectedPullDownIndex]
-                                  ["KBNMSAI_CD"],
+                                      ["KBNMSAI_CD"] ??
+                                  '',
                           KBN_CD:
                               listPullDownCreateAnkenPage[selectedPullDownIndex]
-                                  ["KBN_CD"],
+                                      ["KBN_CD"] ??
+                                  '',
                           onSuccess: () {
                             Navigator.pop(context);
                             CustomToast.show(context,

@@ -4,8 +4,10 @@ import 'dart:convert';
 class GetPullDownAnken {
   GetPullDownAnken() : super();
 
-  Future<dynamic> getPullDownAnken(
-      {required Function(dynamic) onSuccess}) async {
+  Future<dynamic> getPullDownAnken({
+    required Function(dynamic) onSuccess,
+    required Function() onFailed,
+  }) async {
     final response = await http.get(
       Uri.parse(
           "https://koji-app.starboardasiavn.com/requestSalesConstructionSalesPreviewContents.php?TAN_EIG_ID="),
@@ -16,7 +18,7 @@ class GetPullDownAnken {
       onSuccess.call(body);
       return body;
     } else {
-      throw Exception('Failed to getAnken');
+      onFailed.call();
     }
   }
 }

@@ -202,7 +202,7 @@ class _Page724UpdateState extends State<Page724Update> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        DateFormat('yyyy今MM月dd日(E)', 'ja')
+                        DateFormat('yyyy年MM月dd日(E)', 'ja')
                             .format(widget.initialDate)
                             .toString(),
                         style: const TextStyle(

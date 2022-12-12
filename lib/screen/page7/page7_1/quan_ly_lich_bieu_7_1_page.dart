@@ -99,11 +99,11 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     final dynamic result = await GetAnkenCuaMotPhongBan()
         .getAnkenCuaMotPhongBan(kojiGyoSyaCd, date, (response) {
       setState(() {
-        sukejuuruAllUser = response["PERSON"][0];
+        sukejuuruAllUser = response["PERSON"][0] ?? [];
         sukejuuruPhongBan = response["OFFICE"];
       });
 
-      List<dynamic> listPerson = response["PERSON"][0];
+      List<dynamic> listPerson = response["PERSON"][0] ?? [];
       List<dynamic> listPersonTemp = [];
       listPerson.forEach((element) {
         listPersonTemp.add(
@@ -1133,36 +1133,38 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
   Color getTitleColorByText({required String text}) {
     switch (text) {
-      case '!! 重要 !!':
-        return Colors.red;
-      case '重要':
-        return Colors.red;
       case 'ネット工事':
-        return const Color.fromARGB(255, 46, 196, 51);
-      case '工事打診':
-        return const Color.fromARGB(255, 84, 218, 22);
-      case '営業下見':
-        return Colors.purple;
-      case '営業工事':
-        return const Color.fromARGB(255, 176, 39, 73);
-      case '日予実':
-        return Colors.blue;
-      case '計予実':
-        return Colors.yellow;
+        return const Color(0xFF2ea14d);
       case 'ネット下見':
-        return Colors.red;
+        return const Color(0xfffa2f31);
+      case '日予実':
+        return const Color(0xff1e73d4);
+      case '計予実':
+        return const Color(0xffe0c610);
+      case '工事打診':
+        return const Color(0xff8fd629);
       case '下見打診':
-        return const Color.fromARGB(255, 232, 105, 147);
-      case 'メモ':
-        return const Color(0xFFF6B704);
+        return const Color(0xfff595a9);
       case '追加希望':
-        return Colors.orange;
+        return const Color(0xfff6b704);
       case '追加STOP':
-        return Colors.red;
+        return const Color(0xfff60404);
+      case 'STOP':
+        return const Color(0xfff60404);
       case '休み':
-        return Colors.red;
+        return const Color(0xfff60404);
+      case '重要':
+        return const Color(0xfff60404);
+      case '!! 重要 !!':
+        return const Color(0xfff60404);
       case '月次':
-        return Color(0xFF2F8FAD);
+        return const Color(0xff2893b5);
+      case '営業下見':
+        return const Color(0xfffa2f31);
+      case '営業工事':
+        return const Color(0xfffa2f31);
+      case 'メモ':
+        return const Color(0xFF2ea14d);
       default:
         return Colors.grey;
     }
@@ -1170,40 +1172,40 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
   Color getBackgroundColorByText({required String text}) {
     switch (text) {
-      case '!! 重要 !!':
-        return const Color.fromARGB(255, 229, 165, 160);
-      case '重要':
-        return const Color.fromARGB(255, 229, 165, 160);
       case 'ネット工事':
-        return const Color.fromARGB(255, 174, 224, 177);
-      case '工事打診':
-        return const Color.fromARGB(255, 173, 228, 144);
-      case '営業下見':
-        return const Color.fromARGB(255, 174, 133, 181);
-      case '営業工事':
-        return const Color.fromARGB(255, 182, 140, 150);
-      case '日予実':
-        return const Color.fromARGB(255, 145, 184, 215);
-      case '計予実':
-        return const Color.fromARGB(255, 233, 225, 153);
+        return const Color.fromARGB(255, 125, 228, 152);
       case 'ネット下見':
-        return const Color.fromARGB(255, 229, 165, 160);
+        return const Color.fromARGB(255, 234, 149, 150);
+      case '日予実':
+        return const Color.fromARGB(255, 109, 155, 209);
+      case '計予実':
+        return const Color.fromARGB(255, 214, 203, 114);
+      case '工事打診':
+        return const Color.fromARGB(255, 173, 209, 122);
       case '下見打診':
-        return const Color.fromARGB(255, 224, 192, 203);
-      case 'メモ':
-        return const Color.fromARGB(255, 239, 206, 115);
+        return const Color.fromARGB(255, 234, 149, 150);
       case '追加希望':
-        return const Color(0xffF6B704);
-      case '月次':
-        return const Color(0xFF2F8FAD);
+        return const Color.fromARGB(255, 228, 204, 136);
       case '追加STOP':
-        return Color.fromARGB(255, 229, 165, 160);
-      case '追加希望':
-        return Color.fromARGB(255, 229, 165, 160);
+        return const Color.fromARGB(255, 234, 149, 150);
+      case 'STOP':
+        return const Color.fromARGB(255, 234, 149, 150);
       case '休み':
-        return Color.fromARGB(255, 229, 165, 160);
+        return const Color.fromARGB(255, 234, 149, 150);
+      case '重要':
+        return const Color.fromARGB(255, 234, 149, 150);
+      case '!! 重要 !!':
+        return const Color.fromARGB(255, 234, 149, 150);
+      case '月次':
+        return const Color.fromARGB(255, 113, 161, 176);
+      case '営業下見':
+        return const Color.fromARGB(255, 234, 149, 150);
+      case '営業工事':
+        return const Color.fromARGB(255, 234, 149, 150);
+      case 'メモ':
+        return const Color.fromARGB(255, 126, 211, 149);
       default:
-        return const Color.fromARGB(255, 227, 223, 223);
+        return const Color.fromARGB(255, 213, 208, 208);
     }
   }
 

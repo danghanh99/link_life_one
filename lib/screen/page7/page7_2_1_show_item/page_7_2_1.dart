@@ -159,7 +159,7 @@ class _Page721State extends State<Page721> {
                     .toString();
             titleDateTime3 = time == null
                 ? ''
-                : DateFormat('yyyy今MM月dd日(E)', 'ja').format(time!).toString() +
+                : DateFormat('yyyy年MM月dd日(E)', 'ja').format(time!).toString() +
                     " " +
                     jikanKara +
                     " " +

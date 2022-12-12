@@ -253,7 +253,7 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                         child: Text(
                           time == null
                               ? ''
-                              : DateFormat('yyyy今MM月dd日(E)', 'ja')
+                              : DateFormat('yyyy年MM月dd日(E)', 'ja')
                                   .format(time!)
                                   .toString(),
                           style: const TextStyle(
