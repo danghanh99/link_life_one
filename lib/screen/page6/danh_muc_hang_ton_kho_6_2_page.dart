@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:link_life_one/api/inventory/create_or_edit_api.dart';
 import 'package:link_life_one/api/inventory/get_inventories_api.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/models/inventory.dart';
@@ -8,7 +9,6 @@ import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../menu_page/menu_page.dart';
-import 'danh_sach_dat_hang_cac_bo_phan_6_3_page.dart';
 import 'inventories/danh_sach_cac_bo_phan_5_1_3_page.dart';
 
 class DanhMucHangTonKho62Page extends StatefulWidget {
@@ -302,13 +302,21 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
               ),
               child: TextButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          const DanhSachDatHangCacBoPhan63Page(),
-                    ),
-                  );
+                  CreateOrEditApi().createOrEditInventory(
+                      INVENTORY_DETAIL: listInventory
+                          .where((element) => element.STATUS == true)
+                          .toList(),
+                      onSuccess: () {
+                        CustomToast.show(context,
+                            message: 'Create or edit success',
+                            backGround: Colors.green);
+                      },
+                      onFailed: () {
+                        CustomToast.show(
+                          context,
+                          message: 'Create or edit error',
+                        );
+                      });
                 },
                 child: const Text(
                   '発注申請',
@@ -461,12 +469,13 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
     }
 
     if (col == 0) {
-      return RadioListTile(
-        value: row,
-        groupValue: currentRadioRow,
-        onChanged: (e) {
+      return Checkbox(
+        activeColor: Colors.blue,
+        checkColor: Colors.white,
+        value: listInventory[row - 1].STATUS,
+        onChanged: (newValue) {
           setState(() {
-            currentRadioRow = row;
+            listInventory[row - 1].STATUS = newValue ?? false;
           });
         },
       );

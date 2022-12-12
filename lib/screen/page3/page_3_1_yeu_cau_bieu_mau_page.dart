@@ -226,7 +226,8 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                               color: const Color.fromARGB(255, 111, 177, 224),
                             ),
                           ),
-                          child: Text("PDF $index")),
+                          child: Text(
+                              item != null ? item['FILE_NAME'] : "PDF $index")),
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) =>

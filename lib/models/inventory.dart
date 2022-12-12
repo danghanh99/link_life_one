@@ -9,6 +9,7 @@ class Inventory {
   final String? hacchuuSuuryou;
   int? tougetsuJitsuZaiko;
   final String? meekaa;
+  bool STATUS;
 
   Inventory(
       {this.buzaiKanriGoban,
@@ -20,7 +21,8 @@ class Inventory {
       this.shukkoSuuryou,
       this.hacchuuSuuryou,
       this.tougetsuJitsuZaiko,
-      this.meekaa});
+      this.meekaa,
+      this.STATUS = false});
 
   factory Inventory.fromJson(Map<String, dynamic> json) {
     return Inventory(
