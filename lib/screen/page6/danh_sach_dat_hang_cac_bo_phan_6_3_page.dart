@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page6/page631/phe_duyet_don_dat_hang_6_3_1_page.dart';
+import 'package:link_life_one/screen/page6/page631/hacchuushounin_phe_duyet_don_dat_hang_6_3_1_page.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../components/login_widget.dart';
@@ -264,13 +264,13 @@ class _DanhSachDatHangCacBoPhan63PageState
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const PheDuyetDonDatHang631Page(),
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) =>
+                      //         const PheDuyetDonDatHang631Page(),
+                      //   ),
+                      // );
                     },
                     child: const Text(
                       '発注承認',

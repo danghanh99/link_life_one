@@ -1,17 +1,16 @@
 import "package:http/http.dart" as http;
 import 'dart:convert';
 
-class GetPartOrderList {
-  GetPartOrderList() : super();
+class GetPullDownStatusIchiran {
+  GetPullDownStatusIchiran() : super();
 
-  Future<List<dynamic>> getPartOrderList({
-    required String SYOZOKU_CD,
+  Future<List<dynamic>> getPullDownStatusIchiran({
     required Function(List<dynamic>) onSuccess,
     required Function onFailed,
   }) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Order/requestGetPartOrderList.php?SYOZOKU_CD=${SYOZOKU_CD}"),
+          "https://koji-app.starboardasiavn.com/Request/Order/requestGetPullDownStatus.php"),
     );
 
     if (response.statusCode == 200) {
