@@ -50,11 +50,11 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
     '出納帳',
   ];
 
-  String SINGLE_SUMMARIZE = "01";
+  // String SINGLE_SUMMARIZE = "01";
 
   @override
   void initState() {
-    SINGLE_SUMMARIZE = widget.isSendAList ? "02" : "01";
+    // SINGLE_SUMMARIZE = widget.isSendAList ? "02" : "01";
     callGetListPdf();
     super.initState();
   }
@@ -352,7 +352,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                         title: '',
                         body: ShashinKakuninPage(
                           JYUCYU_ID: widget.JYUCYU_ID,
-                          SINGLE_SUMMARIZE: SINGLE_SUMMARIZE,
+                          SINGLE_SUMMARIZE: widget.single_summarize,
                         ),
                       );
                     },
@@ -393,7 +393,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                           MaterialPageRoute(
                             builder: (context) => KojiHoukoku(
                               initialDate: widget.initialDate,
-                              SINGLE_SUMMARIZE: SINGLE_SUMMARIZE,
+                              SINGLE_SUMMARIZE: widget.single_summarize,
                               JYUCYU_ID: widget.JYUCYU_ID,
                               KOJI_ST: widget.KOJI_ST,
                               SYUYAKU_JYUCYU_ID: widget.JYUCYU_ID,

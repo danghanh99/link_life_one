@@ -15,7 +15,7 @@ class LoginApi {
     String url =
         "https://koji-app.starboardasiavn.com/Request/Login/requestLogin.php";
     final response = await http.post(Uri.parse(url),
-        body: {'LOGIN_ID': '10081', 'PASSWORD': 'lifeone0081'});
+        body: {'LOGIN_ID': '00000', 'PASSWORD': '123456'});
     // body: {'LOGIN_ID': id, 'PASSWORD': password});
 
     if (response.body == "{\"error_message\":Unauthorized}[]") {
