@@ -171,6 +171,14 @@ class _MenuPageState extends State<MenuPage> {
                               message: "既読ができました。",
                               backGround: Colors.green,
                             );
+                            callGetThongBaoMenuApi();
+                          },
+                          onFailed: () {
+                            CustomToast.show(
+                              context,
+                              message: "既読ができませんでした。",
+                              backGround: Colors.red,
+                            );
                           });
                     },
                     child: const Text(

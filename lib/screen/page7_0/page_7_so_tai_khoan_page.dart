@@ -36,7 +36,7 @@ class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
 
   Future<void> getAccountBook() async {
     final box = Hive.box<String>('user');
-    final TANT_CD = box.values.first;
+    final TANT_CD = box.values.last;
     await AccountBookApi().getAccountBook(
         TANT_CD: TANT_CD,
         onSuccess: (accoutBookResponse) {

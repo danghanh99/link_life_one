@@ -12,7 +12,7 @@ class GetBuzaiApi {
     required Function onFailed,
   }) async {
     final box = Hive.box<User>('userBox');
-    final User user = box.values.first;
+    final User user = box.values.last;
     String SYOZOKU_CD = user.SYOZOKU_CD;
     dynamic response = await http.get(
       Uri.parse(

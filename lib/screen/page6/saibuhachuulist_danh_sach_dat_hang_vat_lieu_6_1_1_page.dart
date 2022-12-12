@@ -322,13 +322,20 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                         child: TextButton(
                           onPressed: () {
                             print("object");
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) =>
-                            //         const DanhSachCacBoPhan512Page(),
-                            //   ),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DanhSachCacBoPhan512Page(
+                                  onAdd: (data) {
+                                    data;
+                                    saibuList;
+                                    setState(() {
+                                      saibuList.addAll(data);
+                                    });
+                                  },
+                                ),
+                              ),
+                            );
                           },
                           child: const Text(
                             'リストから選択',
@@ -458,79 +465,79 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
     );
   }
 
-  Widget _dropDownButton(BuildContext context, String value) {
-    return PopupMenuButton<int>(
-      color: Colors.white,
-      padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {}
-        if (number == 2) {}
-      },
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "投函数を選択",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "投函数を選択",
-              ),
-            ],
-          ),
-        ),
-      ],
-      offset: const Offset(-35, -90),
-      child: Container(
-        width: 130,
-        height: 30,
-        decoration: BoxDecoration(
-          color: const Color(0xFFF5F6F8),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              value,
-              style: const TextStyle(
-                color: Color(0xFF999999),
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            Image.asset(
-              Assets.icDown,
-              width: 13,
-              height: 13,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _dropDownButton(BuildContext context, String value) {
+  //   return PopupMenuButton<int>(
+  //     color: Colors.white,
+  //     padding: EdgeInsets.zero,
+  //     onSelected: (number) {
+  //       if (number == 1) {}
+  //       if (number == 2) {}
+  //     },
+  //     shape: const RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.all(Radius.circular(12.0))),
+  //     itemBuilder: (context) => [
+  //       PopupMenuItem(
+  //         height: 25,
+  //         padding: const EdgeInsets.only(right: 0, left: 10),
+  //         value: 1,
+  //         child: Row(
+  //           children: const [
+  //             SizedBox(
+  //               width: 14,
+  //             ),
+  //             Text(
+  //               "投函数を選択",
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //       const PopupMenuDivider(),
+  //       PopupMenuItem(
+  //         height: 25,
+  //         padding: const EdgeInsets.only(right: 0, left: 10),
+  //         value: 2,
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.start,
+  //           children: const [
+  //             SizedBox(
+  //               width: 14,
+  //             ),
+  //             Text(
+  //               "投函数を選択",
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ],
+  //     offset: const Offset(-35, -90),
+  //     child: Container(
+  //       width: 130,
+  //       height: 30,
+  //       decoration: BoxDecoration(
+  //         color: const Color(0xFFF5F6F8),
+  //         borderRadius: BorderRadius.circular(8),
+  //       ),
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //         children: [
+  //           Text(
+  //             value,
+  //             style: const TextStyle(
+  //               color: Color(0xFF999999),
+  //               fontSize: 14,
+  //               fontWeight: FontWeight.w400,
+  //             ),
+  //           ),
+  //           Image.asset(
+  //             Assets.icDown,
+  //             width: 13,
+  //             height: 13,
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget header() {
     return Row(
@@ -642,7 +649,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
             ),
             Padding(
               padding: const EdgeInsets.only(right: 7, left: 7),
-              child: _moreButton(context),
+              child: _moreButton(context, row),
             ),
           ],
         );
@@ -666,56 +673,46 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
     );
   }
 
-  Widget _moreButton(BuildContext context) {
+  Widget _moreButton(BuildContext context, int row) {
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {
-          // Navigator.of(context).push(MaterialPageRoute(
-          //     builder: (context) => EditThemePage(
-          //           index: index,
-          //           meditationThemeDTO: meditationThemeDTO,
-          //         )));
-        }
-        if (number == 2) {}
-      },
+      onSelected: (number) {},
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      itemBuilder: (context) =>
+          List.generate(100, (index) => index + 1).map((item) {
+        return PopupMenuItem(
+          onTap: () {
+            setState(() {
+              saibuList[row - 1]["SURYO"] = item.toString();
+            });
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
           value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Text(
+                      item.toString(),
+                      style: TextStyle(color: Color(0xFF999999)),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "Dropdown item",
-              ),
+              const Divider(),
             ],
           ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "Dropdown item",
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      }).toList(),
       offset: const Offset(-25, -10),
       child: Image.asset(
         Assets.icDropdown,

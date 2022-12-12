@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:link_life_one/api/order/saubulist/get_part_list.dart';
+import 'package:link_life_one/api/order/saubulist/get_pull_down_category.dart';
+import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page5/page_5_3_danh_sach_nhan_lai_vat_lieu.dart';
 
@@ -10,7 +13,9 @@ import '../../shared/custom_button.dart';
 import '../menu_page/menu_page.dart';
 
 class DanhSachCacBoPhan512Page extends StatefulWidget {
+  final Function(List<dynamic>) onAdd;
   const DanhSachCacBoPhan512Page({
+    required this.onAdd,
     Key? key,
   }) : super(key: key);
 
@@ -20,19 +25,46 @@ class DanhSachCacBoPhan512Page extends StatefulWidget {
 }
 
 class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
-  List<String> listNames = [
-    '入出庫管理',
-    '部材管理',
-    '出納帳',
-  ];
-
   late int currentRadioRow;
+
+  List<dynamic> saibuList = [];
+
+  List<dynamic> listPullDown = [];
+
+  String pulldownCategory = 'カテゴリを選択';
 
   @override
   void initState() {
     currentRadioRow = -1;
 
     super.initState();
+    callGetPartList();
+    callGetPullDownCategory();
+  }
+
+  Future<dynamic> callGetPartList() async {
+    final dynamic result = await GetPartList().getPartList(onSuccess: (data) {
+      for (var element in data) {
+        element["status"] = false;
+      }
+
+      setState(() {
+        saibuList.addAll(data);
+      });
+    }, onFailed: () {
+      CustomToast.show(context, message: "Failed to get part list");
+    });
+  }
+
+  Future<dynamic> callGetPullDownCategory() async {
+    final dynamic result =
+        await GetPullDownCategory().getPullDownCategory(onSuccess: (data) {
+      setState(() {
+        listPullDown.addAll(data);
+      });
+    }, onFailed: () {
+      CustomToast.show(context, message: "Failed to get pulldown category");
+    });
   }
 
   @override
@@ -159,7 +191,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
                 scrollDirection: Axis.horizontal,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _buildRows(4),
+                  children: _buildRows(saibuList.length + 1),
                 ),
               ),
             ),
@@ -180,13 +212,14 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const Page53DanhSachNhanLaiVatLieu(),
-                        ),
-                      );
+                      Navigator.pop(context);
+                      List<dynamic> listSelected = saibuList
+                          .where((element) => element["status"] == true)
+                          .toList();
+                      for (var element in listSelected) {
+                        element["status"] = false;
+                      }
+                      widget.onAdd.call(listSelected);
                     },
                     child: const Text(
                       '追加',
@@ -211,7 +244,6 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
 
   Widget _dropDownButton(
     BuildContext context,
-    String value,
     double width,
   ) {
     return PopupMenuButton<int>(
@@ -223,40 +255,42 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
       },
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      itemBuilder: (context) => listPullDown.map((item) {
+        return PopupMenuItem(
+          onTap: () {
+            setState(() {
+              if (pulldownCategory == item["KBNMSAI_NAME"]) {
+                pulldownCategory = 'カテゴリを選択';
+              } else {
+                pulldownCategory = item["KBNMSAI_NAME"];
+              }
+            });
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
           value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Text(
+                      item["KBNMSAI_NAME"].toString(),
+                      style: TextStyle(color: Color(0xFF999999)),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "Dropdown item1",
-              ),
+              const Divider(),
             ],
           ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "Dropdown item2",
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      }).toList(),
       offset: const Offset(-0, 50),
       child: Container(
         width: width,
@@ -271,7 +305,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                value,
+                pulldownCategory,
                 style: const TextStyle(
                   color: Color(0xFF999999),
                   fontSize: 14,
@@ -369,7 +403,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
         const SizedBox(
           height: 5,
         ),
-        _dropDownButton(context, 'カテゴリを選択', width ?? 30),
+        _dropDownButton(context, width ?? 30),
       ],
     );
   }
@@ -409,20 +443,50 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
   }
 
   Widget contentTable(int col, int row) {
-    return col == 0
-        ? RadioListTile(
-            value: row,
-            groupValue: currentRadioRow,
-            onChanged: (e) {
-              setState(() {
-                currentRadioRow = row;
-              });
-            },
-          )
-        : const Text(
-            '',
-            style: TextStyle(color: Colors.black),
-          );
+    if (row != 0 && col != 0) {
+      String value = '';
+
+      if (col == 1) {
+        value = saibuList[row - 1]["BUZAI_HACYUMSAI_ID"] ?? '';
+      }
+      if (col == 2) {
+        value = saibuList[row - 1]["BUNRUI"] ?? '';
+      }
+      if (col == 3) {
+        value = saibuList[row - 1]["MAKER_NAME"] ?? '';
+      }
+      if (col == 4) {
+        value = saibuList[row - 1]["HINBAN"] ?? '';
+      }
+      if (col == 5) {
+        value = saibuList[row - 1]["SYOHIN_NAME"] ?? '';
+      }
+      if (col == 6) {
+        value = saibuList[row - 1]["SURYO"] ?? '';
+      }
+
+      return Text(
+        value,
+        style: const TextStyle(color: Colors.black),
+      );
+    }
+
+    if (col == 0) {
+      return Checkbox(
+        activeColor: Colors.blue,
+        checkColor: Colors.white,
+        value: saibuList[row - 1]["status"],
+        onChanged: (newValue) {
+          setState(() {
+            saibuList[row - 1]["status"] = newValue ?? false;
+          });
+        },
+      );
+    }
+    return const Text(
+      '',
+      style: TextStyle(color: Colors.black),
+    );
   }
 
   List<Widget> _buildCells2(int count, int row) {
@@ -432,8 +496,8 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
       '分類',
       'メーカー',
       '品番',
-      '',
-      '',
+      '商品名',
+      '実数量',
     ];
 
     Size size = MediaQuery.of(context).size;

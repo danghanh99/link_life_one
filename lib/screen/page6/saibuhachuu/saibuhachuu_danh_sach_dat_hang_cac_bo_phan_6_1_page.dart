@@ -45,7 +45,7 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
 
   Future<dynamic> callGetLichTrinhItem() async {
     final box = Hive.box<User>('userBox');
-    final User user = box.values.first;
+    final User user = box.values.last;
 
     final dynamic result = await GetPartOrderList().getPartOrderList(
         SYOZOKU_CD: user.SYOZOKU_CD,
