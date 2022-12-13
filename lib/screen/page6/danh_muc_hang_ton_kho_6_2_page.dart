@@ -73,7 +73,7 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
           );
         },
         onFailed: () {
-          CustomToast.show(context, message: 'Get list inventory error');
+          CustomToast.show(context, message: 'データを取得しませんでした。');
         });
   }
 
@@ -356,13 +356,12 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
                           .toList(),
                       onSuccess: () {
                         CustomToast.show(context,
-                            message: 'Create or edit success',
-                            backGround: Colors.green);
+                            message: '登録しました。', backGround: Colors.green);
                       },
                       onFailed: () {
                         CustomToast.show(
                           context,
-                          message: 'Create or edit error',
+                          message: '登録しませんでした。',
                         );
                       });
                 },

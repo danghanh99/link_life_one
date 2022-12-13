@@ -204,13 +204,11 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                                     child: SfPdfViewer.network(
                                       item['SITAMIIRAISYO_FILEPATH'],
                                       key: _pdfViewerKey,
-                                      onDocumentLoaded: (details) {
-                                        // CustomToast.show(context,
-                                        //     message: "Load failed");
-                                      },
+                                      onDocumentLoaded: (details) {},
                                       onDocumentLoadFailed: (detail) {
                                         CustomToast.show(context,
-                                            message: detail.description);
+                                            message: "PDFを取得しませんでした。");
+                                        // message: detail.description);
                                       },
                                     ),
                                   )

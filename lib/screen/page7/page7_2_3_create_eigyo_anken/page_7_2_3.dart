@@ -127,8 +127,7 @@ class _Page723State extends State<Page723> {
         print(result);
       },
       onFailed: () {
-        CustomToast.show(context,
-            message: "Failed to get list pulldown eigyoanken");
+        CustomToast.show(context, message: "データを取得しませんでした。");
       },
     );
 

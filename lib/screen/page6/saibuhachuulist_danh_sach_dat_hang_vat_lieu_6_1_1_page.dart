@@ -127,8 +127,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
               }
             },
             onFailed: () {
-              CustomToast.show(context,
-                  message: "Failed to get material order list");
+              CustomToast.show(context, message: "データを取得しませんでした。");
             });
   }
 
@@ -139,7 +138,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
           onSccess.call(data);
         },
         onFailed: () {
-          CustomToast.show(context, message: "Failed to get check list");
+          CustomToast.show(context, message: "データを取得しませんでした。");
         });
   }
 
@@ -272,8 +271,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                                         }
                                       }, onFailed: () {
                                         CustomToast.show(context,
-                                            message:
-                                                "Failed to get data from QR code");
+                                            message: "データを取得しませんでした。");
                                       });
                                     });
                                   },
@@ -422,7 +420,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                         print(list);
                         if (list.isEmpty) {
                           CustomToast.show(context,
-                              message: "Please select an order",
+                              message: "一つを選択してください。",
                               backGround: Colors.yellow);
                         }
 
@@ -433,13 +431,12 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                             onSuccess: () {
                               CustomToast.show(
                                 context,
-                                message: "Add material ordering successfull",
+                                message: "登録しました。",
                                 backGround: Colors.green,
                               );
                             },
                             onFailed: () {
-                              CustomToast.show(context,
-                                  message: "Add material ordering failed");
+                              CustomToast.show(context, message: "登録しませんでした。");
                             });
                       },
                       child: const Text(

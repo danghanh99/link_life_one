@@ -56,7 +56,7 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
           });
         },
         onFailed: () {
-          CustomToast.show(context, message: "Failed to get part order list");
+          CustomToast.show(context, message: "データを取得しませんでした。");
         });
   }
 
@@ -68,7 +68,7 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
         listPullDown = data;
       });
     }, onFailed: () {
-      CustomToast.show(context, message: "Failed to get pull down");
+      CustomToast.show(context, message: "データを取得しませんでした。");
     });
   }
 
@@ -266,8 +266,7 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
                           ),
                         );
                       } else {
-                        CustomToast.show(context,
-                            message: "Please select an order");
+                        CustomToast.show(context, message: "一つを選択してください。");
                       }
                     },
                     child: const Text(

@@ -798,7 +798,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
         GestureDetector(
           onTap: () {
             if (TENPO_CD == null) {
-              CustomToast.show(context, message: "Tenpo CD null");
+              CustomToast.show(context, message: "TenpoCDを取得しませんでした。");
             } else {
               if (HOJIN_FLG == null ||
                   HOJIN_FLG == "0" ||

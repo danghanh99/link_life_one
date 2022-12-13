@@ -174,7 +174,7 @@ class _ShashinTeishuutsuGamenPageState
                             if (imageFile == null) {
                               CustomToast.show(
                                 context,
-                                message: "Please select photo",
+                                message: "写真を選択してください。",
                                 backGround: Colors.orange,
                               );
                             } else {
@@ -185,14 +185,14 @@ class _ShashinTeishuutsuGamenPageState
                                   onFailed: () {
                                     CustomToast.show(
                                       context,
-                                      message: "Upload photo failed ",
+                                      message: "写真のアップロードに失敗しました",
                                       backGround: Colors.red,
                                     );
                                   },
                                   onSuccess: () {
                                     CustomToast.show(
                                       context,
-                                      message: "Upload photo successfull ",
+                                      message: "写真をアップロードしました",
                                       backGround: Colors.green,
                                     );
                                   });

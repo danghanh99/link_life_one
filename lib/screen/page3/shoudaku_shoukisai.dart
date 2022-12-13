@@ -55,7 +55,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
           }
         },
         onFailed: () {
-          CustomToast.show(context, message: "Failed to get Shoudakusho");
+          CustomToast.show(context, message: "承諾書を取得しませんでした。");
         });
   }
 

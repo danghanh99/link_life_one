@@ -97,7 +97,7 @@ class _Page724CreateState extends State<Page724Create> {
         TAN_CAL_ID: '',
         onSuccess: () {},
         onFailed: () {
-          CustomToast.show(context, message: "Failed to get memo pulldown");
+          CustomToast.show(context, message: "データを取得しませんでした。");
         });
     setState(() {
       pullDownMemo = result == null ? [] : result['pullDown'];
@@ -314,12 +314,11 @@ class _Page724CreateState extends State<Page724Create> {
                         onSuccess: () {
                           Navigator.pop(context);
                           CustomToast.show(context,
-                              message: "Create successfull",
-                              backGround: Colors.green);
+                              message: "登録しました。", backGround: Colors.green);
                           widget.onSuccess.call();
                         },
                         onFailed: () {
-                          CustomToast.show(context, message: 'Create error');
+                          CustomToast.show(context, message: '登録しませんでした。');
                         });
                   },
                   child: const Text(

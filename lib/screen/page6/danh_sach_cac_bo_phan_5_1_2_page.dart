@@ -52,7 +52,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
         saibuList.addAll(data);
       });
     }, onFailed: () {
-      CustomToast.show(context, message: "Failed to get part list");
+      CustomToast.show(context, message: "データを取得しませんでした。");
     });
   }
 
@@ -63,7 +63,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
         listPullDown.addAll(data);
       });
     }, onFailed: () {
-      CustomToast.show(context, message: "Failed to get pulldown category");
+      CustomToast.show(context, message: "データを取得しませんでした。");
     });
   }
 

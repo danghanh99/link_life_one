@@ -111,7 +111,7 @@ class _Page724UpdateState extends State<Page724Update> {
         TAN_CAL_ID: TAN_CAL_ID,
         onSuccess: () {},
         onFailed: () {
-          CustomToast.show(context, message: "Failed to get memo pulldown");
+          CustomToast.show(context, message: "データを取得しませんでした。");
         });
     setState(() {
       pullDownMemo = result == null ? [] : result['pullDown'];
@@ -330,12 +330,11 @@ class _Page724UpdateState extends State<Page724Update> {
                         onSuccess: () {
                           Navigator.pop(context);
                           CustomToast.show(context,
-                              message: "Update successfull",
-                              backGround: Colors.green);
+                              message: "変更しました。", backGround: Colors.green);
                           widget.onSuccess.call();
                         },
                         onFailed: () {
-                          CustomToast.show(context, message: 'Update error');
+                          CustomToast.show(context, message: '変更しませんでした。');
                         });
                   },
                   child: const Text(
@@ -366,13 +365,11 @@ class _Page724UpdateState extends State<Page724Update> {
                         onSuccess: () {
                           Navigator.pop(context);
                           CustomToast.show(context,
-                              message: "Delete memo successfull",
-                              backGround: Colors.green);
+                              message: "削除しました。", backGround: Colors.green);
                           widget.onSuccess.call();
                         },
                         onFailed: () {
-                          CustomToast.show(context,
-                              message: 'Delete memo error');
+                          CustomToast.show(context, message: '削除しませんでした。');
                         });
                   },
                   child: const Text(

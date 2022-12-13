@@ -298,10 +298,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     }
   }
 
-  void _copyCode() {
-    // Clipboard.setData(ClipboardData(text: widget.controller?.text)).then((_) => Toast.show(context,
-    //     message: 'Copied', colorToast: AppColors.TOAST, iconToast: Assets.ICON_TOAST_SUCCESS));
-  }
+  void _copyCode() {}
 
   void _togglePassword() {
     setState(() {
