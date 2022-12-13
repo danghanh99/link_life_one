@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:link_life_one/api/inventory/create_or_edit_api.dart';
 import 'package:link_life_one/api/inventory/get_inventories_api.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/models/inventory.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../components/custom_text_field.dart';
 import '../../components/login_widget.dart';
 import '../../components/text_line_down.dart';
@@ -29,10 +31,29 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
     '部材管理',
     '出納帳',
   ];
-
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  Barcode? result;
+  QRViewController? controller;
+  bool isShowScandQR = false;
   late int currentRadioRow;
 
   List<Inventory> listInventory = [];
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      controller!.pauseCamera();
+    } else if (Platform.isIOS) {
+      controller!.resumeCamera();
+    }
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -225,7 +246,11 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        isShowScandQR = true;
+                      });
+                    },
                     child: const Text(
                       'QR読取',
                       style: TextStyle(
@@ -292,7 +317,30 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
                 ),
               ],
             ),
-            Expanded(child: Container()),
+            isShowScandQR
+                ? Container(
+                    height: 300,
+                    child: Column(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 5,
+                          child: QRView(
+                            key: qrKey,
+                            onQRViewCreated: (controller) {
+                              this.controller = controller;
+                              controller.scannedDataStream.listen((scanData) {
+                                setState(() {
+                                  result = scanData;
+                                  isShowScandQR = false;
+                                });
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : Container(),
             Container(
               width: 120,
               height: 37,

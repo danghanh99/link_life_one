@@ -256,7 +256,8 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      // var x = listBuzai.where((element) => element.STATUS == true).toList();
+                      // Navigator.pop(context);
                     },
                     child: const Text(
                       '追加',
