@@ -923,8 +923,12 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                           width: colWidth()[col],
                           child: Text(
                             value1nguoi == '個人'
-                                ? sukejuuruSelectedUser["TANT_NAME"]
-                                : sukejuuruAllUser[row - 2]["TANT_NAME"],
+                                ? (sukejuuruSelectedUser == null
+                                    ? ''
+                                    : sukejuuruSelectedUser["TANT_NAME"])
+                                : (sukejuuruAllUser.isEmpty
+                                    ? ''
+                                    : sukejuuruAllUser[row - 2]["TANT_NAME"]),
                             style: const TextStyle(
                                 color: Color(0xFF042C5C),
                                 fontSize: 20,
@@ -1035,7 +1039,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     List<Widget> xxx = [];
     _listDay().forEach(
       (element) {
-        if (sukejuuruSelectedUser.isNotEmpty &&
+        if (sukejuuruSelectedUser != null &&
+            sukejuuruSelectedUser.isNotEmpty &&
             sukejuuruSelectedUser[element] != null &&
             sukejuuruSelectedUser[element].isNotEmpty &&
             element.split('-').last == listDayOfWeek()[col].split(' ').first) {
@@ -1054,13 +1059,16 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         }
       },
     );
-    xxx.add(
-      insert(
-        dateSelected: listDayOfWeek()[col].split(' ').first,
-        JYOKEN_CD: sukejuuruSelectedUser["TANT_CD"],
-        isPhongBan: false,
-      ),
-    );
+    if (sukejuuruSelectedUser != null) {
+      xxx.add(
+        insert(
+          dateSelected: listDayOfWeek()[col].split(' ').first,
+          JYOKEN_CD: sukejuuruSelectedUser["TANT_CD"],
+          isPhongBan: false,
+        ),
+      );
+    }
+
     return xxx;
   }
 

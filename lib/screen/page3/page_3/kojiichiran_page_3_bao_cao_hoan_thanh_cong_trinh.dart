@@ -61,7 +61,8 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
     await GetTirasi().getTirasi(
       YMD: inputDate ?? date,
       onSuccess: (data) {
-        if (data["TIRASI"] != null) {
+        List<dynamic> mtplist = data;
+        if (mtplist.isNotEmpty && data["TIRASI"] != null) {
           if (data["TIRASI"][0] != null) {
             if (data["TIRASI"][0]["KOJI_TIRASISU"] != null) {
               setState(() {
@@ -124,6 +125,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                   child: GestureDetector(
                     onTap: () async {
                       DateTime? picked = await showDatePicker(
+                          locale: const Locale("ja", "JA"),
                           context: context,
                           initialDate: date,
                           firstDate: DateTime(1990),
