@@ -1,28 +1,35 @@
+import 'package:hive_flutter/adapters.dart';
 import "package:http/http.dart" as http;
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
 
+import '../../../models/user.dart';
+
 class CreateAnken {
   CreateAnken() : super();
 
-  Future<dynamic> createAnken(
-      {required DateTime YMD,
-      required String JYOKEN_CD,
-      required String JYOKEN_SYBET_FLG,
-      required String TAG_KBN,
-      required String START_TIME,
-      required String END_TIME,
-      required String JININ,
-      required String JIKAN,
-      required String GUEST_NAME,
-      required String ATTEND_NAME1,
-      required String ATTEND_NAME2,
-      required String ATTEND_NAME3,
-      required String ALL_DAY_FLG,
-      required String KBNMSAI_CD,
-      required String KBN_CD,
-      required Function() onSuccess}) async {
+  Future<dynamic> createAnken({
+    required DateTime YMD,
+    required String JYOKEN_CD,
+    required String JYOKEN_SYBET_FLG,
+    required String TAG_KBN,
+    required String START_TIME,
+    required String END_TIME,
+    required String JININ,
+    required String JIKAN,
+    required String GUEST_NAME,
+    required String ATTEND_NAME1,
+    required String ATTEND_NAME2,
+    required String ATTEND_NAME3,
+    required String ALL_DAY_FLG,
+    required String KBNMSAI_CD,
+    required String KBN_CD,
+    required Function() onSuccess,
+    required Function() onFailed,
+  }) async {
+    final box = Hive.box<User>('userBox');
+    final User user = box.values.last;
     final response = await http.post(
         Uri.parse(
             "https://koji-app.starboardasiavn.com/Request/Schedule/requestSalesConstructionSalesPreviewUpdate.php"),
@@ -42,14 +49,14 @@ class CreateAnken {
           "ALL_DAY_FLG": ALL_DAY_FLG,
           "KBNMSAI_CD": KBNMSAI_CD,
           "KBN_CD": KBN_CD,
+          "LOGIN_ID": user.TANT_CD,
         });
 
     if (response.statusCode == 200) {
-      // final dynamic body = jsonDecode(response.body);
+      jsonDecode(response.body);
       onSuccess.call();
-      // return body;
     } else {
-      throw Exception('Failed to createAnken');
+      onFailed.call();
     }
   }
 }

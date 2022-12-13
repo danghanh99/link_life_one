@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/show_holiday.dart';
 import 'package:link_life_one/components/login_widget.dart';
-import 'package:link_life_one/screen/page7/page7_2_3_create_item/page_7_2_3.dart';
+import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/screen/page7/page7_2_3_create_eigyo_anken/page_7_2_3.dart';
 import 'package:link_life_one/screen/page7/page7_2_3_edit_show_anken/page_7_2_3_edit_show_anken.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/create/page_7_2_4_create.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/update/page_7_2_4_update.dart';
@@ -98,26 +99,40 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       Function? onsuccess}) async {
     final dynamic result = await GetAnkenCuaMotPhongBan()
         .getAnkenCuaMotPhongBan(kojiGyoSyaCd, date, (response) {
-      setState(() {
-        sukejuuruAllUser = response["PERSON"][0] ?? [];
-        sukejuuruPhongBan = response["OFFICE"];
-      });
+      if (response["OFFICE"] != null) {
+        setState(() {
+          sukejuuruPhongBan = response["OFFICE"];
+        });
+      }
 
-      List<dynamic> listPerson = response["PERSON"][0] ?? [];
-      List<dynamic> listPersonTemp = [];
-      listPerson.forEach((element) {
-        listPersonTemp.add(
-            {"TANT_NAME": element["TANT_NAME"], "TANT_CD": element["TANT_CD"]});
-      });
-      setState(() {
-        listNhanVien = listPersonTemp;
-        sukejuuruSelectedUser = response["PERSON"][0][0];
-        selectedNhanVienName = listNhanVien[0]["TANT_NAME"];
-        selectedNhanVienTantCD = listNhanVien[0]["TANT_CD"];
-        print("111");
-      });
+      if (response["PERSON"] != null) {
+        List<dynamic> listmtp = response["PERSON"][0];
+        if (listmtp.isNotEmpty) {
+          setState(() {
+            sukejuuruAllUser = response["PERSON"][0] ?? [];
+          });
+
+          List<dynamic> listPerson = response["PERSON"][0] ?? [];
+          List<dynamic> listPersonTemp = [];
+          listPerson.forEach((element) {
+            listPersonTemp.add({
+              "TANT_NAME": element["TANT_NAME"],
+              "TANT_CD": element["TANT_CD"]
+            });
+          });
+          setState(() {
+            listNhanVien = listPersonTemp;
+            sukejuuruSelectedUser = response["PERSON"][0][0];
+            selectedNhanVienName = listNhanVien[0]["TANT_NAME"];
+            selectedNhanVienTantCD = listNhanVien[0]["TANT_CD"];
+            print("111");
+          });
+        }
+      }
 
       onsuccess?.call();
+    }, () {
+      CustomToast.show(context, message: "データを取得できませんでした。");
     });
 
     return result;

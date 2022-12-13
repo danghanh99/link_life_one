@@ -12,7 +12,7 @@ import 'package:link_life_one/screen/page4/xac_nhan_thanh_tich_page.dart';
 import '../../api/menu/post_update_koji_read_flg.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
-import '../page3/page_3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
+import '../page3/page_3/kojiichiran_page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 import 'components/list_comment.dart';
 import 'components/list_thong_bao.dart';
 import 'components/menu.dart';
@@ -281,7 +281,8 @@ class _MenuPageState extends State<MenuPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const Page3BaoCaoHoanThanhCongTrinh(),
+            builder: (context) =>
+                const KojiichiranPage3BaoCaoHoanThanhCongTrinh(),
           ),
         );
         break;

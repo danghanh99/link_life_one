@@ -11,25 +11,26 @@ import 'package:link_life_one/screen/page3/page_3/components/logout_widget.dart'
 import 'package:link_life_one/screen/page3/page_3_1_yeu_cau_bieu_mau_page.dart';
 import '../../../api/KojiPageApi/get_list_koji_api.dart';
 import '../../../api/KojiPageApi/request_post_count.dart';
+import '../../../api/koji/tirasu/get_tirasi.dart';
 import '../../../api/koji/tirasu/post_tirasi_update_api.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/validator.dart';
 import 'components/title_widget.dart';
 
-class Page3BaoCaoHoanThanhCongTrinh extends StatefulWidget {
+class KojiichiranPage3BaoCaoHoanThanhCongTrinh extends StatefulWidget {
   final DateTime? initialDate;
-  const Page3BaoCaoHoanThanhCongTrinh({
+  const KojiichiranPage3BaoCaoHoanThanhCongTrinh({
     this.initialDate,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<Page3BaoCaoHoanThanhCongTrinh> createState() =>
-      _Page3BaoCaoHoanThanhCongTrinhState();
+  State<KojiichiranPage3BaoCaoHoanThanhCongTrinh> createState() =>
+      _KojiichiranPage3BaoCaoHoanThanhCongTrinhState();
 }
 
-class _Page3BaoCaoHoanThanhCongTrinhState
-    extends State<Page3BaoCaoHoanThanhCongTrinh> {
+class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
+    extends State<KojiichiranPage3BaoCaoHoanThanhCongTrinh> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   List<String> listNames = [
     '入出庫管理',
@@ -42,16 +43,39 @@ class _Page3BaoCaoHoanThanhCongTrinhState
 
   String tiraru = '';
   bool isValid = true;
+  TextEditingController textEditingController = TextEditingController();
 
   @override
   void initState() {
     date = widget.initialDate ?? DateTime.now();
     super.initState();
     callGetListKojiApi(inputDate: date);
+    callGetTirasi(inputDate: date);
   }
 
   Future<List<Koji>> callGetListKojiApi({DateTime? inputDate}) async {
     return await GetListKojiApi().getListKojiApi(date: inputDate ?? date);
+  }
+
+  Future<void> callGetTirasi({DateTime? inputDate}) async {
+    await GetTirasi().getTirasi(
+      YMD: inputDate ?? date,
+      onSuccess: (data) {
+        if (data["TIRASI"] != null) {
+          if (data["TIRASI"][0] != null) {
+            if (data["TIRASI"][0]["KOJI_TIRASISU"] != null) {
+              setState(() {
+                tiraru = data["TIRASI"][0]["KOJI_TIRASISU"];
+                textEditingController.text = tiraru;
+              });
+            }
+          }
+        }
+      },
+      onFailed: () {
+        CustomToast.show(context, message: "チラシ投函数を取得できません");
+      },
+    );
   }
 
   String formatJikan({required String? jikan}) {
@@ -105,6 +129,7 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                           date = picked;
                         });
                         callGetListKojiApi(inputDate: picked);
+                        callGetTirasi(inputDate: picked);
                       }
                     },
                     child: Row(
@@ -419,13 +444,12 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                           width: 100.w,
                           height: 100.h,
                           child: CustomTextField(
+                            controller: textEditingController,
                             maxLength: 10,
                             hint: '',
                             type: TextInputType.phone,
                             // validator: _validateNumber,
                             onChanged: (text) {
-                              // _validateNumber(text);
-                              // _formKey.currentState?.validate();
                               validateNumber(text);
                             },
                           ),
@@ -508,6 +532,7 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                 date = date.add(const Duration(days: -7));
               });
               callGetListKojiApi(inputDate: date);
+              callGetTirasi(inputDate: date);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -572,6 +597,7 @@ class _Page3BaoCaoHoanThanhCongTrinhState
                 date = date.add(const Duration(days: 7));
               });
               callGetListKojiApi(inputDate: date);
+              callGetTirasi(inputDate: date);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

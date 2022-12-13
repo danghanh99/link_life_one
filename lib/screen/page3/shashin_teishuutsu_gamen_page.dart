@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:link_life_one/api/koji/postPhotoSubmissionRegistration/upload_photo_api.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
-import 'package:link_life_one/screen/page3/page_3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
+import 'package:link_life_one/screen/page3/page_3/kojiichiran_page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 
 class ShashinTeishuutsuGamenPage extends StatefulWidget {
@@ -160,7 +160,7 @@ class _ShashinTeishuutsuGamenPageState
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  Page3BaoCaoHoanThanhCongTrinh(
+                                  KojiichiranPage3BaoCaoHoanThanhCongTrinh(
                                 initialDate: widget.initialDate,
                               ),
                             ),
