@@ -8,7 +8,7 @@ import 'package:link_life_one/api/KojiPageApi/create_riyuu.dart';
 import 'package:link_life_one/api/KojiPageApi/get_image.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
-import 'package:link_life_one/screen/page3/page_3/page_3_bao_cao_hoan_thanh_cong_trinh.dart';
+import 'package:link_life_one/screen/page3/page_3/kojiichiran_page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -234,7 +234,8 @@ class _ShashinTeishuutsuGamenPage2State
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Page3BaoCaoHoanThanhCongTrinh(
+                            builder: (context) =>
+                                KojiichiranPage3BaoCaoHoanThanhCongTrinh(
                               initialDate: widget.initialDate,
                             ),
                           ),

@@ -1,11 +1,11 @@
 import 'package:check_points/check_point.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:link_life_one/api/sukejuuru_page_api/create_anken/create_anken.dart';
+import 'package:link_life_one/api/sukejuuru_page_api/create_eigyo_anken_api/create_eigyo_anken.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/create/page_7_2_4_create.dart';
 
-import '../../../api/sukejuuru_page_api/pull_down_anken/get_pull_down_anken.dart';
+import '../../../api/sukejuuru_page_api/details_vs_pull_down_eigyo_anken/get_sales_construction_sales_preview_contents.dart';
 import '../../../components/custom_text_field.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/validator.dart';
@@ -116,7 +116,8 @@ class _Page723State extends State<Page723> {
   }
 
   Future<dynamic> callGetPullDownAnken({Function? onsuccess}) async {
-    final dynamic result = GetPullDownAnken().getPullDownAnken(
+    final dynamic result =
+        GetPullDownAnken().getSalesConstructionSalesPreviewContents(
       onSuccess: (result) {
         setState(() {
           listPullDownCreateAnkenPage = result["PULLDOWN"];
@@ -580,8 +581,14 @@ class _Page723State extends State<Page723> {
                           onSuccess: () {
                             Navigator.pop(context);
                             CustomToast.show(context,
-                                message: "Create Anken Successfull",
+                                message: "営業案件を登録できました。",
                                 backGround: Colors.green);
+                            widget.onCreateAnkenSuccessfull.call();
+                          },
+                          onFailed: () {
+                            CustomToast.show(context,
+                                message: "営業案件を登録できませんでした。",
+                                backGround: Colors.red);
                             widget.onCreateAnkenSuccessfull.call();
                           },
                         );

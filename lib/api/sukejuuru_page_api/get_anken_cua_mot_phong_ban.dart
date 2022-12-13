@@ -6,8 +6,12 @@ import 'package:intl/intl.dart';
 class GetAnkenCuaMotPhongBan {
   GetAnkenCuaMotPhongBan() : super();
 
-  Future<dynamic> getAnkenCuaMotPhongBan(String kojiGyoSyaCd, DateTime dateTime,
-      Function(dynamic) onSuccess) async {
+  Future<dynamic> getAnkenCuaMotPhongBan(
+    String kojiGyoSyaCd,
+    DateTime dateTime,
+    Function(dynamic) onSuccess,
+    Function() onFailed,
+  ) async {
     if (kojiGyoSyaCd == "") {
       return null;
     } else {
@@ -21,7 +25,8 @@ class GetAnkenCuaMotPhongBan {
         onSuccess.call(body);
         return body;
       } else {
-        throw Exception('Failed to getAnkenCuaMotPhongBan');
+        onFailed.call();
+        return '';
       }
     }
   }
