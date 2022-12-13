@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/KojiPageApi/get_riyuu.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page_2.dart';
@@ -157,15 +158,18 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
                             )
                           : GestureDetector(
                               onTap: () async {
-                                DateTime? newDate = await showDatePicker(
-                                    context: context,
-                                    initialDate: date,
-                                    firstDate: DateTime(1990),
-                                    lastDate: DateTime(2200));
-
-                                setState(() {
-                                  if (newDate != null) date = newDate;
-                                });
+                                DatePicker.showDatePicker(context,
+                                    showTitleActions: true,
+                                    minTime: DateTime(1990, 3, 5),
+                                    maxTime: DateTime(2200, 6, 7),
+                                    onChanged: (datePick) {},
+                                    onConfirm: (newDate) {
+                                  setState(() {
+                                    date = newDate;
+                                  });
+                                },
+                                    currentTime: DateTime.now(),
+                                    locale: LocaleType.jp);
                               },
                               child: Row(
                                 children: [

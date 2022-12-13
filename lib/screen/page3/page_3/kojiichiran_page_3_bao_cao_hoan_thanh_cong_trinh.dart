@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
@@ -124,19 +125,21 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                   ),
                   child: GestureDetector(
                     onTap: () async {
-                      DateTime? picked = await showDatePicker(
-                          locale: const Locale("ja", "JA"),
-                          context: context,
-                          initialDate: date,
-                          firstDate: DateTime(1990),
-                          lastDate: DateTime(2100));
-                      if (picked != null && picked != date) {
-                        setState(() {
-                          date = picked;
-                        });
-                        callGetListKojiApi(inputDate: picked);
-                        callGetTirasi(inputDate: picked);
-                      }
+                      DateTime? picked;
+                      DatePicker.showDatePicker(context,
+                          showTitleActions: true,
+                          minTime: DateTime(1990, 3, 5),
+                          maxTime: DateTime(2200, 6, 7),
+                          onChanged: (datePick) {}, onConfirm: (datePick) {
+                        picked = datePick;
+                        if (picked != null && picked != date) {
+                          setState(() {
+                            date = picked!;
+                          });
+                          callGetListKojiApi(inputDate: picked);
+                          callGetTirasi(inputDate: picked);
+                        }
+                      }, currentTime: DateTime.now(), locale: LocaleType.jp);
                     },
                     child: Row(
                       children: [

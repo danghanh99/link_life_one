@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/show_holiday.dart';
 import 'package:link_life_one/components/login_widget.dart';
@@ -96,6 +97,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   Future<dynamic> callGetAnkenCuaMotPhongBan(
       {required String kojiGyoSyaCd,
       required DateTime date,
+      int? currentEmployeeIndex,
       Function? onsuccess}) async {
     final dynamic result = await GetAnkenCuaMotPhongBan()
         .getAnkenCuaMotPhongBan(kojiGyoSyaCd, date, (response) {
@@ -106,27 +108,55 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       }
 
       if (response["PERSON"] != null) {
-        List<dynamic> listmtp = response["PERSON"][0];
-        if (listmtp.isNotEmpty) {
-          setState(() {
-            sukejuuruAllUser = response["PERSON"][0] ?? [];
-          });
-
-          List<dynamic> listPerson = response["PERSON"][0] ?? [];
-          List<dynamic> listPersonTemp = [];
-          listPerson.forEach((element) {
-            listPersonTemp.add({
-              "TANT_NAME": element["TANT_NAME"],
-              "TANT_CD": element["TANT_CD"]
+        if (currentEmployeeIndex != null) {
+          List<dynamic> listmtp = response["PERSON"][currentEmployeeIndex];
+          if (listmtp.isNotEmpty) {
+            setState(() {
+              sukejuuruAllUser = response["PERSON"][currentEmployeeIndex] ?? [];
             });
-          });
-          setState(() {
-            listNhanVien = listPersonTemp;
-            sukejuuruSelectedUser = response["PERSON"][0][0];
-            selectedNhanVienName = listNhanVien[0]["TANT_NAME"];
-            selectedNhanVienTantCD = listNhanVien[0]["TANT_CD"];
-            print("111");
-          });
+
+            List<dynamic> listPerson =
+                response["PERSON"][currentEmployeeIndex] ?? [];
+            List<dynamic> listPersonTemp = [];
+            listPerson.forEach((element) {
+              listPersonTemp.add({
+                "TANT_NAME": element["TANT_NAME"],
+                "TANT_CD": element["TANT_CD"]
+              });
+            });
+            setState(() {
+              listNhanVien = listPersonTemp;
+              sukejuuruSelectedUser =
+                  response["PERSON"][currentEmployeeIndex][0];
+              selectedNhanVienName =
+                  listNhanVien[currentEmployeeIndex]["TANT_NAME"];
+              selectedNhanVienTantCD =
+                  listNhanVien[currentEmployeeIndex]["TANT_CD"];
+            });
+          }
+        } else {
+          List<dynamic> listmtp = response["PERSON"][0];
+          if (listmtp.isNotEmpty) {
+            setState(() {
+              sukejuuruAllUser = response["PERSON"][0] ?? [];
+            });
+
+            List<dynamic> listPerson = response["PERSON"][0] ?? [];
+            List<dynamic> listPersonTemp = [];
+            listPerson.forEach((element) {
+              listPersonTemp.add({
+                "TANT_NAME": element["TANT_NAME"],
+                "TANT_CD": element["TANT_CD"]
+              });
+            });
+            setState(() {
+              listNhanVien = listPersonTemp;
+              sukejuuruSelectedUser = response["PERSON"][0][0];
+              selectedNhanVienName = listNhanVien[0]["TANT_NAME"];
+              selectedNhanVienTantCD = listNhanVien[0]["TANT_CD"];
+              print("111");
+            });
+          }
         }
       }
 
@@ -422,21 +452,32 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                           ),
                           child: GestureDetector(
                             onTap: () async {
-                              DateTime? picked = await showDatePicker(
-                                  context: context,
-                                  initialDate: date,
-                                  firstDate: DateTime(1990),
-                                  lastDate: DateTime(2100));
-                              if (picked != null && picked != date) {
-                                setState(() {
-                                  date = picked;
-                                });
-                                // callGetListSukejuuru(date);
-                                callGetAnkenCuaMotPhongBan(
-                                  kojiGyoSyaCd: phongBanId,
-                                  date: date,
-                                );
-                              }
+                              DatePicker.showDatePicker(context,
+                                  showTitleActions: true,
+                                  minTime: DateTime(1990, 3, 5),
+                                  maxTime: DateTime(2200, 6, 7),
+                                  onChanged: (datePick) {},
+                                  onConfirm: (newDate) {
+                                if (newDate != date) {
+                                  setState(() {
+                                    date = newDate;
+                                  });
+                                  // callGetListSukejuuru(date);
+
+                                  int? index;
+                                  if (value1nguoi == '個人') {
+                                    index = sukejuuruAllUser
+                                        .indexOf(sukejuuruSelectedUser);
+                                  }
+                                  callGetAnkenCuaMotPhongBan(
+                                    kojiGyoSyaCd: phongBanId,
+                                    date: date,
+                                    currentEmployeeIndex: index,
+                                  );
+                                }
+                              },
+                                  currentTime: DateTime.now(),
+                                  locale: LocaleType.jp);
                             },
                             child: Row(
                               children: [
@@ -533,9 +574,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               setState(() {
                 date = date.add(const Duration(days: -7));
                 // callGetListSukejuuru(date);
+                int? index;
+                if (value1nguoi == '個人') {
+                  index = sukejuuruAllUser.indexOf(sukejuuruSelectedUser);
+                }
                 callGetAnkenCuaMotPhongBan(
                   kojiGyoSyaCd: phongBanId,
                   date: date,
+                  currentEmployeeIndex: index,
                 );
               });
             },
@@ -585,10 +631,15 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               setState(() {
                 date = date.add(const Duration(days: 7));
               });
-              // callGetListSukejuuru(date);
+
+              int? index;
+              if (value1nguoi == '個人') {
+                index = sukejuuruAllUser.indexOf(sukejuuruSelectedUser);
+              }
               callGetAnkenCuaMotPhongBan(
                 kojiGyoSyaCd: phongBanId,
                 date: date,
+                currentEmployeeIndex: index,
               );
             },
             child: Row(
@@ -1302,11 +1353,15 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   body: Page721(
                     HOMON_SBT: e["HOMON_SBT"],
                     JYUCYU_ID: e["JYUCYU_ID"],
-                    // KBNMSAI_NAME: e["KBNMSAI_NAME"],
                     onSuccessUpdate: () {
+                      int? index;
+                      if (value1nguoi == '個人') {
+                        index = sukejuuruAllUser.indexOf(sukejuuruSelectedUser);
+                      }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
                         date: date,
+                        currentEmployeeIndex: index,
                       );
                     },
                   ),
@@ -1322,9 +1377,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     KBNMSAI_NAME: e["KBNMSAI_NAME"],
                     TAN_EIG_ID: TAN_EIG_ID ?? '',
                     onUpdateAnkenSuccessfull: () {
+                      int? index;
+                      if (value1nguoi == '個人') {
+                        index = sukejuuruAllUser.indexOf(sukejuuruSelectedUser);
+                      }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
                         date: date,
+                        currentEmployeeIndex: index,
                       );
                     },
                     initialDate: date,
@@ -1350,9 +1410,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     JYOKEN_CD: e['JYOKEN_CD'],
                     isPhongBan: isPhongBanData,
                     onSuccess: (() {
+                      int? index;
+                      if (value1nguoi == '個人') {
+                        index = sukejuuruAllUser.indexOf(sukejuuruSelectedUser);
+                      }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
                         date: date,
+                        currentEmployeeIndex: index,
                       );
                     }),
                   ),
@@ -1377,9 +1442,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     // KBNMSAI_NAME: e["KBNMSAI_NAME"],
                     HOMON_SBT: e["HOMON_SBT"],
                     onSuccessUpdate: () {
+                      int? index;
+                      if (value1nguoi == '個人') {
+                        index = sukejuuruAllUser.indexOf(sukejuuruSelectedUser);
+                      }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
                         date: date,
+                        currentEmployeeIndex: index,
                       );
                     },
                   ),
@@ -1398,9 +1468,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     TANT_CD: tantCd ?? '',
                     isPhongBan: isPhongBanData,
                     onUpdateAnkenSuccessfull: () {
+                      int? index;
+                      if (value1nguoi == '個人') {
+                        index = sukejuuruAllUser.indexOf(sukejuuruSelectedUser);
+                      }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
                         date: date,
+                        currentEmployeeIndex: index,
                       );
                     },
                   ),
@@ -1423,9 +1498,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     JYOKEN_CD: e['JYOKEN_CD'],
                     isPhongBan: isPhongBanData,
                     onSuccess: (() {
+                      int? index;
+                      if (value1nguoi == '個人') {
+                        index = sukejuuruAllUser.indexOf(sukejuuruSelectedUser);
+                      }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
                         date: date,
+                        currentEmployeeIndex: index,
                       );
                     }),
                   ),
@@ -1526,9 +1606,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   TANT_CD: JYOKEN_CD,
                   isPhongBan: isPhongBan,
                   onCreateAnkenSuccessfull: () {
+                    int? index;
+                    if (value1nguoi == '個人') {
+                      index = sukejuuruAllUser.indexOf(sukejuuruSelectedUser);
+                    }
                     callGetAnkenCuaMotPhongBan(
                       kojiGyoSyaCd: phongBanId,
                       date: date,
+                      currentEmployeeIndex: index,
                     );
                   },
                 ),
@@ -1552,9 +1637,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   isPhongBan: isPhongBan,
                   initialDate: newDate,
                   onSuccess: () {
+                    int? index;
+                    if (value1nguoi == '個人') {
+                      index = sukejuuruAllUser.indexOf(sukejuuruSelectedUser);
+                    }
                     callGetAnkenCuaMotPhongBan(
                       kojiGyoSyaCd: phongBanId,
                       date: date,
+                      currentEmployeeIndex: index,
                     );
                   },
                 ),
