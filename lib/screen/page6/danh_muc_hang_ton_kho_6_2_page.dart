@@ -73,7 +73,7 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
           );
         },
         onFailed: () {
-          CustomToast.show(context, message: 'データを取得しませんでした。');
+          CustomToast.show(context, message: 'データを取得出来ませんでした。');
         });
   }
 
@@ -356,12 +356,12 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
                           .toList(),
                       onSuccess: () {
                         CustomToast.show(context,
-                            message: '登録しました。', backGround: Colors.green);
+                            message: '登録出来ました。', backGround: Colors.green);
                       },
                       onFailed: () {
                         CustomToast.show(
                           context,
-                          message: '登録しませんでした。',
+                          message: '登録できませんでした。。',
                         );
                       });
                 },

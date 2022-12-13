@@ -52,7 +52,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
         saibuList.addAll(data);
       });
     }, onFailed: () {
-      CustomToast.show(context, message: "データを取得しませんでした。");
+      CustomToast.show(context, message: "データを取得出来ませんでした。");
     });
   }
 
@@ -63,7 +63,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
         listPullDown.addAll(data);
       });
     }, onFailed: () {
-      CustomToast.show(context, message: "データを取得しませんでした。");
+      CustomToast.show(context, message: "データを取得出来ませんでした。");
     });
   }
 

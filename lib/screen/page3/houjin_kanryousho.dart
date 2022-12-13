@@ -279,7 +279,7 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
             } else {
               // ignore: use_build_context_synchronously
               CustomToast.show(context,
-                  message: '写真を選択してください',
+                  message: '写真を選択してください。',
                   textStyle: const TextStyle(color: Colors.red));
             }
           },
@@ -317,7 +317,7 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
             } else {
               // ignore: use_build_context_synchronously
               CustomToast.show(context,
-                  message: '写真を選択してください',
+                  message: '写真を選択してください。',
                   textStyle: const TextStyle(color: Colors.red));
             }
           },
@@ -345,14 +345,14 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                 onSuccess: () {
                   CustomToast.show(
                     context,
-                    message: '登録した',
+                    message: '正常に登録できました。',
                     backGround: Colors.green,
                   );
                   Navigator.pop(context);
                   Navigator.pop(context);
                 },
                 onFailed: () {
-                  CustomToast.show(context, message: '登録しませんでした');
+                  CustomToast.show(context, message: '登録できませんでした。');
                 });
           },
           child: Container(

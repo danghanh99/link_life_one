@@ -45,7 +45,7 @@ class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
           });
         },
         onFailed: () {
-          CustomToast.show(context, message: 'データを取得しませんでした。');
+          CustomToast.show(context, message: 'データを取得出来ませんでした。');
         });
   }
 

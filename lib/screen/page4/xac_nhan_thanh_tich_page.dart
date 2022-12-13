@@ -288,7 +288,7 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
           }
         },
         onFailed: () {
-          CustomToast.show(context, message: 'プルダウンを取得しませんでした。');
+          CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
         },
       );
     });
@@ -462,10 +462,10 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
                     });
                   },
                   onFailed: () {
-                    CustomToast.show(context, message: 'データを取得しませんでした。');
+                    CustomToast.show(context, message: 'データを取得出来ませんでした。');
                   });
             } else {
-              CustomToast.show(context, message: '何月を選択してください。');
+              CustomToast.show(context, message: '月を選択してください。');
             }
           },
           height: 25,
@@ -587,7 +587,7 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
                           });
                         },
                         onFailed: () {
-                          CustomToast.show(context, message: 'データを取得しませんでした。');
+                          CustomToast.show(context, message: 'データを取得出来ませんでした。');
                         });
                   }
                 },

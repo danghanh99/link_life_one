@@ -495,12 +495,12 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
               list: widget.DATA_TABLE,
               onSuccess: () {
                 CustomToast.show(context,
-                    message: "登録しました。", backGround: Colors.green);
+                    message: "登録出来ました。", backGround: Colors.green);
               },
               onFailed: () {
                 CustomToast.show(
                   context,
-                  message: "登録しませんでした。",
+                  message: "登録できませんでした。。",
                 );
               },
             );

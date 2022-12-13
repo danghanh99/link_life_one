@@ -247,7 +247,7 @@ class _ShashinTeishuutsuGamenPage2State
                             // ignore: use_build_context_synchronously
                             CustomToast.show(
                               context,
-                              message: "写真を選択してください。",
+                              message: "写真を選択してください。。",
                               backGround: Colors.orange,
                             );
                           } else {
@@ -257,14 +257,14 @@ class _ShashinTeishuutsuGamenPage2State
                                 onFailed: (error) {
                                   CustomToast.show(
                                     context,
-                                    message: error ?? "写真のアップロードに失敗しました ",
+                                    message: error ?? "写真のアップロードに失敗しました。。 ",
                                     backGround: Colors.red,
                                   );
                                 },
                                 onSuccess: () {
                                   CustomToast.show(
                                     context,
-                                    message: "写真をアップロードしました",
+                                    message: "写真をアップロード出来ました。",
                                     backGround: Colors.green,
                                   );
                                   if (widget.index == 1 || widget.index == 4) {

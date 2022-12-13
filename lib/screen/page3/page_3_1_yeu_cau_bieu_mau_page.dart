@@ -207,7 +207,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                                       onDocumentLoaded: (details) {},
                                       onDocumentLoadFailed: (detail) {
                                         CustomToast.show(context,
-                                            message: "PDFを取得しませんでした。");
+                                            message: "PDFを取得出来ませんでした。");
                                         // message: detail.description);
                                       },
                                     ),

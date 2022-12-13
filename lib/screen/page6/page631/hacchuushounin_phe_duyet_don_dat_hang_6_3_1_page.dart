@@ -50,7 +50,7 @@ class _HachuushouninPheDuyetDonDatHang631PageState
               });
             },
             onFailed: () {
-              CustomToast.show(context, message: "発注承認リストを取得できません");
+              CustomToast.show(context, message: "発注承認リストを取得出来ませんでした。");
             });
   }
 
@@ -162,10 +162,11 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                               },
                               onFailed: () {
                                 CustomToast.show(context,
-                                    message: "発注却下ができませんでした。");
+                                    message: "発注却下がで出来ませんでした。");
                               });
                         } else {
-                          CustomToast.show(context, message: "一つ発注承認を選んでください");
+                          CustomToast.show(context,
+                              message: "一つ発注承認を選んでください。。");
                         }
                       },
                       child: const Text(
@@ -213,10 +214,11 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                               },
                               onFailed: () {
                                 CustomToast.show(context,
-                                    message: "発注承認ができませんでした。");
+                                    message: "発注承認が出来ませんでした。");
                               });
                         } else {
-                          CustomToast.show(context, message: "一つ発注承認を選んでください");
+                          CustomToast.show(context,
+                              message: "一つ発注承認を選んでください。。");
                         }
                       },
                       child: const Text(
