@@ -109,8 +109,12 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                 const SizedBox(
                   width: 5,
                 ),
-                leftNextButton('先週'),
+                const SizedBox(
+                  width: 8,
+                ),
+                leftNextButton('先週', 7),
                 const SizedBox(width: 8),
+                leftNextButton('先日', 1),
                 Padding(
                   padding: const EdgeInsets.only(
                     bottom: 15,
@@ -153,7 +157,9 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                   ),
                 ),
                 const SizedBox(width: 8),
-                rightNextButton('翌週'),
+                rightNextButton('翌日', 1),
+                const SizedBox(width: 8),
+                rightNextButton('翌週', 7),
               ],
             ),
             const SizedBox(
@@ -514,7 +520,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
     );
   }
 
-  Widget leftNextButton(String text) {
+  Widget leftNextButton(String text, int index) {
     return Column(
       children: [
         Container(
@@ -529,26 +535,37 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
           child: GestureDetector(
             onTap: () {
               setState(() {
-                date = date.add(const Duration(days: -7));
+                date = date.add(Duration(days: -index));
               });
               callGetListKojiApi(inputDate: date);
               callGetTirasi(inputDate: date);
             },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  Assets.polygonLeft,
-                  width: 13,
-                  height: 13,
-                ),
-                Image.asset(
-                  Assets.polygonLeft,
-                  width: 13,
-                  height: 13,
-                ),
-              ],
-            ),
+            child: index == 7
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        Assets.polygonLeft,
+                        width: 13,
+                        height: 13,
+                      ),
+                      Image.asset(
+                        Assets.polygonLeft,
+                        width: 13,
+                        height: 13,
+                      ),
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        Assets.polygonLeft,
+                        width: 13,
+                        height: 13,
+                      ),
+                    ],
+                  ),
           ),
         ),
         Text(
@@ -579,7 +596,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
     }
   }
 
-  Widget rightNextButton(String text) {
+  Widget rightNextButton(String text, int index) {
     return Column(
       children: [
         Container(
@@ -594,25 +611,33 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
           child: GestureDetector(
             onTap: () {
               setState(() {
-                date = date.add(const Duration(days: 7));
+                date = date.add(Duration(days: index));
               });
               callGetListKojiApi(inputDate: date);
               callGetTirasi(inputDate: date);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  Assets.polygonRight,
-                  width: 13,
-                  height: 13,
-                ),
-                Image.asset(
-                  Assets.polygonRight,
-                  width: 13,
-                  height: 13,
-                ),
-              ],
+              children: index == 7
+                  ? [
+                      Image.asset(
+                        Assets.polygonRight,
+                        width: 13,
+                        height: 13,
+                      ),
+                      Image.asset(
+                        Assets.polygonRight,
+                        width: 13,
+                        height: 13,
+                      ),
+                    ]
+                  : [
+                      Image.asset(
+                        Assets.polygonRight,
+                        width: 13,
+                        height: 13,
+                      ),
+                    ],
             ),
           ),
         ),
