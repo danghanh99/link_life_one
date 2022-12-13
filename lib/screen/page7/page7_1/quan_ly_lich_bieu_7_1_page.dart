@@ -162,7 +162,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
       onsuccess?.call();
     }, () {
-      CustomToast.show(context, message: "データを取得できませんでした。");
+      CustomToast.show(context, message: "データを取得出来ませんでした。");
     });
 
     return result;

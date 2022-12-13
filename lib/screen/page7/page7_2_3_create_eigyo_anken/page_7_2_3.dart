@@ -127,7 +127,7 @@ class _Page723State extends State<Page723> {
         print(result);
       },
       onFailed: () {
-        CustomToast.show(context, message: "データを取得しませんでした。");
+        CustomToast.show(context, message: "データを取得出来ませんでした。");
       },
     );
 
@@ -586,7 +586,7 @@ class _Page723State extends State<Page723> {
                           },
                           onFailed: () {
                             CustomToast.show(context,
-                                message: "営業案件を登録できませんでした。",
+                                message: "営業案件を登録出来ませんでした。",
                                 backGround: Colors.red);
                             widget.onCreateAnkenSuccessfull.call();
                           },

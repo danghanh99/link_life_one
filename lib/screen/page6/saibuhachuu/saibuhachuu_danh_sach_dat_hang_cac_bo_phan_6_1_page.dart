@@ -56,7 +56,7 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
           });
         },
         onFailed: () {
-          CustomToast.show(context, message: "データを取得しませんでした。");
+          CustomToast.show(context, message: "データを取得出来ませんでした。");
         });
   }
 
@@ -68,7 +68,7 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
         listPullDown = data;
       });
     }, onFailed: () {
-      CustomToast.show(context, message: "データを取得しませんでした。");
+      CustomToast.show(context, message: "データを取得出来ませんでした。");
     });
   }
 

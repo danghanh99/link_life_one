@@ -46,7 +46,7 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
         listPullDown = data;
       });
     }, onFailed: () {
-      CustomToast.show(context, message: "部材発注一覧のプルダウンを取得できません");
+      CustomToast.show(context, message: "部材発注一覧のプルダウンを取得出来ませんでした。");
     });
   }
 
@@ -61,7 +61,7 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
         listIchiran.addAll(data);
       });
     }, onFailed: () {
-      CustomToast.show(context, message: "部材発注一覧リストを取得できません");
+      CustomToast.show(context, message: "部材発注一覧リストを取得出来ませんでした。");
     });
   }
 
@@ -205,7 +205,8 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                   child: TextButton(
                     onPressed: () {
                       if (currentRadioRow <= 0) {
-                        CustomToast.show(context, message: "一つの部材発注一覧を選んでください");
+                        CustomToast.show(context,
+                            message: "一つの部材発注一覧を選んでください。");
                       } else {
                         Navigator.push(
                           context,

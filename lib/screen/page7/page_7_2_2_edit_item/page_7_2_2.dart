@@ -601,7 +601,7 @@ class _Page722State extends State<Page722> {
                           validKaraMade) {
                         UpdateLichTrinh().updateLichTrinh(
                             onFailed: () {
-                              CustomToast.show(context, message: "変更しませんでした。");
+                              CustomToast.show(context, message: "変更出来ませんでした。");
                             },
                             KBN_CD: listPullDownEditPage[selectedPullDownIndex]
                                 ["KBN_CD"],
@@ -632,7 +632,8 @@ class _Page722State extends State<Page722> {
                             onSuccess: () {
                               Navigator.pop(context);
                               CustomToast.show(context,
-                                  message: "変更しました。", backGround: Colors.green);
+                                  message: "変更出来ました。",
+                                  backGround: Colors.green);
                               widget.onSuccessUpdate.call();
                             });
                       }

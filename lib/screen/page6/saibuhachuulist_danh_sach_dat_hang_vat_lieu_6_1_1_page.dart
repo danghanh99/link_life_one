@@ -127,7 +127,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
               }
             },
             onFailed: () {
-              CustomToast.show(context, message: "データを取得しませんでした。");
+              CustomToast.show(context, message: "データを取得出来ませんでした。");
             });
   }
 
@@ -138,7 +138,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
           onSccess.call(data);
         },
         onFailed: () {
-          CustomToast.show(context, message: "データを取得しませんでした。");
+          CustomToast.show(context, message: "データを取得出来ませんでした。");
         });
   }
 
@@ -271,7 +271,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                                         }
                                       }, onFailed: () {
                                         CustomToast.show(context,
-                                            message: "データを取得しませんでした。");
+                                            message: "データを取得出来ませんでした。");
                                       });
                                     });
                                   },
@@ -431,12 +431,13 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                             onSuccess: () {
                               CustomToast.show(
                                 context,
-                                message: "登録しました。",
+                                message: "登録出来ました。",
                                 backGround: Colors.green,
                               );
                             },
                             onFailed: () {
-                              CustomToast.show(context, message: "登録しませんでした。");
+                              CustomToast.show(context,
+                                  message: "登録できませんでした。。");
                             });
                       },
                       child: const Text(

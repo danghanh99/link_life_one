@@ -55,7 +55,7 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
         tmp = listBuzai;
       });
     }, onFailed: () {
-      CustomToast.show(context, message: 'データを取得しませんでした。');
+      CustomToast.show(context, message: 'データを取得出来ませんでした。');
     });
   }
 
@@ -69,7 +69,7 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
         pullDownSelected = pullDown.isEmpty ? '' : list.first['KBNMSAI_NAME'];
       });
     }, onFailed: () {
-      CustomToast.show(context, message: 'データを取得しませんでした。');
+      CustomToast.show(context, message: 'データを取得出来ませんでした。');
     });
   }
 

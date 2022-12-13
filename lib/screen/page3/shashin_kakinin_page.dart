@@ -54,7 +54,7 @@ class _ShashinKakuninPageState extends State<ShashinKakuninPage> {
           });
         },
         onFailed: () {
-          CustomToast.show(context, message: "リスト写真を取得しませんでした。");
+          CustomToast.show(context, message: "リスト写真を取得出来ませんでした。");
         });
   }
 

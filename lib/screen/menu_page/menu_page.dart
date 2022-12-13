@@ -168,7 +168,7 @@ class _MenuPageState extends State<MenuPage> {
                           onSuccess: () {
                             CustomToast.show(
                               context,
-                              message: "既読ができました。",
+                              message: "新着コメントを既読にしました。",
                               backGround: Colors.green,
                             );
                             callGetThongBaoMenuApi();
@@ -176,7 +176,7 @@ class _MenuPageState extends State<MenuPage> {
                           onFailed: () {
                             CustomToast.show(
                               context,
-                              message: "既読ができませんでした。",
+                              message: "新着コメントを既読にすることが失敗しました。",
                               backGround: Colors.red,
                             );
                           });

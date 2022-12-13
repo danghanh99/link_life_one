@@ -665,7 +665,7 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                           },
                           onFailed: () {
                             CustomToast.show(context,
-                                message: "営業案件を変更できませんでした。",
+                                message: "営業案件を変更出来ませんでした。",
                                 backGround: Colors.green);
                             widget.onUpdateAnkenSuccessfull.call();
                           },

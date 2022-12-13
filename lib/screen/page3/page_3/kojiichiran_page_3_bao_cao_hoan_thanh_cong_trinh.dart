@@ -75,7 +75,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
         }
       },
       onFailed: () {
-        CustomToast.show(context, message: "チラシ投函数を取得できません");
+        CustomToast.show(context, message: "チラシ投函数を取得できません。");
       },
     );
   }
