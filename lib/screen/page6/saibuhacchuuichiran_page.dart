@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page6/page631/phe_duyet_don_dat_hang_6_3_1_page.dart';
+import 'package:intl/intl.dart';
+import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/screen/page6/page631/hacchuushounin_phe_duyet_don_dat_hang_6_3_1_page.dart';
 
+import '../../api/order/saibuhacchu_ichiran/get_part_order_list_ichiran.dart';
+import '../../api/order/saibuhacchu_ichiran/get_pull_down_status_ichiran.dart';
 import '../../components/custom_text_field.dart';
 import '../../components/login_widget.dart';
 import '../../components/text_line_down.dart';
@@ -20,111 +23,46 @@ class SaibuhacchuuichiranPage extends StatefulWidget {
 }
 
 class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
-  List<String> listNames = [
-    '入出庫管理',
-    '部材管理',
-    '出納帳',
-  ];
-
-  List<Widget> _buildCells2(int count, int row) {
-    List<String> colNames = [
-      '',
-      '発注ID',
-      'ステータス',
-      '発注日',
-      '発注者',
-      '品番',
-      '商品名',
-    ];
-
-    Size size = MediaQuery.of(context).size;
-    List<double> colwidth =
-        MediaQuery.of(context).orientation == Orientation.portrait
-            ? [
-                30,
-                130,
-                130,
-                100,
-                100,
-                120,
-                120,
-              ]
-            : [
-                30,
-                (size.width - 33) * 2 / 7 + -30,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-              ];
-
-    return List.generate(count, (col) {
-      if (row == 0) {
-        return Container(
-          decoration: BoxDecoration(
-            border: Border.all(width: 0.5),
-            color: const Color(0xFFFF9900),
-          ),
-          alignment: Alignment.center,
-          width: colwidth[col],
-          height: 80,
-          child: Text(
-            colNames[col],
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        );
-      }
-
-      return Container(
-        decoration: BoxDecoration(
-          border: Border.all(width: 0.5),
-          color: Colors.white,
-        ),
-        alignment: Alignment.center,
-        width: colwidth[col],
-        height: 50,
-        child: contentTable(col, row),
-      );
-    });
-  }
-
-  List<Widget> _buildRows(int count) {
-    return List.generate(count, (index) {
-      return Row(
-        children: _buildCells2(7, index),
-      );
-    });
-  }
-
-  Widget contentTable(int col, int row) {
-    return col == 0
-        ? RadioListTile(
-            value: row,
-            groupValue: currentRadioRow,
-            onChanged: (e) {
-              setState(() {
-                currentRadioRow = row;
-              });
-            },
-          )
-        : const Text(
-            '',
-            style: TextStyle(color: Colors.black),
-          );
-  }
-
   late int currentRadioRow;
+
+  List<dynamic> listIchiran = [];
+
+  String currentPullDownValue = 'カテゴリを選択';
+
+  List<dynamic> listPullDown = [];
 
   @override
   void initState() {
     currentRadioRow = -1;
-
+    callGetPullDownStatusIchiran();
+    callGetPartOrderListIchiran();
     super.initState();
+  }
+
+  Future<dynamic> callGetPullDownStatusIchiran() async {
+    final dynamic result = await GetPullDownStatusIchiran()
+        .getPullDownStatusIchiran(onSuccess: (data) {
+      setState(() {
+        listPullDown = data;
+      });
+    }, onFailed: () {
+      CustomToast.show(context, message: "部材発注一覧のプルダウンを取得できません");
+    });
+  }
+
+  Future<dynamic> callGetPartOrderListIchiran() async {
+    final dynamic result = await GetPartOrderListIchiran()
+        .getPartOrderListIchiran(onSuccess: (data) {
+      // for (var element in data) {
+      //   element["status"] = false;
+      // }
+
+      setState(() {
+        listIchiran.addAll(data);
+      });
+    }, onFailed: () {
+      CustomToast.show(context, message: "部材発注一覧リストを取得できません");
+    });
   }
 
   @override
@@ -238,13 +176,15 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
             const SizedBox(
               height: 10,
             ),
-            SingleChildScrollView(
-              scrollDirection: Axis.vertical,
+            Expanded(
               child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _buildRows(4),
+                scrollDirection: Axis.vertical,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: _buildRows(listIchiran.length + 1),
+                  ),
                 ),
               ),
             ),
@@ -253,6 +193,7 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
             ),
             Expanded(child: Container()),
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
                   width: 120,
@@ -263,13 +204,20 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const PheDuyetDonDatHang631Page(),
-                        ),
-                      );
+                      if (currentRadioRow <= 0) {
+                        CustomToast.show(context, message: "一つの部材発注一覧を選んでください");
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                HachuushouninPheDuyetDonDatHang631Page(
+                                    BUZAI_HACYU_ID:
+                                        listIchiran[currentRadioRow - 1]
+                                            ["BUZAI_HACYU_ID"]),
+                          ),
+                        );
+                      }
                     },
                     child: const Text(
                       '発注承認',
@@ -281,7 +229,7 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                     ),
                   ),
                 ),
-                Expanded(child: Container()),
+                // Expanded(child: Container()),
                 const SizedBox(
                   width: 5,
                 ),
@@ -354,7 +302,6 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
 
   Widget _dropDownButton(
     BuildContext context,
-    String value,
     double width,
   ) {
     return PopupMenuButton<int>(
@@ -366,40 +313,42 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
       },
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
+      itemBuilder: (context) => listPullDown.map((item) {
+        return PopupMenuItem(
+          onTap: () {
+            setState(() {
+              if (currentPullDownValue == item["KBNMSAI_NAME"]) {
+                currentPullDownValue = "カテゴリを選択";
+              } else {
+                currentPullDownValue = item["KBNMSAI_NAME"];
+              }
+            });
+          },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
           value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 14,
+                    ),
+                    Text(
+                      item["KBNMSAI_NAME"].toString(),
+                      style: const TextStyle(color: Color(0xFF999999)),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "Dropdown item1",
-              ),
+              const Divider(),
             ],
           ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "Dropdown item2",
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      }).toList(),
       offset: const Offset(-0, 50),
       child: Container(
         width: width - 4,
@@ -414,7 +363,7 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                value,
+                currentPullDownValue,
                 style: const TextStyle(
                   color: Color(0xFF999999),
                   fontSize: 14,
@@ -543,8 +492,134 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
         const SizedBox(
           height: 5,
         ),
-        _dropDownButton(context, 'カテゴリを選択', width ?? 30),
+        _dropDownButton(context, width ?? 30),
       ],
     );
+  }
+
+  List<Widget> _buildCells2(int count, int row) {
+    List<String> colNames = [
+      '',
+      '発注ID',
+      '状況',
+      '発注日',
+      '発注者',
+      '品番',
+      '商品名',
+    ];
+
+    Size size = MediaQuery.of(context).size;
+    List<double> colwidth =
+        MediaQuery.of(context).orientation == Orientation.portrait
+            ? [
+                30,
+                130,
+                130,
+                100,
+                100,
+                120,
+                120,
+              ]
+            : [
+                30,
+                (size.width - 33) * 2 / 7 + -30,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+                (size.width - 33) / 7,
+              ];
+
+    return List.generate(count, (col) {
+      if (row == 0) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(width: 0.5),
+            color: const Color(0xFFFF9900),
+          ),
+          alignment: Alignment.center,
+          width: colwidth[col],
+          height: 80,
+          child: Text(
+            colNames[col],
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        );
+      }
+
+      return Container(
+        decoration: BoxDecoration(
+          border: Border.all(width: 0.5),
+          color: Colors.white,
+        ),
+        alignment: Alignment.center,
+        width: colwidth[col],
+        height: 50,
+        child: contentTable(col, row),
+      );
+    });
+  }
+
+  List<Widget> _buildRows(int count) {
+    return List.generate(count, (index) {
+      return Row(
+        children: _buildCells2(7, index),
+      );
+    });
+  }
+
+  Widget contentTable(int col, int row) {
+    if (row != 0 && col != 0) {
+      String value = '';
+      listIchiran;
+
+      if (col == 1) {
+        value = listIchiran[row - 1]["BUZAI_HACYU_ID"] ?? '';
+      }
+      if (col == 2) {
+        value = listIchiran[row - 1]["KBNMSAI_NAME"] ?? '';
+      }
+      if (col == 3) {
+        if (listIchiran[row - 1]["HACYU_YMD"] == null) {
+          value = '';
+        } else {
+          DateTime time =
+              DateFormat("yyyy-MM-dd").parse(listIchiran[row - 1]["HACYU_YMD"]);
+          value = DateFormat('yyyy/MM/dd', 'ja').format(time).toString();
+        }
+      }
+      if (col == 4) {
+        value = listIchiran[row - 1]["TANT_NAME"] ?? '';
+      }
+      if (col == 5) {
+        value = listIchiran[row - 1]["JISYA_CD"] ?? '';
+      }
+      if (col == 6) {
+        value = listIchiran[row - 1]["SYOHIN_NAME"] ?? '';
+      }
+
+      return Text(
+        value,
+        style: const TextStyle(color: Colors.black),
+      );
+    }
+    return col == 0
+        ? RadioListTile(
+            value: row,
+            groupValue: currentRadioRow,
+            onChanged: (e) {
+              setState(() {
+                currentRadioRow = row;
+              });
+            },
+          )
+        : const Text(
+            '',
+            style: TextStyle(color: Colors.black),
+          );
   }
 }
