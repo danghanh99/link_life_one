@@ -1,29 +1,35 @@
 import 'dart:convert';
 
+import 'package:hive_flutter/adapters.dart';
 import "package:http/http.dart" as http;
 import 'package:intl/intl.dart';
 import 'package:link_life_one/components/toast.dart';
 
+import '../../../models/user.dart';
+
 class CreateMemo {
   CreateMemo() : super();
 
-  Future<dynamic> createMemo({
-    required String JYOKEN_CD,
-    required String JYOKEN_SYBET_FLG,
-    required DateTime YMD,
-    String? TAG_KBN,
-    String? NAIYO,
-    String? START_TIME,
-    String? END_TIME,
-    String? ALL_DAY_FLG,
-    String? MEMO_CD,
-    String? TAN_CAL_ID,
-    required Function() onSuccess,
-  }) async {
+  Future<dynamic> createMemo(
+      {required String JYOKEN_CD,
+      required String JYOKEN_SYBET_FLG,
+      required DateTime YMD,
+      required String KBNMSAI_CD,
+      String? TAG_KBN,
+      String? NAIYO,
+      String? START_TIME,
+      String? END_TIME,
+      String? ALL_DAY_FLG,
+      String? MEMO_CD,
+      String? TAN_CAL_ID,
+      required Function() onSuccess,
+      required Function onFailed}) async {
     try {
+      final box = Hive.box<User>('userBox');
+      final User user = box.values.last;
       final response = await http.post(
         Uri.parse(
-            "https://koji-app.starboardasiavn.com/Request/Schedule/requestMemoUpdate.php"),
+            "https://koji-app.starboardasiavn.com/Request/Schedule/requestPostMemoUpdate.php"),
         body: {
           'JYOKEN_CD': JYOKEN_CD,
           'JYOKEN_SYBET_FLG': JYOKEN_SYBET_FLG,
@@ -34,6 +40,9 @@ class CreateMemo {
           'END_TIME': END_TIME ?? '',
           'ALL_DAY_FLG': ALL_DAY_FLG,
           'MEMO_CD': MEMO_CD,
+          'COMMENT': '',
+          'KBNMSAI_CD': KBNMSAI_CD,
+          'LOGIN_ID': user.TANT_CD
         },
       );
 
@@ -42,7 +51,7 @@ class CreateMemo {
         onSuccess.call();
         return body;
       } else {
-        throw Exception('Failed to get list phong ban');
+        onFailed.call();
       }
     } catch (e) {
       print(e);
@@ -56,7 +65,7 @@ class CreateMemo {
   }) async {
     try {
       String url =
-          "https://koji-app.starboardasiavn.com/Request/Schedule/requestMemoRegistration.php?TAN_CAL_ID=1234567789";
+          "https://koji-app.starboardasiavn.com/Request/Schedule/requestGetMemoRegistration.php?TAN_CAL_ID=1234567789";
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {

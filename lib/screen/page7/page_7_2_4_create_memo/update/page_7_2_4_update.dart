@@ -316,24 +316,27 @@ class _Page724UpdateState extends State<Page724Update> {
                 child: TextButton(
                   onPressed: () {
                     CreateMemo().createMemo(
-                      JYOKEN_CD: widget.JYOKEN_CD,
-                      JYOKEN_SYBET_FLG: widget.isPhongBan ? '1' : '0',
-                      YMD: widget.initialDate,
-                      TAG_KBN: '06',
-                      MEMO_CD: pullDownSelected['KBNMSAI_CD'],
-                      NAIYO: dateinput.text,
-                      START_TIME: kara,
-                      END_TIME: made,
-                      ALL_DAY_FLG: checkedValue ? '1' : '0',
-                      TAN_CAL_ID: widget.TAN_CAL_ID,
-                      onSuccess: () {
-                        Navigator.pop(context);
-                        CustomToast.show(context,
-                            message: "Update successfull",
-                            backGround: Colors.green);
-                        widget.onSuccess.call();
-                      },
-                    );
+                        KBNMSAI_CD: pullDownSelected['KBNMSAI_CD'],
+                        JYOKEN_CD: widget.JYOKEN_CD,
+                        JYOKEN_SYBET_FLG: widget.isPhongBan ? '1' : '0',
+                        YMD: widget.initialDate,
+                        TAG_KBN: '06',
+                        MEMO_CD: pullDownSelected['KBNMSAI_CD'],
+                        NAIYO: dateinput.text,
+                        START_TIME: kara,
+                        END_TIME: made,
+                        ALL_DAY_FLG: checkedValue ? '1' : '0',
+                        TAN_CAL_ID: widget.TAN_CAL_ID,
+                        onSuccess: () {
+                          Navigator.pop(context);
+                          CustomToast.show(context,
+                              message: "Update successfull",
+                              backGround: Colors.green);
+                          widget.onSuccess.call();
+                        },
+                        onFailed: () {
+                          CustomToast.show(context, message: 'Update error');
+                        });
                   },
                   child: const Text(
                     '登録',
@@ -359,17 +362,18 @@ class _Page724UpdateState extends State<Page724Update> {
                 child: TextButton(
                   onPressed: () {
                     DeleteMemo().deleteMemo(
-                      JYOKEN_CD: widget.JYOKEN_CD,
-                      JYOKEN_SYBET_FLG: widget.isPhongBan ? '1' : '0',
-                      YMD: widget.initialDate,
-                      onSuccess: () {
-                        Navigator.pop(context);
-                        CustomToast.show(context,
-                            message: "Delete memo successfull",
-                            backGround: Colors.green);
-                        widget.onSuccess.call();
-                      },
-                    );
+                        TAN_CAL_ID: widget.TAN_CAL_ID,
+                        onSuccess: () {
+                          Navigator.pop(context);
+                          CustomToast.show(context,
+                              message: "Delete memo successfull",
+                              backGround: Colors.green);
+                          widget.onSuccess.call();
+                        },
+                        onFailed: () {
+                          CustomToast.show(context,
+                              message: 'Delete memo error');
+                        });
                   },
                   child: const Text(
                     '削除',

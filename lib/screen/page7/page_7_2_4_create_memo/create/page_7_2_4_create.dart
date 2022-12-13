@@ -301,6 +301,7 @@ class _Page724CreateState extends State<Page724Create> {
                 child: TextButton(
                   onPressed: () {
                     CreateMemo().createMemo(
+                        KBNMSAI_CD: pullDownSelected['KBNMSAI_CD'],
                         JYOKEN_CD: widget.JYOKEN_CD,
                         JYOKEN_SYBET_FLG: widget.isPhongBan ? '1' : '0',
                         YMD: widget.initialDate,
@@ -316,6 +317,9 @@ class _Page724CreateState extends State<Page724Create> {
                               message: "Create successfull",
                               backGround: Colors.green);
                           widget.onSuccess.call();
+                        },
+                        onFailed: () {
+                          CustomToast.show(context, message: 'Create error');
                         });
                   },
                   child: const Text(
