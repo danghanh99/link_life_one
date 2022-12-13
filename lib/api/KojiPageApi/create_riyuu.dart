@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 
+import '../../constants/constant.dart';
+
 class CreateRiyuu {
   CreateRiyuu() : super();
 
@@ -44,7 +46,7 @@ class CreateRiyuu {
   }
 
   String _getUrl(String SHITAMI_MENU) {
-    String domain = "https://koji-app.starboardasiavn.com/Request/Koji/";
+    String domain = "${Constant.url}Request/Koji/";
     switch (SHITAMI_MENU) {
       case '1':
         return '${domain}requestPhotoSubmissionRegistrationFromSendPhoto.php';

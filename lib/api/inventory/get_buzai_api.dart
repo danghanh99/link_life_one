@@ -2,6 +2,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import "package:http/http.dart" as http;
 import 'package:link_life_one/models/buzai.dart';
 import 'dart:convert';
+import '../../constants/constant.dart';
 import '../../models/user.dart';
 
 class GetBuzaiApi {
@@ -16,7 +17,7 @@ class GetBuzaiApi {
     String SYOZOKU_CD = user.SYOZOKU_CD;
     dynamic response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Order/requestGetPartList.php?SYOZOKU_CD=$SYOZOKU_CD"),
+          "${Constant.url}Request/Order/requestGetPartList.php?SYOZOKU_CD=$SYOZOKU_CD"),
     );
 
     if (response.statusCode == 200) {

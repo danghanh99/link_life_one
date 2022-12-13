@@ -3,6 +3,8 @@ import "package:http/http.dart" as http;
 import 'package:intl/intl.dart';
 import 'package:link_life_one/models/user.dart';
 
+import '../../../constants/constant.dart';
+
 class PostPurchaseOrderReject {
   PostPurchaseOrderReject() : super();
 
@@ -13,7 +15,7 @@ class PostPurchaseOrderReject {
   }) async {
     try {
       String url =
-          "https://koji-app.starboardasiavn.com/Request/Order/requestPostPurchaseOrderReject.php";
+          "${Constant.url}Request/Order/requestPostPurchaseOrderReject.php";
       final response = await http.post(
         Uri.parse(url),
         body: {"BUZAI_HACYU_ID": BUZAI_HACYU_ID_List.toString()}.toString(),

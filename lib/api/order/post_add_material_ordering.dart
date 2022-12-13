@@ -3,6 +3,8 @@ import "package:http/http.dart" as http;
 import 'package:intl/intl.dart';
 import 'package:link_life_one/models/user.dart';
 
+import '../../constants/constant.dart';
+
 class PostAddMaterialOrdering {
   PostAddMaterialOrdering() : super();
 
@@ -19,7 +21,7 @@ class PostAddMaterialOrdering {
 
     try {
       String url =
-          "https://koji-app.starboardasiavn.com/Request/Order/requestPostAddMaterialOrdering.php";
+          "${Constant.url}Request/Order/requestPostAddMaterialOrdering.php";
       final response = await http.post(
         Uri.parse(url),
         body: {

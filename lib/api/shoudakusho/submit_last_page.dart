@@ -1,6 +1,8 @@
 import 'package:hive_flutter/adapters.dart';
 import "package:http/http.dart" as http;
 
+import '../../constants/constant.dart';
+
 class SubmitLastPage {
   SubmitLastPage() : super();
 
@@ -31,8 +33,7 @@ class SubmitLastPage {
         }
       }
 
-      String url =
-          "https://koji-app.starboardasiavn.com/Request/Koji/requestConsent.php";
+      String url = "${Constant.url}Request/Koji/requestConsent.php";
       final response = await http.post(
         Uri.parse(url),
         body: {

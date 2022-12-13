@@ -2,6 +2,8 @@ import "package:http/http.dart" as http;
 import 'package:link_life_one/models/people.dart';
 import 'dart:convert';
 
+import '../../constants/constant.dart';
+
 class GetPullDownListPeople {
   GetPullDownListPeople() : super();
 
@@ -10,7 +12,7 @@ class GetPullDownListPeople {
   }) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Result/requestGetPullDownListPeople.php"),
+          "${Constant.url}Request/Result/requestGetPullDownListPeople.php"),
     );
 
     if (response.statusCode == 200) {

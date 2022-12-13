@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:intl/intl.dart';
 
+import '../../../constants/constant.dart';
 import '../../../models/user.dart';
 
 class UpdateAnkenMiddle {
@@ -33,7 +34,7 @@ class UpdateAnkenMiddle {
     final User user = box.values.last;
     final response = await http.post(
         Uri.parse(
-            "https://koji-app.starboardasiavn.com/Request/Schedule/requestSalesConstructionSalesPreviewUpdate.php"),
+            "${Constant.url}Request/Schedule/requestSalesConstructionSalesPreviewUpdate.php"),
         body: {
           "YMD": YMD,
           "JYOKEN_CD": JYOKEN_CD,

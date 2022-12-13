@@ -2,6 +2,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import "package:http/http.dart" as http;
 import 'dart:convert';
 
+import '../../constants/constant.dart';
+
 class GetThongBaoMenuApi {
   GetThongBaoMenuApi() : super();
 
@@ -13,7 +15,7 @@ class GetThongBaoMenuApi {
 
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Menu/requestGetMenu.php?LOGIN_ID=${id}"),
+          "${Constant.url}Request/Menu/requestGetMenu.php?LOGIN_ID=${id}"),
     );
 
     if (response.statusCode == 200) {

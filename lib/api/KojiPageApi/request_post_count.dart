@@ -3,6 +3,8 @@ import "package:http/http.dart" as http;
 import 'package:intl/intl.dart';
 import 'package:link_life_one/models/koji.dart';
 
+import '../../constants/constant.dart';
+
 class RequestPostCount {
   RequestPostCount() : super();
 
@@ -14,7 +16,7 @@ class RequestPostCount {
     String loginID = box.values.last;
     final response = await http.post(
         Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Koji/requestPostUpdateSummarize.php",
+          "${Constant.url}Request/Koji/requestPostUpdateSummarize.php",
         ),
         body: {
           'YMD': DateFormat(('yyyy-MM-dd')).format(date),

@@ -1,6 +1,8 @@
 import "package:http/http.dart" as http;
 import 'dart:convert';
 
+import '../../constants/constant.dart';
+
 class GetShoudakusho {
   GetShoudakusho() : super();
 
@@ -12,9 +14,9 @@ class GetShoudakusho {
   }) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Koji/requestGetWrittenConsent.php?JYUCYU_ID=0301416579&KOJI_ST=03"),
+          "${Constant.url}Request/Koji/requestGetWrittenConsent.php?JYUCYU_ID=0301416579&KOJI_ST=03"),
       // Uri.parse(
-      //     "https://koji-app.starboardasiavn.com/requestGetWrittenConsent.php?JYUCYU_ID=${JYUCYU_ID}&KOJI_ST=${KOJI_ST}"),
+      //     "${Constant.url}requestGetWrittenConsent.php?JYUCYU_ID=${JYUCYU_ID}&KOJI_ST=${KOJI_ST}"),
     );
 
     if (response.statusCode == 200) {

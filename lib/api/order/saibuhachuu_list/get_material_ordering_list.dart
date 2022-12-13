@@ -1,6 +1,8 @@
 import "package:http/http.dart" as http;
 import 'dart:convert';
 
+import '../../../constants/constant.dart';
+
 class GetMaterialOrderingList {
   GetMaterialOrderingList() : super();
 
@@ -12,7 +14,7 @@ class GetMaterialOrderingList {
   }) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Order/requestGetMaterialOrderingList.php?SYOZOKU_CD=00000&JISYA_CD=KPMH081A41S"),
+          "${Constant.url}Request/Order/requestGetMaterialOrderingList.php?SYOZOKU_CD=00000&JISYA_CD=KPMH081A41S"),
     );
 
     if (response.statusCode == 200) {

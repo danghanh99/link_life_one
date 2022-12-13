@@ -3,6 +3,7 @@ import "package:http/http.dart" as http;
 import 'package:intl/intl.dart';
 import 'dart:convert';
 
+import '../../../constants/constant.dart';
 import '../../../models/user.dart';
 
 class GetTirasi {
@@ -18,7 +19,7 @@ class GetTirasi {
 
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Koji/requestGetTirasi.php?YMD=${DateFormat(('yyyy-MM-dd')).format(YMD)}&LOGIN_ID=${LOGIN_ID}"),
+          "${Constant.url}Request/Koji/requestGetTirasi.php?YMD=${DateFormat(('yyyy-MM-dd')).format(YMD)}&LOGIN_ID=${LOGIN_ID}"),
     );
 
     if (response.statusCode == 200) {

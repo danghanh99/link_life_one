@@ -1,5 +1,7 @@
 import "package:http/http.dart" as http;
 
+import '../../constants/constant.dart';
+
 class PostUpdateKojiReadFlg {
   PostUpdateKojiReadFlg() : super();
 
@@ -11,7 +13,7 @@ class PostUpdateKojiReadFlg {
     try {
       final response = await http.post(
           Uri.parse(
-              "https://koji-app.starboardasiavn.com/Request/Menu/requestPostUpdateKojiReadFlg.php"),
+              "${Constant.url}Request/Menu/requestPostUpdateKojiReadFlg.php"),
           body: {
             "JYUCYU_ID": listJYUCYU_ID.toString(),
           });

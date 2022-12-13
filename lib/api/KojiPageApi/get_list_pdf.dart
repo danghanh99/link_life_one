@@ -2,6 +2,8 @@ import "package:http/http.dart" as http;
 import 'package:link_life_one/models/koji.dart';
 import 'dart:convert';
 
+import '../../constants/constant.dart';
+
 class GetListPdf {
   GetListPdf() : super();
 
@@ -9,7 +11,7 @@ class GetListPdf {
       {required Koji koji, required String SINGLE_SUMMARIZE}) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Koji/requestGetRequestForm.php?JYUCYU_ID=${koji.jyucyuId}&SINGLE_SUMMARIZE=$SINGLE_SUMMARIZE&HOMON_SBT=${koji.homonSbt}"),
+          "${Constant.url}Request/Koji/requestGetRequestForm.php?JYUCYU_ID=${koji.jyucyuId}&SINGLE_SUMMARIZE=$SINGLE_SUMMARIZE&HOMON_SBT=${koji.homonSbt}"),
     );
 
     if (response.statusCode == 200) {

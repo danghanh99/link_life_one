@@ -2,6 +2,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import "package:http/http.dart" as http;
 import 'package:link_life_one/models/inventory.dart';
 import 'dart:convert';
+import '../../constants/constant.dart';
 import '../../models/user.dart';
 
 class GetInventoriesApi {
@@ -19,12 +20,12 @@ class GetInventoriesApi {
     if (isContinue) {
       response = await http.get(
         Uri.parse(
-            "https://koji-app.starboardasiavn.com/Request/Order/requestGetInventoryListForEdit.php?SYOZOKU_CD=$SYOZOKU_CD"),
+            "${Constant.url}Request/Order/requestGetInventoryListForEdit.php?SYOZOKU_CD=$SYOZOKU_CD"),
       );
     } else {
       response = await http.get(
         Uri.parse(
-            "https://koji-app.starboardasiavn.com/Request/Order/requestGetInventoryListForCreate.php?SYOZOKU_CD=$SYOZOKU_CD"),
+            "${Constant.url}Request/Order/requestGetInventoryListForCreate.php?SYOZOKU_CD=$SYOZOKU_CD"),
       );
     }
 

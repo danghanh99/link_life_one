@@ -1,6 +1,8 @@
 import "package:http/http.dart" as http;
 import 'dart:convert';
 
+import '../../../constants/constant.dart';
+
 class GetPullDownCategory {
   GetPullDownCategory() : super();
 
@@ -9,8 +11,7 @@ class GetPullDownCategory {
     required Function onFailed,
   }) async {
     final response = await http.get(
-      Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Order/requestGetPullDownCategory.php"),
+      Uri.parse("${Constant.url}Request/Order/requestGetPullDownCategory.php"),
     );
 
     if (response.statusCode == 200) {

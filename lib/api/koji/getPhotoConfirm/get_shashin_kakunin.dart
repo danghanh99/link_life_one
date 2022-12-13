@@ -1,6 +1,8 @@
 import "package:http/http.dart" as http;
 import 'dart:convert';
 
+import '../../../constants/constant.dart';
+
 class GetShashinKakunin {
   GetShashinKakunin() : super();
 
@@ -12,7 +14,7 @@ class GetShashinKakunin {
   }) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Koji/requestGetPhotoConfirm.php?JYUCYU_ID=${JYUCYU_ID}&SINGLE_SUMMARIZE=${SINGLE_SUMMARIZE}"),
+          "${Constant.url}Request/Koji/requestGetPhotoConfirm.php?JYUCYU_ID=${JYUCYU_ID}&SINGLE_SUMMARIZE=${SINGLE_SUMMARIZE}"),
     );
 
     if (response.statusCode == 200) {

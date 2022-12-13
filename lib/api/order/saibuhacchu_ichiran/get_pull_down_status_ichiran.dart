@@ -1,6 +1,8 @@
 import "package:http/http.dart" as http;
 import 'dart:convert';
 
+import '../../../constants/constant.dart';
+
 class GetPullDownStatusIchiran {
   GetPullDownStatusIchiran() : super();
 
@@ -9,8 +11,7 @@ class GetPullDownStatusIchiran {
     required Function onFailed,
   }) async {
     final response = await http.get(
-      Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Order/requestGetPullDownStatus.php"),
+      Uri.parse("${Constant.url}Request/Order/requestGetPullDownStatus.php"),
     );
 
     if (response.statusCode == 200) {

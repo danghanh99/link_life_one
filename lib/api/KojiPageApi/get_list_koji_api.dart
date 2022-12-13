@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:link_life_one/models/koji.dart';
 import 'dart:convert';
 
+import '../../constants/constant.dart';
+
 class GetListKojiApi {
   GetListKojiApi() : super();
 
@@ -14,7 +16,7 @@ class GetListKojiApi {
 
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Koji/requestGetConstructionList.php?YMD=${DateFormat(('yyyy-MM-dd')).format(date2)}&LOGIN_ID=${id}"),
+          "${Constant.url}Request/Koji/requestGetConstructionList.php?YMD=${DateFormat(('yyyy-MM-dd')).format(date2)}&LOGIN_ID=${id}"),
     );
 
     if (response.statusCode == 200) {

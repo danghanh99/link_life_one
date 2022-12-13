@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:intl/intl.dart';
 
+import '../../../constants/constant.dart';
+
 class GetLichTrinhItem {
   GetLichTrinhItem() : super();
 
@@ -13,7 +15,7 @@ class GetLichTrinhItem {
   }) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Schedule/requestGetNetPreviewContents.php?JYUCYU_ID=${JYUCYU_ID}&HOMON_SBT=${HOMON_SBT}"),
+          "${Constant.url}Request/Schedule/requestGetNetPreviewContents.php?JYUCYU_ID=${JYUCYU_ID}&HOMON_SBT=${HOMON_SBT}"),
     );
 
     if (response.statusCode == 200) {

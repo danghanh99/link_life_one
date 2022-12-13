@@ -4,6 +4,8 @@ import 'dart:convert';
 
 import 'package:link_life_one/models/user.dart';
 
+import '../../../constants/constant.dart';
+
 class GetPartList {
   GetPartList() : super();
 
@@ -16,7 +18,7 @@ class GetPartList {
 
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Order/requestGetPartList.php?SYOZOKU_CD=${SYOZOKU_CD}"),
+          "${Constant.url}Request/Order/requestGetPartList.php?SYOZOKU_CD=${SYOZOKU_CD}"),
     );
 
     if (response.statusCode == 200) {

@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:hive_flutter/adapters.dart';
 import "package:http/http.dart" as http;
 
+import '../../constants/constant.dart';
+
 class ShowHoliday {
   ShowHoliday() : super();
 
@@ -16,7 +18,7 @@ class ShowHoliday {
       final month = date.month.toString();
       final response = await http.get(
         Uri.parse(
-            "https://koji-app.starboardasiavn.com/Request/Schedule/requestShowHoliday.php?TANT_CD=${TANT_CD}&HOLIDAY_YEAR=${year}&GET_MONTH=${month}&GET_YEAR=${year}"),
+            "${Constant.url}Request/Schedule/requestShowHoliday.php?TANT_CD=${TANT_CD}&HOLIDAY_YEAR=${year}&GET_MONTH=${month}&GET_YEAR=${year}"),
       );
 
       if (response.statusCode == 200) {

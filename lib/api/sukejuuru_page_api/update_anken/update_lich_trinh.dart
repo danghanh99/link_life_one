@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:intl/intl.dart';
 
+import '../../../constants/constant.dart';
+
 class UpdateLichTrinh {
   UpdateLichTrinh() : super();
 
@@ -25,7 +27,7 @@ class UpdateLichTrinh {
   }) async {
     final response = await http.post(
         Uri.parse(
-            "https://koji-app.starboardasiavn.com/Request/Schedule/requestNetConstructionNetPreviewContentsUpdate.php"),
+            "${Constant.url}Request/Schedule/requestNetConstructionNetPreviewContentsUpdate.php"),
         body: {
           "JYUCYU_ID": JYUCYU_ID,
           "TAG_KBN": TAG_KBN,

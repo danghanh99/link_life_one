@@ -1,6 +1,8 @@
 import "package:http/http.dart" as http;
 import 'dart:convert';
 
+import '../../constants/constant.dart';
+
 class HouJinKanRyoShoApi {
   HouJinKanRyoShoApi() : super();
 
@@ -10,7 +12,7 @@ class HouJinKanRyoShoApi {
       required Function() onSuccess}) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Koji/requestGetCorporateCompletionForm.php?TENPO_CD=$TENPO_CD&JYUCYU_ID=$JYUCYU_ID"),
+          "${Constant.url}Request/Koji/requestGetCorporateCompletionForm.php?TENPO_CD=$TENPO_CD&JYUCYU_ID=$JYUCYU_ID"),
     );
 
     if (response.statusCode == 200) {

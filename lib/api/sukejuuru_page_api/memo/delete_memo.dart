@@ -1,6 +1,8 @@
 import 'dart:convert';
 import "package:http/http.dart" as http;
 
+import '../../../constants/constant.dart';
+
 class DeleteMemo {
   DeleteMemo() : super();
 
@@ -11,7 +13,7 @@ class DeleteMemo {
     try {
       final response = await http.post(
           Uri.parse(
-              "https://koji-app.starboardasiavn.com/Request/Schedule/requestPostMemoDelete.php"),
+              "${Constant.url}Request/Schedule/requestPostMemoDelete.php"),
           body: {'TAN_CAL_ID': TAN_CAL_ID});
 
       if (response.statusCode == 200) {

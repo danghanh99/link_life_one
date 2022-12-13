@@ -2,6 +2,8 @@ import "package:http/http.dart" as http;
 import 'package:link_life_one/models/month.dart';
 import 'dart:convert';
 
+import '../../constants/constant.dart';
+
 class GetPullDownListMonth {
   GetPullDownListMonth() : super();
 
@@ -12,7 +14,7 @@ class GetPullDownListMonth {
   }) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Result/requestGetPullDownListMoth.php?TANT_CD=$TANT_CD"),
+          "${Constant.url}Request/Result/requestGetPullDownListMoth.php?TANT_CD=$TANT_CD"),
     );
 
     if (response.statusCode == 200) {

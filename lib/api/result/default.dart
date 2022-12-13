@@ -2,6 +2,8 @@ import "package:http/http.dart" as http;
 import 'dart:convert';
 import 'package:link_life_one/models/thanh_tich.dart';
 
+import '../../constants/constant.dart';
+
 class Default {
   Default() : super();
 
@@ -13,7 +15,7 @@ class Default {
   }) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Result/requestDefault.php?TANT_CD=$TANT_CD&JISEKI_YMD=$JISEKI_YMD"),
+          "${Constant.url}Request/Result/requestDefault.php?TANT_CD=$TANT_CD&JISEKI_YMD=$JISEKI_YMD"),
     );
 
     if (response.statusCode == 200) {

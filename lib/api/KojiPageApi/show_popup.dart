@@ -2,6 +2,8 @@ import "package:http/http.dart" as http;
 import 'package:intl/intl.dart';
 import 'dart:convert';
 
+import '../../constants/constant.dart';
+
 class ShowPopUp {
   ShowPopUp() : super();
 
@@ -12,7 +14,7 @@ class ShowPopUp {
       required Function(int count) onSuccess}) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Koji/requestCheckCount.php?YMD=${DateFormat(('yyyy-MM-dd')).format(YMD)}&SETSAKI_ADDRESS=${SETSAKI_ADDRESS}&JYUCYU_ID=${JYUCYU_ID}"),
+          "${Constant.url}Request/Koji/requestCheckCount.php?YMD=${DateFormat(('yyyy-MM-dd')).format(YMD)}&SETSAKI_ADDRESS=${SETSAKI_ADDRESS}&JYUCYU_ID=${JYUCYU_ID}"),
     );
 
     if (response.statusCode == 200) {

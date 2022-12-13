@@ -3,6 +3,8 @@ import 'package:hive_flutter/adapters.dart';
 import "package:http/http.dart" as http;
 import 'package:dio/dio.dart';
 
+import '../../../constants/constant.dart';
+
 class PostTirasiUpdateApi {
   PostTirasiUpdateApi() : super();
 
@@ -15,8 +17,7 @@ class PostTirasiUpdateApi {
   }) async {
     try {
       var dio = Dio();
-      String url =
-          "https://koji-app.starboardasiavn.com/Request/Koji/requestPostTirasiUpdate.php";
+      String url = "${Constant.url}Request/Koji/requestPostTirasiUpdate.php";
       FormData formData = FormData.fromMap(
         {
           'YMD': YMD,

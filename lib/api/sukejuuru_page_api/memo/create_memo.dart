@@ -5,6 +5,7 @@ import "package:http/http.dart" as http;
 import 'package:intl/intl.dart';
 import 'package:link_life_one/components/toast.dart';
 
+import '../../../constants/constant.dart';
 import '../../../models/user.dart';
 
 class CreateMemo {
@@ -28,8 +29,7 @@ class CreateMemo {
       final box = Hive.box<User>('userBox');
       final User user = box.values.last;
       final response = await http.post(
-        Uri.parse(
-            "https://koji-app.starboardasiavn.com/Request/Schedule/requestPostMemoUpdate.php"),
+        Uri.parse("${Constant.url}Request/Schedule/requestPostMemoUpdate.php"),
         body: {
           'JYOKEN_CD': JYOKEN_CD,
           'JYOKEN_SYBET_FLG': JYOKEN_SYBET_FLG,
@@ -65,7 +65,7 @@ class CreateMemo {
   }) async {
     try {
       String url =
-          "https://koji-app.starboardasiavn.com/Request/Schedule/requestGetMemoRegistration.php?TAN_CAL_ID=1234567789";
+          "${Constant.url}Request/Schedule/requestGetMemoRegistration.php?TAN_CAL_ID=1234567789";
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {

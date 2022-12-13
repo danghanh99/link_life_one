@@ -3,6 +3,8 @@ import 'package:hive_flutter/adapters.dart';
 import "package:http/http.dart" as http;
 import 'package:dio/dio.dart';
 
+import '../../../constants/constant.dart';
+
 class UploadPhotoApi {
   UploadPhotoApi() : super();
 
@@ -16,7 +18,7 @@ class UploadPhotoApi {
     try {
       var dio = Dio();
       String url =
-          "https://koji-app.starboardasiavn.com/Request/Koji/requestPostPhotoSubmissionRegistration.php";
+          "${Constant.url}Request/Koji/requestPostPhotoSubmissionRegistration.php";
       FormData formData = FormData.fromMap(
         {
           'FILE_NAME': await MultipartFile.fromFile(FILE_PATH),

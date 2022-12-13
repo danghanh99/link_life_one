@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:hive_flutter/adapters.dart';
 import "package:http/http.dart" as http;
 
+import '../../constants/constant.dart';
 import '../../models/user.dart';
 
 class LoginApi {
@@ -12,8 +13,7 @@ class LoginApi {
       required String password,
       required Function onSuccess,
       required onFailed}) async {
-    String url =
-        "https://koji-app.starboardasiavn.com/Request/Login/requestLogin.php";
+    String url = "${Constant.url}Request/Login/requestLogin.php";
     final response = await http.post(Uri.parse(url),
         body: {'LOGIN_ID': '00000', 'PASSWORD': '123456'});
     // body: {'LOGIN_ID': id, 'PASSWORD': password});

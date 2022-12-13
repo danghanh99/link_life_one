@@ -1,6 +1,8 @@
 import "package:http/http.dart" as http;
 import 'dart:convert';
 
+import '../../constants/constant.dart';
+
 class GetRiyuu {
   GetRiyuu() : super();
 
@@ -8,7 +10,7 @@ class GetRiyuu {
       {required String JYUCYU_ID, required Function() onSuccess}) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Koji/requestEnterReason.php?JYUCYU_ID=$JYUCYU_ID"),
+          "${Constant.url}Request/Koji/requestEnterReason.php?JYUCYU_ID=$JYUCYU_ID"),
     );
 
     if (response.statusCode == 200) {

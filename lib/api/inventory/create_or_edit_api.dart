@@ -1,6 +1,7 @@
 import 'package:hive_flutter/adapters.dart';
 import "package:http/http.dart" as http;
 
+import '../../constants/constant.dart';
 import '../../models/user.dart';
 
 class CreateOrEditApi {
@@ -15,7 +16,7 @@ class CreateOrEditApi {
     final User user = box.values.last;
     dynamic response = await http.post(
         Uri.parse(
-            "https://koji-app.starboardasiavn.com/Request/Order/requestPostInventoryListForCreateOrEdit.php"),
+            "${Constant.url}Request/Order/requestPostInventoryListForCreateOrEdit.php"),
         body: {
           'LOGIN_ID': user.TANT_CD,
           'INVENTORY_DETAIL': INVENTORY_DETAIL.toString()

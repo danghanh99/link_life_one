@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:intl/intl.dart';
 
+import '../../../constants/constant.dart';
+
 class GetLichTrinhItemEditPage {
   GetLichTrinhItemEditPage() : super();
 
@@ -13,7 +15,7 @@ class GetLichTrinhItemEditPage {
   }) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Schedule/requestNetConstructionNetPreviewContentsDetails.php?JYUCYU_ID=${JYUCYU_ID}&HOMON_SBT=${HOMON_SBT}"),
+          "${Constant.url}Request/Schedule/requestNetConstructionNetPreviewContentsDetails.php?JYUCYU_ID=${JYUCYU_ID}&HOMON_SBT=${HOMON_SBT}"),
     );
 
     if (response.statusCode == 200) {

@@ -32,7 +32,7 @@ class ShashinKakuninPage extends StatefulWidget {
 class _ShashinKakuninPageState extends State<ShashinKakuninPage> {
   Future? getShashinKakunin;
   List<dynamic> listPhotos = [];
-  // String url = "https://koji-app.starboardasiavn.com/";
+  // String url = "${Constant.url}";
   @override
   void initState() {
     getShashinKakunin = callGetShashinKakunin();

@@ -1,5 +1,6 @@
 import "package:http/http.dart" as http;
 import 'dart:convert';
+import '../../constants/constant.dart';
 import '../../models/account_book.dart';
 
 class AccountBookApi {
@@ -12,7 +13,7 @@ class AccountBookApi {
   }) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/AccountBook/requestAccountBook.php?TANT_CD=$TANT_CD"),
+          "${Constant.url}Request/AccountBook/requestAccountBook.php?TANT_CD=$TANT_CD"),
     );
 
     if (response.statusCode == 200) {

@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:intl/intl.dart';
 
+import '../../constants/constant.dart';
+
 class GetAnkenCuaMotPhongBan {
   GetAnkenCuaMotPhongBan() : super();
 
@@ -17,7 +19,7 @@ class GetAnkenCuaMotPhongBan {
     } else {
       final response = await http.get(
         Uri.parse(
-            "https://koji-app.starboardasiavn.com/Request/Schedule/requestDefault.php?KOJIGYOSYA_CD=${kojiGyoSyaCd}&YMD=${kojiGyoSyaCd}&YMD=${DateFormat(('yyyy-MM-dd')).format(dateTime)}"),
+            "${Constant.url}Request/Schedule/requestDefault.php?KOJIGYOSYA_CD=${kojiGyoSyaCd}&YMD=${kojiGyoSyaCd}&YMD=${DateFormat(('yyyy-MM-dd')).format(dateTime)}"),
       );
 
       if (response.statusCode == 200) {

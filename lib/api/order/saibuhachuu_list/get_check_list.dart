@@ -1,6 +1,8 @@
 import "package:http/http.dart" as http;
 import 'dart:convert';
 
+import '../../../constants/constant.dart';
+
 class GetCheckList {
   GetCheckList() : super();
 
@@ -11,7 +13,7 @@ class GetCheckList {
   }) async {
     final response = await http.get(
       Uri.parse(
-          "https://koji-app.starboardasiavn.com/Request/Order/requestGetCheckList.php?BUZAI_HACYU_ID=0000000001"),
+          "${Constant.url}Request/Order/requestGetCheckList.php?BUZAI_HACYU_ID=0000000001"),
     );
 
     if (response.statusCode == 200) {
