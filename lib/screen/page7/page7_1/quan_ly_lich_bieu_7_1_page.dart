@@ -105,59 +105,84 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         setState(() {
           sukejuuruPhongBan = response["OFFICE"];
         });
+      } else {
+        setState(() {
+          sukejuuruPhongBan = [];
+        });
       }
 
       if (response["PERSON"] != null) {
-        if (currentEmployeeIndex != null) {
-          List<dynamic> listmtp = response["PERSON"][currentEmployeeIndex];
-          if (listmtp.isNotEmpty) {
-            setState(() {
-              sukejuuruAllUser = response["PERSON"][currentEmployeeIndex] ?? [];
-            });
+        List<dynamic> tmpPERSON = response["PERSON"][0];
 
-            List<dynamic> listPerson =
-                response["PERSON"][currentEmployeeIndex] ?? [];
-            List<dynamic> listPersonTemp = [];
-            listPerson.forEach((element) {
-              listPersonTemp.add({
-                "TANT_NAME": element["TANT_NAME"],
-                "TANT_CD": element["TANT_CD"]
-              });
-            });
-            setState(() {
-              listNhanVien = listPersonTemp;
-              sukejuuruSelectedUser =
-                  response["PERSON"][currentEmployeeIndex][0];
-              selectedNhanVienName =
-                  listNhanVien[currentEmployeeIndex]["TANT_NAME"];
-              selectedNhanVienTantCD =
-                  listNhanVien[currentEmployeeIndex]["TANT_CD"];
-            });
-          }
+        if (tmpPERSON.isEmpty) {
+          setState(() {
+            listNhanVien = [];
+            sukejuuruSelectedUser = null;
+            selectedNhanVienName = '';
+            selectedNhanVienTantCD = '';
+            sukejuuruAllUser = [];
+          });
         } else {
-          List<dynamic> listmtp = response["PERSON"][0];
-          if (listmtp.isNotEmpty) {
-            setState(() {
-              sukejuuruAllUser = response["PERSON"][0] ?? [];
-            });
-
-            List<dynamic> listPerson = response["PERSON"][0] ?? [];
-            List<dynamic> listPersonTemp = [];
-            listPerson.forEach((element) {
-              listPersonTemp.add({
-                "TANT_NAME": element["TANT_NAME"],
-                "TANT_CD": element["TANT_CD"]
+          if (currentEmployeeIndex != null) {
+            List<dynamic> listmtp = response["PERSON"][currentEmployeeIndex];
+            if (listmtp.isNotEmpty) {
+              setState(() {
+                sukejuuruAllUser =
+                    response["PERSON"][currentEmployeeIndex] ?? [];
               });
-            });
-            setState(() {
-              listNhanVien = listPersonTemp;
-              sukejuuruSelectedUser = response["PERSON"][0][0];
-              selectedNhanVienName = listNhanVien[0]["TANT_NAME"];
-              selectedNhanVienTantCD = listNhanVien[0]["TANT_CD"];
-              print("111");
-            });
+
+              List<dynamic> listPerson =
+                  response["PERSON"][currentEmployeeIndex] ?? [];
+              List<dynamic> listPersonTemp = [];
+              listPerson.forEach((element) {
+                listPersonTemp.add({
+                  "TANT_NAME": element["TANT_NAME"],
+                  "TANT_CD": element["TANT_CD"]
+                });
+              });
+              setState(() {
+                listNhanVien = listPersonTemp;
+                sukejuuruSelectedUser =
+                    response["PERSON"][currentEmployeeIndex][0];
+                selectedNhanVienName =
+                    listNhanVien[currentEmployeeIndex]["TANT_NAME"];
+                selectedNhanVienTantCD =
+                    listNhanVien[currentEmployeeIndex]["TANT_CD"];
+              });
+            }
+          } else {
+            List<dynamic> listmtp = response["PERSON"][0];
+            if (listmtp.isNotEmpty) {
+              setState(() {
+                sukejuuruAllUser = response["PERSON"][0] ?? [];
+              });
+
+              List<dynamic> listPerson = response["PERSON"][0] ?? [];
+              List<dynamic> listPersonTemp = [];
+              listPerson.forEach((element) {
+                listPersonTemp.add({
+                  "TANT_NAME": element["TANT_NAME"],
+                  "TANT_CD": element["TANT_CD"]
+                });
+              });
+              setState(() {
+                listNhanVien = listPersonTemp;
+                sukejuuruSelectedUser = response["PERSON"][0][0];
+                selectedNhanVienName = listNhanVien[0]["TANT_NAME"];
+                selectedNhanVienTantCD = listNhanVien[0]["TANT_CD"];
+                print("111");
+              });
+            }
           }
         }
+      } else {
+        setState(() {
+          listNhanVien = [];
+          sukejuuruSelectedUser = null;
+          selectedNhanVienName = '';
+          selectedNhanVienTantCD = '';
+          sukejuuruAllUser = [];
+        });
       }
 
       onsuccess?.call();
@@ -324,9 +349,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         setState(() {
                           value1nguoi = '個人';
                         });
-
-                        // callGetListNhanVienCuaPhongBan(
-                        //     kojiGyoSyaCd: phongBanId);
                       },
                       child: Text(
                         '個人',
@@ -1523,7 +1545,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         child: Container(
           width: colWidth()[col],
           color: getBackgroundColorByText(
-            text: e["KBNMSAI_NAME"],
+            text: e["KBNMSAI_NAME"] ?? '',
           ),
           child: Padding(
             padding: const EdgeInsets.all(3),
@@ -1552,14 +1574,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                           child: Container(
                             // color: backgroundKojiItem(e),
                             color: getTitleColorByText(
-                              text: e["KBNMSAI_NAME"],
+                              text: e["KBNMSAI_NAME"] ?? '',
                             ),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                 bottom: 2,
                               ),
                               child: Text(
-                                e['KBNMSAI_NAME'],
+                                e['KBNMSAI_NAME'] ?? '',
                                 style: const TextStyle(
                                   // color: kojiColorWithType(e),
                                   color: Colors.white,

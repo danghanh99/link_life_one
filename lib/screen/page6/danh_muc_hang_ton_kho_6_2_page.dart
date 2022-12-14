@@ -227,6 +227,7 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
               height: 5,
             ),
             CustomTextField(
+              isReadOnly: true,
               fillColor: const Color(0xFFA5A7A9),
               hint: 'テキストテキストテキスト',
               type: TextInputType.emailAddress,
@@ -366,7 +367,7 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
                       });
                 },
                 child: const Text(
-                  '発注申請',
+                  '棚卸確定',
                   style: TextStyle(
                     decoration: TextDecoration.underline,
                     color: Colors.white,
