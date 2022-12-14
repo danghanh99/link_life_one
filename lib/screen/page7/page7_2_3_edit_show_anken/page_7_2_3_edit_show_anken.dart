@@ -192,7 +192,7 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
               response["EIGYO_ANKEN"][0]["ATTEND_NAME3"];
 
           checkAllDayCreateAnkenPage =
-              response["EIGYO_ANKEN"][0]["ALL_DAY_FLG"] == 1 ? true : false;
+              response["EIGYO_ANKEN"][0]["ALL_DAY_FLG"] == "1" ? true : false;
         });
       },
       TAN_EIG_ID: widget.TAN_EIG_ID,
@@ -306,7 +306,8 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                             children: [
                               Column(
                                 children: [
-                                  _moreButton2(context),
+                                  _moreButton2(
+                                      context, !checkAllDayCreateAnkenPage),
                                   validKaraMade
                                       ? Container()
                                       : const Padding(
@@ -325,10 +326,20 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                                     checkColor: Colors.white,
                                     value: checkAllDayCreateAnkenPage,
                                     onChanged: (newValue) {
-                                      setState(() {
-                                        checkAllDayCreateAnkenPage = newValue ??
-                                            checkAllDayCreateAnkenPage;
-                                      });
+                                      if (newValue == true) {
+                                        setState(() {
+                                          checkAllDayCreateAnkenPage = true;
+
+                                          jikanKaraCreateAnkenPage = "08:00";
+                                          jikanMadeCreateAnkenPage = "19:00";
+                                        });
+                                      } else {
+                                        setState(() {
+                                          checkAllDayCreateAnkenPage =
+                                              newValue ??
+                                                  checkAllDayCreateAnkenPage;
+                                        });
+                                      }
                                     },
                                   ),
                                   const Text(
@@ -354,7 +365,8 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                           ),
                           Column(
                             children: [
-                              _moreButton3(context),
+                              _moreButton3(
+                                  context, !checkAllDayCreateAnkenPage),
                               validKaraMade
                                   ? Container()
                                   : const Padding(
@@ -407,7 +419,6 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                               type: TextInputType.number,
                               onChanged: (text) {
                                 setState(() {
-                                  textEditingControllerNin.text = text;
                                   jinNumberCreateAnkenPage = text;
                                 });
                               },
@@ -448,7 +459,6 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                               type: TextInputType.number,
                               onChanged: (text) {
                                 setState(() {
-                                  textEditingControllerJikan.text = text;
                                   jikanNumberCreateAnkenPage = text;
                                 });
                               },
@@ -503,8 +513,6 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                           onChanged: (text) {
                             setState(() {
                               okyakuSamaCreateAnkenPage = text;
-
-                              textEditingControllerKhachHang.text = text;
                             });
                           },
                           maxLines: 1,
@@ -546,9 +554,6 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                               onChanged: (text) {
                                 setState(() {
                                   sankasha1CreateAnkenPage = text;
-
-                                  textEditingControllerNguoiThamGia1.text =
-                                      text;
                                 });
                               },
                               maxLines: 1,
@@ -567,8 +572,6 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                               onChanged: (text) {
                                 setState(() {
                                   sankasha2CreateAnkenPage = text;
-                                  textEditingControllerNguoiThamGia2.text =
-                                      text;
                                 });
                               },
                               maxLines: 1,
@@ -587,8 +590,6 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                               onChanged: (text) {
                                 setState(() {
                                   sankasha3CreateAnkenPage = text;
-                                  textEditingControllerNguoiThamGia3.text =
-                                      text;
                                 });
                               },
                               maxLines: 1,
@@ -827,8 +828,9 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
     );
   }
 
-  Widget _moreButton2(BuildContext context) {
+  Widget _moreButton2(BuildContext context, bool? isEnable) {
     return PopupMenuButton<int>(
+      enabled: isEnable ?? true,
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {},
@@ -897,8 +899,9 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
     );
   }
 
-  Widget _moreButton3(BuildContext context) {
+  Widget _moreButton3(BuildContext context, bool? isEnable) {
     return PopupMenuButton<int>(
+      enabled: isEnable ?? true,
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {},

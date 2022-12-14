@@ -108,7 +108,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         selectAll: true,
       ),
       maxLines: widget.maxLines,
-      controller: widget.isDatePicker ? dateinput : widget.controller,
+      controller: widget.controller,
       obscureText: widget.isPassword && !showPassword,
       style: widget.largeHint == true
           ? TextStyle(
