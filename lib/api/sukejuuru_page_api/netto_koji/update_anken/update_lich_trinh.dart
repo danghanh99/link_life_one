@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:intl/intl.dart';
 
-import '../../../constants/constant.dart';
+import '../../../../constants/constant.dart';
 
 class UpdateLichTrinh {
   UpdateLichTrinh() : super();

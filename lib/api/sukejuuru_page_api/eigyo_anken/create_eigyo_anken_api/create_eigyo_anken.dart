@@ -4,8 +4,8 @@ import 'dart:convert';
 
 import 'package:intl/intl.dart';
 
-import '../../../constants/constant.dart';
-import '../../../models/user.dart';
+import '../../../../constants/constant.dart';
+import '../../../../models/user.dart';
 
 class CreateAnken {
   CreateAnken() : super();

@@ -1,18 +1,18 @@
 import "package:http/http.dart" as http;
 import 'dart:convert';
 
-import '../../../constants/constant.dart';
+import '../../../../constants/constant.dart';
 
-class GetPullDownAnken {
-  GetPullDownAnken() : super();
+class GetAnkenDetail {
+  GetAnkenDetail() : super();
 
-  Future<dynamic> getSalesConstructionSalesPreviewContents({
+  Future<dynamic> getAnkenDetail({
     required Function(dynamic) onSuccess,
-    required Function() onFailed,
+    required String TAN_EIG_ID,
   }) async {
     final response = await http.get(
       Uri.parse(
-          "${Constant.url}Request/Schedule/requestSalesConstructionSalesPreviewContents.php?TAN_EIG_ID="),
+          "${Constant.url}Request/Schedule/requestSalesConstructionSalesPreviewContents.php?TAN_EIG_ID=${TAN_EIG_ID}"),
     );
 
     if (response.statusCode == 200) {
@@ -20,7 +20,7 @@ class GetPullDownAnken {
       onSuccess.call(body);
       return body;
     } else {
-      onFailed.call();
+      throw Exception('Failed to getAnken');
     }
   }
 }

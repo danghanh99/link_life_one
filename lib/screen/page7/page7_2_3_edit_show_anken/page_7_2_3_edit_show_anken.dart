@@ -1,13 +1,14 @@
 import 'package:check_points/check_point.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:link_life_one/api/sukejuuru_page_api/create_eigyo_anken_api/create_eigyo_anken.dart';
-import 'package:link_life_one/api/sukejuuru_page_api/update_anken_middle/update_anken_middle.dart';
+import 'package:link_life_one/api/sukejuuru_page_api/eigyo_anken/create_eigyo_anken_api/create_eigyo_anken.dart';
+import 'package:link_life_one/api/sukejuuru_page_api/eigyo_anken/delete_eigyo_anken.dart';
+import 'package:link_life_one/api/sukejuuru_page_api/eigyo_anken/update_anken_middle/update_anken_middle.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/create/page_7_2_4_create.dart';
 
-import '../../../api/sukejuuru_page_api/details_vs_pull_down_eigyo_anken/get_sales_construction_sales_preview_contents.dart';
-import '../../../api/sukejuuru_page_api/show_eigyo_anken/get_anken_detail.dart';
+import '../../../api/sukejuuru_page_api/eigyo_anken/details_vs_pull_down_eigyo_anken/get_sales_construction_sales_preview_contents.dart';
+import '../../../api/sukejuuru_page_api/eigyo_anken/show_eigyo_anken/get_anken_detail.dart';
 import '../../../components/custom_text_field.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/validator.dart';
@@ -699,6 +700,41 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                     },
                     child: const Text(
                       'キャンセル',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  width: 120,
+                  height: 37,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(26),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      DeleteEigyoAnken().deleteEigyoAnken(
+                          onSuccess: () {
+                            Navigator.pop(context);
+                            widget.onUpdateAnkenSuccessfull.call();
+                            CustomToast.show(context,
+                                message: "削除出来ました。", backGround: Colors.green);
+                          },
+                          onFailed: () {
+                            CustomToast.show(context, message: "削除出来ませんでした。");
+                          },
+                          TAN_EIG_ID: widget.TAN_EIG_ID);
+                    },
+                    child: const Text(
+                      '削除',
                       style: TextStyle(
                         decoration: TextDecoration.underline,
                         color: Colors.white,
