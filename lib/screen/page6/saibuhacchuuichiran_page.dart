@@ -27,6 +27,8 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
 
   List<dynamic> listIchiran = [];
 
+  List<dynamic> listIchiranThayDoi = [];
+
   String currentPullDownValue = 'カテゴリを選択';
 
   List<dynamic> listPullDown = [];
@@ -53,12 +55,9 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
   Future<dynamic> callGetPartOrderListIchiran() async {
     final dynamic result = await GetPartOrderListIchiran()
         .getPartOrderListIchiran(onSuccess: (data) {
-      // for (var element in data) {
-      //   element["status"] = false;
-      // }
-
       setState(() {
-        listIchiran.addAll(data);
+        listIchiran = data;
+        listIchiranThayDoi = listIchiran;
       });
     }, onFailed: () {
       CustomToast.show(context, message: "部材発注一覧リストを取得出来ませんでした。");
@@ -183,7 +182,7 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                   scrollDirection: Axis.horizontal,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: _buildRows(listIchiran.length + 1),
+                    children: _buildRows(listIchiranThayDoi.length + 1),
                   ),
                 ),
               ),
@@ -214,7 +213,7 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                             builder: (context) =>
                                 HachuushouninPheDuyetDonDatHang631Page(
                                     BUZAI_HACYU_ID:
-                                        listIchiran[currentRadioRow - 1]
+                                        listIchiranThayDoi[currentRadioRow - 1]
                                             ["BUZAI_HACYU_ID"]),
                           ),
                         );
@@ -318,10 +317,27 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
         return PopupMenuItem(
           onTap: () {
             setState(() {
+              // List<dynamic> tmp = [];
+              // tmp = listIchiranThayDoi.where((element) {
+              //   return element;
+              // }).toList();
+
               if (currentPullDownValue == item["KBNMSAI_NAME"]) {
                 currentPullDownValue = "カテゴリを選択";
               } else {
                 currentPullDownValue = item["KBNMSAI_NAME"];
+
+                // list = listBuzai
+                //     .where((element) => (element.HINBAN!.toUpperCase().contains(
+                //             hinbanController.text.toUpperCase().trim()) &&
+                //         element.MAKER_NAME!.toUpperCase().contains(
+                //             mekaController.text.toUpperCase().trim()) &&
+                //         element.SYOHIN_NAME!.contains(
+                //             shohinmeiController.text.toUpperCase().trim()) &&
+                //         element.BUNRUI!
+                //             .toUpperCase()
+                //             .contains(pullDownSelected.toUpperCase())))
+                //     .toList();
               }
             });
           },
@@ -576,31 +592,30 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
   Widget contentTable(int col, int row) {
     if (row != 0 && col != 0) {
       String value = '';
-      listIchiran;
 
       if (col == 1) {
-        value = listIchiran[row - 1]["BUZAI_HACYU_ID"] ?? '';
+        value = listIchiranThayDoi[row - 1]["BUZAI_HACYU_ID"] ?? '';
       }
       if (col == 2) {
-        value = listIchiran[row - 1]["KBNMSAI_NAME"] ?? '';
+        value = listIchiranThayDoi[row - 1]["KBNMSAI_NAME"] ?? '';
       }
       if (col == 3) {
-        if (listIchiran[row - 1]["HACYU_YMD"] == null) {
+        if (listIchiranThayDoi[row - 1]["HACYU_YMD"] == null) {
           value = '';
         } else {
-          DateTime time =
-              DateFormat("yyyy-MM-dd").parse(listIchiran[row - 1]["HACYU_YMD"]);
+          DateTime time = DateFormat("yyyy-MM-dd")
+              .parse(listIchiranThayDoi[row - 1]["HACYU_YMD"]);
           value = DateFormat('yyyy/MM/dd', 'ja').format(time).toString();
         }
       }
       if (col == 4) {
-        value = listIchiran[row - 1]["TANT_NAME"] ?? '';
+        value = listIchiranThayDoi[row - 1]["TANT_NAME"] ?? '';
       }
       if (col == 5) {
-        value = listIchiran[row - 1]["JISYA_CD"] ?? '';
+        value = listIchiranThayDoi[row - 1]["JISYA_CD"] ?? '';
       }
       if (col == 6) {
-        value = listIchiran[row - 1]["SYOHIN_NAME"] ?? '';
+        value = listIchiranThayDoi[row - 1]["SYOHIN_NAME"] ?? '';
       }
 
       return Text(

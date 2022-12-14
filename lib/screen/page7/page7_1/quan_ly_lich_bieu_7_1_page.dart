@@ -51,7 +51,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
   String value1nguoi = 'グループ';
   // DateTime date = DateTime.parse('2022-11-11');
-  DateTime date = DateTime.now();
+  DateTime currentDate = DateTime.now();
   ScrollController scrollControllerItem = ScrollController();
   ScrollController scrollController = ScrollController();
   ScrollController scrollController2 = ScrollController();
@@ -64,7 +64,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   void initState() {
     callGetListPhongBan(() {
       geAnkenCuaMotPhongBanFuture = callGetAnkenCuaMotPhongBan(
-          kojiGyoSyaCd: listPhongBan[0]["KOJIGYOSYA_CD"], date: date);
+          kojiGyoSyaCd: listPhongBan[0]["KOJIGYOSYA_CD"], date: currentDate);
     });
 
     scrollController2.addListener(() {
@@ -418,13 +418,13 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                           onPressed: () {
                             ShowHoliday().showHoliday(
                               TANT_CD: selectedNhanVienTantCD,
-                              date: date,
+                              date: currentDate,
                               onSuccess: ((body) {
                                 CustomDialog.showCustomDialog(
                                   context: context,
                                   title: '',
                                   body: PopupHienThi(
-                                    month: date.month.toString(),
+                                    month: currentDate.month.toString(),
                                     body: body,
                                   ),
                                 );
@@ -480,11 +480,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                                   maxTime: DateTime(2200, 6, 7),
                                   onChanged: (datePick) {},
                                   onConfirm: (newDate) {
-                                if (newDate != date) {
+                                if (newDate != currentDate) {
                                   setState(() {
-                                    date = newDate;
+                                    currentDate = newDate;
                                   });
-                                  // callGetListSukejuuru(date);
 
                                   int? index;
                                   if (value1nguoi == '個人') {
@@ -493,12 +492,12 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                                   }
                                   callGetAnkenCuaMotPhongBan(
                                     kojiGyoSyaCd: phongBanId,
-                                    date: date,
+                                    date: currentDate,
                                     currentEmployeeIndex: index,
                                   );
                                 }
                               },
-                                  currentTime: DateTime.now(),
+                                  currentTime: currentDate,
                                   locale: LocaleType.jp);
                             },
                             child: Row(
@@ -509,7 +508,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                                 const SizedBox(width: 3),
                                 Text(
                                   DateFormat('yyyy /MM / dd (E)', 'ja')
-                                      .format(date)
+                                      .format(currentDate)
                                       .toString(),
                                   style: const TextStyle(
                                     color: Color(0xFF77869E),
@@ -594,7 +593,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
           child: GestureDetector(
             onTap: () {
               setState(() {
-                date = date.add(const Duration(days: -7));
+                currentDate = currentDate.add(const Duration(days: -7));
                 // callGetListSukejuuru(date);
                 int? index;
                 if (value1nguoi == '個人') {
@@ -602,7 +601,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 }
                 callGetAnkenCuaMotPhongBan(
                   kojiGyoSyaCd: phongBanId,
-                  date: date,
+                  date: currentDate,
                   currentEmployeeIndex: index,
                 );
               });
@@ -651,7 +650,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
           child: GestureDetector(
             onTap: () {
               setState(() {
-                date = date.add(const Duration(days: 7));
+                currentDate = currentDate.add(const Duration(days: 7));
               });
 
               int? index;
@@ -660,7 +659,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               }
               callGetAnkenCuaMotPhongBan(
                 kojiGyoSyaCd: phongBanId,
-                date: date,
+                date: currentDate,
                 currentEmployeeIndex: index,
               );
             },
@@ -710,7 +709,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             int index = listPhongBan.indexOf(item);
             callGetAnkenCuaMotPhongBan(
                 kojiGyoSyaCd: listPhongBan[index]["KOJIGYOSYA_CD"],
-                date: date,
+                date: currentDate,
                 onsuccess: () {});
             setState(() {
               phongBanName = listPhongBan[index]["KOJIGYOSYA_NAME"];
@@ -859,7 +858,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   }
 
   List<String> _listDay() {
-    DateTime firstDayOfWeek = date.subtract(Duration(days: date.weekday - 1));
+    DateTime firstDayOfWeek =
+        currentDate.subtract(Duration(days: currentDate.weekday - 1));
     return List.generate(7, (index) => index).map((value) {
       return DateFormat(('yyyy-MM-dd')).format(
         firstDayOfWeek.add(Duration(days: value)),
@@ -876,7 +876,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   }
 
   List<String> listDayOfWeek() {
-    DateTime firstDayOfWeek = date.subtract(Duration(days: date.weekday - 1));
+    DateTime firstDayOfWeek =
+        currentDate.subtract(Duration(days: currentDate.weekday - 1));
     return List.generate(8, (index) => index).map((value) {
       if (value == 0) {
         return '';
@@ -1382,7 +1383,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
-                        date: date,
+                        date: currentDate,
                         currentEmployeeIndex: index,
                       );
                     },
@@ -1405,11 +1406,11 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
-                        date: date,
+                        date: currentDate,
                         currentEmployeeIndex: index,
                       );
                     },
-                    initialDate: date,
+                    initialDate: currentDate,
                     TANT_CD: tantCd ?? '',
                     isPhongBan: isPhongBanData,
                   ),
@@ -1438,7 +1439,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
-                        date: date,
+                        date: currentDate,
                         currentEmployeeIndex: index,
                       );
                     }),
@@ -1470,7 +1471,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
-                        date: date,
+                        date: currentDate,
                         currentEmployeeIndex: index,
                       );
                     },
@@ -1486,7 +1487,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   body: Page723EditShowAnken(
                     KBNMSAI_NAME: e["KBNMSAI_NAME"],
                     TAN_EIG_ID: TAN_EIG_ID ?? '',
-                    initialDate: date,
+                    initialDate: currentDate,
                     TANT_CD: tantCd ?? '',
                     isPhongBan: isPhongBanData,
                     onUpdateAnkenSuccessfull: () {
@@ -1496,7 +1497,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
-                        date: date,
+                        date: currentDate,
                         currentEmployeeIndex: index,
                       );
                     },
@@ -1526,7 +1527,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
-                        date: date,
+                        date: currentDate,
                         currentEmployeeIndex: index,
                       );
                     }),
@@ -1613,7 +1614,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     required bool isPhongBan,
   }) {
     DateTime newDate = DateFormat("yyyy-MM-dd")
-        .parse("${date.year}-${date.month}-$dateSelected");
+        .parse("${currentDate.year}-${currentDate.month}-$dateSelected");
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Row(
@@ -1634,7 +1635,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     }
                     callGetAnkenCuaMotPhongBan(
                       kojiGyoSyaCd: phongBanId,
-                      date: date,
+                      date: currentDate,
                       currentEmployeeIndex: index,
                     );
                   },
@@ -1665,7 +1666,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     }
                     callGetAnkenCuaMotPhongBan(
                       kojiGyoSyaCd: phongBanId,
-                      date: date,
+                      date: currentDate,
                       currentEmployeeIndex: index,
                     );
                   },
