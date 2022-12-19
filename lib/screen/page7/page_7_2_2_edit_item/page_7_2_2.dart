@@ -207,8 +207,8 @@ class _Page722State extends State<Page722> {
                   jinNumberEditPage = JININ;
                   jikanNumberEditPage = JIKAN;
                   commentEditPage = COMMENT;
-                  datetimeEditPage =
-                      DateFormat("yyyy-MM-dd hh:mm:ss").parse(UPD_YMD);
+                  datetimeEditPage = DateFormat("yyyy-MM-dd")
+                      .parse(data["DATA"][0]["KOJI_YMD"]);
                 });
               }
             });
