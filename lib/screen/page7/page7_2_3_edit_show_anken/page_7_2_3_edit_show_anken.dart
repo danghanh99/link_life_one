@@ -178,18 +178,22 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
 
           textEditingControllerJikan.text = tong.toString();
 ////////////////////////////////////////////////////
-          okyakuSamaCreateAnkenPage = response["EIGYO_ANKEN"][0]["GUEST_NAME"];
-          sankasha1CreateAnkenPage = response["EIGYO_ANKEN"][0]["ATTEND_NAME1"];
-          sankasha2CreateAnkenPage = response["EIGYO_ANKEN"][0]["ATTEND_NAME2"];
-          sankasha3CreateAnkenPage = response["EIGYO_ANKEN"][0]["ATTEND_NAME3"];
+          okyakuSamaCreateAnkenPage =
+              response["EIGYO_ANKEN"][0]["GUEST_NAME"] ?? '';
+          sankasha1CreateAnkenPage =
+              response["EIGYO_ANKEN"][0]["ATTEND_NAME1"] ?? '';
+          sankasha2CreateAnkenPage =
+              response["EIGYO_ANKEN"][0]["ATTEND_NAME2"] ?? '';
+          sankasha3CreateAnkenPage =
+              response["EIGYO_ANKEN"][0]["ATTEND_NAME3"] ?? '';
           textEditingControllerKhachHang.text =
-              response["EIGYO_ANKEN"][0]["GUEST_NAME"];
+              response["EIGYO_ANKEN"][0]["GUEST_NAME"] ?? '';
           textEditingControllerNguoiThamGia1.text =
-              response["EIGYO_ANKEN"][0]["ATTEND_NAME1"];
+              response["EIGYO_ANKEN"][0]["ATTEND_NAME1"] ?? '';
           textEditingControllerNguoiThamGia2.text =
-              response["EIGYO_ANKEN"][0]["ATTEND_NAME2"];
+              response["EIGYO_ANKEN"][0]["ATTEND_NAME2"] ?? '';
           textEditingControllerNguoiThamGia3.text =
-              response["EIGYO_ANKEN"][0]["ATTEND_NAME3"];
+              response["EIGYO_ANKEN"][0]["ATTEND_NAME3"] ?? '';
 
           checkAllDayCreateAnkenPage =
               response["EIGYO_ANKEN"][0]["ALL_DAY_FLG"] == "1" ? true : false;
