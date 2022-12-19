@@ -228,6 +228,7 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
             ),
             CustomTextField(
               isReadOnly: true,
+              showCursor: false,
               fillColor: const Color(0xFFA5A7A9),
               hint: 'テキストテキストテキスト',
               type: TextInputType.emailAddress,
