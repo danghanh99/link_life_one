@@ -59,25 +59,29 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
   }
 
   Future<void> callGetTirasi({DateTime? inputDate}) async {
-    await GetTirasi().getTirasi(
-      YMD: inputDate ?? date,
-      onSuccess: (data) {
-        List<dynamic> mtplist = data;
-        if (mtplist.isNotEmpty && data["TIRASI"] != null) {
-          if (data["TIRASI"][0] != null) {
-            if (data["TIRASI"][0]["KOJI_TIRASISU"] != null) {
-              setState(() {
-                tiraru = data["TIRASI"][0]["KOJI_TIRASISU"];
-                textEditingController.text = tiraru;
-              });
+    try {
+      await GetTirasi().getTirasi(
+        YMD: inputDate ?? date,
+        onSuccess: (data) {
+          if (data["TIRASI"] != null) {
+            List<dynamic> mtplist = data["TIRASI"];
+            if (data["TIRASI"][0] != null && mtplist.isNotEmpty) {
+              if (data["TIRASI"][0]["KOJI_TIRASISU"] != null) {
+                setState(() {
+                  tiraru = data["TIRASI"][0]["KOJI_TIRASISU"];
+                  textEditingController.text = tiraru;
+                });
+              }
             }
           }
-        }
-      },
-      onFailed: () {
-        CustomToast.show(context, message: "チラシ投函数を取得できません。");
-      },
-    );
+        },
+        onFailed: () {
+          CustomToast.show(context, message: "チラシ投函数を取得できません。");
+        },
+      );
+    } catch (e) {
+      CustomToast.show(context, message: "チラシを取得出来ませんでした。");
+    }
   }
 
   String formatJikan({required String? jikan}) {
@@ -526,62 +530,71 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
   }
 
   Widget leftNextButton(String text, int index) {
-    return Column(
-      children: [
-        Container(
-          width: 36,
-          height: 32,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(Assets.rectangle),
-              fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          date = date.add(Duration(days: -index));
+        });
+        callGetListKojiApi(inputDate: date);
+        callGetTirasi(inputDate: date);
+      },
+      child: Column(
+        children: [
+          Container(
+            width: 36,
+            height: 32,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(Assets.rectangle),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  date = date.add(Duration(days: -index));
+                });
+                callGetListKojiApi(inputDate: date);
+                callGetTirasi(inputDate: date);
+              },
+              child: index == 7
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          Assets.polygonLeft,
+                          width: 13,
+                          height: 13,
+                        ),
+                        Image.asset(
+                          Assets.polygonLeft,
+                          width: 13,
+                          height: 13,
+                        ),
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          Assets.polygonLeft,
+                          width: 13,
+                          height: 13,
+                        ),
+                      ],
+                    ),
             ),
           ),
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                date = date.add(Duration(days: -index));
-              });
-              callGetListKojiApi(inputDate: date);
-              callGetTirasi(inputDate: date);
-            },
-            child: index == 7
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        Assets.polygonLeft,
-                        width: 13,
-                        height: 13,
-                      ),
-                      Image.asset(
-                        Assets.polygonLeft,
-                        width: 13,
-                        height: 13,
-                      ),
-                    ],
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        Assets.polygonLeft,
-                        width: 13,
-                        height: 13,
-                      ),
-                    ],
-                  ),
-          ),
-        ),
-        Text(
-          text,
-          style: const TextStyle(
-            color: Color(0xFF042C5C),
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
-          ),
-        )
-      ],
+          Text(
+            text,
+            style: const TextStyle(
+              color: Color(0xFF042C5C),
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -602,59 +615,68 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
   }
 
   Widget rightNextButton(String text, int index) {
-    return Column(
-      children: [
-        Container(
-          width: 36,
-          height: 32,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(Assets.rectangle),
-              fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          date = date.add(Duration(days: index));
+        });
+        callGetListKojiApi(inputDate: date);
+        callGetTirasi(inputDate: date);
+      },
+      child: Column(
+        children: [
+          Container(
+            width: 36,
+            height: 32,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(Assets.rectangle),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  date = date.add(Duration(days: index));
+                });
+                callGetListKojiApi(inputDate: date);
+                callGetTirasi(inputDate: date);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: index == 7
+                    ? [
+                        Image.asset(
+                          Assets.polygonRight,
+                          width: 13,
+                          height: 13,
+                        ),
+                        Image.asset(
+                          Assets.polygonRight,
+                          width: 13,
+                          height: 13,
+                        ),
+                      ]
+                    : [
+                        Image.asset(
+                          Assets.polygonRight,
+                          width: 13,
+                          height: 13,
+                        ),
+                      ],
+              ),
             ),
           ),
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                date = date.add(Duration(days: index));
-              });
-              callGetListKojiApi(inputDate: date);
-              callGetTirasi(inputDate: date);
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: index == 7
-                  ? [
-                      Image.asset(
-                        Assets.polygonRight,
-                        width: 13,
-                        height: 13,
-                      ),
-                      Image.asset(
-                        Assets.polygonRight,
-                        width: 13,
-                        height: 13,
-                      ),
-                    ]
-                  : [
-                      Image.asset(
-                        Assets.polygonRight,
-                        width: 13,
-                        height: 13,
-                      ),
-                    ],
+          Text(
+            text,
+            style: const TextStyle(
+              color: Color(0xFF042C5C),
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
             ),
-          ),
-        ),
-        Text(
-          text,
-          style: const TextStyle(
-            color: Color(0xFF042C5C),
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 
