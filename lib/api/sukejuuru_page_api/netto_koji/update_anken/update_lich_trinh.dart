@@ -39,8 +39,7 @@ class UpdateLichTrinh {
           "HOMONJIKAN": JIKAN_START, // kara
           "HOMONJIKAN_END": JIKAN_END, // made
           "JININ": JININ,
-          "KANSAN_POINT":
-              KANSAN_POINT == "1" || KANSAN_POINT == "01" ? "1" : "0", // k biet
+          "KANSAN_POINT": KANSAN_POINT == "" ? "0" : KANSAN_POINT, // k biet
           "ALL_DAY_FLG": ALL_DAY_FLG, // check all day
           "MEMO": MEMO,
           "HOMON_SBT": HOMON_SBT,
