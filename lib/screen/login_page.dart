@@ -85,21 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: GestureDetector(
                             onTap: () {
                               if (_formKey.currentState?.validate() == true) {
-                                LoginApi().login(
-                                    id: emailController.text,
-                                    password: passwordController.text,
-                                    onSuccess: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => MenuPage(),
-                                        ),
-                                      );
-                                    },
-                                    onFailed: () {
-                                      CustomToast.show(context,
-                                          message: "担当者コードまたはパスワードが正しくありません");
-                                    });
+                                onTapLoginButton();
                               }
                             },
                             child: SizedBox(
@@ -109,23 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                                 onClick: () {
                                   if (_formKey.currentState?.validate() ==
                                       true) {
-                                    LoginApi().login(
-                                        id: emailController.text,
-                                        password: passwordController.text,
-                                        onSuccess: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const MenuPage(),
-                                            ),
-                                          );
-                                        },
-                                        onFailed: () {
-                                          CustomToast.show(context,
-                                              message:
-                                                  "担当者コードまたはパスワードが正しくありません");
-                                        });
+                                    onTapLoginButton();
                                   }
                                 },
                                 name: 'ログイン',
@@ -145,11 +115,28 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  void onTapLoginButton() {
+    LoginApi().login(
+        id: emailController.text,
+        password: passwordController.text,
+        onSuccess: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MenuPage(),
+            ),
+          );
+        },
+        onFailed: () {
+          CustomToast.show(context, message: "担当者コードまたはパスワードが正しくありません");
+        });
+  }
+
   String? _validateEmail(String? input) {
     if (Validator.onlyNumber(input!)) {
       return null;
     } else {
-      return '~が存在しません。正しいコードを入九してください。';
+      return '担当者コードは必須入力です';
     }
   }
 
@@ -157,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
     if (Validator.password(input!)) {
       return null;
     } else {
-      return 'パスワードが正しくありません。';
+      return 'パスワードは必須入力です';
     }
   }
 }
