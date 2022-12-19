@@ -12,14 +12,14 @@ class LoginApi {
       {required String id,
       required String password,
       required Function onSuccess,
-      required onFailed}) async {
+      required Function(String) onFailed}) async {
     String url = "${Constant.url}Request/Login/requestLogin.php";
     final response = await http.post(Uri.parse(url),
-        body: {'LOGIN_ID': '00000', 'PASSWORD': '123456'});
-    // body: {'LOGIN_ID': id, 'PASSWORD': password});
+        // body: {'LOGIN_ID': '00000', 'PASSWORD': '123456'});
+        body: {'LOGIN_ID': id, 'PASSWORD': password});
 
     if (response.body == "{\"error_message\":Unauthorized}[]") {
-      onFailed.call();
+      onFailed.call("担当者コードまたはパスワードが正しくありません");
     } else {
       if (response.statusCode == 200) {
         openBox((box, userBox) {
@@ -56,7 +56,9 @@ class LoginApi {
           onSuccess.call();
         });
       } else {
-        onFailed.call();
+        String eee =
+            jsonDecode(response.body)["msg"][0] ?? "担当者コードまたはパスワードが正しくありません";
+        onFailed.call(eee);
       }
     }
   }

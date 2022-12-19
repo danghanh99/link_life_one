@@ -1,9 +1,11 @@
+import 'package:hive_flutter/adapters.dart';
 import "package:http/http.dart" as http;
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
 
 import '../../../../constants/constant.dart';
+import '../../../../models/user.dart';
 
 class UpdateLichTrinh {
   UpdateLichTrinh() : super();
@@ -25,6 +27,8 @@ class UpdateLichTrinh {
     required Function() onSuccess,
     required Function() onFailed,
   }) async {
+    final box = Hive.box<User>('userBox');
+    final User user = box.values.last;
     final response = await http.post(
         Uri.parse(
             "${Constant.url}Request/Schedule/requestNetConstructionNetPreviewContentsUpdate.php"),
@@ -33,15 +37,17 @@ class UpdateLichTrinh {
           "TAG_KBN": TAG_KBN,
           "KBN": KBN, // appoint check
           "HOMONJIKAN": JIKAN_START, // kara
-          "JIKAN_END": JIKAN_END, // made
+          "HOMONJIKAN_END": JIKAN_END, // made
           "JININ": JININ,
-          "KANSAN_POINT": KANSAN_POINT, // k biet
+          "KANSAN_POINT":
+              KANSAN_POINT == "1" || KANSAN_POINT == "01" ? "1" : "0", // k biet
           "ALL_DAY_FLG": ALL_DAY_FLG, // check all day
           "MEMO": MEMO,
           "HOMON_SBT": HOMON_SBT,
           // "KBN_CD": KBN_CD,
           "KBNMSAI_CD": KBNMSAI_CD,
           "JIKAN": JIKAN,
+          "LOGIN_ID": user.TANT_CD,
         });
 
     if (response.statusCode == 200) {

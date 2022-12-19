@@ -127,8 +127,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
           );
         },
-        onFailed: () {
-          CustomToast.show(context, message: "担当者コードまたはパスワードが正しくありません");
+        onFailed: (message) {
+          CustomToast.show(context, message: message);
         });
   }
 
