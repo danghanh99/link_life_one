@@ -63,16 +63,21 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
       await GetTirasi().getTirasi(
         YMD: inputDate ?? date,
         onSuccess: (data) {
-          if (data["TIRASI"] != null) {
-            List<dynamic> mtplist = data["TIRASI"];
-            if (data["TIRASI"][0] != null && mtplist.isNotEmpty) {
-              if (data["TIRASI"][0]["KOJI_TIRASISU"] != null) {
+          List<dynamic> mtplist = data;
+          if (mtplist.isNotEmpty) {
+            if (mtplist[0] != null) {
+              if (mtplist[0]["KOJI_TIRASISU"] != null) {
                 setState(() {
-                  tiraru = data["TIRASI"][0]["KOJI_TIRASISU"];
+                  tiraru = mtplist[0]["KOJI_TIRASISU"];
                   textEditingController.text = tiraru;
                 });
               }
             }
+          } else {
+            setState(() {
+              tiraru = '';
+              textEditingController.text = tiraru;
+            });
           }
         },
         onFailed: () {
