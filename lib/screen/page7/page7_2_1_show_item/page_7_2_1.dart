@@ -99,7 +99,8 @@ class _Page721State extends State<Page721> {
         onSuccess: (data) {
           print(data);
           setState(() {
-            time = DateFormat("yyyy-MM-dd").parse(data[0]["KOJI_YMD"]);
+            String YMD_api = data[0]["KOJI_YMD"] ?? data[0]["SITAMI_YMD"];
+            time = DateFormat("yyyy-MM-dd").parse(YMD_api);
 
             if (data[0]["JININ"] != null) JININ = data[0]["JININ"];
             if (data[0]["JIKAN"] != null) JIKAN = data[0]["JIKAN"];

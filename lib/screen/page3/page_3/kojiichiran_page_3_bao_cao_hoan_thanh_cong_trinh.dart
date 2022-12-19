@@ -214,7 +214,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                                     builder: (context) {
                                       return CupertinoAlertDialog(
                                         title: const Text(
-                                          "この工事を設置不可で登録を行います。\n(元に戻せません)",
+                                          "同一のお客様がいます完了確認書を1枚にまとめますか？",
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 16,
@@ -224,7 +224,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                                         content: const Padding(
                                           padding: EdgeInsets.only(top: 15),
                                           child: Text(
-                                            "操作は必ず本部へ電話報告後に行ってください。\nまたサイボウズの設置不可アプリ登録は必ず行ってください。",
+                                            "いいえの場合、それぞれの完了書にサインをもらってください。",
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 16,

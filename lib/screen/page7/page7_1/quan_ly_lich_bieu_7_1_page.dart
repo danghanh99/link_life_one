@@ -1378,6 +1378,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         type == "ネット下見" ||
         type == "法人工事" ||
         type == "法人下見" ||
+        type == "日予実" ||
         type == "工事打診" ||
         type == "下見打診") {
       return 'lichtrinh';
@@ -1496,7 +1497,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               {}
           }
         } else {
-          String type = getTypeItemLichTrinh(e["KBNMSAI_NAME"]);
+          String type = getTypeItemLichTrinh(e["KBNMSAI_NAME"] ?? '');
 
           switch (type) {
             case ("lichtrinh"):
@@ -1581,7 +1582,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               break;
 
             default:
-              {}
+              {
+                CustomToast.show(context, message: "KBNMSAI_NAMETを取得出来ませんでした。");
+              }
           }
         }
       },

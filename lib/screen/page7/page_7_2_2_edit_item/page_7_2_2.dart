@@ -137,8 +137,6 @@ class _Page722State extends State<Page722> {
             JYUCYU_ID: widget.JYUCYU_ID,
             HOMON_SBT: widget.HOMON_SBT,
             onSuccess: (data) {
-              print(data);
-
               if (data["PULLDOWN"] != null) {
                 setState(() {
                   listPullDownEditPage = data["PULLDOWN"];
