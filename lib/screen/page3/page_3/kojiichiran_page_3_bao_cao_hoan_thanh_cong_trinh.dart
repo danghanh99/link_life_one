@@ -467,7 +467,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                         ),
                         !isValid
                             ? Text(
-                                "Only number",
+                                '整数のみ',
                                 style: TextStyle(
                                     color: Colors.red, fontSize: 12.sp),
                               )

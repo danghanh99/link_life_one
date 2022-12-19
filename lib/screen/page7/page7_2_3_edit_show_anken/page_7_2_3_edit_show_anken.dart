@@ -313,7 +313,7 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                                       : const Padding(
                                           padding: EdgeInsets.only(top: 5),
                                           child: Text(
-                                            "Invalid",
+                                            "未選択",
                                             style: TextStyle(color: Colors.red),
                                           ),
                                         ),
@@ -372,7 +372,7 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                                   : const Padding(
                                       padding: EdgeInsets.only(top: 5),
                                       child: Text(
-                                        "Invalid",
+                                        "未選択",
                                         style: TextStyle(color: Colors.red),
                                       ),
                                     ),
@@ -974,7 +974,7 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
     if (Validator.onlyNumber(input!)) {
       return null;
     } else {
-      return 'Only number';
+      return '整数のみ';
     }
   }
 
@@ -982,7 +982,7 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
     if (Validator.onlyNumber(input!)) {
       return null;
     } else {
-      return 'Only number';
+      return '整数のみ';
     }
   }
 }
