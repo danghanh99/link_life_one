@@ -588,22 +588,113 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   }
 
   Widget leftNextButton(String text) {
-    return Column(
-      children: [
-        Container(
-          width: 36,
-          height: 32,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(Assets.rectangle),
-              fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          currentDate = currentDate.add(const Duration(days: -7));
+          // callGetListSukejuuru(date);
+          int? index;
+          if (value1nguoi == '個人') {
+            index = sukejuuruAllUser.indexOf(sukejuuruSelectedUser);
+          }
+          callGetAnkenCuaMotPhongBan(
+            kojiGyoSyaCd: phongBanId,
+            date: currentDate,
+            currentEmployeeIndex: index,
+          );
+        });
+      },
+      child: Column(
+        children: [
+          Container(
+            width: 36,
+            height: 32,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(Assets.rectangle),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  currentDate = currentDate.add(const Duration(days: -7));
+                  // callGetListSukejuuru(date);
+                  int? index;
+                  if (value1nguoi == '個人') {
+                    index = sukejuuruAllUser.indexOf(sukejuuruSelectedUser);
+                  }
+                  callGetAnkenCuaMotPhongBan(
+                    kojiGyoSyaCd: phongBanId,
+                    date: currentDate,
+                    currentEmployeeIndex: index,
+                  );
+                });
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    Assets.polygonLeft,
+                    width: 13,
+                    height: 13,
+                  ),
+                  Image.asset(
+                    Assets.polygonLeft,
+                    width: 13,
+                    height: 13,
+                  ),
+                ],
+              ),
             ),
           ),
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                currentDate = currentDate.add(const Duration(days: -7));
-                // callGetListSukejuuru(date);
+          Text(
+            text,
+            style: const TextStyle(
+              color: Color(0xFF042C5C),
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget rightNextButton(String text) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          currentDate = currentDate.add(const Duration(days: 7));
+        });
+
+        int? index;
+        if (value1nguoi == '個人') {
+          index = sukejuuruAllUser.indexOf(sukejuuruSelectedUser);
+        }
+        callGetAnkenCuaMotPhongBan(
+          kojiGyoSyaCd: phongBanId,
+          date: currentDate,
+          currentEmployeeIndex: index,
+        );
+      },
+      child: Column(
+        children: [
+          Container(
+            width: 36,
+            height: 32,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(Assets.rectangle),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  currentDate = currentDate.add(const Duration(days: 7));
+                });
+
                 int? index;
                 if (value1nguoi == '個人') {
                   index = sukejuuruAllUser.indexOf(sukejuuruSelectedUser);
@@ -613,91 +704,34 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   date: currentDate,
                   currentEmployeeIndex: index,
                 );
-              });
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  Assets.polygonLeft,
-                  width: 13,
-                  height: 13,
-                ),
-                Image.asset(
-                  Assets.polygonLeft,
-                  width: 13,
-                  height: 13,
-                ),
-              ],
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    Assets.polygonRight,
+                    width: 13,
+                    height: 13,
+                  ),
+                  Image.asset(
+                    Assets.polygonRight,
+                    width: 13,
+                    height: 13,
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        Text(
-          text,
-          style: const TextStyle(
-            color: Color(0xFF042C5C),
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget rightNextButton(String text) {
-    return Column(
-      children: [
-        Container(
-          width: 36,
-          height: 32,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(Assets.rectangle),
-              fit: BoxFit.cover,
+          Text(
+            text,
+            style: const TextStyle(
+              color: Color(0xFF042C5C),
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
             ),
-          ),
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                currentDate = currentDate.add(const Duration(days: 7));
-              });
-
-              int? index;
-              if (value1nguoi == '個人') {
-                index = sukejuuruAllUser.indexOf(sukejuuruSelectedUser);
-              }
-              callGetAnkenCuaMotPhongBan(
-                kojiGyoSyaCd: phongBanId,
-                date: currentDate,
-                currentEmployeeIndex: index,
-              );
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  Assets.polygonRight,
-                  width: 13,
-                  height: 13,
-                ),
-                Image.asset(
-                  Assets.polygonRight,
-                  width: 13,
-                  height: 13,
-                ),
-              ],
-            ),
-          ),
-        ),
-        Text(
-          text,
-          style: const TextStyle(
-            color: Color(0xFF042C5C),
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 
