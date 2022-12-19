@@ -215,9 +215,18 @@ class _Page724CreateState extends State<Page724Create> {
                                   checkColor: Colors.white,
                                   value: checkedValue,
                                   onChanged: (newValue) {
-                                    setState(() {
-                                      checkedValue = newValue ?? true;
-                                    });
+                                    if (newValue == true) {
+                                      setState(() {
+                                        checkedValue = true;
+
+                                        kara = "08:00";
+                                        made = "19:00";
+                                      });
+                                    } else {
+                                      setState(() {
+                                        checkedValue = newValue ?? checkedValue;
+                                      });
+                                    }
                                   },
                                 ),
                                 const Text(
@@ -440,6 +449,7 @@ class _Page724CreateState extends State<Page724Create> {
 
   Widget _moreButton2(BuildContext context) {
     return PopupMenuButton<int>(
+      enabled: !checkedValue,
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {},
@@ -509,6 +519,7 @@ class _Page724CreateState extends State<Page724Create> {
 
   Widget _moreButton3(BuildContext context) {
     return PopupMenuButton<int>(
+      enabled: !checkedValue,
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {},

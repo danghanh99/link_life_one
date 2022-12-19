@@ -393,9 +393,19 @@ class _Page722State extends State<Page722> {
                                 checkColor: Colors.white,
                                 value: checkAllDayEditPage,
                                 onChanged: (newValue) {
-                                  setState(() {
-                                    checkAllDayEditPage = newValue ?? true;
-                                  });
+                                  if (newValue == true) {
+                                    setState(() {
+                                      checkAllDayEditPage = true;
+
+                                      jikanKaraEditPage = "08:00";
+                                      jikanMadeEditPage = "19:00";
+                                    });
+                                  } else {
+                                    setState(() {
+                                      checkAllDayEditPage =
+                                          newValue ?? checkAllDayEditPage;
+                                    });
+                                  }
                                 },
                               ),
                               const Text(
@@ -758,6 +768,7 @@ class _Page722State extends State<Page722> {
 
   Widget _moreButton2(BuildContext context) {
     return PopupMenuButton<int>(
+      enabled: !checkAllDayEditPage,
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {},
@@ -828,6 +839,7 @@ class _Page722State extends State<Page722> {
 
   Widget _moreButton3(BuildContext context) {
     return PopupMenuButton<int>(
+      enabled: !checkAllDayEditPage,
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {},

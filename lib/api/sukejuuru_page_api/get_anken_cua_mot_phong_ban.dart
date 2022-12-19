@@ -19,7 +19,7 @@ class GetAnkenCuaMotPhongBan {
     } else {
       final response = await http.get(
         Uri.parse(
-            "${Constant.url}Request/Schedule/requestDefault.php?KOJIGYOSYA_CD=${kojiGyoSyaCd}&YMD=${kojiGyoSyaCd}&YMD=${DateFormat(('yyyy-MM-dd')).format(dateTime)}"),
+            "${Constant.url}Request/Schedule/requestDefault.php?KOJIGYOSYA_CD=${kojiGyoSyaCd}&YMD=${DateFormat(('yyyy-MM-dd')).format(dateTime)}"),
       );
 
       if (response.statusCode == 200) {

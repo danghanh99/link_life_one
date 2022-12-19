@@ -256,10 +256,20 @@ class _Page723State extends State<Page723> {
                                     checkColor: Colors.white,
                                     value: checkAllDayCreateAnkenPage,
                                     onChanged: (newValue) {
-                                      setState(() {
-                                        checkAllDayCreateAnkenPage =
-                                            newValue ?? true;
-                                      });
+                                      if (newValue == true) {
+                                        setState(() {
+                                          checkAllDayCreateAnkenPage = true;
+
+                                          jikanKaraCreateAnkenPage = "08:00";
+                                          jikanMadeCreateAnkenPage = "19:00";
+                                        });
+                                      } else {
+                                        setState(() {
+                                          checkAllDayCreateAnkenPage =
+                                              newValue ??
+                                                  checkAllDayCreateAnkenPage;
+                                        });
+                                      }
                                     },
                                   ),
                                   const Text(
@@ -714,6 +724,7 @@ class _Page723State extends State<Page723> {
 
   Widget _moreButton2(BuildContext context) {
     return PopupMenuButton<int>(
+      enabled: !checkAllDayCreateAnkenPage,
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {},
@@ -784,6 +795,7 @@ class _Page723State extends State<Page723> {
 
   Widget _moreButton3(BuildContext context) {
     return PopupMenuButton<int>(
+      enabled: !checkAllDayCreateAnkenPage,
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {},
