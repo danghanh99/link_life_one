@@ -527,6 +527,15 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     const SizedBox(
                       height: 10,
                     ),
+                    SingleChildScrollView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: scrollController,
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: _buildLastRows2(1),
+                      ),
+                    ),
                     Expanded(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
@@ -899,23 +908,24 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       int count, int row, ScrollController scrollController2) {
     return List.generate(count, (col) {
       if (row == 0) {
-        return Container(
-          decoration: BoxDecoration(
-            border: Border.all(width: 0.5),
-            color: const Color(0xFFA5A7A9),
-          ),
-          alignment: Alignment.center,
-          width: colWidth()[col],
-          height: 30,
-          child: Text(
-            listDayOfWeek()[col],
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        );
+        return Container();
+        // return Container(
+        //   decoration: BoxDecoration(
+        //     border: Border.all(width: 0.5),
+        //     color: const Color(0xFFA5A7A9),
+        //   ),
+        //   alignment: Alignment.center,
+        //   width: colWidth()[col],
+        //   height: 30,
+        //   child: Text(
+        //     listDayOfWeek()[col],
+        //     style: const TextStyle(
+        //       color: Colors.black,
+        //       fontSize: 15,
+        //       fontWeight: FontWeight.w700,
+        //     ),
+        //   ),
+        // );
       }
 
       if (row != 0) {
