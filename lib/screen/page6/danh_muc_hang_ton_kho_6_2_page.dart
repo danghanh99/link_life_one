@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:link_life_one/api/inventory/QR_api.dart';
 import 'package:link_life_one/api/inventory/create_or_edit_api.dart';
 import 'package:link_life_one/api/inventory/get_inventories_api.dart';
 import 'package:link_life_one/components/toast.dart';
@@ -190,23 +191,43 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
             const SizedBox(
               height: 25,
             ),
-            SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Flexible(
+            listInventory.isNotEmpty
+                ? Expanded(
                     child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Column(
+                      scrollDirection: Axis.vertical,
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: _buildRows(listInventory.length + 1),
+                        children: <Widget>[
+                          Flexible(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: _buildRows(listInventory.length + 1),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   )
-                ],
-              ),
-            ),
+                : SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Flexible(
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: _buildRows(listInventory.length + 1),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
             const SizedBox(
               height: 10,
             ),
@@ -279,7 +300,13 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DanhSachCacBoPhan513Page(),
+                          builder: (context) => DanhSachCacBoPhan513Page(
+                            back: (List<Inventory> a) {
+                              setState(() {
+                                listInventory.addAll(a);
+                              });
+                            },
+                          ),
                         ),
                       );
                     },
@@ -335,6 +362,13 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
                                   result = scanData;
                                   isShowScandQR = false;
                                 });
+                                QRApi().getQRApi(onSuccess: (api) {
+                                  setState(() {
+                                    listInventory.add(api);
+                                  });
+                                }, onFailed: () {
+                                  CustomToast.show(context, message: 'エーラ');
+                                });
                               });
                             },
                           ),
@@ -366,6 +400,12 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
                           message: '登録できませんでした。。',
                         );
                       });
+                  setState(() {
+                    listInventory = listInventory.map((e) {
+                      e.STATUS = false;
+                      return e;
+                    }).toList();
+                  });
                 },
                 child: const Text(
                   '棚卸確定',
@@ -466,20 +506,22 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
     if (col == 6) {
       return Text(listInventory.isEmpty
           ? ''
-          : listInventory[row - 1].sengetsuJitsuZaiko!);
+          : (listInventory[row - 1].sengetsuJitsuZaiko ?? '0'));
     }
     if (col == 7) {
-      return Text(
-          listInventory.isEmpty ? '' : listInventory[row - 1].shukkoSuuryou!);
+      return Text(listInventory.isEmpty
+          ? ''
+          : (listInventory[row - 1].shukkoSuuryou ?? ''));
     }
     if (col == 8) {
-      return Text(
-          listInventory.isEmpty ? '' : listInventory[row - 1].hacchuuSuuryou!);
+      return Text(listInventory.isEmpty
+          ? ''
+          : (listInventory[row - 1].hacchuuSuuryou ?? ''));
     }
     if (col == 9) {
       return Text(listInventory.isEmpty
           ? ''
-          : listInventory[row - 1].tanka!.toString());
+          : (listInventory[row - 1].tanka ?? '').toString());
     }
     if (col == 10) {
       return Row(
@@ -512,8 +554,8 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
     if (col == 11) {
       return Text(listInventory.isEmpty
           ? ''
-          : (listInventory[row - 1].tanka! *
-                  listInventory[row - 1].tougetsuJitsuZaiko!)
+          : (listInventory[row - 1].tanka ??
+                  1 * (listInventory[row - 1].tougetsuJitsuZaiko ?? 0))
               .toString());
     }
 

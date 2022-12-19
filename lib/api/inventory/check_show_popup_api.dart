@@ -1,31 +1,26 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import "package:http/http.dart" as http;
-import 'package:link_life_one/models/buzai.dart';
 import 'dart:convert';
 import '../../constants/constant.dart';
 import '../../models/user.dart';
 
-class GetBuzaiApi {
-  GetBuzaiApi() : super();
+class CheckShowPopupApi {
+  CheckShowPopupApi() : super();
 
-  Future<void> getBuzai({
-    required Function(List<Buzai> list) onSuccess,
+  Future<void> checkShowPopup({
+    required Function(bool tt) onSuccess,
     required Function onFailed,
   }) async {
     final box = Hive.box<User>('userBox');
     final User user = box.values.last;
-    String SYOZOKU_CD = user.SYOZOKU_CD;
     dynamic response = await http.get(
       Uri.parse(
-          "${Constant.url}Request/Order/requestGetInventoryListMaterialListSearch.php?BUZAI_BUNRUI=&MAKER_NAME=&HINBAN&SYOHIN_NAME&SYOZOKU_CD=$SYOZOKU_CD"),
+          "${Constant.url}Request/Order/requestCheckInventorySaved.php?LOGIN_ID=${user.TANT_CD}"),
     );
 
     if (response.statusCode == 200) {
       final List<dynamic> body = jsonDecode(response.body);
-      final List<Buzai> list = body.map((e) {
-        return Buzai.fromJson(e);
-      }).toList();
-      onSuccess.call(list);
+      onSuccess.call(body.isEmpty);
     } else {
       onFailed.call();
     }

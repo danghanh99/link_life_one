@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:link_life_one/api/inventory/check_show_popup_api.dart';
 import 'package:link_life_one/screen/page6/saibuhacchuuichiran_page.dart';
 
 import '../../../shared/custom_button.dart';
@@ -152,68 +153,82 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
         break;
 
       case ('棚卸'):
-        showDialog(
-          context: context,
-          builder: (context) {
-            return SizedBox(
-              width: double.infinity,
-              child: CupertinoAlertDialog(
-                content: const Padding(
-                  padding: EdgeInsets.only(top: 15),
-                  child: Text(
-                    "前回編集途中のリストがあります。",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                    ),
+        CheckShowPopupApi().checkShowPopup(
+            onSuccess: (tt) {
+              if (tt) {
+                MaterialPageRoute(
+                  builder: (context) => const DanhMucHangTonKho62Page(
+                    isContinue: false,
                   ),
-                ),
-                actions: <Widget>[
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const DanhMucHangTonKho62Page(
-                              isContinue: true,
+                );
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: CupertinoAlertDialog(
+                        content: const Padding(
+                          padding: EdgeInsets.only(top: 15),
+                          child: Text(
+                            "前回編集途中のリストがあります。",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                        );
-                      },
-                      child: const Text(
-                        '続きから編集する',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
                         ),
-                      )),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context); //close Dialog
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const DanhMucHangTonKho62Page(
-                            isContinue: false,
-                          ),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      '破壊して新規リスト作成',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                        actions: <Widget>[
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const DanhMucHangTonKho62Page(
+                                      isContinue: true,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                '続きから編集する',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context); //close Dialog
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const DanhMucHangTonKho62Page(
+                                    isContinue: false,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              '破壊して新規リスト作成',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                  )
-                ],
-              ),
-            );
-          },
-        );
+                    );
+                  },
+                );
+              }
+            },
+            onFailed: () {});
 
         break;
 

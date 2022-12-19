@@ -3,16 +3,18 @@ import 'package:link_life_one/api/inventory/get_buzai_api.dart';
 import 'package:link_life_one/api/inventory/get_pulldown_api.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/models/buzai.dart';
-import 'package:link_life_one/screen/page5/page_5_3_danh_sach_nhan_lai_vat_lieu.dart';
 import '../../../components/custom_text_field.dart';
 import '../../../components/login_widget.dart';
 import '../../../components/text_line_down.dart';
+import '../../../models/inventory.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/custom_button.dart';
 import '../../menu_page/menu_page.dart';
 
 class DanhSachCacBoPhan513Page extends StatefulWidget {
+  final Function(List<Inventory>) back;
   const DanhSachCacBoPhan513Page({
+    required this.back,
     Key? key,
   }) : super(key: key);
 
@@ -165,7 +167,7 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
                                     shohinmeiController.text
                                         .toUpperCase()
                                         .trim()) &&
-                                element.BUNRUI!
+                                element.BUZAI_BUNRUI!
                                     .toUpperCase()
                                     .contains(pullDownSelected.toUpperCase())))
                             .toList();
@@ -183,7 +185,6 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
                                         .toUpperCase()
                                         .trim())))
                             .toList();
-                        ;
                       }
 
                       setState(() {
@@ -229,13 +230,15 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
             const SizedBox(
               height: 10,
             ),
-            SingleChildScrollView(
-              scrollDirection: Axis.vertical,
+            Expanded(
               child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _buildRows(tmp.length + 1),
+                scrollDirection: Axis.vertical,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: _buildRows(tmp.length + 1),
+                  ),
                 ),
               ),
             ),
@@ -256,8 +259,18 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      // var x = listBuzai.where((element) => element.STATUS == true).toList();
-                      // Navigator.pop(context);
+                      var x = listBuzai
+                          .where((element) => element.STATUS == true)
+                          .toList();
+                      widget.back.call(x
+                          .map((e) => (Inventory(
+                              bunrui: e.BUZAI_BUNRUI,
+                              buzaiKanriGoban: e.BUZAI_KANRI_NO,
+                              meekaa: e.MAKER_NAME,
+                              hinban: e.HINBAN,
+                              shohinmei: e.SYOHIN_NAME)))
+                          .toList());
+                      Navigator.pop(context);
                     },
                     child: const Text(
                       '追加',
@@ -478,13 +491,13 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
   Widget contentTable(int col, int row) {
     if (col == 1) {
       return Text(
-        tmp.isNotEmpty ? tmp[row - 1].BUZAI_HACYUMSAI_ID.toString() : '',
+        tmp.isNotEmpty ? tmp[row - 1].BUZAI_KANRI_NO.toString() : '',
         style: const TextStyle(color: Colors.black),
       );
     }
     if (col == 2) {
       return Text(
-        tmp.isNotEmpty ? tmp[row - 1].BUNRUI.toString() : '',
+        tmp.isNotEmpty ? tmp[row - 1].BUZAI_BUNRUI.toString() : '',
         style: const TextStyle(color: Colors.black),
       );
     }

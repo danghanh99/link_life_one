@@ -20,12 +20,12 @@ class GetInventoriesApi {
     if (isContinue) {
       response = await http.get(
         Uri.parse(
-            "${Constant.url}Request/Order/requestGetInventoryListForEdit.php?SYOZOKU_CD=$SYOZOKU_CD"),
+            "${Constant.url}Request/Order/requestGetInventoryListWithSaved.php?SYOZOKU_CD=${user.SYOZOKU_CD}&LOGIN_ID=${user.TANT_CD}"),
       );
     } else {
       response = await http.get(
         Uri.parse(
-            "${Constant.url}Request/Order/requestGetInventoryListForCreate.php?SYOZOKU_CD=$SYOZOKU_CD"),
+            "${Constant.url}Request/Order/requesGetInventoryListWithoutSaved.php?SYOZOKU_CD=${user.SYOZOKU_CD}"),
       );
     }
 

@@ -16,11 +16,14 @@ class CreateOrEditApi {
     final User user = box.values.last;
     dynamic response = await http.post(
         Uri.parse(
-            "${Constant.url}Request/Order/requestPostInventoryListForCreateOrEdit.php"),
+            "${Constant.url}Request/Order/requesPostInventoryListWithSaved.php"),
         body: {
-          'LOGIN_ID': user.TANT_CD,
+          'USER_INFO': {
+            'LOGIN_ID': user.TANT_CD,
+            'SYOZOKU_CD': user.SYOZOKU_CD
+          },
           'INVENTORY_DETAIL': INVENTORY_DETAIL.toString()
-        });
+        }.toString());
 
     if (response.statusCode == 200) {
       onSuccess.call();
