@@ -2,55 +2,40 @@ import 'package:check_points/check_point.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/eigyo_anken/create_eigyo_anken_api/create_eigyo_anken.dart';
-import 'package:link_life_one/api/sukejuuru_page_api/eigyo_anken/delete_eigyo_anken.dart';
-import 'package:link_life_one/api/sukejuuru_page_api/eigyo_anken/update_anken_middle/update_anken_middle.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/create/page_7_2_4_create.dart';
 
-import '../../../api/sukejuuru_page_api/eigyo_anken/details_vs_pull_down_eigyo_anken/get_sales_construction_sales_preview_contents.dart';
-import '../../../api/sukejuuru_page_api/eigyo_anken/show_eigyo_anken/get_anken_detail.dart';
-import '../../../components/custom_text_field.dart';
-import '../../../shared/assets.dart';
-import '../../../shared/validator.dart';
-import '../../page6/saibuhachuulist_danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
+import '../../../../api/sukejuuru_page_api/eigyo_anken/details_vs_pull_down_eigyo_anken/get_sales_construction_sales_preview_contents.dart';
+import '../../../../components/custom_text_field.dart';
+import '../../../../shared/assets.dart';
+import '../../../../shared/validator.dart';
+import '../../../page6/saibuhachuulist_danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
-class Page723EditShowAnken extends StatefulWidget {
+class Page723 extends StatefulWidget {
   final DateTime initialDate;
   final String TANT_CD;
   final bool isPhongBan;
-  final String TAN_EIG_ID;
-  final Function onUpdateAnkenSuccessfull;
-  final String KBNMSAI_NAME;
-  const Page723EditShowAnken({
+  final Function onCreateAnkenSuccessfull;
+  const Page723({
     required this.initialDate,
     required this.TANT_CD,
     required this.isPhongBan,
-    required this.onUpdateAnkenSuccessfull,
-    required this.TAN_EIG_ID,
-    required this.KBNMSAI_NAME,
+    required this.onCreateAnkenSuccessfull,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<Page723EditShowAnken> createState() => _Page723EditShowAnkenState();
+  State<Page723> createState() => _Page723State();
 }
 
-class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
+class _Page723State extends State<Page723> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-
-  TextEditingController textEditingControllerJikan = TextEditingController();
-  TextEditingController textEditingControllerNin = TextEditingController();
-
-  TextEditingController textEditingControllerKhachHang =
-      TextEditingController();
-  TextEditingController textEditingControllerNguoiThamGia1 =
-      TextEditingController();
-  TextEditingController textEditingControllerNguoiThamGia2 =
-      TextEditingController();
-  TextEditingController textEditingControllerNguoiThamGia3 =
-      TextEditingController();
-
-  bool validKaraMade = true;
+  // late bool checkedValue;
+  // late String nettoKoJi;
+  // late String kaigiKara;
+  // late String kaigiMade;
+  bool validJikanKara = true;
+  bool validJikanMade = true;
 
   late List<dynamic> listPullDownCreateAnkenPage = [
     {"KBNMSAI_NAME": "営業工事"},
@@ -68,11 +53,7 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
   late String sankasha3CreateAnkenPage = '';
   int selectedPullDownIndex = 0;
 
-  String TAG_KBN = '';
-
   String currentPullDownValue = '';
-
-  DateTime? time;
 
   List<dynamic> listDateTime1 = [
     "01:00",
@@ -128,78 +109,27 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
   ];
   @override
   void initState() {
-    widget.TAN_EIG_ID;
     checkAllDayCreateAnkenPage = false;
     jikanKaraCreateAnkenPage = listDateTime1[listDateTime1.length - 1];
     jikanMadeCreateAnkenPage = listDateTime2[listDateTime1.length - 1];
-    callGetAnkenDetail();
+    callGetPullDownAnken();
     super.initState();
   }
 
-  Future<dynamic> callGetAnkenDetail({Function? onsuccess}) async {
-    final dynamic result = GetAnkenDetail().getAnkenDetail(
-      onSuccess: (response) {
+  Future<dynamic> callGetPullDownAnken({Function? onsuccess}) async {
+    final dynamic result =
+        GetPullDownAnken().getSalesConstructionSalesPreviewContents(
+      onSuccess: (result) {
         setState(() {
-          listPullDownCreateAnkenPage = response["PULLDOWN"];
-          for (var element in listPullDownCreateAnkenPage) {
-            if (element["KBNMSAI_NAME"] == widget.KBNMSAI_NAME) {
-              selectedPullDownIndex =
-                  listPullDownCreateAnkenPage.indexOf(element);
-              currentPullDownValue = element["KBNMSAI_NAME"];
-            }
-          }
-
-          TAG_KBN = response["EIGYO_ANKEN"][0]["TAG_KBN"];
-          time =
-              DateFormat("yyyy-MM-dd").parse(response["EIGYO_ANKEN"][0]["YMD"]);
-          datetimeCreateAnkenPage =
-              DateFormat("yyyy-MM-dd").parse(response["EIGYO_ANKEN"][0]["YMD"]);
-          jikanKaraCreateAnkenPage = response["EIGYO_ANKEN"][0]["START_TIME"]
-                  .toString()
-                  .split(":")[0] +
-              ":" +
-              response["EIGYO_ANKEN"][0]["START_TIME"].toString().split(":")[1];
-          jikanMadeCreateAnkenPage = response["EIGYO_ANKEN"][0]["END_TIME"]
-                  .toString()
-                  .split(":")[0] +
-              ":" +
-              response["EIGYO_ANKEN"][0]["END_TIME"].toString().split(":")[1];
-          jinNumberCreateAnkenPage = response["EIGYO_ANKEN"][0]["JININ"];
-          textEditingControllerNin.text =
-              int.parse(response["EIGYO_ANKEN"][0]["JININ"]).toString();
-          jikanNumberCreateAnkenPage = response["EIGYO_ANKEN"][0]["JIKAN"];
-
-////////////////////////////////////////////////////////////
-          ///
-          String xxxx = response["EIGYO_ANKEN"][0]["JIKAN"];
-          int phannguyen = int.parse(xxxx.split(".")[0]);
-          int phanthapphan = int.parse(xxxx.split(".")[1]) >= 5 ? 1 : 0;
-          int tong = phannguyen + phanthapphan;
-
-          textEditingControllerJikan.text = tong.toString();
-////////////////////////////////////////////////////
-          okyakuSamaCreateAnkenPage =
-              response["EIGYO_ANKEN"][0]["GUEST_NAME"] ?? '';
-          sankasha1CreateAnkenPage =
-              response["EIGYO_ANKEN"][0]["ATTEND_NAME1"] ?? '';
-          sankasha2CreateAnkenPage =
-              response["EIGYO_ANKEN"][0]["ATTEND_NAME2"] ?? '';
-          sankasha3CreateAnkenPage =
-              response["EIGYO_ANKEN"][0]["ATTEND_NAME3"] ?? '';
-          textEditingControllerKhachHang.text =
-              response["EIGYO_ANKEN"][0]["GUEST_NAME"] ?? '';
-          textEditingControllerNguoiThamGia1.text =
-              response["EIGYO_ANKEN"][0]["ATTEND_NAME1"] ?? '';
-          textEditingControllerNguoiThamGia2.text =
-              response["EIGYO_ANKEN"][0]["ATTEND_NAME2"] ?? '';
-          textEditingControllerNguoiThamGia3.text =
-              response["EIGYO_ANKEN"][0]["ATTEND_NAME3"] ?? '';
-
-          checkAllDayCreateAnkenPage =
-              response["EIGYO_ANKEN"][0]["ALL_DAY_FLG"] == "1" ? true : false;
+          listPullDownCreateAnkenPage = result["PULLDOWN"];
+          currentPullDownValue = listPullDownCreateAnkenPage[0]["KBNMSAI_NAME"];
+          selectedPullDownIndex = 0;
         });
+        print(result);
       },
-      TAN_EIG_ID: widget.TAN_EIG_ID,
+      onFailed: () {
+        CustomToast.show(context, message: "データを取得出来ませんでした。");
+      },
     );
 
     return result;
@@ -286,11 +216,9 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          time == null
-                              ? ''
-                              : DateFormat('yyyy年MM月dd日(E)', 'ja')
-                                  .format(time!)
-                                  .toString(),
+                          DateFormat('yyyy年MM月dd日(E)', 'ja')
+                              .format(widget.initialDate)
+                              .toString(),
                           style: const TextStyle(
                             color: Color(0xFF000000),
                             fontSize: 14,
@@ -310,9 +238,8 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                             children: [
                               Column(
                                 children: [
-                                  _moreButton2(
-                                      context, !checkAllDayCreateAnkenPage),
-                                  validKaraMade
+                                  _moreButton2(context),
+                                  validJikanKara
                                       ? Container()
                                       : const Padding(
                                           padding: EdgeInsets.only(top: 5),
@@ -369,9 +296,8 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                           ),
                           Column(
                             children: [
-                              _moreButton3(
-                                  context, !checkAllDayCreateAnkenPage),
-                              validKaraMade
+                              _moreButton3(context),
+                              validJikanMade
                                   ? Container()
                                   : const Padding(
                                       padding: EdgeInsets.only(top: 5),
@@ -416,7 +342,7 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                             // width: size.width / 2 - 80,
                             width: 80,
                             child: CustomTextField(
-                              controller: textEditingControllerNin,
+                              maxLength: 2,
                               validator: _validateNumber,
                               fillColor: const Color(0xFFF5F6F8),
                               hint: jinNumberCreateAnkenPage.toString(),
@@ -456,7 +382,7 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                             // width: size.width / 2 - 80,
                             width: 80,
                             child: CustomTextField(
-                              controller: textEditingControllerJikan,
+                              maxLength: 10,
                               validator: _validateNumber2,
                               fillColor: const Color(0xFFF5F6F8),
                               hint: jikanNumberCreateAnkenPage.toString(),
@@ -510,7 +436,6 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                       Container(
                         width: 420,
                         child: CustomTextField(
-                          controller: textEditingControllerKhachHang,
                           fillColor: const Color(0xFFF5F6F8),
                           hint: '',
                           type: TextInputType.emailAddress,
@@ -551,7 +476,6 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                           Container(
                             width: 420,
                             child: CustomTextField(
-                              controller: textEditingControllerNguoiThamGia1,
                               fillColor: const Color(0xFFF5F6F8),
                               hint: '',
                               type: TextInputType.emailAddress,
@@ -569,7 +493,6 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                           Container(
                             width: 420,
                             child: CustomTextField(
-                              controller: textEditingControllerNguoiThamGia2,
                               fillColor: const Color(0xFFF5F6F8),
                               hint: '',
                               type: TextInputType.emailAddress,
@@ -587,7 +510,6 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                           Container(
                             width: 420,
                             child: CustomTextField(
-                              controller: textEditingControllerNguoiThamGia3,
                               fillColor: const Color(0xFFF5F6F8),
                               hint: '',
                               type: TextInputType.emailAddress,
@@ -622,30 +544,44 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      if (jikanKaraCreateAnkenPage == null ||
-                          jikanMadeCreateAnkenPage == null) {
-                        setState(() {
-                          validKaraMade = false;
-                        });
-                      }
+                      // if (jikanKaraCreateAnkenPage == null ||
+                      //     jikanMadeCreateAnkenPage == null) {
+                      //   setState(() {
+                      //     validJikanKara = false;
+                      //   });
+                      // }
+                      // if (jikanKaraCreateAnkenPage == null ||
+                      //     jikanMadeCreateAnkenPage == null) {
+                      //   setState(() {
+                      //     validJikanKara = false;
+                      //   });
+                      // }
                       if (int.parse(jikanKaraCreateAnkenPage.split(":")[0]) >=
                           int.parse(jikanMadeCreateAnkenPage.split(":")[0])) {
                         setState(() {
-                          validKaraMade = false;
+                          validJikanKara = false;
+                          validJikanMade = false;
                         });
+                        CustomToast.show(context,
+                            message: "終了時間は開始時間より後である必要があります");
                       } else {
                         setState(() {
-                          validKaraMade = true;
+                          validJikanKara = true;
+                          validJikanMade = true;
                         });
                       }
                       if (_formKey.currentState?.validate() == true &&
-                          validKaraMade) {
-                        UpdateAnkenMiddle().updateAnkenMiddle(
-                          YMD: DateFormat(('yyyy-MM-dd'))
-                              .format(widget.initialDate),
-                          JYOKEN_CD: widget.TANT_CD,
-                          JYOKEN_SYBET_FLG: widget.isPhongBan ? '1' : '0',
-                          TAG_KBN: TAG_KBN,
+                          validJikanKara &&
+                          validJikanMade) {
+                        CreateAnken().createAnken(
+                          YMD: widget.initialDate,
+                          JYOKEN_CD: widget.TANT_CD, // user login id
+                          JYOKEN_SYBET_FLG:
+                              widget.isPhongBan ? '1' : '0', //????
+                          TAG_KBN:
+                              listPullDownCreateAnkenPage[selectedPullDownIndex]
+                                      ["KBN_CD"] ??
+                                  '', // ??
                           START_TIME: jikanKaraCreateAnkenPage + ":00",
                           END_TIME: jikanMadeCreateAnkenPage + ":00",
                           JININ: jinNumberCreateAnkenPage,
@@ -655,25 +591,26 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                           ATTEND_NAME2: sankasha2CreateAnkenPage,
                           ATTEND_NAME3: sankasha3CreateAnkenPage,
                           ALL_DAY_FLG: checkAllDayCreateAnkenPage ? "1" : "0",
-                          TAN_EIG_ID: widget.TAN_EIG_ID,
                           KBNMSAI_CD:
                               listPullDownCreateAnkenPage[selectedPullDownIndex]
-                                  ["KBNMSAI_CD"],
+                                      ["KBNMSAI_CD"] ??
+                                  '',
                           KBN_CD:
                               listPullDownCreateAnkenPage[selectedPullDownIndex]
-                                  ["KBN_CD"],
+                                      ["KBN_CD"] ??
+                                  '',
                           onSuccess: () {
                             Navigator.pop(context);
                             CustomToast.show(context,
-                                message: "営業案件を変更できました。",
+                                message: "営業案件を登録できました。",
                                 backGround: Colors.green);
-                            widget.onUpdateAnkenSuccessfull.call();
+                            widget.onCreateAnkenSuccessfull.call();
                           },
                           onFailed: () {
                             CustomToast.show(context,
-                                message: "営業案件を変更出来ませんでした。",
-                                backGround: Colors.green);
-                            widget.onUpdateAnkenSuccessfull.call();
+                                message: "営業案件を登録出来ませんでした。",
+                                backGround: Colors.red);
+                            widget.onCreateAnkenSuccessfull.call();
                           },
                         );
                       }
@@ -705,41 +642,6 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                     },
                     child: const Text(
                       'キャンセル',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  width: 120,
-                  height: 37,
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      DeleteEigyoAnken().deleteEigyoAnken(
-                          onSuccess: () {
-                            Navigator.pop(context);
-                            widget.onUpdateAnkenSuccessfull.call();
-                            CustomToast.show(context,
-                                message: "削除出来ました。", backGround: Colors.green);
-                          },
-                          onFailed: () {
-                            CustomToast.show(context, message: "削除出来ませんでした。");
-                          },
-                          TAN_EIG_ID: widget.TAN_EIG_ID);
-                    },
-                    child: const Text(
-                      '削除',
                       style: TextStyle(
                         decoration: TextDecoration.underline,
                         color: Colors.white,
@@ -832,9 +734,9 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
     );
   }
 
-  Widget _moreButton2(BuildContext context, bool? isEnable) {
+  Widget _moreButton2(BuildContext context) {
     return PopupMenuButton<int>(
-      enabled: isEnable ?? true,
+      enabled: !checkAllDayCreateAnkenPage,
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {},
@@ -903,9 +805,9 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
     );
   }
 
-  Widget _moreButton3(BuildContext context, bool? isEnable) {
+  Widget _moreButton3(BuildContext context) {
     return PopupMenuButton<int>(
-      enabled: isEnable ?? true,
+      enabled: !checkAllDayCreateAnkenPage,
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {},

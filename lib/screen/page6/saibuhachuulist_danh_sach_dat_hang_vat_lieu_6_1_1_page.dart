@@ -404,8 +404,30 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                                   message: "一つを選択してください。",
                                   backGround: Colors.yellow);
                             } else {
+                              List<dynamic> list2 = [];
+
+                              for (var element in list) {
+                                dynamic first = {
+                                  "MAKER_NAME": element["MAKER_NAME"],
+                                  "BUNRUI": element["BUNRUI"],
+                                  "JISYA_CD": element["JISYA_CD"],
+                                  "SYOHIN_NAME": element["SYOHIN_NAME"],
+                                  "LOT": element["LOT"],
+                                  "HACYU_TANKA": element["HACYU_TANKA"],
+                                  "SURYO": element["SURYO"],
+                                  "TANI_CD": element["TANI_CD"],
+                                  "KINGAK": element["KINGAK"],
+                                  "HINBAN": element["HINBAN"],
+                                  "BUZAI_HACYU_ID": element["BUZAI_HACYU_ID"],
+                                  "BUZAI_HACYUMSAI_ID":
+                                      element["BUZAI_HACYUMSAI_ID"],
+                                  "status": element["status"],
+                                };
+                                list2.add(first);
+                              }
+
                               setState(() {
-                                saibuList.addAll(list);
+                                saibuList.addAll(list2);
                               });
                             }
                           },
