@@ -84,9 +84,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
     super.initState();
     if (widget.JISYA_CD != null && widget.SYOZOKU_CD != null) {
       call2ApiGetList();
-    } else {
-      saibuList.add(first);
-    }
+    } else {}
   }
 
   Future<dynamic> call2ApiGetList() async {
@@ -96,9 +94,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
             JISYA_CD: widget.JISYA_CD!,
             onSuccess: (data) {
               if (data.isEmpty && saibuList.isEmpty) {
-                setState(() {
-                  saibuList.add(first);
-                });
+                setState(() {});
               } else {
                 for (var element in data) {
                   element["status"] = false;
@@ -111,9 +107,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                 if (widget.BUZAI_HACYU_ID != null) {
                   callGetCheckList((res) {
                     if (res.isEmpty && saibuList.isEmpty) {
-                      setState(() {
-                        saibuList.add(first);
-                      });
+                      setState(() {});
                     } else {
                       for (var element in res) {
                         element["status"] = false;
@@ -358,7 +352,24 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                           borderRadius: BorderRadius.circular(26),
                         ),
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            //delete
+                            List<dynamic> list = saibuList
+                                .where((element) => element["status"] == true)
+                                .toList();
+                            list;
+
+                            if (list.isEmpty) {
+                              CustomToast.show(context,
+                                  message: "一つを選択してください。",
+                                  backGround: Colors.yellow);
+                            } else {
+                              setState(() {
+                                saibuList.removeWhere(
+                                    (element) => element["status"] == true);
+                              });
+                            }
+                          },
                           child: const Text(
                             '削除',
                             style: TextStyle(
@@ -382,14 +393,21 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                         ),
                         child: TextButton(
                           onPressed: () {
-                            // print("object");
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) =>
-                            //         const DanhSachCacBoPhan512Page(),
-                            //   ),
-                            // );
+                            //copy
+                            List<dynamic> list = saibuList
+                                .where((element) => element["status"] == true)
+                                .toList();
+                            list;
+
+                            if (list.isEmpty) {
+                              CustomToast.show(context,
+                                  message: "一つを選択してください。",
+                                  backGround: Colors.yellow);
+                            } else {
+                              setState(() {
+                                saibuList.addAll(list);
+                              });
+                            }
                           },
                           child: const Text(
                             'リスト複製',
@@ -463,80 +481,6 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
       ),
     );
   }
-
-  // Widget _dropDownButton(BuildContext context, String value) {
-  //   return PopupMenuButton<int>(
-  //     color: Colors.white,
-  //     padding: EdgeInsets.zero,
-  //     onSelected: (number) {
-  //       if (number == 1) {}
-  //       if (number == 2) {}
-  //     },
-  //     shape: const RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.all(Radius.circular(12.0))),
-  //     itemBuilder: (context) => [
-  //       PopupMenuItem(
-  //         height: 25,
-  //         padding: const EdgeInsets.only(right: 0, left: 10),
-  //         value: 1,
-  //         child: Row(
-  //           children: const [
-  //             SizedBox(
-  //               width: 14,
-  //             ),
-  //             Text(
-  //               "投函数を選択",
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //       const PopupMenuDivider(),
-  //       PopupMenuItem(
-  //         height: 25,
-  //         padding: const EdgeInsets.only(right: 0, left: 10),
-  //         value: 2,
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.start,
-  //           children: const [
-  //             SizedBox(
-  //               width: 14,
-  //             ),
-  //             Text(
-  //               "投函数を選択",
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ],
-  //     offset: const Offset(-35, -90),
-  //     child: Container(
-  //       width: 130,
-  //       height: 30,
-  //       decoration: BoxDecoration(
-  //         color: const Color(0xFFF5F6F8),
-  //         borderRadius: BorderRadius.circular(8),
-  //       ),
-  //       child: Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //         children: [
-  //           Text(
-  //             value,
-  //             style: const TextStyle(
-  //               color: Color(0xFF999999),
-  //               fontSize: 14,
-  //               fontWeight: FontWeight.w400,
-  //             ),
-  //           ),
-  //           Image.asset(
-  //             Assets.icDown,
-  //             width: 13,
-  //             height: 13,
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Widget header() {
     return Row(

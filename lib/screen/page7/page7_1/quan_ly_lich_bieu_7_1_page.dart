@@ -89,6 +89,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         });
         onSuccess.call();
       }
+    }, onFailed: () {
+      CustomToast.show(context,
+          message: "データを取得出来ませんでした。", backGround: Colors.red);
     });
 
     return result;
