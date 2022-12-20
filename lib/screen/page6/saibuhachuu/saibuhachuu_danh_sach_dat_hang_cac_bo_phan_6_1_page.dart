@@ -29,7 +29,7 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
   late int currentRadioRow;
 
   List<dynamic> listOrder = [];
-  List<dynamic> listOrderByStatus = [];
+  List<dynamic> listOrderKhongCoDinh = [];
   List<dynamic> listPullDown = [];
 
   String currentPullDownValue = 'カテゴリを選択';
@@ -53,6 +53,7 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
           print(data);
           setState(() {
             listOrder = data;
+            listOrderKhongCoDinh = listOrder;
           });
         },
         onFailed: () {
@@ -108,10 +109,42 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
                       columnText(
                         width: size.width / 2 - 30,
                         text: '発注ID',
+                        onChange: (text) {
+                          if (text == '') {
+                            setState(() {
+                              listOrderKhongCoDinh = listOrder;
+                            });
+                          } else {
+                            setState(() {
+                              listOrderKhongCoDinh = listOrderKhongCoDinh
+                                  .where((element) => element["BUZAI_HACYU_ID"]
+                                      .toString()
+                                      .contains(text))
+                                  .toList();
+                            });
+                          }
+                        },
                       ),
                       columnText(
                         width: size.width / 2 - 30,
                         text: '発注者',
+                        onChange: (text) {
+                          listOrderKhongCoDinh;
+                          if (text == '') {
+                            setState(() {
+                              listOrderKhongCoDinh = listOrder;
+                            });
+                          } else {
+                            setState(() {
+                              listOrderKhongCoDinh = listOrderKhongCoDinh
+                                  .where((element) => element["TANT_NAME"]
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(text.toLowerCase()))
+                                  .toList();
+                            });
+                          }
+                        },
                       ),
                     ],
                   ),
@@ -192,9 +225,7 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
                   scrollDirection: Axis.horizontal,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: _buildRows(currentPullDownValue == 'カテゴリを選択'
-                        ? listOrder.length + 1
-                        : listOrderByStatus.length + 1),
+                    children: _buildRows(listOrderKhongCoDinh.length + 1),
                   ),
                 ),
               ),
@@ -249,9 +280,7 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
                   child: TextButton(
                     onPressed: () {
                       if (currentRadioRow - 1 >= 0) {
-                        List<dynamic> tmp = currentPullDownValue == 'カテゴリを選択'
-                            ? listOrder
-                            : listOrderByStatus;
+                        List<dynamic> tmp = listOrderKhongCoDinh;
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -308,15 +337,15 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
             if (currentPullDownValue == item["KBNMSAI_NAME"]) {
               setState(() {
                 currentPullDownValue = 'カテゴリを選択';
-                listOrderByStatus = [];
+                listOrderKhongCoDinh = listOrder;
               });
             } else {
               setState(() {
                 List<dynamic> tmp = listOrder
-                    .where(
-                        (element) => element["element"] == item["KBNMSAI_NAME"])
+                    .where((element) =>
+                        element["KBNMSAI_NAME"] == item["KBNMSAI_NAME"])
                     .toList();
-                listOrderByStatus = tmp;
+                listOrderKhongCoDinh = tmp;
                 currentPullDownValue = item["KBNMSAI_NAME"];
               });
             }
@@ -443,6 +472,7 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
     Color? color,
     String? hint,
     String? text,
+    Function(String)? onChange,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -464,7 +494,9 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
             fillColor: color,
             hint: hint ?? '',
             type: TextInputType.emailAddress,
-            onChanged: (text) {},
+            onChanged: (text) {
+              onChange?.call(text);
+            },
             maxLines: 1,
           ),
         ),
@@ -500,7 +532,7 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
   Widget contentTable(int col, int row) {
     listOrder;
     List<dynamic> tmp = [];
-    tmp = currentPullDownValue == 'カテゴリを選択' ? listOrder : listOrderByStatus;
+    tmp = listOrderKhongCoDinh;
     if (row != 0 && col != 0) {
       String value = '';
 

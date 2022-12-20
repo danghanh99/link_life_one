@@ -211,21 +211,23 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
                       ),
                     ),
                   )
-                : SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Flexible(
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: _buildRows(listInventory.length + 1),
+                : Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Flexible(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: _buildRows(listInventory.length + 1),
+                              ),
                             ),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
             const SizedBox(
@@ -344,6 +346,52 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
                     ),
                   ),
                 ),
+                const Expanded(
+                  child: SizedBox(
+                    width: 5,
+                  ),
+                ),
+                Container(
+                  width: 120,
+                  height: 37,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF6D8FDB),
+                    borderRadius: BorderRadius.circular(26),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      CreateOrEditApi().createOrEditInventory(
+                          INVENTORY_DETAIL: listInventory
+                              .where((element) => element.STATUS == true)
+                              .toList(),
+                          onSuccess: () {
+                            CustomToast.show(context,
+                                message: '登録出来ました。', backGround: Colors.green);
+                          },
+                          onFailed: () {
+                            CustomToast.show(
+                              context,
+                              message: '登録できませんでした。。',
+                            );
+                          });
+                      setState(() {
+                        listInventory = listInventory.map((e) {
+                          e.STATUS = false;
+                          return e;
+                        }).toList();
+                      });
+                    },
+                    child: const Text(
+                      '棚卸確定',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
             isShowScandQR
@@ -377,47 +425,6 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
                     ),
                   )
                 : Container(),
-            Container(
-              width: 120,
-              height: 37,
-              decoration: BoxDecoration(
-                color: const Color(0xFF6D8FDB),
-                borderRadius: BorderRadius.circular(26),
-              ),
-              child: TextButton(
-                onPressed: () {
-                  CreateOrEditApi().createOrEditInventory(
-                      INVENTORY_DETAIL: listInventory
-                          .where((element) => element.STATUS == true)
-                          .toList(),
-                      onSuccess: () {
-                        CustomToast.show(context,
-                            message: '登録出来ました。', backGround: Colors.green);
-                      },
-                      onFailed: () {
-                        CustomToast.show(
-                          context,
-                          message: '登録できませんでした。。',
-                        );
-                      });
-                  setState(() {
-                    listInventory = listInventory.map((e) {
-                      e.STATUS = false;
-                      return e;
-                    }).toList();
-                  });
-                },
-                child: const Text(
-                  '棚卸確定',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
             const SizedBox(
               height: 10,
             ),

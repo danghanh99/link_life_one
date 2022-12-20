@@ -316,16 +316,20 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
       itemBuilder: (context) => listPullDown.map((item) {
         return PopupMenuItem(
           onTap: () {
+            List<dynamic> tmp = [];
+            tmp = listIchiran.where((element) {
+              return element;
+            }).toList();
             setState(() {
-              // List<dynamic> tmp = [];
-              // tmp = listIchiranThayDoi.where((element) {
-              //   return element;
-              // }).toList();
-
               if (currentPullDownValue == item["KBNMSAI_NAME"]) {
                 currentPullDownValue = "カテゴリを選択";
+                listIchiranThayDoi = tmp;
               } else {
                 currentPullDownValue = item["KBNMSAI_NAME"];
+                listIchiranThayDoi = tmp
+                    .where((element) =>
+                        element["KBNMSAI_NAME"] == item["KBNMSAI_NAME"])
+                    .toList();
 
                 // list = listBuzai
                 //     .where((element) => (element.HINBAN!.toUpperCase().contains(
