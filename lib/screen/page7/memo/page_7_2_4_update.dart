@@ -1,18 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:link_life_one/api/sukejuuru_page_api/memo/create_memo.dart';
+import 'package:link_life_one/api/sukejuuru_page_api/memo/delete_memo.dart';
 
-import '../../../../components/custom_text_field.dart';
-import '../../../../components/toast.dart';
-import '../../../../shared/assets.dart';
+import '../../../api/sukejuuru_page_api/memo/create_memo.dart';
+import '../../../components/custom_text_field.dart';
+import '../../../components/toast.dart';
+import '../../../shared/assets.dart';
 
-class Page724Create extends StatefulWidget {
+class Page724Update extends StatefulWidget {
   final DateTime initialDate;
+  final String TAN_CAL_ID;
+  final String KBNMSAI_NAME;
+  final bool checkedValue;
+  final String NAIYO;
+  final String START_TIME;
+  final String END_TIME;
   final String JYOKEN_CD;
-  final bool isPhongBan;
+  final isPhongBan;
   final Function() onSuccess;
-  const Page724Create({
+  const Page724Update({
     required this.initialDate,
+    required this.TAN_CAL_ID,
+    required this.KBNMSAI_NAME,
+    required this.checkedValue,
+    required this.NAIYO,
+    required this.END_TIME,
+    required this.START_TIME,
     required this.JYOKEN_CD,
     required this.isPhongBan,
     required this.onSuccess,
@@ -20,10 +33,10 @@ class Page724Create extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<Page724Create> createState() => _Page724CreateState();
+  State<Page724Update> createState() => _Page724UpdateState();
 }
 
-class _Page724CreateState extends State<Page724Create> {
+class _Page724UpdateState extends State<Page724Update> {
   TextEditingController dateinput = TextEditingController();
   List<String> listDateTime1 = [
     "01:00",
@@ -77,31 +90,33 @@ class _Page724CreateState extends State<Page724Create> {
     "23:00",
     "00:00",
   ];
-  late DateTime date;
   late bool checkedValue;
-  String kara = "01:00";
-  String made = "23:00";
+  late String kara = "";
+  late String made = "";
   List<dynamic> pullDownMemo = [];
   dynamic pullDownSelected;
 
   @override
   void initState() {
-    date = widget.initialDate;
-    checkedValue = false;
-    callGetListPullDownMemo();
+    kara = listDateTime1.firstWhere((e) => widget.START_TIME.contains(e));
+    made = listDateTime1.firstWhere((e) => widget.END_TIME.contains(e));
+    dateinput.text = widget.NAIYO;
+    checkedValue = widget.checkedValue;
+    callGetListPullDownMemo(widget.TAN_CAL_ID);
     super.initState();
   }
 
-  Future<void> callGetListPullDownMemo() async {
+  Future<void> callGetListPullDownMemo(String TAN_CAL_ID) async {
     final result = await CreateMemo().pullDownMemo(
-        TAN_CAL_ID: '',
+        TAN_CAL_ID: TAN_CAL_ID,
         onSuccess: () {},
         onFailed: () {
           CustomToast.show(context, message: "データを取得出来ませんでした。");
         });
     setState(() {
       pullDownMemo = result == null ? [] : result['pullDown'];
-      pullDownSelected = pullDownMemo.first;
+      pullDownSelected = pullDownMemo.firstWhere(
+          (element) => element['KBNMSAI_NAME'] == widget.KBNMSAI_NAME);
     });
   }
 
@@ -143,9 +158,9 @@ class _Page724CreateState extends State<Page724Create> {
               children: [
                 Row(
                   children: [
-                    const SizedBox(
+                    Container(
                       width: 130,
-                      child: Align(
+                      child: const Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           '概要',
@@ -170,9 +185,9 @@ class _Page724CreateState extends State<Page724Create> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const SizedBox(
+                    Container(
                       width: 130,
-                      child: Align(
+                      child: const Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           '日時',
@@ -261,9 +276,9 @@ class _Page724CreateState extends State<Page724Create> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(
+                    Container(
                       width: 130,
-                      child: Align(
+                      child: const Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           '内容',
@@ -280,8 +295,8 @@ class _Page724CreateState extends State<Page724Create> {
                       child: CustomTextField(
                         fillColor: const Color(0xFFF5F6F8),
                         hint: '',
-                        type: TextInputType.text,
                         controller: dateinput,
+                        type: TextInputType.emailAddress,
                         onChanged: (text) {},
                         maxLines: 6,
                       ),
@@ -320,14 +335,15 @@ class _Page724CreateState extends State<Page724Create> {
                         START_TIME: kara,
                         END_TIME: made,
                         ALL_DAY_FLG: checkedValue ? '1' : '0',
+                        TAN_CAL_ID: widget.TAN_CAL_ID,
                         onSuccess: () {
                           Navigator.pop(context);
                           CustomToast.show(context,
-                              message: "登録出来ました。", backGround: Colors.green);
+                              message: "変更出来ました。", backGround: Colors.green);
                           widget.onSuccess.call();
                         },
                         onFailed: () {
-                          CustomToast.show(context, message: '登録できませんでした。。');
+                          CustomToast.show(context, message: '変更出来ませんでした。');
                         });
                   },
                   child: const Text(
@@ -343,6 +359,38 @@ class _Page724CreateState extends State<Page724Create> {
               ),
               const SizedBox(
                 width: 10,
+              ),
+              Container(
+                width: 120,
+                height: 37,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF96265),
+                  borderRadius: BorderRadius.circular(26),
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    DeleteMemo().deleteMemo(
+                        TAN_CAL_ID: widget.TAN_CAL_ID,
+                        onSuccess: () {
+                          Navigator.pop(context);
+                          CustomToast.show(context,
+                              message: "削除しました。", backGround: Colors.green);
+                          widget.onSuccess.call();
+                        },
+                        onFailed: () {
+                          CustomToast.show(context, message: '削除出来ませんでした。');
+                        });
+                  },
+                  child: const Text(
+                    '削除',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
               ),
               const SizedBox(
                 width: 10,

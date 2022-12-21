@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:link_life_one/screen/page7/page_7_2_2_edit_item/page_7_2_2.dart';
+import 'package:link_life_one/screen/page7/netto_koji/page_7_2_2_edit_item/page_7_2_2.dart';
 
-import '../../../api/sukejuuru_page_api/netto_koji/show_anken/get_lich_trinh_item_edit_page.dart';
-import '../../../api/sukejuuru_page_api/netto_koji/show_anken/get_lich_trinh_item.dart';
-import '../../../components/custom_text_field.dart';
-import '../../../shared/assets.dart';
-import '../../page6/saibuhachuulist_danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
+import '../../../../api/sukejuuru_page_api/netto_koji/show_anken/get_lich_trinh_item_edit_page.dart';
+import '../../../../api/sukejuuru_page_api/netto_koji/show_anken/get_lich_trinh_item.dart';
+import '../../../../components/custom_text_field.dart';
+import '../../../../shared/assets.dart';
+import '../../../page6/saibuhachuulist_danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
 class Page721 extends StatefulWidget {
   final String JYUCYU_ID;

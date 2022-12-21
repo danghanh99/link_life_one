@@ -6,8 +6,8 @@ import 'package:link_life_one/components/login_widget.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/screen/page7/eigyo_anken/page7_2_3_create_eigyo_anken/page_7_2_3.dart';
 import 'package:link_life_one/screen/page7/eigyo_anken/page7_2_3_edit_show_anken/page_7_2_3_edit_show_anken.dart';
-import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/create/page_7_2_4_create.dart';
-import 'package:link_life_one/screen/page7/page_7_2_4_create_memo/update/page_7_2_4_update.dart';
+import 'package:link_life_one/screen/page7/memo/page_7_2_4_create.dart';
+import 'package:link_life_one/screen/page7/memo/page_7_2_4_update.dart';
 import '../../../api/sukejuuru_page_api/get_anken_cua_mot_phong_ban.dart';
 import '../../../api/sukejuuru_page_api/get_list_phong_ban.dart';
 import '../../../components/text_line_down.dart';
@@ -16,7 +16,7 @@ import '../../../shared/custom_button.dart';
 import '../../menu_page/menu_page.dart';
 import '../component/dialog.dart';
 import '../component/popup_hien_thi.dart';
-import '../page7_2_1_show_item/page_7_2_1.dart';
+import '../netto_koji/page7_2_1_show_item/page_7_2_1.dart';
 
 class QuanLyLichBieu71Page extends StatefulWidget {
   const QuanLyLichBieu71Page({
