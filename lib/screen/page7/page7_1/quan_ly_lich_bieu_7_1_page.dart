@@ -1032,44 +1032,59 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             alignment: Alignment.topLeft,
             width: colWidth()[col],
             height: 400,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 5, left: 5),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          width: colWidth()[col],
-                          child: Text(
-                            value1nguoi == '個人'
-                                ? (sukejuuruSelectedUser == null
-                                    ? ''
-                                    : sukejuuruSelectedUser["TANT_NAME"])
-                                : (sukejuuruAllUser.isEmpty
-                                    ? ''
-                                    : sukejuuruAllUser[row - 2]["TANT_NAME"]),
-                            style: const TextStyle(
-                                color: Color(0xFF042C5C),
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400),
+            child: GestureDetector(
+              onTap: () {
+                //group
+                if (value1nguoi != '個人') {
+                  setState(() {
+                    value1nguoi = '個人';
+                    sukejuuruSelectedUser = sukejuuruAllUser[row - 2];
+                    selectedNhanVienName =
+                        sukejuuruAllUser[row - 2]["TANT_NAME"];
+                    selectedNhanVienTantCD =
+                        sukejuuruAllUser[row - 2]["TANT_CD"];
+                  });
+                }
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5, left: 5),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            width: colWidth()[col],
+                            child: Text(
+                              value1nguoi == '個人'
+                                  ? (sukejuuruSelectedUser == null
+                                      ? ''
+                                      : sukejuuruSelectedUser["TANT_NAME"])
+                                  : (sukejuuruAllUser.isEmpty
+                                      ? ''
+                                      : sukejuuruAllUser[row - 2]["TANT_NAME"]),
+                              style: const TextStyle(
+                                  color: Color(0xFF042C5C),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400),
+                            ),
                           ),
                         ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: const [
+                      Icon(
+                        Icons.calendar_month_rounded,
+                        color: Colors.black,
+                        size: 40.0,
                       ),
                     ],
                   ),
-                ),
-                Row(
-                  children: const [
-                    Icon(
-                      Icons.calendar_month_rounded,
-                      color: Colors.black,
-                      size: 40.0,
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           );
         } else {
