@@ -32,7 +32,8 @@ class _ListCommentState extends State<ListComment> {
             itemCount: widget.listComments.length,
             itemBuilder: (context, index) {
               return Text(
-                widget.listComments[index]["COMMENT"],
+                widget.listComments[index]["COMMENT"] ??
+                    widget.listComments[index]["MEMO"],
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
