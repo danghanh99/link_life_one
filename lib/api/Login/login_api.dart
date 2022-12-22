@@ -15,8 +15,8 @@ class LoginApi {
       required Function(String) onFailed}) async {
     String url = "${Constant.url}Request/Login/requestLogin.php";
     final response = await http.post(Uri.parse(url),
-        body: {'LOGIN_ID': '00000', 'PASSWORD': '123456'});
-        // body: {'LOGIN_ID': id, 'PASSWORD': password});
+        // body: {'LOGIN_ID': '00000', 'PASSWORD': '123456'});
+        body: {'LOGIN_ID': id, 'PASSWORD': password});
 
     if (response.body == "{\"error_message\":Unauthorized}[]") {
       onFailed.call("担当者コードまたはパスワードが正しくありません");

@@ -10,6 +10,11 @@ class Validator {
     return regExp.hasMatch(input);
   }
 
+  static bool onlyDouble(String input) {
+    RegExp regExp = RegExp(r'^[0-9]+.[0-9]+$');
+    return regExp.hasMatch(input);
+  }
+
   static bool password(String input) =>
       (input.length >= 6) && !input.contains(' ');
 

@@ -1026,18 +1026,34 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
   }
 
   String? _validateNumber(String? input) {
-    if (Validator.onlyNumber(input!)) {
-      return null;
+    if (input == '' || input == null) {
+      return '未選択';
     } else {
-      return '整数のみ';
+      if (Validator.onlyNumber(input)) {
+        return null;
+      } else {
+        return '整数のみ';
+      }
     }
   }
 
+  // String? _validateNumber2(String? input) {
+  //   if (Validator.onlyNumber(input!)) {
+  //     return null;
+  //   } else {
+  //     return '整数のみ';
+  //   }
+  // }
+
   String? _validateNumber2(String? input) {
-    if (Validator.onlyNumber(input!)) {
-      return null;
+    if (input == '' || input == null) {
+      return '未選択';
     } else {
-      return '整数のみ';
+      if (Validator.onlyDouble(input)) {
+        return null;
+      } else {
+        return '整数のみ';
+      }
     }
   }
 
