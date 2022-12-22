@@ -421,7 +421,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                           onPressed: () {
                             ShowHoliday().showHoliday(
                               TANT_CD: selectedNhanVienTantCD,
-                              date: currentDate,
                               onSuccess: ((body) {
                                 CustomDialog.showCustomDialog(
                                   context: context,

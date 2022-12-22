@@ -25,58 +25,36 @@ class _PopupHienThiState extends State<PopupHienThi> {
 
   @override
   void initState() {
-    tongNgayNghiCuaNam = widget.body["totalHolidays"] == null
-        ? "0"
-        : widget.body["totalHolidays"].toString();
-    soNgayDaNghiTrongNam = widget.body["totalHolidaysPerYear"] == null
-        ? "0"
-        : widget.body["totalHolidaysPerYear"].toString();
-    soNgayNghiConLaiTrongNam =
-        ((int.parse(tongNgayNghiCuaNam) - int.parse(soNgayDaNghiTrongNam)))
-            .toString();
+    tongNgayNghiCuaNam = widget.body['YEAR'] != null &&
+            widget.body['YEAR']['AVAILABLE_DAYS'].isNotEmpty
+        ? widget.body['YEAR']['AVAILABLE_DAYS'].first.toString()
+        : '0';
+    soNgayDaNghiTrongNam = widget.body['YEAR'] != null &&
+            widget.body['YEAR']['DAY_OFFS'].isNotEmpty
+        ? widget.body['YEAR']['DAY_OFFS'].first.toString()
+        : '0';
+    soNgayNghiConLaiTrongNam = widget.body['YEAR'] != null &&
+            widget.body['YEAR']['THE_REST_OF_DAY_OFFS'].isNotEmpty
+        ? widget.body['YEAR']['THE_REST_OF_DAY_OFFS'].first.toString()
+        : '0';
 
-    tongNgayNghiCuaThang = widget.body["0"][getKeyOfMonth()];
-    soNgayDaNghiTrongThang = widget.body["totalHolidaysPerMonth"].toString();
-    soNgayNghiConLaiTrongThang =
-        ((int.parse(tongNgayNghiCuaThang) - int.parse(soNgayDaNghiTrongThang)))
-            .toString();
-
-    soNgayNghiVuotQuaTrongThang = int.parse(soNgayDaNghiTrongThang) >
-            int.parse(tongNgayNghiCuaThang)
-        ? (int.parse(soNgayDaNghiTrongThang) - int.parse(tongNgayNghiCuaThang))
-            .toString()
+    tongNgayNghiCuaThang = widget.body['MONTH'] != null &&
+            widget.body['MONTH']['AVAILABLE_DAYS'].isNotEmpty
+        ? widget.body['MONTH']['AVAILABLE_DAYS'].first.toString()
+        : '0';
+    soNgayDaNghiTrongThang = widget.body['MONTH'] != null &&
+            widget.body['MONTH']['DAY_OFFS'].isNotEmpty
+        ? widget.body['MONTH']['DAY_OFFS'].first.toString()
+        : '0';
+    soNgayNghiConLaiTrongThang = widget.body['MONTH'] != null &&
+            widget.body['MONTH']['THE_REST_OF_DAY_OFFS'].isNotEmpty
+        ? widget.body['MONTH']['THE_REST_OF_DAY_OFFS'].first.toString()
+        : '0';
+    soNgayNghiVuotQuaTrongThang = widget.body['MONTH'] != null &&
+            widget.body['MONTH']['DAY_OFFS_OVER'].isNotEmpty
+        ? widget.body['MONTH']['DAY_OFFS_OVER'].first.toString()
         : '0';
     super.initState();
-  }
-
-  getKeyOfMonth() {
-    switch (widget.month) {
-      case '01':
-        return 'HOLIDAY_JAN';
-      case '02':
-        return 'HOLIDAY_FEB';
-      case '03':
-        return 'HOIDAY_MAR';
-      case '04':
-        return 'HOIDAY_APR';
-      case '05':
-        return 'HOIDAY_MAY';
-      case '06':
-        return 'HOIDAY_JUN';
-      case '07':
-        return 'HOIDAY_JUL';
-      case '08':
-        return 'HOIDAY_AUG';
-      case '09':
-        return 'HOIDAY_SEP';
-      case '10':
-        return 'HOIDAY_OCT';
-      case '11':
-        return 'HOIDAY_NOV';
-      case '12':
-        return 'HOIDAY_DEC';
-      default:
-    }
   }
 
   @override
@@ -127,7 +105,6 @@ class _PopupHienThiState extends State<PopupHienThi> {
                   child: InputDecorator(
                     decoration: const InputDecoration(
                       enabledBorder: OutlineInputBorder(
-                        // width: 0.0 produces a thin "hairline" border
                         borderSide: BorderSide(color: Colors.black, width: 1.0),
                         borderRadius: BorderRadius.all(Radius.circular(0.0)),
                       ),
