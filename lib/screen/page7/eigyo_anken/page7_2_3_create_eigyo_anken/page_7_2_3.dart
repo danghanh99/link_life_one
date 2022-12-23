@@ -106,7 +106,7 @@ class _Page723State extends State<Page723> {
     "23:30",
   ];
   List<dynamic> listDateTime2 = [
-   "00:00",
+    "00:00",
     "00:30",
     "01:00",
     "01:30",
@@ -158,8 +158,8 @@ class _Page723State extends State<Page723> {
   @override
   void initState() {
     checkAllDayCreateAnkenPage = false;
-    jikanKaraCreateAnkenPage = listDateTime1[listDateTime1.length - 1];
-    jikanMadeCreateAnkenPage = listDateTime2[listDateTime1.length - 1];
+    jikanKaraCreateAnkenPage = listDateTime1[0];
+    jikanMadeCreateAnkenPage = listDateTime2[0];
     callGetPullDownAnken();
     super.initState();
   }
@@ -610,8 +610,7 @@ class _Page723State extends State<Page723> {
                           validJikanKara = false;
                           validJikanMade = false;
                         });
-                        CustomToast.show(context,
-                            message: "終了時間は開始時間より後である必要があります");
+                        CustomToast.show(context, message: "開始時間＜終了時間として下さい。");
                       } else {
                         setState(() {
                           validJikanKara = true;

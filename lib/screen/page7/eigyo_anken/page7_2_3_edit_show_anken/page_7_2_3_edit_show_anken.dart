@@ -180,8 +180,8 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
   void initState() {
     widget.TAN_EIG_ID;
     checkAllDayCreateAnkenPage = false;
-    jikanKaraCreateAnkenPage = listDateTime1[listDateTime1.length - 1];
-    jikanMadeCreateAnkenPage = listDateTime2[listDateTime1.length - 1];
+    jikanKaraCreateAnkenPage = listDateTime1[0];
+    jikanMadeCreateAnkenPage = listDateTime2[0];
     callGetAnkenDetail();
     super.initState();
   }
@@ -679,15 +679,22 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                           validKaraMade = false;
                         });
                       }
-                      if (int.parse(jikanKaraCreateAnkenPage.split(":")[0]) >=
+                      if (int.parse(jikanKaraCreateAnkenPage.split(":")[0]) >
                           int.parse(jikanMadeCreateAnkenPage.split(":")[0])) {
                         setState(() {
                           validKaraMade = false;
                         });
                       } else {
-                        setState(() {
-                          validKaraMade = true;
-                        });
+                        if (int.parse(jikanKaraCreateAnkenPage.split(":")[1]) >=
+                            int.parse(jikanMadeCreateAnkenPage.split(":")[1])) {
+                          setState(() {
+                            validKaraMade = false;
+                          });
+                        } else {
+                          setState(() {
+                            validKaraMade = true;
+                          });
+                        }
                       }
                       if (_formKey.currentState?.validate() == true &&
                           validKaraMade) {
