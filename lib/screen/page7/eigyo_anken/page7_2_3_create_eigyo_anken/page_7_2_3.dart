@@ -56,6 +56,8 @@ class _Page723State extends State<Page723> {
   String currentPullDownValue = '';
 
   List<dynamic> listDateTime1 = [
+    "00:00",
+    "00:30",
     "01:00",
     "01:30",
     "02:00",
@@ -102,10 +104,10 @@ class _Page723State extends State<Page723> {
     "22:30",
     "23:00",
     "23:30",
-    "00:00",
-    "00:30",
   ];
   List<dynamic> listDateTime2 = [
+   "00:00",
+    "00:30",
     "01:00",
     "01:30",
     "02:00",
@@ -152,8 +154,6 @@ class _Page723State extends State<Page723> {
     "22:30",
     "23:00",
     "23:30",
-    "00:00",
-    "00:30",
   ];
   @override
   void initState() {

@@ -28,6 +28,8 @@ class Page722 extends StatefulWidget {
 
 class _Page722State extends State<Page722> {
   List<dynamic> listDateTime1 = [
+    "00:00",
+    "00:30",
     "01:00",
     "01:30",
     "02:00",
@@ -74,10 +76,10 @@ class _Page722State extends State<Page722> {
     "22:30",
     "23:00",
     "23:30",
-    "00:00",
-    "00:30",
   ];
   List<dynamic> listDateTime2 = [
+    "00:00",
+    "00:30",
     "01:00",
     "01:30",
     "02:00",
@@ -124,8 +126,6 @@ class _Page722State extends State<Page722> {
     "22:30",
     "23:00",
     "23:30",
-    "00:00",
-    "00:30",
   ];
   final GlobalKey<FormState> _formKey = GlobalKey();
 

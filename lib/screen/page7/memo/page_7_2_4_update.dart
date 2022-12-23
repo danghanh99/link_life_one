@@ -39,6 +39,8 @@ class Page724Update extends StatefulWidget {
 class _Page724UpdateState extends State<Page724Update> {
   TextEditingController dateinput = TextEditingController();
   List<String> listDateTime1 = [
+    "00:00",
+    "00:30",
     "01:00",
     "01:30",
     "02:00",
@@ -85,10 +87,10 @@ class _Page724UpdateState extends State<Page724Update> {
     "22:30",
     "23:00",
     "23:30",
-    "00:00",
-    "00:30",
   ];
   List<String> listDateTime2 = [
+    "00:00",
+    "00:30",
     "01:00",
     "01:30",
     "02:00",
@@ -135,8 +137,6 @@ class _Page724UpdateState extends State<Page724Update> {
     "22:30",
     "23:00",
     "23:30",
-    "00:00",
-    "00:30",
   ];
   late bool checkedValue;
   late String kara = "";
