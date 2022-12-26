@@ -12,7 +12,8 @@ class Validator {
 
   static bool onlyDouble(String input) {
     RegExp regExp = RegExp(r'^[0-9]+.[0-9]+$');
-    return regExp.hasMatch(input);
+    RegExp regExp2 = RegExp(r'^[0-9]+$');
+    return regExp.hasMatch(input) || regExp2.hasMatch(input);
   }
 
   static bool password(String input) =>

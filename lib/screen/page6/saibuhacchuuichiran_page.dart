@@ -5,6 +5,7 @@ import 'package:link_life_one/screen/page6/page631/hacchuushounin_phe_duyet_don_
 
 import '../../api/order/saibuhacchu_ichiran/get_part_order_list_ichiran.dart';
 import '../../api/order/saibuhacchu_ichiran/get_pull_down_status_ichiran.dart';
+import '../../components/custom_header_widget.dart';
 import '../../components/custom_text_field.dart';
 import '../../components/login_widget.dart';
 import '../../components/text_line_down.dart';
@@ -407,39 +408,7 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
   }
 
   Widget header() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MenuPage(),
-              ),
-            );
-          },
-          child: Image.asset(
-            Assets.LOGO_LINK,
-            width: 100,
-            height: 100,
-          ),
-        ),
-        Column(
-          children: [
-            LoginWidget(),
-            const SizedBox(
-              height: 10,
-            ),
-            TextLineDown(
-                text: '戻る',
-                onTap: () {
-                  Navigator.pop(context);
-                }),
-          ],
-        ),
-      ],
-    );
+    return const CustomHeaderWidget();
   }
 
   Widget title() {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page5/page_5_2_1_danh_sach_ton_kho.dart';
+import '../../components/custom_header_widget.dart';
 import '../../components/login_widget.dart';
 import '../../components/text_line_down.dart';
 import '../../shared/date_formatter copy.dart';
@@ -410,39 +411,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
   }
 
   Widget header() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MenuPage(),
-              ),
-            );
-          },
-          child: Image.asset(
-            Assets.LOGO_LINK,
-            width: 100,
-            height: 100,
-          ),
-        ),
-        Column(
-          children: [
-            LoginWidget(),
-            const SizedBox(
-              height: 20,
-            ),
-            TextLineDown(
-                text: '戻る',
-                onTap: () {
-                  Navigator.pop(context);
-                }),
-          ],
-        ),
-      ],
-    );
+    return const CustomHeaderWidget();
   }
 
   Widget title() {

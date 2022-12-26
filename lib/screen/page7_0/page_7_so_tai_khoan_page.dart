@@ -5,6 +5,7 @@ import 'package:link_life_one/api/account_book/account_book_api.dart';
 import 'package:link_life_one/components/login_widget.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/models/account_book.dart';
+import '../../components/custom_header_widget.dart';
 import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
@@ -64,39 +65,7 @@ class _SoTaiKhoanPageState extends State<SoTaiKhoanPage> {
         ),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MenuPage(),
-                      ),
-                    );
-                  },
-                  child: Image.asset(
-                    Assets.LOGO_LINK,
-                    width: 100,
-                    height: 100,
-                  ),
-                ),
-                Column(
-                  children: [
-                    const LoginWidget(),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextLineDown(
-                        text: '戻る',
-                        onTap: () {
-                          Navigator.pop(context);
-                        }),
-                  ],
-                ),
-              ],
-            ),
+            const CustomHeaderWidget(),
             Center(
               child: Container(
                 decoration: BoxDecoration(

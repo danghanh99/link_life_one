@@ -10,6 +10,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../api/order/post_add_material_ordering.dart';
 import '../../api/order/saibuhachuu_list/get_check_list.dart';
 import '../../api/order/saibuhachuu_list/get_material_ordering_list.dart';
+import '../../components/custom_header_widget.dart';
 import '../../components/custom_text_field.dart';
 import '../../components/login_widget.dart';
 import '../../components/text_line_down.dart';
@@ -505,39 +506,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
   }
 
   Widget header() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MenuPage(),
-              ),
-            );
-          },
-          child: Image.asset(
-            Assets.LOGO_LINK,
-            width: 100,
-            height: 100,
-          ),
-        ),
-        Column(
-          children: [
-            LoginWidget(),
-            const SizedBox(
-              height: 10,
-            ),
-            TextLineDown(
-                text: '戻る',
-                onTap: () {
-                  Navigator.pop(context);
-                }),
-          ],
-        ),
-      ],
-    );
+    return const CustomHeaderWidget();
   }
 
   Widget title() {

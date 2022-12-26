@@ -6,6 +6,7 @@ import 'package:link_life_one/api/inventory/get_inventories_api.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/models/inventory.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import '../../components/custom_header_widget.dart';
 import '../../components/custom_text_field.dart';
 import '../../components/login_widget.dart';
 import '../../components/text_line_down.dart';
@@ -435,39 +436,7 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
   }
 
   Widget header() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MenuPage(),
-              ),
-            );
-          },
-          child: Image.asset(
-            Assets.LOGO_LINK,
-            width: 100,
-            height: 100,
-          ),
-        ),
-        Column(
-          children: [
-            LoginWidget(),
-            const SizedBox(
-              height: 10,
-            ),
-            TextLineDown(
-                text: '戻る',
-                onTap: () {
-                  Navigator.pop(context);
-                }),
-          ],
-        ),
-      ],
-    );
+    return const CustomHeaderWidget();
   }
 
   Widget title() {

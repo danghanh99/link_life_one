@@ -685,7 +685,7 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                           validKaraMade = false;
                         });
                       } else {
-                        if (int.parse(jikanKaraCreateAnkenPage.split(":")[1]) >=
+                        if (int.parse(jikanKaraCreateAnkenPage.split(":")[1]) >
                             int.parse(jikanMadeCreateAnkenPage.split(":")[1])) {
                           setState(() {
                             validKaraMade = false;

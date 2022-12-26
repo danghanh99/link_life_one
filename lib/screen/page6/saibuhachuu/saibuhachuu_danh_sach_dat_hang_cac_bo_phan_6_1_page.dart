@@ -6,6 +6,7 @@ import 'package:link_life_one/screen/login_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../api/order/get_part_order_list.dart';
 import '../../../api/order/get_pull_down_status.dart';
+import '../../../components/custom_header_widget.dart';
 import '../../../components/custom_text_field.dart';
 import '../../../components/login_widget.dart';
 import '../../../components/text_line_down.dart';
@@ -412,39 +413,7 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
   }
 
   Widget header() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MenuPage(),
-              ),
-            );
-          },
-          child: Image.asset(
-            Assets.LOGO_LINK,
-            width: 100,
-            height: 100,
-          ),
-        ),
-        Column(
-          children: [
-            LoginWidget(),
-            const SizedBox(
-              height: 10,
-            ),
-            TextLineDown(
-                text: '戻る',
-                onTap: () {
-                  Navigator.pop(context);
-                }),
-          ],
-        ),
-      ],
-    );
+    return const CustomHeaderWidget();
   }
 
   Widget title() {

@@ -4,6 +4,7 @@ import 'package:link_life_one/components/login_widget.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page3/page_3/kojiichiran_page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 
+import '../../components/custom_header_widget.dart';
 import '../../components/custom_text_field.dart';
 import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
@@ -43,31 +44,7 @@ class _Page32NopAnhState extends State<Page32NopAnh> {
           // crossAxisAlignment: CrossAxisAlignment.start,
           // mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MenuPage(),
-                      ),
-                    );
-                  },
-                  child: Image.asset(
-                    Assets.LOGO_LINK,
-                    width: 100,
-                    height: 100,
-                  ),
-                ),
-                Column(
-                  children: [
-                    LoginWidget(),
-                  ],
-                ),
-              ],
-            ),
+            const CustomHeaderWidget(),
             Center(
               child: Container(
                 decoration: BoxDecoration(

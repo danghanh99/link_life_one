@@ -127,8 +127,12 @@ class _PopupHienThiState extends State<PopupHienThi> {
                             '既取得日数', soNgayDaNghiTrongThang, Colors.black),
                         textVsBoxText(
                             '残日数', soNgayNghiConLaiTrongThang, Colors.red),
-                        textVsBoxText('過剰取得日数', soNgayNghiVuotQuaTrongThang,
-                            Colors.black),
+                        textVsBoxText(
+                            '過剰取得日数',
+                            soNgayNghiVuotQuaTrongThang,
+                            int.parse(soNgayNghiVuotQuaTrongThang) > 0
+                                ? Colors.red
+                                : Colors.black),
                       ],
                     ),
                   ),

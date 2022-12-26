@@ -9,6 +9,7 @@ import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/screen/page3/shitami_houkoku_page.dart';
 import 'package:link_life_one/screen/page7/component/dialog.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import '../../components/custom_header_widget.dart';
 import '../../components/text_line_down.dart';
 import '../../models/koji.dart';
 import '../../shared/assets.dart';
@@ -83,34 +84,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
         ),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MenuPage(),
-                      ),
-                    );
-                  },
-                  child: Image.asset(
-                    Assets.LOGO_LINK,
-                    width: 100,
-                    height: 100,
-                  ),
-                ),
-                Column(
-                  children: [
-                    LoginWidget(),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            const CustomHeaderWidget(),
             Center(
               child: Container(
                 decoration: BoxDecoration(
@@ -128,16 +102,6 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                   ),
                 ),
               ),
-            ),
-            Row(
-              children: [
-                TextLineDown(
-                    text: '戻る',
-                    onTap: () {
-                      Navigator.pop(context);
-                    }),
-                const Spacer(),
-              ],
             ),
             const SizedBox(
               height: 10,
@@ -243,7 +207,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
             Row(
               children: [
                 Container(
-                  width: 100.w,
+                  width: 130.w,
                   height: 37,
                   decoration: BoxDecoration(
                     color: const Color(0xFFFA6366),
@@ -339,7 +303,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                   width: 5,
                 ),
                 Container(
-                  width: 100.w,
+                  width: 130.w,
                   height: 37,
                   decoration: BoxDecoration(
                     color: const Color(0xFF6D8FDB),
@@ -369,7 +333,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                 ),
                 Expanded(child: Container()),
                 Container(
-                  width: 140.w,
+                  width: 180.w,
                   height: 37,
                   decoration: BoxDecoration(
                     color: const Color(0xFFFFA800),

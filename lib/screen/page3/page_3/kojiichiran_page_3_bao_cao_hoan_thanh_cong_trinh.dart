@@ -5,10 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/KojiPageApi/show_popup.dart';
+import 'package:link_life_one/components/custom_header_widget.dart';
 import 'package:link_life_one/components/custom_text_field.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/models/koji.dart';
-import 'package:link_life_one/screen/page3/page_3/components/logout_widget.dart';
 import 'package:link_life_one/screen/page3/page_3_1_yeu_cau_bieu_mau_page.dart';
 import '../../../api/KojiPageApi/get_list_koji_api.dart';
 import '../../../api/KojiPageApi/request_post_count.dart';
@@ -109,7 +109,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
         ),
         child: Column(
           children: [
-            const LogoutWidget(),
+            const CustomHeaderWidget(),
             const TitleWidget(),
             const SizedBox(
               height: 10,

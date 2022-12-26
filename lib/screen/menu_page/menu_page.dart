@@ -10,6 +10,7 @@ import 'package:link_life_one/screen/page7_0/page_7_so_tai_khoan_page.dart';
 import 'package:link_life_one/screen/page4/xac_nhan_thanh_tich_page.dart';
 
 import '../../api/menu/post_update_koji_read_flg.dart';
+import '../../components/custom_header_widget.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../page3/page_3/kojiichiran_page_3_bao_cao_hoan_thanh_cong_trinh.dart';
@@ -118,32 +119,7 @@ class _MenuPageState extends State<MenuPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(
-                    Assets.LOGO_LINK,
-                    width: 100.w,
-                    height: 100.h,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: const Color(0xFFDFE0E3),
-                          width: 2.w,
-                        ),
-                      ),
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: LoginWidget(),
-                    ),
-                  ),
-                ],
-              ),
+              const CustomHeaderWidget(),
               Row(
                 children: [
                   Image.asset(

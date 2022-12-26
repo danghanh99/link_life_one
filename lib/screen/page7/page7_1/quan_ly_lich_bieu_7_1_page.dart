@@ -10,6 +10,7 @@ import 'package:link_life_one/screen/page7/memo/page_7_2_4_create.dart';
 import 'package:link_life_one/screen/page7/memo/page_7_2_4_update.dart';
 import '../../../api/sukejuuru_page_api/get_anken_cua_mot_phong_ban.dart';
 import '../../../api/sukejuuru_page_api/get_list_phong_ban.dart';
+import '../../../components/custom_header_widget.dart';
 import '../../../components/text_line_down.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/custom_button.dart';
@@ -209,25 +210,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         ),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                backToMenu(),
-                Column(
-                  children: [
-                    logout(),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextLineDown(
-                        text: '戻る',
-                        onTap: () {
-                          Navigator.pop(context);
-                        }),
-                  ],
-                ),
-              ],
-            ),
+            const CustomHeaderWidget(),
             Center(
               child: Container(
                 decoration: BoxDecoration(
@@ -1708,11 +1691,11 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             },
             child: const Icon(
               Icons.add_circle,
-              size: 16,
+              size: 20,
             ),
           ),
           const SizedBox(
-            width: 3,
+            width: 10,
           ),
           GestureDetector(
             onTap: () {
@@ -1737,7 +1720,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 ),
               );
             },
-            child: const Icon(Icons.insert_drive_file_outlined),
+            child: const Icon(
+              Icons.insert_drive_file_outlined,
+              size: 24,
+            ),
           ),
         ],
       ),
@@ -1780,27 +1766,5 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         ),
       );
     });
-  }
-
-  Widget backToMenu() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MenuPage(),
-          ),
-        );
-      },
-      child: Image.asset(
-        Assets.LOGO_LINK,
-        width: 100,
-        height: 100,
-      ),
-    );
-  }
-
-  Widget logout() {
-    return const LoginWidget();
   }
 }
