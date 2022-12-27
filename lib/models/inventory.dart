@@ -7,6 +7,7 @@ class Inventory {
   final int? tanka;
   final String? shukkoSuuryou;
   final String? hacchuuSuuryou;
+  final String? haibanFlg;
   int? tougetsuJitsuZaiko;
   final String? meekaa;
   bool STATUS;
@@ -22,6 +23,7 @@ class Inventory {
       this.hacchuuSuuryou,
       this.tougetsuJitsuZaiko,
       this.meekaa,
+      this.haibanFlg,
       this.STATUS = false});
 
   factory Inventory.fromJson(Map<String, dynamic> json) {
@@ -35,6 +37,7 @@ class Inventory {
         tanka: int.parse(json['SIIRE_TANKA'] ?? '1'),
         shukkoSuuryou: json['SYUKKOJISEKI_SURYO'] ?? '',
         hacchuuSuuryou: json['BUZAIHACYUMSAI_SURYO'] ?? '',
+        haibanFlg: json['HAIBAN_FLG'] ?? '0',
         meekaa: json['MAKER_NAME'] ?? '');
   }
 }

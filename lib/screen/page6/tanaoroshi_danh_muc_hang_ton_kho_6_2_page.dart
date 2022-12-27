@@ -15,19 +15,20 @@ import '../../shared/custom_button.dart';
 import '../menu_page/menu_page.dart';
 import 'inventories/danh_sach_cac_bo_phan_5_1_3_page.dart';
 
-class DanhMucHangTonKho62Page extends StatefulWidget {
+class TanaoroshiDanhMucHangTonKho62Page extends StatefulWidget {
   final bool isContinue;
-  const DanhMucHangTonKho62Page({
+  const TanaoroshiDanhMucHangTonKho62Page({
     required this.isContinue,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<DanhMucHangTonKho62Page> createState() =>
-      _DanhMucHangTonKho62PageState();
+  State<TanaoroshiDanhMucHangTonKho62Page> createState() =>
+      _TanaoroshiDanhMucHangTonKho62PageState();
 }
 
-class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
+class _TanaoroshiDanhMucHangTonKho62PageState
+    extends State<TanaoroshiDanhMucHangTonKho62Page> {
   List<String> listNames = [
     '入出庫管理',
     '部材管理',
@@ -152,7 +153,11 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
       return Container(
         decoration: BoxDecoration(
           border: Border.all(width: 0.5),
-          color: Colors.white,
+          color: listInventory.isEmpty
+              ? Colors.white
+              : (listInventory[row - 1].haibanFlg == '1'
+                  ? Colors.grey
+                  : Colors.white),
         ),
         alignment: Alignment.center,
         width: colwidth[col],
@@ -536,6 +541,9 @@ class _DanhMucHangTonKho62PageState extends State<DanhMucHangTonKho62Page> {
     }
 
     if (col == 0) {
+      if (listInventory[row - 1].haibanFlg == '1') {
+        return Container();
+      }
       return Checkbox(
         activeColor: Colors.blue,
         checkColor: Colors.white,

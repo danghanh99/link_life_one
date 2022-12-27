@@ -10,7 +10,7 @@ import '../../page5/page5_quan_ly/quan_ly_nhap_xuat_page.dart';
 import '../../page5/page_5_1_lich_kiem_ke.dart';
 import '../../page5/page_5_2_danh_sach_nguyen_lieu.dart';
 import '../../page5/page_5_3_danh_sach_nhan_lai_vat_lieu.dart';
-import '../../page6/danh_muc_hang_ton_kho_6_2_page.dart';
+import '../../page6/tanaoroshi_danh_muc_hang_ton_kho_6_2_page.dart';
 import '../../page6/saibuhachuu/saibuhachuu_danh_sach_dat_hang_cac_bo_phan_6_1_page.dart';
 import '../../page6/page6_quan_ly/page_6_quan_ly_thanh_vien.dart';
 import '../../page7_0/page_7_so_tai_khoan_page.dart';
@@ -157,7 +157,7 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
             onSuccess: (tt) {
               if (tt) {
                 MaterialPageRoute(
-                  builder: (context) => const DanhMucHangTonKho62Page(
+                  builder: (context) => const TanaoroshiDanhMucHangTonKho62Page(
                     isContinue: false,
                   ),
                 );
@@ -187,7 +187,7 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        const DanhMucHangTonKho62Page(
+                                        const TanaoroshiDanhMucHangTonKho62Page(
                                       isContinue: true,
                                     ),
                                   ),
@@ -207,7 +207,7 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      const DanhMucHangTonKho62Page(
+                                      const TanaoroshiDanhMucHangTonKho62Page(
                                     isContinue: false,
                                   ),
                                 ),

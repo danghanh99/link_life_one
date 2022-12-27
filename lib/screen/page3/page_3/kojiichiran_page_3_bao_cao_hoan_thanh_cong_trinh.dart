@@ -378,11 +378,11 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: isShitami
+                              color: showMauXanh(item.kojiSt)
                                   ? const Color.fromARGB(255, 111, 177, 224)
                                   : const Color.fromARGB(255, 216, 181, 111),
                               border: Border.all(
-                                color: isShitami
+                                color: showMauXanh(item.kojiSt)
                                     ? const Color.fromARGB(255, 111, 177, 224)
                                     : const Color.fromARGB(255, 216, 181, 111),
                               ),
@@ -766,5 +766,9 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
         ),
       ),
     );
+  }
+
+  bool showMauXanh(String kojiSt) {
+    return kojiSt == '03';
   }
 }
