@@ -182,7 +182,7 @@ class _Page721State extends State<Page721> {
     Size size = MediaQuery.of(context).size;
 
     return showUpdatePage
-        ? Page722(
+        ? NettoKojiPage722(
             KBNMSAI_NAME: KBNMSAI_NAME,
             onSuccessUpdate: () {
               widget.onSuccessUpdate.call();

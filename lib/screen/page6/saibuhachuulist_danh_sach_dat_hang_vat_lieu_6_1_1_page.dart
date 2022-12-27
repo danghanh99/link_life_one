@@ -494,7 +494,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                     ),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 40,
                   ),
                 ],
               ),

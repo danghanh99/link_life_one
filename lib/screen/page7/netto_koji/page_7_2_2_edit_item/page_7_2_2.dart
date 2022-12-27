@@ -8,13 +8,13 @@ import '../../../../components/toast.dart';
 import '../../../../shared/assets.dart';
 import '../../../../shared/validator.dart';
 
-class Page722 extends StatefulWidget {
+class NettoKojiPage722 extends StatefulWidget {
   final String JYUCYU_ID;
   final String HOMON_SBT;
   final String KBNMSAI_NAME;
 
   final Function onSuccessUpdate;
-  const Page722({
+  const NettoKojiPage722({
     required this.JYUCYU_ID,
     required this.HOMON_SBT,
     required this.KBNMSAI_NAME,
@@ -23,10 +23,10 @@ class Page722 extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<Page722> createState() => _Page722State();
+  State<NettoKojiPage722> createState() => _NettoKojiPage722State();
 }
 
-class _Page722State extends State<Page722> {
+class _NettoKojiPage722State extends State<NettoKojiPage722> {
   List<dynamic> listDateTime1 = [
     "00:00",
     "00:30",

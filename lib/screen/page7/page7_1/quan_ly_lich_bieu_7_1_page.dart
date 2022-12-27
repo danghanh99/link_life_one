@@ -1592,9 +1592,17 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         padding: const EdgeInsets.only(bottom: 2),
         child: Container(
           width: colWidth()[col],
-          color: getBackgroundColorByText(
-            text: e["KBNMSAI_NAME"] ?? '',
-          ),
+          // color: getBackgroundColorByText(
+          //   text: e["KBNMSAI_NAME"] ?? '',
+          // ),
+          color: e["YOBIKOMOKU2_KBN2"] != null
+              ? Color.fromARGB(
+                  int.parse(e["YOBIKOMOKU2_KBN2"].toString().split(", ")[0]),
+                  int.parse(e["YOBIKOMOKU2_KBN2"].toString().split(", ")[1]),
+                  int.parse(e["YOBIKOMOKU2_KBN2"].toString().split(", ")[2]),
+                  int.parse(e["YOBIKOMOKU2_KBN2"].toString().split(", ")[3]),
+                )
+              : Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(3),
             child: Column(
@@ -1621,9 +1629,11 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         WidgetSpan(
                           child: Container(
                             // color: backgroundKojiItem(e),
-                            color: getTitleColorByText(
-                              text: e["KBNMSAI_NAME"] ?? '',
-                            ),
+                            // color: getTitleColorByText(
+                            //   text: e["KBNMSAI_NAME"] ?? '',
+                            // ),
+                            color: Color(
+                                int.parse(e["YOBIKOMOKU1_KBN2"] ?? 0xffffffff)),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                 bottom: 2,
@@ -1654,6 +1664,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       ),
     );
   }
+
+  // String datetimeToHHmm(String datetimeString) {
+  //   return datetimeString.split(" ")[1];
+  // }
 
   Widget insert({
     required String dateSelected,
