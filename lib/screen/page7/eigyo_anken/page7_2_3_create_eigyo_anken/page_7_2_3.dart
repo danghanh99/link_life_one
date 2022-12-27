@@ -925,7 +925,7 @@ class _Page723State extends State<Page723> {
 
   String? _validateNumber(String? input) {
     if (input == '' || input == null) {
-      return '未選択';
+      return '未入力';
     } else {
       if (Validator.onlyNumber(input)) {
         return null;
@@ -937,7 +937,7 @@ class _Page723State extends State<Page723> {
 
   String? _validateNumber2(String? input) {
     if (input == '' || input == null) {
-      return '未選択';
+      return '未入力';
     } else {
       if (Validator.onlyDouble(input)) {
         return null;
