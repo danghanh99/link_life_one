@@ -305,97 +305,6 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
   }
 
   Widget title2() {
-    // return Container(
-    //   width: 1000.w,
-    //   decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-    //   child: Row(
-    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //     children: [
-    //       Container(
-    //         width: 1000.w / 8,
-    //         decoration: const BoxDecoration(
-    //           border: Border(
-    //             right: BorderSide(
-    //               //                   <--- left side
-    //               color: Colors.black,
-    //               width: 1.2,
-    //             ),
-    //           ),
-    //         ),
-    //         child: const Padding(
-    //           padding: EdgeInsets.only(left: 30, right: 30, top: 7, bottom: 7),
-    //           child: Text(
-    //             '受注ID',
-    //             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-    //           ),
-    //         ),
-    //       ),
-    //       SizedBox(
-    //         width: 1000.w / 8,
-    //         child: Text(
-    //           '受注ID',
-    //           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-    //         ),
-    //       ),
-    //       Container(
-    //         width: 1000.w / ,
-    //         decoration: const BoxDecoration(
-    //           border: Border(
-    //             right: BorderSide(
-    //               //                   <--- left side
-    //               color: Colors.black,
-    //               width: 1.2,
-    //             ),
-    //             left: BorderSide(
-    //               //                   <--- left side
-    //               color: Colors.black,
-    //               width: 1.2,
-    //             ),
-    //           ),
-    //         ),
-    //         child: const Padding(
-    //           padding: EdgeInsets.only(left: 30, right: 30, top: 7, bottom: 7),
-    //           child: Text(
-    //             'お客様名',
-    //             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-    //           ),
-    //         ),
-    //       ),
-    //       Text(
-    //         '受注ID',
-    //         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-    //       ),
-    //       Container(
-    //         decoration: const BoxDecoration(
-    //           border: Border(
-    //             left: BorderSide(
-    //               //                   <--- left side
-    //               color: Colors.black,
-    //               width: 1.2,
-    //             ),
-    //             right: BorderSide(
-    //               //                   <--- left side
-    //               color: Colors.black,
-    //               width: 1.2,
-    //             ),
-    //           ),
-    //         ),
-    //         child: const Padding(
-    //           padding: EdgeInsets.only(left: 30, right: 30, top: 7, bottom: 7),
-    //           child: Text(
-    //             'ご訪問日',
-    //             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-    //           ),
-    //         ),
-    //       ),
-    //       Text(
-    //         '受注ID',
-    //         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-    //       )
-    //     ],
-    //   ),
-    // );
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: _buildLastRowCells(6),
@@ -421,7 +330,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                 125.w,
               ]
             : [
-                30,
+                (size.width - 33) / 7,
                 (size.width - 33) * 2 / 7 + -30,
                 (size.width - 33) / 7,
                 (size.width - 33) / 7,
@@ -486,7 +395,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                 220.w,
               ]
             : [
-                30,
+                (size.width - 33) / 7,
                 (size.width - 33) * 2 / 7 + -30,
                 (size.width - 33) / 7,
                 (size.width - 33) / 7,

@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
 
 import '../../api/shoudakusho/submit_last_page.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ShoudakuSho extends StatefulWidget {
   final DateTime? initialDate;
@@ -205,7 +206,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                     children: [
                                       const Center(
                                         child: Text(
-                                          'お客様確認書項',
+                                          'お客様確認事項',
                                           style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.w700),
@@ -333,7 +334,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                                   },
                                                 ),
                                                 const Text(
-                                                  '作業繝所・搬出入通路のキズ・汚れ確認',
+                                                  '作業箇所・搬出入通路のキズ・汚れ確認',
                                                   style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:
@@ -409,28 +410,28 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                             ),
                             Column(
                               children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 10,
+                                    left: 40,
+                                  ),
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: const Text(
+                                      'サイン記載スペース',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ),
+                                ),
                                 Container(
                                   width: size.width - 100,
-                                  height: 210,
+                                  height: 300,
                                   decoration: BoxDecoration(
                                       border: Border.all(color: Colors.black)),
                                   child: Column(
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 30,
-                                          left: 40,
-                                        ),
-                                        child: Container(
-                                          alignment: Alignment.centerLeft,
-                                          child: const Text(
-                                            'サイン記載スペース',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w700),
-                                          ),
-                                        ),
-                                      ),
                                       SingleChildScrollView(
                                         child: Signature(
                                           key: const Key('signature'),

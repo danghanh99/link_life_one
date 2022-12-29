@@ -33,6 +33,8 @@ class KojiichiranPage3BaoCaoHoanThanhCongTrinh extends StatefulWidget {
 class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
     extends State<KojiichiranPage3BaoCaoHoanThanhCongTrinh> {
   final GlobalKey<FormState> _formKey = GlobalKey();
+  bool isLoading = false;
+  List<Koji> listKoji = [];
   List<String> listNames = [
     '入出庫管理',
     '部材管理',
@@ -45,17 +47,39 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
   String tiraru = '';
   bool isValid = true;
   TextEditingController textEditingController = TextEditingController();
-
+  Future<List<Koji>>? getListKojiApi;
   @override
   void initState() {
     date = widget.initialDate ?? DateTime.now();
     super.initState();
-    callGetListKojiApi(inputDate: date);
+    getListKojiApi = callGetListKojiApi(inputDate: date);
     callGetTirasi(inputDate: date);
   }
 
   Future<List<Koji>> callGetListKojiApi({DateTime? inputDate}) async {
-    return await GetListKojiApi().getListKojiApi(date: inputDate ?? date);
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
+    return await GetListKojiApi().getListKojiApi(
+      date: inputDate ?? date,
+      onSuccess: (list) {
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+            listKoji = list;
+          });
+        }
+      },
+      onFailed: () {
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      },
+    );
   }
 
   Future<void> callGetTirasi({DateTime? inputDate}) async {
@@ -188,18 +212,32 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                 border: Border.all(),
               ),
               child: FutureBuilder<List<Koji>>(
-                  future: callGetListKojiApi(),
+                  future: getListKojiApi,
                   builder: (context, response) {
-                    if (response.data == null) {
-                      return const Center(child: Text("Loading..."));
+                    if (isLoading == true) {
+                      return const Center(
+                          child: Text(
+                        "読み込み中です。",
+                        style: TextStyle(fontSize: 20),
+                      ));
                     }
+                    print(listKoji!.length);
+
+                    if (listKoji!.isEmpty) {
+                      return const Center(
+                          child: Text(
+                        "案件はありません",
+                        style: TextStyle(fontSize: 20),
+                      ));
+                    }
+
                     return ListView.separated(
                       shrinkWrap: true,
                       physics: const ClampingScrollPhysics(),
                       padding: const EdgeInsets.only(right: 15, left: 15),
-                      itemCount: response.data!.length,
+                      itemCount: listKoji!.length,
                       itemBuilder: (ctx, index) {
-                        final item = response.data![index];
+                        final item = listKoji![index];
                         bool isShitami = item.homonSbt == '01';
                         return GestureDetector(
                           onTap: () {
@@ -379,12 +417,12 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: showMauXanh(item.kojiSt)
-                                  ? const Color.fromARGB(255, 111, 177, 224)
-                                  : const Color.fromARGB(255, 216, 181, 111),
+                                  ? const Color(0xffc5d8f1)
+                                  : const Color(0xfffce9d9),
                               border: Border.all(
                                 color: showMauXanh(item.kojiSt)
-                                    ? const Color.fromARGB(255, 111, 177, 224)
-                                    : const Color.fromARGB(255, 216, 181, 111),
+                                    ? const Color(0xffc5d8f1)
+                                    : const Color(0xfffce9d9),
                               ),
                             ),
                             child: Padding(

@@ -9,7 +9,10 @@ import '../../constants/constant.dart';
 class GetListKojiApi {
   GetListKojiApi() : super();
 
-  Future<List<Koji>> getListKojiApi({DateTime? date}) async {
+  Future<List<Koji>> getListKojiApi(
+      {DateTime? date,
+      required Function onFailed,
+      required Function(List<Koji>) onSuccess}) async {
     DateTime date2 = date ?? DateTime.now();
     final box = Hive.box<String>('user');
     final id = box.values.last;
@@ -38,8 +41,10 @@ class GetListKojiApi {
                 kojiSt: e['KOJI_ST']),
           )
           .toList();
+      onSuccess.call(list);
       return list;
     } else {
+      onFailed.call();
       throw Exception('Failed to get list koji');
     }
   }
