@@ -416,22 +416,27 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                         width: 5,
                       ),
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: checkAllDayEditPage
+                            ? CrossAxisAlignment.end
+                            : CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            children: [
-                              _moreButton2(context),
-                              validKaraMade
-                                  ? Container()
-                                  : const Padding(
-                                      padding: EdgeInsets.only(top: 5),
-                                      child: Text(
-                                        "未選択",
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                    ),
-                            ],
-                          ),
+                          checkAllDayEditPage
+                              ? Text("-")
+                              : Column(
+                                  children: [
+                                    _moreButton2(context),
+                                    validKaraMade
+                                        ? Container()
+                                        : const Padding(
+                                            padding: EdgeInsets.only(top: 5),
+                                            child: Text(
+                                              "未選択",
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                          ),
+                                  ],
+                                ),
                           Row(
                             children: [
                               Checkbox(
@@ -475,20 +480,22 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                       const SizedBox(
                         width: 10,
                       ),
-                      Column(
-                        children: [
-                          _moreButton3(context),
-                          validKaraMade
-                              ? Container()
-                              : const Padding(
-                                  padding: EdgeInsets.only(top: 5),
-                                  child: Text(
-                                    "未選択",
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                ),
-                        ],
-                      ),
+                      checkAllDayEditPage
+                          ? Text("-")
+                          : Column(
+                              children: [
+                                _moreButton3(context),
+                                validKaraMade
+                                    ? Container()
+                                    : const Padding(
+                                        padding: EdgeInsets.only(top: 5),
+                                        child: Text(
+                                          "未選択",
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      ),
+                              ],
+                            ),
                     ],
                   ),
                   Row(

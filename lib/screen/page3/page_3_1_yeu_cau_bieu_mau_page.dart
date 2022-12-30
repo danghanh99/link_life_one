@@ -84,7 +84,67 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
         ),
         child: Column(
           children: [
-            const CustomHeaderWidget(),
+            CustomHeaderWidget(
+              onBack: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: CupertinoAlertDialog(
+                        title: const Text(
+                          "",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        content: const Padding(
+                          padding: EdgeInsets.only(top: 15),
+                          child: Text(
+                            "記入した情報が破棄されますがよろしいでしょうか。",
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 24, 23, 23),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context); //close Dialog
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                'はい',
+                                style: TextStyle(
+                                  color: Color(0xFFEB5757),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              'いいえ',
+                              style: TextStyle(
+                                color: Color(0xFF007AFF),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
             Center(
               child: Container(
                 decoration: BoxDecoration(

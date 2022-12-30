@@ -282,22 +282,28 @@ class _Page723State extends State<Page723> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: checkAllDayCreateAnkenPage
+                                ? CrossAxisAlignment.end
+                                : CrossAxisAlignment.start,
                             children: [
-                              Column(
-                                children: [
-                                  _moreButton2(context),
-                                  validJikanKara
-                                      ? Container()
-                                      : const Padding(
-                                          padding: EdgeInsets.only(top: 5),
-                                          child: Text(
-                                            "未選択",
-                                            style: TextStyle(color: Colors.red),
-                                          ),
-                                        ),
-                                ],
-                              ),
+                              checkAllDayCreateAnkenPage
+                                  ? Text("-")
+                                  : Column(
+                                      children: [
+                                        _moreButton2(context),
+                                        validJikanKara
+                                            ? Container()
+                                            : const Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 5),
+                                                child: Text(
+                                                  "未選択",
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                ),
+                                              ),
+                                      ],
+                                    ),
                               Row(
                                 children: [
                                   Checkbox(
@@ -342,20 +348,23 @@ class _Page723State extends State<Page723> {
                           const SizedBox(
                             width: 10,
                           ),
-                          Column(
-                            children: [
-                              _moreButton3(context),
-                              validJikanMade
-                                  ? Container()
-                                  : const Padding(
-                                      padding: EdgeInsets.only(top: 5),
-                                      child: Text(
-                                        "未選択",
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                    ),
-                            ],
-                          ),
+                          checkAllDayCreateAnkenPage
+                              ? Text("-")
+                              : Column(
+                                  children: [
+                                    _moreButton3(context),
+                                    validJikanMade
+                                        ? Container()
+                                        : const Padding(
+                                            padding: EdgeInsets.only(top: 5),
+                                            child: Text(
+                                              "未選択",
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                          ),
+                                  ],
+                                ),
                         ],
                       ),
                     ],

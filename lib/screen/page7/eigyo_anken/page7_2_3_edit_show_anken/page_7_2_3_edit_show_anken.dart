@@ -356,24 +356,30 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: checkAllDayCreateAnkenPage
+                                ? CrossAxisAlignment.end
+                                : CrossAxisAlignment.start,
                             children: [
-                              Column(
-                                children: [
-                                  // showTimePicker(),
-                                  _moreButton2(
-                                      context, !checkAllDayCreateAnkenPage),
-                                  validKaraMade
-                                      ? Container()
-                                      : const Padding(
-                                          padding: EdgeInsets.only(top: 5),
-                                          child: Text(
-                                            "未選択",
-                                            style: TextStyle(color: Colors.red),
-                                          ),
-                                        ),
-                                ],
-                              ),
+                              checkAllDayCreateAnkenPage
+                                  ? Text("-")
+                                  : Column(
+                                      children: [
+                                        // showTimePicker(),
+                                        _moreButton2(context,
+                                            !checkAllDayCreateAnkenPage),
+                                        validKaraMade
+                                            ? Container()
+                                            : const Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 5),
+                                                child: Text(
+                                                  "未選択",
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                ),
+                                              ),
+                                      ],
+                                    ),
                               Row(
                                 children: [
                                   Checkbox(
@@ -418,21 +424,24 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                           const SizedBox(
                             width: 10,
                           ),
-                          Column(
-                            children: [
-                              _moreButton3(
-                                  context, !checkAllDayCreateAnkenPage),
-                              validKaraMade
-                                  ? Container()
-                                  : const Padding(
-                                      padding: EdgeInsets.only(top: 5),
-                                      child: Text(
-                                        "未選択",
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                    ),
-                            ],
-                          ),
+                          checkAllDayCreateAnkenPage
+                              ? Text("-")
+                              : Column(
+                                  children: [
+                                    _moreButton3(
+                                        context, !checkAllDayCreateAnkenPage),
+                                    validKaraMade
+                                        ? Container()
+                                        : const Padding(
+                                            padding: EdgeInsets.only(top: 5),
+                                            child: Text(
+                                              "未選択",
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                          ),
+                                  ],
+                                ),
                         ],
                       ),
                     ],

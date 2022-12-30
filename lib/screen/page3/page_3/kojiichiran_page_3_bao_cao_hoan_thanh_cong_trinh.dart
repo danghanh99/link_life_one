@@ -16,6 +16,7 @@ import '../../../api/koji/tirasu/get_tirasi.dart';
 import '../../../api/koji/tirasu/post_tirasi_update_api.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/validator.dart';
+import '../shashin_teishuutsu_gamen_page_2.dart';
 import 'components/title_widget.dart';
 
 class KojiichiranPage3BaoCaoHoanThanhCongTrinh extends StatefulWidget {
@@ -76,6 +77,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
         if (mounted) {
           setState(() {
             isLoading = false;
+            listKoji = [];
           });
         }
       },
@@ -215,11 +217,32 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                   future: getListKojiApi,
                   builder: (context, response) {
                     if (isLoading == true) {
-                      return const Center(
-                          child: Text(
-                        "読み込み中です。",
-                        style: TextStyle(fontSize: 20),
-                      ));
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment
+                            .center, //Center Row contents horizontally,
+                        crossAxisAlignment: CrossAxisAlignment
+                            .center, //Center Row contents vertically,
+                        children: const [
+                          SizedBox(
+                            width: 15,
+                            height: 15,
+                            child: CircularProgressIndicator(
+                              color: Colors.grey,
+                              strokeWidth: 3,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "読み込み中です。",
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: Color.fromARGB(255, 118, 114, 114),
+                            ),
+                          ),
+                        ],
+                      );
                     }
                     print(listKoji!.length);
 
@@ -227,7 +250,10 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                       return const Center(
                           child: Text(
                         "案件はありません",
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(
+                          fontSize: 17,
+                          color: Color.fromARGB(255, 118, 114, 114),
+                        ),
                       ));
                     }
 
@@ -477,94 +503,101 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
               ),
             ),
             Expanded(child: Container()),
-            Container(
-              height: 80.h,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2),
-                    child: Text(
-                      'チラシ投函数',
-                      style: TextStyle(
-                        color: const Color(0xFF042C5C),
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    // child: _moreButton(context),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: 100.w,
-                          height: 100.h,
-                          child: CustomTextField(
-                            controller: textEditingController,
-                            maxLength: 10,
-                            hint: '',
-                            type: TextInputType.phone,
-                            // validator: _validateNumber,
-                            onChanged: (text) {
-                              validateNumber(text);
-                            },
-                          ),
-                        ),
-                        !isValid
-                            ? Text(
-                                '整数のみ',
-                                style: TextStyle(
-                                    color: Colors.red, fontSize: 12.sp),
-                              )
-                            : Container(),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 70,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFA800),
-                      borderRadius: BorderRadius.circular(26),
-                    ),
-                    child: TextButton(
-                      onPressed: () async {
-                        final box = await Hive.openBox<String>('user');
-                        String loginID = box.values.last;
-
-                        PostTirasiUpdateApi().postTirasiUpdateApi(
-                            YMD: DateFormat('yyyy-MM-dd', 'ja')
-                                .format(date)
-                                .toString(),
-                            LOGIN_ID: loginID,
-                            KOJI_TIRASISU: tiraru,
-                            onFailed: () {
-                              CustomToast.show(context,
-                                  message: "エラー!!!投函数更新ができませんでした。");
-                            },
-                            onSuccess: () {
-                              CustomToast.show(context,
-                                  message: "投函数更新ができました。",
-                                  backGround: Colors.green);
-                            });
-                      },
-                      child: const Text(
-                        '更新',
+            Form(
+              key: _formKey,
+              child: Container(
+                height: 100.h,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2),
+                      child: Text(
+                        'チラシ投函数',
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
+                          color: const Color(0xFF042C5C),
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: 100.w,
+                            height: 100.h,
+                            child: CustomTextField(
+                              controller: textEditingController,
+                              maxLength: 10,
+                              hint: '',
+                              type: TextInputType.phone,
+                              validator: _validateNumber,
+                              onChanged: (text) {
+                                setState(() {
+                                  tiraru = text;
+                                });
+                                // validateNumber(text);
+                              },
+                            ),
+                          ),
+                          // !isValid
+                          //     ? Text(
+                          //         '整数のみ',
+                          //         style: TextStyle(
+                          //             color: Colors.red, fontSize: 12.sp),
+                          //       )
+                          //     : Container(),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: 70,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFA800),
+                        borderRadius: BorderRadius.circular(26),
+                      ),
+                      child: TextButton(
+                        onPressed: () async {
+                          if (_formKey.currentState?.validate() == true) {
+                            final box = await Hive.openBox<String>('user');
+                            String loginID = box.values.last;
+
+                            PostTirasiUpdateApi().postTirasiUpdateApi(
+                                YMD: DateFormat('yyyy-MM-dd', 'ja')
+                                    .format(date)
+                                    .toString(),
+                                LOGIN_ID: loginID,
+                                KOJI_TIRASISU: tiraru,
+                                onFailed: () {
+                                  CustomToast.show(context,
+                                      message: "エラー!!!投函数更新ができませんでした。");
+                                },
+                                onSuccess: () {
+                                  CustomToast.show(context,
+                                      message: "投函数更新ができました。",
+                                      backGround: Colors.green);
+                                });
+                          }
+                        },
+                        child: const Text(
+                          '更新',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(
-              height: 10,
+              height: 20,
             )
           ],
         ),
@@ -641,19 +674,31 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
     );
   }
 
-  bool validateNumber(String? input) {
-    if (Validator.onlyNumber(input!)) {
-      setState(() {
-        isValid = true;
-        tiraru = input;
-      });
-      return true;
+  // bool validateNumber(String? input) {
+  //   if (Validator.onlyNumber(input!)) {
+  //     setState(() {
+  //       isValid = true;
+  //       tiraru = input;
+  //     });
+  //     return true;
+  //   } else {
+  //     setState(() {
+  //       isValid = false;
+  //       tiraru = '';
+  //     });
+  //     return false;
+  //   }
+  // }
+
+  String? _validateNumber(String? input) {
+    if (input == '' || input == null) {
+      return '未入力';
     } else {
-      setState(() {
-        isValid = false;
-        tiraru = '';
-      });
-      return false;
+      if (Validator.onlyNumber(input)) {
+        return null;
+      } else {
+        return '整数のみ';
+      }
     }
   }
 

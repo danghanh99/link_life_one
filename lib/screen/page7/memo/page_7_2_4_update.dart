@@ -268,9 +268,13 @@ class _Page724UpdateState extends State<Page724Update> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: checkedValue
+                              ? CrossAxisAlignment.end
+                              : CrossAxisAlignment.start,
                           children: [
-                            _moreButton2(context),
+                            checkedValue
+                                ? const Text("-")
+                                : _moreButton2(context),
                             Row(
                               children: [
                                 Checkbox(
@@ -313,7 +317,7 @@ class _Page724UpdateState extends State<Page724Update> {
                         const SizedBox(
                           width: 10,
                         ),
-                        _moreButton3(context),
+                        checkedValue ? const Text("-") : _moreButton3(context),
                       ],
                     ),
                   ],

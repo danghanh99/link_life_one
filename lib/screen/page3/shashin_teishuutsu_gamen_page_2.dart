@@ -151,48 +151,56 @@ class _ShashinTeishuutsuGamenPage2State
                         border: Border.all(color: Colors.black),
                       ),
                     )
-                  : CarouselSlider.builder(
-                      carouselController: carouselController,
-                      options: CarouselOptions(
-                        initialPage: listImage.length - 1,
-                        viewportFraction: 1,
-                        height: size.height.h * 0.7 - 50,
-                        enableInfiniteScroll: false,
-                        onPageChanged: (index, reason) {},
+                  : Container(
+                      width: size.width - 50,
+                      height: size.height.h * 2 / 3,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        border: Border.all(color: Colors.black),
                       ),
-                      itemCount: listImage.length,
-                      itemBuilder:
-                          (BuildContext context, int itemIndex, int idx) {
-                        String? path =
-                            "https://gamek.mediacdn.vn/133514250583805952/2020/6/28/823171412209073690918001588031818576536427n-15933186251841355750111.jpg";
-                        return SizedBox(
-                          width: 700,
-                          height: 1000,
-                          child: listImage[itemIndex].runtimeType == XFile
-                              ? Image.file(
-                                  File(listImage[idx]!.path),
-                                  width: size.width - 50,
-                                  height: size.height * 2 / 3,
-                                  fit: size.width > size.height
-                                      ? null
-                                      : BoxFit.fill,
-                                )
-                              : CachedNetworkImage(
-                                  imageUrl: path,
-                                  placeholder: (context, url) => const Center(
-                                    child: SizedBox(
-                                      width: 100,
-                                      height: 100,
-                                      child: CircularProgressIndicator(
-                                        color: Colors.yellow,
+                      child: CarouselSlider.builder(
+                        carouselController: carouselController,
+                        options: CarouselOptions(
+                          initialPage: listImage.length - 1,
+                          viewportFraction: 1,
+                          height: size.height.h * 0.7 - 50,
+                          enableInfiniteScroll: false,
+                          onPageChanged: (index, reason) {},
+                        ),
+                        itemCount: listImage.length,
+                        itemBuilder:
+                            (BuildContext context, int itemIndex, int idx) {
+                          String? path =
+                              "https://gamek.mediacdn.vn/133514250583805952/2020/6/28/823171412209073690918001588031818576536427n-15933186251841355750111.jpg";
+                          return SizedBox(
+                            width: 700,
+                            height: 1000,
+                            child: listImage[itemIndex].runtimeType == XFile
+                                ? Image.file(
+                                    File(listImage[idx]!.path),
+                                    width: size.width - 50,
+                                    height: size.height * 2 / 3,
+                                    fit: size.width > size.height
+                                        ? null
+                                        : BoxFit.fill,
+                                  )
+                                : CachedNetworkImage(
+                                    imageUrl: path,
+                                    placeholder: (context, url) => const Center(
+                                      child: SizedBox(
+                                        width: 100,
+                                        height: 100,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.yellow,
+                                        ),
                                       ),
                                     ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
                                   ),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
-                                ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
               const SizedBox(height: 15),
               Row(
@@ -267,12 +275,23 @@ class _ShashinTeishuutsuGamenPage2State
                                     message: "写真をアップロード出来ました。",
                                     backGround: Colors.green,
                                   );
-                                  if (widget.index == 1 || widget.index == 4) {
-                                    Navigator.pop(context);
-                                  } else {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  }
+                                  // if (widget.index == 1 || widget.index == 4) {
+                                  //   Navigator.pop(context);
+                                  // } else {
+                                  //   Navigator.pop(context);
+                                  //   Navigator.pop(context);
+                                  // }
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          KojiichiranPage3BaoCaoHoanThanhCongTrinh(
+                                        initialDate: widget.initialDate ??
+                                            DateTime.now(),
+                                      ),
+                                    ),
+                                  );
                                 },
                                 SHITAMI_MENU: widget.index.toString(),
                                 CANCEL_RIYU: widget.cancelRiyuu,

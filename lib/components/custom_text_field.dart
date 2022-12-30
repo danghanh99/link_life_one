@@ -37,7 +37,9 @@ class CustomTextField extends StatefulWidget {
   final bool showCursor;
   final DateTime? initialDate;
   final String? initValue;
+  final Color? borderColor;
   const CustomTextField({
+    this.borderColor,
     this.initialDate,
     this.initValue,
     this.hint,
@@ -136,84 +138,35 @@ class _CustomTextFieldState extends State<CustomTextField> {
       onFieldSubmitted: (v) =>
           FocusScope.of(context).requestFocus(widget.nextFocus),
       onChanged: widget.onChanged,
-      decoration: false
-          ? InputDecoration(
-              errorStyle: TextStyles.BODY_14.apply(
-                color: AppColors.ERROR_VALIDATE,
+      decoration: InputDecoration(
+        counterText: "",
+        errorStyle: TextStyles.BODY_14.apply(
+          color: AppColors.ERROR_VALIDATE,
+          fontFamily: 'LinotteSemiBold',
+        ),
+        isDense: true,
+        helperText: ' ',
+        filled: true,
+        errorMaxLines: 2,
+        enabledBorder: _borderOutline(),
+        focusedBorder: _borderOutline(),
+        errorBorder: _borderOutline(),
+        border: _borderOutline(),
+        fillColor: widget.fillColor,
+        disabledBorder: _borderOutline(),
+        focusedErrorBorder: _borderOutline(),
+        hintText: widget.hint,
+        hintStyle: widget.largeHint == null
+            ? TextStyles.BODY_14.apply(
+                color: AppColors.PLACE_HOLDER,
+                fontFamily: 'LinotteSemiBold',
+              )
+            : TextStyles.BODY_18.apply(
+                color: AppColors.PLACE_HOLDER,
                 fontFamily: 'LinotteSemiBold',
               ),
-              filled: true,
-              errorMaxLines: 2,
-              enabledBorder: _borderOutline(),
-              focusedBorder: _borderOutline(),
-              errorBorder: _borderOutline(),
-              border: _borderOutline(),
-              fillColor: widget.fillColor,
-              disabledBorder: _borderOutline(),
-              focusedErrorBorder: _borderOutline(),
-              hintText: widget.hint,
-              hintStyle: widget.largeHint == null
-                  ? TextStyles.BODY_14.apply(
-                      color: AppColors.PLACE_HOLDER,
-                      fontFamily: 'LinotteSemiBold',
-                    )
-                  : TextStyles.BODY_18.apply(
-                      color: AppColors.PLACE_HOLDER,
-                      fontFamily: 'LinotteSemiBold',
-                    ),
-              // contentPadding:
-              //     new EdgeInsets.symmetric(vertical: 18.0, horizontal: 16.0),
-              // contentPadding: EdgeInsets.fromLTRB(2, 16, 16, 16),
-              // prefixIcon: SizedBox(
-              //   width: 20,
-              // ),
-              // prefixIconConstraints: BoxConstraints(
-              //   minWidth: 0,
-              //   maxWidth: 15,
-              //   minHeight: 2,
-              // ),
-              // suffixIcon: _buildIcon(),
-            )
-          : InputDecoration(
-              errorStyle: TextStyles.BODY_14.apply(
-                color: AppColors.ERROR_VALIDATE,
-                fontFamily: 'LinotteSemiBold',
-              ),
-              isDense: true,
-              helperText: ' ',
-              filled: true,
-              errorMaxLines: 2,
-              enabledBorder: _borderOutline(),
-              focusedBorder: _borderOutline(),
-              errorBorder: _borderOutline(),
-              border: _borderOutline(),
-              fillColor: widget.fillColor,
-              disabledBorder: _borderOutline(),
-              focusedErrorBorder: _borderOutline(),
-              hintText: widget.hint,
-              hintStyle: widget.largeHint == null
-                  ? TextStyles.BODY_14.apply(
-                      color: AppColors.PLACE_HOLDER,
-                      fontFamily: 'LinotteSemiBold',
-                    )
-                  : TextStyles.BODY_18.apply(
-                      color: AppColors.PLACE_HOLDER,
-                      fontFamily: 'LinotteSemiBold',
-                    ),
-              contentPadding: EdgeInsets.fromLTRB(5.0, 8.0, 5.0, 8.0),
-              // contentPadding: widget.isNameField == true
-              //     ? EdgeInsets.fromLTRB(5.0, 8.0, 5.0, 8.0)
-              //     : EdgeInsets.fromLTRB(2, 16, 16, 16),
-              // prefixIcon: SizedBox(
-              //   width: 20,
-              // ),
-              // prefixIconConstraints: BoxConstraints(
-              //   minWidth: 0,
-              //   maxWidth: 15,
-              //   minHeight: 2,
-              // ),
-              // suffixIcon: _buildIcon(),
-            ),
+        contentPadding: EdgeInsets.fromLTRB(5.0, 8.0, 5.0, 8.0),
+      ),
     );
   }
 
@@ -307,7 +260,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
   }
 
   OutlineInputBorder _borderOutline() => OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-        borderSide: BorderSide(color: AppColors.BORDER, width: 1),
+        borderRadius: const BorderRadius.all(Radius.circular(0)),
+        borderSide:
+            BorderSide(color: widget.borderColor ?? AppColors.BORDER, width: 1),
       );
 }

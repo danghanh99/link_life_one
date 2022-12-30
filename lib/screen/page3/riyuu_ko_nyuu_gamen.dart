@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/KojiPageApi/get_riyuu.dart';
+import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page_2.dart';
 
 import '../../components/custom_text_field.dart';
@@ -44,7 +45,9 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
       () {
         riyuu = result;
         controller.text = riyuu[0]['CANCEL_RIYU'] ?? "";
-        date = DateFormat('yyyy-MM-dd').parse(riyuu[0]['MTMORI_YMD']);
+        date = riyuu[0]['MTMORI_YMD'] != null
+            ? DateFormat('yyyy-MM-dd').parse(riyuu[0]['MTMORI_YMD'])
+            : DateTime.now();
       },
     );
   }
@@ -82,8 +85,8 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
                       child: Container(
                         decoration: BoxDecoration(
                             border: Border.all(
-                                color:
-                                    const Color.fromARGB(255, 247, 240, 240))),
+                          color: const Color.fromARGB(255, 247, 240, 240),
+                        )),
                         width: 200,
                         child: CustomButton(
                           color: Colors.white70,
@@ -120,16 +123,14 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 1.5, color: Colors.black)),
-                    child: CustomTextField(
-                      hint: '',
-                      type: TextInputType.text,
-                      controller: controller,
-                      maxLines: 10,
-                    ),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  child: CustomTextField(
+                    hint: '',
+                    type: TextInputType.text,
+                    validator: _validateString,
+                    controller: controller,
+                    maxLines: 10,
+                    borderColor: Colors.black,
                   ),
                 ),
                 Row(
@@ -160,7 +161,7 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
                               onTap: () async {
                                 DatePicker.showDatePicker(context,
                                     showTitleActions: true,
-                                    minTime: DateTime(1990, 3, 5),
+                                    minTime: DateTime.now(),
                                     maxTime: DateTime(2200, 6, 7),
                                     onChanged: (datePick) {},
                                     onConfirm: (newDate) {
@@ -204,25 +205,27 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
                     const SizedBox(),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => widget.index == 2
-                                ? ShashinTeishuutsuGamenPage2(
-                                    KOJI_ST: widget.KOJI_ST,
-                                    index: widget.index,
-                                    JYUCYU_ID: widget.JYUCYU_ID,
-                                    mitmoriYmd: date,
-                                    cancelRiyuu: controller.text,
-                                  )
-                                : ShashinTeishuutsuGamenPage2(
-                                    KOJI_ST: widget.KOJI_ST,
-                                    index: widget.index,
-                                    JYUCYU_ID: widget.JYUCYU_ID,
-                                    cancelRiyuu: controller.text,
-                                  ),
-                          ),
-                        );
+                        if (_formKey.currentState?.validate() == true) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => widget.index == 2
+                                  ? ShashinTeishuutsuGamenPage2(
+                                      KOJI_ST: widget.KOJI_ST,
+                                      index: widget.index,
+                                      JYUCYU_ID: widget.JYUCYU_ID,
+                                      mitmoriYmd: date,
+                                      cancelRiyuu: controller.text,
+                                    )
+                                  : ShashinTeishuutsuGamenPage2(
+                                      KOJI_ST: widget.KOJI_ST,
+                                      index: widget.index,
+                                      JYUCYU_ID: widget.JYUCYU_ID,
+                                      cancelRiyuu: controller.text,
+                                    ),
+                            ),
+                          );
+                        }
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -247,5 +250,13 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
         ),
       ),
     );
+  }
+
+  String? _validateString(String? input) {
+    if (input == null || input.trim() == '') {
+      return "未入力";
+    } else {
+      return null;
+    }
   }
 }

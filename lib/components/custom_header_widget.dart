@@ -10,7 +10,9 @@ import '../shared/assets.dart';
 import 'login_widget.dart';
 
 class CustomHeaderWidget extends StatefulWidget {
+  final Function? onBack;
   const CustomHeaderWidget({
+    this.onBack,
     Key? key,
   }) : super(key: key);
 
@@ -27,7 +29,11 @@ class _CustomHeaderWidgetState extends State<CustomHeaderWidget> {
         TextLineDown(
             text: '戻る',
             onTap: () {
-              Navigator.pop(context);
+              if (widget.onBack != null) {
+                widget.onBack?.call();
+              } else {
+                Navigator.pop(context);
+              }
             }),
         GestureDetector(
           onTap: () {
