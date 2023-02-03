@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:link_life_one/api/inventory/inventory_api.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page5/page_5_2_danh_sach_nguyen_lieu.dart';
 
 import '../../components/custom_header_widget.dart';
 import '../../components/login_widget.dart';
 import '../../components/text_line_down.dart';
+import '../../components/toast.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../menu_page/menu_page.dart';
@@ -31,6 +35,26 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
     currentRadioRow = -1;
 
     super.initState();
+    getData();
+  }
+
+  Future<void> getData() async {
+    InventoryAPI.shared.getListInventorySchedule(onSuccess: (dynamic) {
+      log('getListInventorySchedule onSuccess');
+    }, onFailed: (dynamic) {
+      log('getListInventorySchedule onFailed');
+      CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+    });
+  }
+
+  Future<void> updateSchedule(int id) async {
+    InventoryAPI.shared.updateInventorySchedule(id, onSuccess: (dynamic) {
+      log('updateInventorySchedule onSuccess');
+      CustomToast.show(context, message: '登録出来ました。', backGround: Colors.green);
+    }, onFailed: (dynamic) {
+      log('updateInventorySchedule onFailed');
+      CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+    });
   }
 
   @override
@@ -50,13 +74,8 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
             header(),
             title(),
             const SizedBox(
-              height: 10,
+              height: 35,
             ),
-
-            const SizedBox(
-              height: 25,
-            ),
-
             Flexible(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -87,7 +106,7 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
             const SizedBox(
               height: 10,
             ),
-            Spacer(),
+            const Spacer(),
             Container(
               width: 120,
               height: 37,
@@ -97,12 +116,11 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
               ),
               child: TextButton(
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => const Page52DanhSachNguyenLieu(),
-                  //   ),
-                  // );
+                  if (currentRadioRow - 1 >= 0) {
+                    updateSchedule(1);
+                  } else {
+                    CustomToast.show(context, message: "一つを選択してください。");
+                  }
                 },
                 child: const Text(
                   '入庫処理',
