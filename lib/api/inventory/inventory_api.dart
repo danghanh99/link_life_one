@@ -1,8 +1,9 @@
+
 import 'package:dio/dio.dart';
 import 'package:link_life_one/api/base/rest_api.dart';
+import 'package:link_life_one/models/inventory_schedule.dart';
 import 'package:link_life_one/models/user.dart';
 import 'package:link_life_one/shared/box_manager.dart';
-import 'dart:convert';
 
 import '../../constants/constant.dart';
 
@@ -14,7 +15,7 @@ class InventoryAPI {
   User user = BoxManager.user;
 
   Future<void> getListInventorySchedule({
-    required Function(dynamic) onSuccess,
+    required Function(List<InventorySchedule>) onSuccess,
     required Function onFailed,
   }) async {
     String urlEndpoint =
@@ -23,7 +24,9 @@ class InventoryAPI {
     final Response response = await RestAPI.shared.getData(urlEndpoint);
 
     if (response.statusCode == 200) {
-      onSuccess(response);
+      List<dynamic> data = response.data;
+      List<InventorySchedule> schedules = data.map((e) => InventorySchedule.fromJson(e)).toList();
+      onSuccess(schedules);
     } else {
       onFailed(response);
     }

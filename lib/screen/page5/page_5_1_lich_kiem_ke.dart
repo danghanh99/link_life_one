@@ -2,16 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:link_life_one/api/inventory/inventory_api.dart';
-import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page5/page_5_2_danh_sach_nguyen_lieu.dart';
+import 'package:link_life_one/models/inventory_schedule.dart';
 
 import '../../components/custom_header_widget.dart';
-import '../../components/login_widget.dart';
-import '../../components/text_line_down.dart';
 import '../../components/toast.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
-import '../menu_page/menu_page.dart';
 
 class Page51LichKiemKe extends StatefulWidget {
   const Page51LichKiemKe({
@@ -30,6 +26,8 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
   ];
   late int currentRadioRow;
 
+  List<InventorySchedule> schedules = [];
+
   @override
   void initState() {
     currentRadioRow = -1;
@@ -39,8 +37,11 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
   }
 
   Future<void> getData() async {
-    InventoryAPI.shared.getListInventorySchedule(onSuccess: (dynamic) {
+    InventoryAPI.shared.getListInventorySchedule(onSuccess: (result) {
       log('getListInventorySchedule onSuccess');
+      setState(() {
+        schedules = result;
+      });
     }, onFailed: (dynamic) {
       log('getListInventorySchedule onFailed');
       CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
@@ -82,19 +83,12 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    // SingleChildScrollView(
-                    //   scrollDirection: Axis.vertical,
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: _buildCells(20),
-                    //   ),
-                    // ),
                     Flexible(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: _buildRows(4),
+                          children: _buildRows(schedules.length + 1),
                         ),
                       ),
                     )
@@ -116,8 +110,11 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
               ),
               child: TextButton(
                 onPressed: () {
-                  if (currentRadioRow - 1 >= 0) {
-                    updateSchedule(1);
+                  if (currentRadioRow > 0 &&
+                      currentRadioRow <= schedules.length) {
+                    InventorySchedule schedule =
+                        schedules.elementAt(currentRadioRow - 1);
+                    updateSchedule(int.parse(schedule.nyukoId ?? ''));
                   } else {
                     CustomToast.show(context, message: "一つを選択してください。");
                   }
@@ -290,11 +287,11 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
               ]
             : [
                 30,
+                (size.width - 33) / 9,
+                (size.width - 33) / 9,
+                (size.width - 33) / 9,
+                (size.width - 33) / 9,
                 2 * (size.width - 33) / 9,
-                (size.width - 33) / 9,
-                (size.width - 33) / 9,
-                (size.width - 33) / 9,
-                (size.width - 33) / 9,
                 0.7 * (size.width - 33) / 9,
                 (size.width - 33) / 9,
                 (size.width - 33) / 9,
@@ -348,14 +345,43 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
             value: row,
             groupValue: currentRadioRow,
             onChanged: (e) {
-              setState(() {
-                currentRadioRow = row;
-              });
+              if (row <= schedules.length) {
+                setState(() {
+                  currentRadioRow = row;
+                });
+              }
             },
           )
-        : const Text(
-            '',
-            style: TextStyle(color: Colors.black),
+        : Text(
+            valueFrom(col, row),
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.black),
           );
+  }
+
+  String valueFrom(int column, int row) {
+    InventorySchedule schedule = schedules.elementAt(row - 1);
+    switch (column) {
+      case 1:
+        return schedule.nyukoYoteiYMD ?? '';
+      case 2:
+        return schedule.ctgoryName ?? '';
+      case 3:
+        return schedule.makerName ?? '';
+      case 4:
+        return schedule.jisyaCode ?? '';
+      case 5:
+        return schedule.syohinName ?? '';
+      case 6:
+        return schedule.suryo ?? '';
+      case 7:
+        return schedule.setsakiName ?? '';
+      case 8:
+        return schedule.kojiYMD ?? '';
+      case 9:
+        return schedule.nyukoYoteiYMD ?? '';
+      default:
+        return '';
+    }
   }
 }
