@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:link_life_one/api/inventory/inventory_api.dart';
+import 'package:link_life_one/components/custom_dialog.dart';
 import 'package:link_life_one/models/inventory_schedule.dart';
 
 import '../../components/custom_header_widget.dart';
@@ -55,6 +57,13 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
     }, onFailed: (dynamic) {
       log('updateInventorySchedule onFailed');
       CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+    });
+  }
+
+  void showAlertConfirm(int nyukoId) {
+    MyDialog.showCustomDialog(
+        context, '', '入庫処理を実行します。よろしいですか？', 'はい', 'いいえ', () => null, () {
+      updateSchedule(nyukoId);
     });
   }
 
@@ -114,7 +123,7 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
                       currentRadioRow <= schedules.length) {
                     InventorySchedule schedule =
                         schedules.elementAt(currentRadioRow - 1);
-                    updateSchedule(int.parse(schedule.nyukoId ?? ''));
+                    showAlertConfirm(int.parse(schedule.nyukoId ?? ''));
                   } else {
                     CustomToast.show(context, message: "一つを選択してください。");
                   }
