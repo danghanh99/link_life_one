@@ -1,14 +1,14 @@
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:link_life_one/models/thanh_tich.dart';
-import 'package:link_life_one/screen/login_page.dart';
+import 'package:link_life_one/api/material/material_api.dart';
+import 'package:link_life_one/models/material_model.dart';
 import 'package:link_life_one/screen/page5/page_5_2_1_danh_sach_ton_kho.dart';
 import '../../components/custom_header_widget.dart';
-import '../../components/login_widget.dart';
-import '../../components/text_line_down.dart';
-import '../../shared/date_formatter copy.dart';
+import '../../components/toast.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
-import '../menu_page/menu_page.dart';
 
 class Page52DanhSachNguyenLieu extends StatefulWidget {
   const Page52DanhSachNguyenLieu({
@@ -21,10 +21,8 @@ class Page52DanhSachNguyenLieu extends StatefulWidget {
 }
 
 class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
-  int radioRow0 = 0;
-  int radioRow1 = 1;
-  int radioRow2 = 2;
   late int currentRadioRow;
+  List<MaterialModel> materials = [];
   List<String> listNames = [
     '入出庫管理',
     '部材管理',
@@ -166,16 +164,88 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     });
   }
 
+  void checkSave() {
+    MaterialAPI.shared.checkSave(onSuccess: (showPopUp) {
+      log('checkSave onSuccess: $showPopUp');
+      if (showPopUp) {
+        showDialog(
+          context: context,
+          builder: (dialogContext) {
+            return SizedBox(
+              width: double.infinity,
+              child: CupertinoAlertDialog(
+                content: const Padding(
+                  padding: EdgeInsets.only(top: 15),
+                  child: Text(
+                    "前回編集途中のリストがあります。",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(dialogContext);
+                      },
+                      child: const Text(
+                        '続きから編集する',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(dialogContext); //close Dialog
+                      getEditMaterial(showPopUp);
+                    },
+                    child: const Text(
+                      '破壊して新規リスト作成',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      } else {}
+    }, onFailed: () {
+      log('checkSave onFailed');
+      CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+    });
+  }
+
+  void getEditMaterial(bool showPopup) {
+    MaterialAPI.shared.getListDefaultFromEditMaterial(
+        showPopup: showPopup,
+        onSuccess: (result) {
+          log('getEditMaterial onSuccess: $result');
+          setState(() {
+            materials = result;
+          });
+        },
+        onFailed: () {
+          log('getEditMaterial onFailed');
+          CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+        });
+  }
+
   @override
   void initState() {
     currentRadioRow = -1;
-
+    checkSave();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       body: Padding(
@@ -191,138 +261,135 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
 
             title(),
             const SizedBox(
-              height: 10,
+              height: 35,
             ),
 
-            const SizedBox(
-              height: 25,
-            ),
-
-            Flexible(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // SingleChildScrollView(
-                    //   scrollDirection: Axis.vertical,
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: _buildCells(20),
-                    //   ),
-                    // ),
-                    Flexible(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: _buildRows(4),
+            Visibility(
+              visible: materials.isNotEmpty,
+              child: Flexible(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Flexible(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: _buildRows(materials.length + 1),
+                          ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
-            // Expanded(child: Container()),
             const SizedBox(
               height: 10,
             ),
-            Row(
-              children: [
-                Container(
-                  width: 100,
-                  height: 37,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFA1A1A1),
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'QR読取',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
+            Visibility(
+              visible: materials.isNotEmpty,
+              child: Row(
+                children: [
+                  Container(
+                    width: 100,
+                    height: 37,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFA1A1A1),
+                      borderRadius: BorderRadius.circular(26),
                     ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Container(
-                  width: 140,
-                  height: 37,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFA1A1A1),
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      print("object");
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Page521DanhSachTonKho(),
+                    child: TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        'QR読取',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         ),
-                      );
-                    },
-                    child: const Text(
-                      'リストから選択',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Container(
-                  width: 100,
-                  height: 37,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFA6366),
-                    borderRadius: BorderRadius.circular(26),
+                  const SizedBox(
+                    width: 5,
                   ),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      '削除',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                  Container(
+                    width: 140,
+                    height: 37,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFA1A1A1),
+                      borderRadius: BorderRadius.circular(26),
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        print("object");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Page521DanhSachTonKho(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'リストから選択',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Container(
+                    width: 100,
+                    height: 37,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFA6366),
+                      borderRadius: BorderRadius.circular(26),
+                    ),
+                    child: TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        '削除',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             Expanded(child: Container()),
-            Container(
-              width: 120,
-              height: 37,
-              decoration: BoxDecoration(
-                color: const Color(0xFF6D8FDB),
-                borderRadius: BorderRadius.circular(26),
-              ),
-              child: TextButton(
-                onPressed: () {},
-                child: const Text(
-                  '持ち出し登録',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+            Visibility(
+              visible: materials.isNotEmpty,
+              child: Container(
+                width: 120,
+                height: 37,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF6D8FDB),
+                  borderRadius: BorderRadius.circular(26),
+                ),
+                child: TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    '持ち出し登録',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
