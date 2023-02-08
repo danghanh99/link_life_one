@@ -526,7 +526,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                       child: Column(
                         children: [
                           SizedBox(
-                            width: 100.w,
+                            width: 240.w,
                             height: 100.h,
                             child: CustomTextField(
                               controller: textEditingController,
@@ -692,12 +692,12 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
 
   String? _validateNumber(String? input) {
     if (input == '' || input == null) {
-      return '未入力';
+      return 'チラシ投函数を入力してください。';
     } else {
       if (Validator.onlyNumber(input)) {
         return null;
       } else {
-        return '整数のみ';
+        return '整数の数字だけを入力してください。';
       }
     }
   }
