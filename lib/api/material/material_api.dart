@@ -54,4 +54,25 @@ class MaterialAPI {
       onFailed();
     }
   }
+
+  Future<void> deleteListMaterial({
+    required Function(String) onSuccess,
+    required Function onFailed,
+  }) async {
+    String urlEndpoint = Constant.deleteListMaterial;
+
+    final Response response = await RestAPI.shared
+        .postDataWithFormData(urlEndpoint, {'TANT_CD': user.TANT_CD});
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = response.data;
+      String message = '';
+      if (data.isNotEmpty) {
+        message = data.first['message'];
+      }
+      onSuccess(message);
+    } else {
+      onFailed();
+    }
+  }
 }

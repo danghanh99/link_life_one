@@ -189,6 +189,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                   TextButton(
                       onPressed: () {
                         Navigator.pop(dialogContext);
+                        deleteMaterial();
                       },
                       child: const Text(
                         '続きから編集する',
@@ -218,6 +219,16 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
       } else {}
     }, onFailed: () {
       log('checkSave onFailed');
+      CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+    });
+  }
+
+  void deleteMaterial() {
+    MaterialAPI.shared.deleteListMaterial(onSuccess: (message) {
+      log('deleteListMaterial onSuccess');
+      CustomToast.show(context, message: message);
+    }, onFailed: () {
+      log('deleteListMaterial onFailed');
       CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
     });
   }
@@ -264,132 +275,125 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
               height: 35,
             ),
 
-            Visibility(
-              visible: materials.isNotEmpty,
-              child: Flexible(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Flexible(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: _buildRows(materials.length + 1),
-                          ),
+            Flexible(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Flexible(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: _buildRows(materials.length + 1),
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
             const SizedBox(
               height: 10,
             ),
-            Visibility(
-              visible: materials.isNotEmpty,
-              child: Row(
-                children: [
-                  Container(
-                    width: 100,
-                    height: 37,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFA1A1A1),
-                      borderRadius: BorderRadius.circular(26),
-                    ),
-                    child: TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        'QR読取',
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
+            Row(
+              children: [
+                Container(
+                  width: 100,
+                  height: 37,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFA1A1A1),
+                    borderRadius: BorderRadius.circular(26),
+                  ),
+                  child: TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'QR読取',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 5,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Container(
+                  width: 140,
+                  height: 37,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFA1A1A1),
+                    borderRadius: BorderRadius.circular(26),
                   ),
-                  Container(
-                    width: 140,
-                    height: 37,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFA1A1A1),
-                      borderRadius: BorderRadius.circular(26),
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        print("object");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Page521DanhSachTonKho(),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        'リストから選択',
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                  child: TextButton(
+                    onPressed: () {
+                      print("object");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Page521DanhSachTonKho(),
                         ),
+                      );
+                    },
+                    child: const Text(
+                      'リストから選択',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 5,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Container(
+                  width: 100,
+                  height: 37,
+                  decoration: BoxDecoration(
+                    color: currentRadioRow < 0
+                        ? const Color(0xFFA1A1A1)
+                        : const Color(0xFFFA6366),
+                    borderRadius: BorderRadius.circular(26),
                   ),
-                  Container(
-                    width: 100,
-                    height: 37,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFA6366),
-                      borderRadius: BorderRadius.circular(26),
-                    ),
-                    child: TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        '削除',
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
+                  child: TextButton(
+                    onPressed: currentRadioRow < 0 ? null : () {},
+                    child: const Text(
+                      '削除',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             Expanded(child: Container()),
-            Visibility(
-              visible: materials.isNotEmpty,
-              child: Container(
-                width: 120,
-                height: 37,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF6D8FDB),
-                  borderRadius: BorderRadius.circular(26),
-                ),
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    '持ち出し登録',
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+            Container(
+              width: 120,
+              height: 37,
+              decoration: BoxDecoration(
+                color: const Color(0xFF6D8FDB),
+                borderRadius: BorderRadius.circular(26),
+              ),
+              child: TextButton(
+                onPressed: () {},
+                child: const Text(
+                  '持ち出し登録',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),

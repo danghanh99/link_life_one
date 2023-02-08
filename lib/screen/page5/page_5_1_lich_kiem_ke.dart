@@ -61,10 +61,10 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
   }
 
   void showAlertConfirm(int nyukoId) {
-    MyDialog.showCustomDialog(
-        context, '', '入庫処理を実行します。よろしいですか？', 'はい', 'いいえ', () => null, () {
+    MyDialog.showCustomDialog(context, '', '入庫処理を実行します。よろしいですか？', 'はい', 'いいえ',
+        () {
       updateSchedule(nyukoId);
-    });
+    }, () => null);
   }
 
   @override

@@ -1,11 +1,12 @@
-
 import 'package:dio/dio.dart';
 import 'package:link_life_one/api/base/rest_api.dart';
 import 'package:link_life_one/models/inventory_schedule.dart';
+import 'package:link_life_one/models/member_category.dart';
 import 'package:link_life_one/models/user.dart';
 import 'package:link_life_one/shared/box_manager.dart';
 
 import '../../constants/constant.dart';
+import '../../models/default_inventory.dart';
 
 class InventoryAPI {
   static final InventoryAPI _instance = InventoryAPI._internal();
@@ -25,7 +26,8 @@ class InventoryAPI {
 
     if (response.statusCode == 200) {
       List<dynamic> data = response.data;
-      List<InventorySchedule> schedules = data.map((e) => InventorySchedule.fromJson(e)).toList();
+      List<InventorySchedule> schedules =
+          data.map((e) => InventorySchedule.fromJson(e)).toList();
       onSuccess(schedules);
     } else {
       onFailed(response);
@@ -44,6 +46,70 @@ class InventoryAPI {
 
     if (response.statusCode == 200) {
       onSuccess(response);
+    } else {
+      onFailed(response);
+    }
+  }
+
+  Future<void> getListMemberCategory({
+    required Function(List<MemberCategory>) onSuccess,
+    required Function onFailed,
+  }) async {
+    String urlEndpoint = Constant.getListMemberCategory;
+
+    final Response response = await RestAPI.shared.getData(urlEndpoint);
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = response.data;
+      List<MemberCategory> members =
+          data.map((e) => MemberCategory.fromJson(e)).toList();
+      onSuccess(members);
+    } else {
+      onFailed(response);
+    }
+  }
+
+  Future<void> getListDefaultInventory({
+    String categoryCode = '',
+    String makerName = '',
+    String jisyaCode = '',
+    String syohinName = '',
+    required Function(List<DefaultInventory>) onSuccess,
+    required Function onFailed,
+  }) async {
+    String urlEndpoint =
+        '${Constant.getListDefaultInventory}SYOZOKU_CD=${user.SYOZOKU_CD}&CTGORY_CD=$categoryCode&MAKER_CD=$makerName&JISYA_CD=$jisyaCode&SYOHIN_NAME=$syohinName';
+
+    final Response response = await RestAPI.shared.getData(urlEndpoint);
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = response.data;
+      List<DefaultInventory> inventories =
+          data.map((e) => DefaultInventory.fromJson(e)).toList();
+      onSuccess(inventories);
+    } else {
+      onFailed(response);
+    }
+  }
+
+  Future<void> getListInventoryByCheckList({
+    required List<DefaultInventory> selectedInventories,
+    required Function(List<DefaultInventory>) onSuccess,
+    required Function onFailed,
+  }) async {
+    List<String> arrayIds =
+        selectedInventories.map((e) => e.zaikoId ?? '').toList();
+    String strIds = arrayIds.join(',').replaceAll(',,', ',');
+    String urlEndpoint =
+        '${Constant.getListInventoryByCheckList}ARRAY_ZAIKO_ID=$strIds';
+
+    final Response response = await RestAPI.shared.getData(urlEndpoint);
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = response.data;
+      List<DefaultInventory> inventories =
+          data.map((e) => DefaultInventory.fromJson(e)).toList();
+      onSuccess(inventories);
     } else {
       onFailed(response);
     }

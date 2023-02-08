@@ -6,10 +6,10 @@ class MyDialog {
       BuildContext context,
       String title,
       String message,
-      String cancelTitle,
       String okTitle,
-      Function() onCancel,
-      Function() onOK) {
+      String cancelTitle,
+      Function() onOK,
+      Function() onCancel) {
     showDialog(
       context: context,
       builder: (dialogContext) {

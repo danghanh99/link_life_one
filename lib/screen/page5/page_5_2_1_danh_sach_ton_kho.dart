@@ -1,13 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:link_life_one/screen/login_page.dart';
+import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:link_life_one/api/inventory/inventory_api.dart';
+import 'package:link_life_one/models/default_inventory.dart';
+import 'package:link_life_one/models/member_category.dart';
+
+import '../../components/custom_dialog.dart';
 import '../../components/custom_header_widget.dart';
 import '../../components/custom_text_field.dart';
-import '../../components/login_widget.dart';
-import '../../components/text_line_down.dart';
+import '../../components/toast.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
-import '../menu_page/menu_page.dart';
 
 class Page521DanhSachTonKho extends StatefulWidget {
   const Page521DanhSachTonKho({
@@ -25,13 +29,101 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
     '出納帳',
   ];
 
+  List<MemberCategory> members = [];
+  int currentDropdownIndex = -1;
+  List<DefaultInventory> inventories = [];
+  final TextEditingController _jisyaCodeController = TextEditingController();
+  final TextEditingController _makerNameController = TextEditingController();
+  final TextEditingController _syohinNameController = TextEditingController();
+
   late int currentRadioRow;
 
   @override
   void initState() {
     currentRadioRow = -1;
-
+    getData();
     super.initState();
+  }
+
+  void getData() {
+    getDataDropdown();
+    getInventories();
+  }
+
+  void getDataDropdown() {
+    InventoryAPI.shared.getListMemberCategory(onSuccess: (members) {
+      log('getListMemberCategory onSuccess');
+      if (members.isNotEmpty) {
+        setState(() {
+          currentDropdownIndex = 0;
+          this.members = members;
+        });
+      }
+    }, onFailed: () {
+      log('getListMemberCategory onFailed');
+      CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+    });
+  }
+
+  void getInventories(
+      {String categoryCode = '',
+      String makerName = '',
+      String jisyaCode = '',
+      String syohinName = ''}) {
+    InventoryAPI.shared.getListDefaultInventory(
+        categoryCode: categoryCode,
+        makerName: makerName,
+        jisyaCode: jisyaCode,
+        syohinName: syohinName,
+        onSuccess: (inventories) {
+          log('getListDefaultInventory onSuccess');
+          setState(() {
+            this.inventories = inventories;
+          });
+        },
+        onFailed: () {
+          log('getListDefaultInventory onFailed');
+          CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+        });
+  }
+
+  void showAlert() {
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return SizedBox(
+          width: double.infinity,
+          child: CupertinoAlertDialog(
+            content: const Padding(
+              padding: EdgeInsets.only(top: 15),
+              child: Text(
+                '持ち出し数量が0の商品があります。',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 24, 23, 23),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(dialogContext);
+                },
+                child: const Text(
+                  'はい',
+                  style: TextStyle(
+                    color: Color(0xFF007AFF),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -74,9 +166,9 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
                         text: '部材カテゴリ',
                       ),
                       columnText(
-                        width: size.width / 2 - 30,
-                        text: '自社コード',
-                      ),
+                          width: size.width / 2 - 30,
+                          text: '自社コード',
+                          textController: _jisyaCodeController),
                     ],
                   ),
                   const SizedBox(
@@ -86,13 +178,13 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       columnText(
-                        width: size.width / 2 - 30,
-                        text: 'メーカー',
-                      ),
+                          width: size.width / 2 - 30,
+                          text: 'メーカー',
+                          textController: _makerNameController),
                       columnText(
-                        width: size.width / 2 - 30,
-                        text: '商品名',
-                      ),
+                          width: size.width / 2 - 30,
+                          text: '商品名',
+                          textController: _syohinNameController),
                     ],
                   ),
                 ],
@@ -112,7 +204,19 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      String categoryCode =
+                          members.elementAt(currentDropdownIndex).kbnCode ?? '';
+                      String makerName = _makerNameController.text;
+                      String jisyaCode = _jisyaCodeController.text;
+                      String syohinName = _syohinNameController.text;
+                      log('search with params: categoryCode: $categoryCode makerName: $makerName jisyaCode: $jisyaCode syohinName: $syohinName');
+                      getInventories(
+                          categoryCode: categoryCode,
+                          makerName: makerName,
+                          jisyaCode: jisyaCode,
+                          syohinName: syohinName);
+                    },
                     child: const Text(
                       '検索',
                       style: TextStyle(
@@ -135,7 +239,15 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        currentDropdownIndex = 0;
+                      });
+                      _jisyaCodeController.text = '';
+                      _makerNameController.text = '';
+                      _syohinNameController.text = '';
+                      getInventories();
+                    },
                     child: const Text(
                       'クリア',
                       style: TextStyle(
@@ -158,7 +270,7 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
                 scrollDirection: Axis.horizontal,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _buildRows(4),
+                  children: _buildRows(inventories.length + 1),
                 ),
               ),
             ),
@@ -178,7 +290,16 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (currentRadioRow > 0 &&
+                          currentRadioRow <= inventories.length) {
+                        DefaultInventory schedule =
+                            inventories.elementAt(currentRadioRow - 1);
+                        showAlert();
+                      } else {
+                        CustomToast.show(context, message: "一つを選択してください。");
+                      }
+                    },
                     child: const Text(
                       '追加',
                       style: TextStyle(
@@ -205,49 +326,41 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
     String value,
     double width,
   ) {
+    List<PopupMenuEntry<int>> widgets = [];
+
+    for (var i = 0; i < members.length; i++) {
+      MemberCategory member = members.elementAt(i);
+      widgets.add(PopupMenuItem(
+        height: 25,
+        padding: const EdgeInsets.only(right: 0, left: 10),
+        value: i,
+        child: Row(
+          children: [
+            const SizedBox(
+              width: 14,
+            ),
+            Text(
+              member.kbnmsaiName ?? '',
+            ),
+          ],
+        ),
+      ));
+      if (i < members.length - 1) {
+        widgets.add(const PopupMenuDivider());
+      }
+    }
+
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {
-        if (number == 1) {}
-        if (number == 2) {}
+        setState(() {
+          currentDropdownIndex = number;
+        });
       },
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "Dropdown item1",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "Dropdown item2",
-              ),
-            ],
-          ),
-        ),
-      ],
+      itemBuilder: (context) => widgets,
       offset: const Offset(-0, 50),
       child: Container(
         width: width,
@@ -313,6 +426,7 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
     Color? color,
     String? hint,
     String? text,
+    TextEditingController? textController,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -331,9 +445,10 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
         SizedBox(
           width: width ?? 30,
           child: CustomTextField(
+            controller: textController,
             fillColor: color,
             hint: hint ?? '',
-            type: TextInputType.emailAddress,
+            type: TextInputType.name,
             onChanged: (text) {},
             maxLines: 1,
           ),
@@ -362,7 +477,12 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
         const SizedBox(
           height: 5,
         ),
-        _dropDownButton(context, 'カテゴリを選択', width ?? 30),
+        _dropDownButton(
+            context,
+            currentDropdownIndex < 0
+                ? ''
+                : members.elementAt(currentDropdownIndex).kbnmsaiName ?? '',
+            width ?? 30),
       ],
     );
   }
@@ -396,15 +516,35 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
             value: row,
             groupValue: currentRadioRow,
             onChanged: (e) {
-              setState(() {
-                currentRadioRow = row;
-              });
+              if (row <= inventories.length) {
+                setState(() {
+                  currentRadioRow = row;
+                });
+              }
             },
           )
-        : const Text(
-            '',
-            style: TextStyle(color: Colors.black),
+        : Text(
+            valueFrom(col, row),
+            style: const TextStyle(color: Colors.black),
           );
+  }
+
+  String valueFrom(int column, int row) {
+    DefaultInventory inventory = inventories.elementAt(row - 1);
+    switch (column) {
+      case 1:
+        return inventory.categoryName ?? '';
+      case 2:
+        return inventory.makerName ?? '';
+      case 3:
+        return inventory.jisyaCode ?? '';
+      case 4:
+        return inventory.syoshinName ?? '';
+      case 5:
+        return inventory.jissu ?? '';
+      default:
+        return '';
+    }
   }
 
   Widget _moreButton(BuildContext context) {
@@ -477,18 +617,18 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
                 130,
                 130,
                 100,
-                100,
+                130,
                 120,
                 120,
               ]
             : [
                 30,
-                (size.width - 33) * 2 / 7 + -30,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
+                (size.width - 33) * 2 / 8 + -30,
+                (size.width - 33) / 8,
+                (size.width - 33) / 8,
+                (size.width - 33) * 2 / 8,
+                (size.width - 33) / 8,
+                (size.width - 33) / 8,
               ];
 
     return List.generate(count, (col) {
