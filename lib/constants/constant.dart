@@ -1,5 +1,7 @@
 class Constant {
+  // prod
   // static const String url = "https://koji-app2.starboardasiavn.com/";
+  // dev
   static const String url = "https://koji-app.starboardasiavn.com/";
   static const String getListInventorySchedule = '${url}src/APIs/InventorySchedule/getListInventorySchedule.php?';
   static const String updateInventoryScheduleById = '${url}src/APIs/InventorySchedule/updateInventoryScheduleById.php';
@@ -9,4 +11,5 @@ class Constant {
   static const String getListMemberCategory = '${url}src/APIs/InventoryList/getListMemberCategory.php';
   static const String getListDefaultInventory = '${url}src/APIs/InventoryList/getListDefaultInventory.php?';
   static const String getListInventoryByCheckList = '${url}src/APIs/InventoryList/getListInventoryByCheckList.php?';
+
 }
