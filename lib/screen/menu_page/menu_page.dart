@@ -1,7 +1,6 @@
+
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/api/menu/get_thong_bao_menu_api.dart';
-import 'package:link_life_one/components/login_widget.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/screen/page5/page5_quan_ly/quan_ly_nhap_xuat_page.dart';
 import 'package:link_life_one/screen/page6/page6_quan_ly/page_6_quan_ly_thanh_vien.dart';
@@ -60,7 +59,7 @@ class _MenuPageState extends State<MenuPage> {
     "0",
   ];
 
-  List<dynamic> listJYUCYU_ID = [];
+  List<String> listJYUCYU_ID = [];
 
   Future? callGetThongBaoMenuApiFuture;
 
@@ -73,14 +72,13 @@ class _MenuPageState extends State<MenuPage> {
   Future<dynamic> callGetThongBaoMenuApi() async {
     final dynamic result =
         await GetThongBaoMenuApi().getThongBaoMenuApi(onSuccess: (res) {
-      print(res);
 
       if (res["COMMENT"] != null) {
         setState(() {
           listComments = res["COMMENT"];
         });
 
-        List<dynamic> tmp = [];
+        List<String> tmp = [];
         for (var element in res["COMMENT"]) {
           tmp.add(element["JYUCYU_ID"]);
         }
@@ -139,6 +137,9 @@ class _MenuPageState extends State<MenuPage> {
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
+                      if (listJYUCYU_ID.isEmpty) {
+                        return;
+                      }
                       PostUpdateKojiReadFlg().postUpdateKojiReadFlg(
                           listJYUCYU_ID: listJYUCYU_ID,
                           onSuccess: () {

@@ -1,4 +1,4 @@
-import "package:http/http.dart" as http;
+import 'package:link_life_one/api/base/rest_api.dart';
 
 import '../../constants/constant.dart';
 
@@ -6,18 +6,17 @@ class PostUpdateKojiReadFlg {
   PostUpdateKojiReadFlg() : super();
 
   Future<void> postUpdateKojiReadFlg({
-    required List<dynamic> listJYUCYU_ID,
+    required List<String> listJYUCYU_ID,
     required Function() onSuccess,
     required Function() onFailed,
   }) async {
     try {
-      final response = await http.post(
-          Uri.parse(
-              "${Constant.url}Request/Menu/requestPostUpdateKojiReadFlg.php"),
-          body: {
-            "JYUCYU_ID": listJYUCYU_ID.toString(),
-          });
-
+      var parameters = {
+        'JYUCYU_ID': listJYUCYU_ID,
+      };
+      String endpoint =
+          '${Constant.url}Request/Menu/requestPostUpdateKojiReadFlg.php';
+      final response = await RestAPI.shared.postData(endpoint, parameters);
       if (response.statusCode == 200) {
         onSuccess.call();
       } else {
