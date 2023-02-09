@@ -87,45 +87,6 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
         });
   }
 
-  void showAlert() {
-    showDialog(
-      context: context,
-      builder: (dialogContext) {
-        return SizedBox(
-          width: double.infinity,
-          child: CupertinoAlertDialog(
-            content: const Padding(
-              padding: EdgeInsets.only(top: 15),
-              child: Text(
-                '持ち出し数量が0の商品があります。',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 24, 23, 23),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(dialogContext);
-                },
-                child: const Text(
-                  'はい',
-                  style: TextStyle(
-                    color: Color(0xFF007AFF),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              )
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -293,9 +254,9 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
                     onPressed: () {
                       if (currentRadioRow > 0 &&
                           currentRadioRow <= inventories.length) {
-                        DefaultInventory schedule =
+                        DefaultInventory inventory =
                             inventories.elementAt(currentRadioRow - 1);
-                        showAlert();
+                        Navigator.pop(context, inventory);
                       } else {
                         CustomToast.show(context, message: "一つを選択してください。");
                       }

@@ -3,11 +3,14 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:link_life_one/api/material/material_api.dart';
+import 'package:link_life_one/models/default_inventory.dart';
 import 'package:link_life_one/models/material_model.dart';
 import 'package:link_life_one/screen/page5/page_5_2_1_danh_sach_ton_kho.dart';
 import '../../components/custom_header_widget.dart';
+import '../../components/custom_text_field.dart';
 import '../../components/toast.dart';
 import '../../shared/assets.dart';
+import '../../shared/colors.dart';
 import '../../shared/custom_button.dart';
 
 class Page52DanhSachNguyenLieu extends StatefulWidget {
@@ -23,11 +26,7 @@ class Page52DanhSachNguyenLieu extends StatefulWidget {
 class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
   late int currentRadioRow;
   List<MaterialModel> materials = [];
-  List<String> listNames = [
-    '入出庫管理',
-    '部材管理',
-    '出納帳',
-  ];
+  Map<String, TextEditingController> textControllers = {};
 
   List<Widget> _buildCells(int count) {
     return List.generate(
@@ -119,25 +118,35 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
 
   Widget contentTable(int col, int row) {
     if (col == 6) {
-      return Row(
-        children: [
-          const Text(''),
-          const Spacer(),
-          Container(
-            decoration: const BoxDecoration(
-              border: Border(
-                left: BorderSide(
-                  color: Colors.black,
-                  width: 0.7,
-                ),
-              ),
-            ),
+      MaterialModel material = materials.elementAt(row - 1);
+      TextEditingController? textController =
+          textControllers[material.jisyaCode];
+      if (textController == null) {
+        textController = TextEditingController(text: material.suryo ?? '');
+        textControllers[material.jisyaCode ?? ''] = textController;
+      }
+      OutlineInputBorder borderOutline = const OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(0)),
+        borderSide: BorderSide(color: AppColors.BORDER, width: 1),
+      );
+      return Container(
+        height: 80,
+        alignment: Alignment.center,
+        child: Center(
+          child: TextField(
+            controller: textController,
+            decoration: InputDecoration(
+                hintText: '0',
+                contentPadding: EdgeInsets.zero,
+                enabledBorder: borderOutline,
+                focusedBorder: borderOutline,
+                disabledBorder: borderOutline),
+            textAlign: TextAlign.center,
+            onChanged: (text) {},
+            keyboardType: TextInputType.number,
+            maxLines: 1,
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 7, left: 7),
-            child: _moreButton(context),
-          ),
-        ],
+        ),
       );
     }
     return col == 0
@@ -145,15 +154,35 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
             value: row,
             groupValue: currentRadioRow,
             onChanged: (e) {
-              setState(() {
-                currentRadioRow = row;
-              });
+              if (row <= materials.length) {
+                setState(() {
+                  currentRadioRow = row;
+                });
+              }
             },
           )
-        : const Text(
-            '',
-            style: TextStyle(color: Colors.black),
+        : Text(
+            valueFrom(col, row),
+            style: const TextStyle(color: Colors.black),
           );
+  }
+
+  String valueFrom(int column, int row) {
+    MaterialModel material = materials.elementAt(row - 1);
+    switch (column) {
+      case 1:
+        return material.ctgoryName ?? '';
+      case 2:
+        return material.makerName ?? '';
+      case 3:
+        return material.jisyaCode ?? '';
+      case 4:
+        return material.syoshinName ?? '';
+      case 5:
+        return material.jissu ?? '';
+      default:
+        return '';
+    }
   }
 
   List<Widget> _buildRows(int count) {
@@ -248,6 +277,45 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
         });
   }
 
+  void showAlertEmptyQuantity() {
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return SizedBox(
+          width: double.infinity,
+          child: CupertinoAlertDialog(
+            content: const Padding(
+              padding: EdgeInsets.only(top: 15),
+              child: Text(
+                '持ち出し数量が0の商品があります。',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 24, 23, 23),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(dialogContext);
+                },
+                child: const Text(
+                  'はい',
+                  style: TextStyle(
+                    color: Color(0xFF007AFF),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     currentRadioRow = -1;
@@ -330,14 +398,17 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {
-                      print("object");
-                      Navigator.push(
+                    onPressed: () async {
+                      DefaultInventory inventory = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const Page521DanhSachTonKho(),
                         ),
                       );
+                      setState(() {
+                        materials
+                            .add(MaterialModel.fromDefaultInventory(inventory));
+                      });
                     },
                     child: const Text(
                       'リストから選択',
@@ -386,7 +457,32 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                 borderRadius: BorderRadius.circular(26),
               ),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  if (currentRadioRow > 0 &&
+                      currentRadioRow <= materials.length) {
+                    MaterialModel material =
+                        materials.elementAt(currentRadioRow - 1);
+                    TextEditingController? textEditingController = textControllers[material.jisyaCode];
+                    int quantity = 0;
+                    if (textEditingController == null) {
+                      quantity = int.parse(material.suryo ?? '0');
+                    } else {
+                      String text = textEditingController.text;
+                      if (text.isEmpty) {
+                        quantity = 0;
+                      } else {
+                        quantity = int.parse(text);
+                      }
+                    }
+                    if (quantity == 0) {
+                      showAlertEmptyQuantity();
+                    } else {
+                      // TODO: Regis 2 API
+                    }
+                  } else {
+                    CustomToast.show(context, message: "一つを選択してください。");
+                  }
+                },
                 child: const Text(
                   '持ち出し登録',
                   style: TextStyle(

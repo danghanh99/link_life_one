@@ -30,7 +30,7 @@ class InventoryAPI {
           data.map((e) => InventorySchedule.fromJson(e)).toList();
       onSuccess(schedules);
     } else {
-      onFailed(response);
+      onFailed();
     }
   }
 
@@ -47,7 +47,7 @@ class InventoryAPI {
     if (response.statusCode == 200) {
       onSuccess(response);
     } else {
-      onFailed(response);
+      onFailed();
     }
   }
 
@@ -65,7 +65,7 @@ class InventoryAPI {
           data.map((e) => MemberCategory.fromJson(e)).toList();
       onSuccess(members);
     } else {
-      onFailed(response);
+      onFailed();
     }
   }
 
@@ -88,7 +88,7 @@ class InventoryAPI {
           data.map((e) => DefaultInventory.fromJson(e)).toList();
       onSuccess(inventories);
     } else {
-      onFailed(response);
+      onFailed();
     }
   }
 
@@ -111,7 +111,7 @@ class InventoryAPI {
           data.map((e) => DefaultInventory.fromJson(e)).toList();
       onSuccess(inventories);
     } else {
-      onFailed(response);
+      onFailed();
     }
   }
 }

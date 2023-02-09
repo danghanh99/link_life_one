@@ -139,13 +139,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
           FocusScope.of(context).requestFocus(widget.nextFocus),
       onChanged: widget.onChanged,
       decoration: InputDecoration(
-        counterText: "",
+        counterText: '',
         errorStyle: TextStyles.BODY_14.apply(
           color: AppColors.ERROR_VALIDATE,
           fontFamily: 'LinotteSemiBold',
         ),
         isDense: true,
-        helperText: ' ',
+        helperText: '',
         filled: true,
         errorMaxLines: 2,
         enabledBorder: _borderOutline(),
