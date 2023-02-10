@@ -41,7 +41,7 @@ class CreateRiyuu {
         onFailed.call(errorMessage);
       }
     } catch (e) {
-      onFailed.call("Update image failed");
+      onFailed.call('画像アップロードが失敗しました。');
     }
   }
 
