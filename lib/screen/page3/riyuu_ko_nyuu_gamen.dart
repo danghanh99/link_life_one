@@ -44,7 +44,7 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
     setState(
       () {
         riyuu = result;
-        controller.text = riyuu[0]['CANCEL_RIYU'] ?? "";
+        controller.text = '';
         date = riyuu[0]['MTMORI_YMD'] != null
             ? DateFormat('yyyy-MM-dd').parse(riyuu[0]['MTMORI_YMD'])
             : DateTime.now();
@@ -133,69 +133,69 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
                     borderColor: Colors.black,
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text(
-                        '見積提出予定日：',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w700),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    SizedBox(
-                      width: 200,
-                      child: widget.index == 3
-                          ? Text(
-                              DateFormat('yyyy年 MM月 dd日', 'ja')
-                                  .format(date)
-                                  .toString(),
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w700),
-                            )
-                          : GestureDetector(
-                              onTap: () async {
-                                DatePicker.showDatePicker(context,
-                                    showTitleActions: true,
-                                    minTime: DateTime.now(),
-                                    maxTime: DateTime(2200, 6, 7),
-                                    onChanged: (datePick) {},
-                                    onConfirm: (newDate) {
-                                  setState(() {
-                                    date = newDate;
-                                  });
-                                },
-                                    currentTime: DateTime.now(),
-                                    locale: LocaleType.jp);
-                              },
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                    Assets.icCalendar,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    DateFormat('yyyy /MM / dd (E)', 'ja')
-                                        .format(
-                                          date,
-                                        )
-                                        .toString(),
-                                    style: const TextStyle(
-                                      color: Color(0xFF77869E),
-                                      fontSize: 14.5,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                    )
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.start,
+                //   children: [
+                //     const Padding(
+                //       padding: EdgeInsets.only(left: 20),
+                //       child: Text(
+                //         '見積提出予定日：',
+                //         style: TextStyle(
+                //             fontSize: 20, fontWeight: FontWeight.w700),
+                //       ),
+                //     ),
+                //     const SizedBox(
+                //       width: 10,
+                //     ),
+                //     SizedBox(
+                //       width: 200,
+                //       child: widget.index == 3
+                //           ? Text(
+                //               DateFormat('yyyy年 MM月 dd日', 'ja')
+                //                   .format(date)
+                //                   .toString(),
+                //               style: const TextStyle(
+                //                   fontSize: 20, fontWeight: FontWeight.w700),
+                //             )
+                //           : GestureDetector(
+                //               onTap: () async {
+                //                 DatePicker.showDatePicker(context,
+                //                     showTitleActions: true,
+                //                     minTime: DateTime.now(),
+                //                     maxTime: DateTime(2200, 6, 7),
+                //                     onChanged: (datePick) {},
+                //                     onConfirm: (newDate) {
+                //                   setState(() {
+                //                     date = newDate;
+                //                   });
+                //                 },
+                //                     currentTime: DateTime.now(),
+                //                     locale: LocaleType.jp);
+                //               },
+                //               child: Row(
+                //                 children: [
+                //                   Image.asset(
+                //                     Assets.icCalendar,
+                //                   ),
+                //                   const SizedBox(width: 5),
+                //                   Text(
+                //                     DateFormat('yyyy /MM / dd (E)', 'ja')
+                //                         .format(
+                //                           date,
+                //                         )
+                //                         .toString(),
+                //                     style: const TextStyle(
+                //                       color: Color(0xFF77869E),
+                //                       fontSize: 14.5,
+                //                       fontWeight: FontWeight.w400,
+                //                     ),
+                //                   )
+                //                 ],
+                //               ),
+                //             ),
+                //     )
+                //   ],
+                // ),
                 const SizedBox(
                   height: 40,
                 ),
