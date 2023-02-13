@@ -38,7 +38,8 @@ class GetListKojiApi {
                 kojiItem: e["KOJI_ITEM"],
                 setsakiAddress: e["SETSAKI_ADDRESS"],
                 setsakiName: e["SETSAKI_NAME"],
-                kojiSt: e['KOJI_ST']),
+                kojiSt: e['KOJI_ST'],
+                hojinFlag: e['HOJIN_FLG']),
           )
           .toList();
       List<Koji> sorted = list;

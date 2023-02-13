@@ -71,7 +71,6 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFFFFFFF),
@@ -421,6 +420,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                               JYUCYU_ID: widget.JYUCYU_ID,
                               KOJI_ST: widget.KOJI_ST,
                               SYUYAKU_JYUCYU_ID: widget.JYUCYU_ID,
+                              HOJIN_FLG: widget.koji.hojinFlag,
                             ),
                           ),
                         );

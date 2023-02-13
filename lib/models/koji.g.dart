@@ -19,6 +19,7 @@ Koji _$KojiFromJson(Map<String, dynamic> json) => Koji(
       setsakiAddress: json['setsakiAddress'] as String,
       setsakiName: json['setsakiName'] as String,
       kojiSt: json['kojiSt'] as String,
+      hojinFlag: json['HOJIN_FLG'] as String
     );
 
 Map<String, dynamic> _$KojiToJson(Koji instance) => <String, dynamic>{
@@ -34,4 +35,5 @@ Map<String, dynamic> _$KojiToJson(Koji instance) => <String, dynamic>{
       'setsakiAddress': instance.setsakiAddress,
       'setsakiName': instance.setsakiName,
       'kojiSt': instance.kojiSt,
+      'HOJIN_FLG': instance.hojinFlag
     };

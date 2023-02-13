@@ -34,6 +34,7 @@ class KojiHoukoku extends StatefulWidget {
   final String SINGLE_SUMMARIZE;
   final String KOJI_ST;
   final String SYUYAKU_JYUCYU_ID;
+  final String HOJIN_FLG;
   const KojiHoukoku({
     super.key,
     this.initialDate,
@@ -41,6 +42,7 @@ class KojiHoukoku extends StatefulWidget {
     required this.SINGLE_SUMMARIZE,
     required this.KOJI_ST,
     required this.SYUYAKU_JYUCYU_ID,
+    required this.HOJIN_FLG
   });
 
   @override
@@ -55,7 +57,6 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
   String currentPullDownValue = '';
   XFile? imageFile;
 
-  String HOJIN_FLG = '0';
   String? TENPO_CD = '00000';
   String? KBN_BIKO;
   @override
@@ -71,16 +72,6 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
         KOJI_ST: widget.KOJI_ST,
         SYUYAKU_JYUCYU_ID: widget.SYUYAKU_JYUCYU_ID,
         onSuccess: (res) {
-          if (res["HOJIN_FLG"] == null || res["HOJIN_FLG"] == "0") {
-            setState(() {
-              HOJIN_FLG = "0";
-            });
-          } else {
-            setState(() {
-              HOJIN_FLG = "1";
-            });
-          }
-
           if (res["TENPO_CD"] != null) {
             setState(() {
               TENPO_CD = res['TENPO_CD'];
@@ -799,10 +790,9 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
             if (TENPO_CD == null) {
               CustomToast.show(context, message: "TenpoCDを取得出来ませんでした。");
             } else {
-              if (HOJIN_FLG == null ||
-                  HOJIN_FLG == "0" ||
-                  HOJIN_FLG == "00" ||
-                  HOJIN_FLG == '') {
+              if (widget.HOJIN_FLG == "0" ||
+                  widget.HOJIN_FLG == "00" ||
+                  widget.HOJIN_FLG == '') {
                 // go to top
                 Navigator.push(
                   context,
