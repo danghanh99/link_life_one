@@ -71,10 +71,9 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
         KOJI_ST: widget.KOJI_ST,
         SYUYAKU_JYUCYU_ID: widget.SYUYAKU_JYUCYU_ID,
         onSuccess: (res) {
-          print(res);
           if (res["HOJIN_FLG"] == null || res["HOJIN_FLG"] == "0") {
             setState(() {
-              HOJIN_FLG = "1";
+              HOJIN_FLG = "0";
             });
           } else {
             setState(() {
