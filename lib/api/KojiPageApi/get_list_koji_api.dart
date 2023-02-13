@@ -27,8 +27,8 @@ class GetListKojiApi {
       final List<Koji> list = body
           .map(
             (e) => Koji(
-                sitamiHomonJikan: e["SITAMIHOMONJIKAN"],
-                kojiHomonJikan: e["KOJIHOMONJIKAN"],
+                sitamiHomonJikan: e["SITAMIHOMONJIKAN"] ?? '',
+                kojiHomonJikan: e["KOJIHOMONJIKAN"] ?? '',
                 homonSbt: e["HOMON_SBT"],
                 jyucyuId: e["JYUCYU_ID"],
                 shitamiJinin: int.parse(e['SITAMI_JININ'] ?? '0'),
@@ -41,7 +41,16 @@ class GetListKojiApi {
                 kojiSt: e['KOJI_ST']),
           )
           .toList();
-      onSuccess.call(list);
+      List<Koji> sorted = list;
+      sorted.sort((a, b) {
+        if (a.homonSbt == '01') { // isShitami
+          return a.sitamiHomonJikan!.compareTo(b.sitamiHomonJikan!);
+        } else {
+          return a.kojiHomonJikan!.compareTo(b.kojiHomonJikan!);
+        }
+      });
+
+      onSuccess.call(sorted);
       return list;
     } else {
       onFailed.call();
