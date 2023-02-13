@@ -44,7 +44,7 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
     setState(
       () {
         riyuu = result;
-        controller.text = '';
+        controller.text = riyuu[0]['CANCEL_RIYU'] ?? "";
         date = riyuu[0]['MTMORI_YMD'] != null
             ? DateFormat('yyyy-MM-dd').parse(riyuu[0]['MTMORI_YMD'])
             : DateTime.now();
