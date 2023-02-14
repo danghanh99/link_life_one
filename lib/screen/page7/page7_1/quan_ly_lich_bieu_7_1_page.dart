@@ -1560,7 +1560,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     TAN_CAL_ID: e['TAN_CAL_ID'],
                     KBNMSAI_NAME: e['KBNMSAI_NAME'],
                     checkedValue: e['ALL_DAY_FLG'] == '1' ? true : false,
-                    NAIYO: e['NAIYO'],
+                    NAIYO: e['NAIYO'] ?? '',
                     END_TIME: e['END_TIME'],
                     START_TIME: e['START_TIME'],
                     JYOKEN_CD: e['JYOKEN_CD'],

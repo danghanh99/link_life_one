@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:link_life_one/models/schedules.dart';
 import 'package:link_life_one/screen/page7/netto_koji/page_7_2_2_edit_item/page_7_2_2.dart';
-
-import '../../../../api/sukejuuru_page_api/netto_koji/show_anken/get_lich_trinh_item_edit_page.dart';
 import '../../../../api/sukejuuru_page_api/netto_koji/show_anken/get_lich_trinh_item.dart';
-import '../../../../components/custom_text_field.dart';
-import '../../../../shared/assets.dart';
-import '../../../page6/saibuhachuulist_danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
 class Page721 extends StatefulWidget {
   final String JYUCYU_ID;
@@ -72,6 +68,8 @@ class _Page721State extends State<Page721> {
   String COMMENT = '';
   List<dynamic> FILEPATH = [];
 
+  ScheduleItem? schedule;
+
   DateTime? time;
 
   @override
@@ -97,77 +95,45 @@ class _Page721State extends State<Page721> {
         JYUCYU_ID: widget.JYUCYU_ID,
         HOMON_SBT: widget.HOMON_SBT,
         onSuccess: (data) {
-          print(data);
-          setState(() {
-            String YMD_api = data[0]["KOJI_YMD"] ?? data[0]["SITAMI_YMD"];
-            time = DateFormat("yyyy-MM-dd").parse(YMD_api);
+          if (data is List && data.isNotEmpty) {
+            ScheduleItem schedule = ScheduleItem.fromJson(data.first);
+            this.schedule = schedule;
+            bool isShitami = widget.HOMON_SBT == '01';
+            setState(() {
+              String YMD_api = isShitami ? schedule.ymd ?? '' : schedule.kojiYmd ?? '';
+              time = DateFormat("yyyy-MM-dd").parse(YMD_api);
+              JININ = isShitami ? schedule.jinin ?? '' : schedule.kojiJinin ?? '';
+              JIKAN = isShitami ? schedule.jikan ?? '' : schedule.kojiJikan ?? '';
+              jikanKara = schedule.homonjikan ?? '';
+              jikanMade = schedule.homonjikanEnd ?? '';
+              SETSAKI_ADDRESS = schedule.setsakiAddress ?? '';
+              KOJI_ITEM = schedule.kojiItem ?? '';
+              SETSAKI_NAME = schedule.setsakiName ?? '';
+              HOMON_TANT_NAME1 = '';
+              HOMON_TANT_NAME2 = '';
+              HOMON_TANT_NAME3 = '';
+              HOMON_TANT_NAME4 = '';
+              ADD_TANTNM = schedule.addTantnm ?? '';
+              ADD_YMD = schedule.addYmd ?? '';
+              UPD_TANTNM = schedule.updTantnm ?? '';
+              UPD_YMD = schedule.updYmd ?? '';
+              SITAMIIRAISYO_FILEPATH = schedule.sitamiiraisyoFilepath ?? '';
+              MEMO = schedule.memo ?? '';
+              HOMON_SBT = schedule.homonSbt ?? '';
+              KBNMSAI_NAME = schedule.kbnmsaiName ?? '';
+              COMMENT = schedule.comment ?? '';
+              FILEPATH = schedule.filepath ?? [];
 
-            if (data[0]["JININ"] != null) JININ = data[0]["JININ"];
-            if (data[0]["JIKAN"] != null) JIKAN = data[0]["JIKAN"];
-            if (data[0]["HOMONJIKAN"] != null) {
-              jikanKara = data[0]["HOMONJIKAN"];
-              // if (data[0]["HOMONJIKAN"].toString().split(" ").length >= 2) {
-              //   HOMONJIKAN = data[0]["HOMONJIKAN"];
-              //   jikanKara = HOMONJIKAN.split(" ")[1];
-              //   datetime = HOMONJIKAN.split(" ")[0];
-              // }
-            }
-            if (data[0]["HOMONJIKAN_END"] != null) {
-              jikanMade = data[0]["HOMONJIKAN_END"];
-              // if (data[0]["HOMONJIKAN_END"].toString().split(" ").length >= 2) {
-              //   HOMONJIKAN_END = data[0]["HOMONJIKAN_END"];
-              //   jikanMade = HOMONJIKAN_END.split(" ")[1];
-              //   datetime = HOMONJIKAN_END.split(" ")[0];
-              // }
-            }
-            if (data[0]["SETSAKI_ADDRESS"] != null)
-              SETSAKI_ADDRESS = data[0]["SETSAKI_ADDRESS"];
-            if (data[0]["KOJI_ITEM"] != null) KOJI_ITEM = data[0]["KOJI_ITEM"];
-            if (data[0]["SETSAKI_NAME"] != null)
-              SETSAKI_NAME = data[0]["SETSAKI_NAME"];
-            if (data[0]["HOMON_TANT_NAME1"] != null)
-              HOMON_TANT_NAME1 = data[0]["HOMON_TANT_NAME1"];
-            if (data[0]["HOMON_TANT_NAME2"] != null)
-              HOMON_TANT_NAME2 = data[0]["HOMON_TANT_NAME2"];
-            if (data[0]["HOMON_TANT_NAME3"] != null)
-              HOMON_TANT_NAME3 = data[0]["HOMON_TANT_NAME3"];
-            if (data[0]["HOMON_TANT_NAME4"] != null)
-              HOMON_TANT_NAME4 = data[0]["HOMON_TANT_NAME4"];
-            if (data[0]["ADD_TANTNM"] != null)
-              ADD_TANTNM = data[0]["ADD_TANTNM"];
-            if (data[0]["ADD_YMD"] != null) ADD_YMD = data[0]["ADD_YMD"];
-            if (data[0]["UPD_TANTNM"] != null)
-              UPD_TANTNM = data[0]["UPD_TANTNM"];
-            if (data[0]["UPD_YMD"] != null) UPD_YMD = data[0]["UPD_YMD"];
-            if (data[0]["SITAMIIRAISYO_FILEPATH"] != null)
-              SITAMIIRAISYO_FILEPATH = data[0]["SITAMIIRAISYO_FILEPATH"];
-            if (data[0]["MEMO"] != null) MEMO = data[0]["MEMO"];
-            if (data[0]["HOMON_SBT"] != null) HOMON_SBT = data[0]["HOMON_SBT"];
-            if (data[0]["KBNMSAI_NAME"] != null)
-              KBNMSAI_NAME = data[0]["KBNMSAI_NAME"];
-            if (data[0]["COMMENT"] != null) COMMENT = data[0]["COMMENT"];
-            if (data[0]["FILEPATH"] != null) FILEPATH = data[0]["FILEPATH"];
-
-            titleDateTimeADD_YMD = ADD_TANTNM +
-                "   " +
-                DateFormat('yyyy/MM/dd(日) hh:mm', 'ja')
-                    .format(convertDateTime(ADD_YMD))
-                    .toString();
-            titleDateTimeUPD_YMD = UPD_TANTNM +
-                "   " +
-                DateFormat('yyyy/MM/dd(日) hh:mm', 'ja')
-                    .format(convertDateTime(UPD_YMD))
-                    .toString();
-            titleDateTime3 = time == null
-                ? ''
-                : DateFormat('yyyy年MM月dd日(E)', 'ja').format(time!).toString() +
-                    " " +
-                    jikanKara +
-                    " " +
-                    "〜" +
-                    " " +
-                    jikanMade;
-          });
+              titleDateTimeADD_YMD = "$ADD_TANTNM   ${DateFormat('yyyy/MM/dd(日) hh:mm', 'ja')
+                      .format(convertDateTime(ADD_YMD))}";
+              titleDateTimeUPD_YMD = "$UPD_TANTNM   ${DateFormat('yyyy/MM/dd(日) hh:mm', 'ja')
+                      .format(convertDateTime(UPD_YMD))}";
+              titleDateTime3 = time == null
+                  ? ''
+                  : "${DateFormat('yyyy年MM月dd日(E)', 'ja')
+                          .format(time!)} $jikanKara 〜 $jikanMade";
+            });
+          }
         });
 
     return result;
