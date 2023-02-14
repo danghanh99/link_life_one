@@ -117,11 +117,16 @@ class _Page721State extends State<Page721> {
               SETSAKI_ADDRESS = schedule.setsakiAddress ?? '';
               KOJI_ITEM = schedule.kojiItem ?? '';
               SETSAKI_NAME = schedule.setsakiName ?? '';
-              tantName = isShitami
-                  ? schedule.tantName1 ?? ''
-                  : (schedule.tantName2 ?? '') +
-                      (schedule.tantName3 ?? '') +
-                      (schedule.tantName4 ?? '');
+              if (!isShitami) {
+                tantName = schedule.tantName4 ?? '';
+              } else {
+                tantName = [
+                  schedule.tantName1,
+                  schedule.tantName2,
+                  schedule.tantName3
+                ].where((s) => s != null && s.isNotEmpty).join(', ');
+              }
+
               ADD_TANTNM = schedule.addTantnm ?? '';
               ADD_YMD = schedule.addYmd ?? '';
               UPD_TANTNM = schedule.updTantnm ?? '';
