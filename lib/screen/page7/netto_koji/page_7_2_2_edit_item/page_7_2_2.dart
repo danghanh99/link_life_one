@@ -12,12 +12,18 @@ class NettoKojiPage722 extends StatefulWidget {
   final String JYUCYU_ID;
   final String HOMON_SBT;
   final String KBNMSAI_NAME;
+  final String jinin;
+  final String jikan;
+  final String memo;
 
   final Function onSuccessUpdate;
   const NettoKojiPage722({
     required this.JYUCYU_ID,
     required this.HOMON_SBT,
     required this.KBNMSAI_NAME,
+    required this.jinin,
+    required this.jikan,
+    required this.memo,
     required this.onSuccessUpdate,
     Key? key,
   }) : super(key: key);
@@ -151,6 +157,7 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
   String JININ = '';
   String JIKAN = '';
   String KOJIAPO_KBN = '';
+  String SITAMIAPO_KBN = '';
   String UPD_TANTNM = '';
   String UPD_YMD = '';
   String KOJI_KANSAN_POINT = '';
@@ -171,9 +178,9 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
     jikanKaraEditPage = "00:00";
     jikanMadeEditPage = "00:00";
     checkAllDayEditPage = false;
-    jinNumberEditPage = "0";
-    jikanNumberEditPage = "0";
-    commentEditPage = "";
+    jinNumberEditPage = widget.jinin;
+    jikanNumberEditPage = widget.jikan;
+    commentEditPage = widget.memo;
 
     callGetLichTrinhItemEditPage();
     super.initState();
@@ -224,6 +231,9 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                     JIKAN = data["DATA"][0]["JIKAN"];
                   if (data["DATA"][0]["KOJIAPO_KBN"] != null)
                     KOJIAPO_KBN = data["DATA"][0]["KOJIAPO_KBN"];
+                  if (data["DATA"][0]["SITAMIAPO_KBN"] != null) {
+                    SITAMIAPO_KBN = data["DATA"][0]["SITAMIAPO_KBN"];
+                  }
                   if (data["DATA"][0]["UPD_TANTNM"] != null)
                     UPD_TANTNM = data["DATA"][0]["UPD_TANTNM"];
 
@@ -248,11 +258,16 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                     ALL_DAY_FLG = data["DATA"][0]["ALL_DAY_FLG"];
 
                   titleEditPage = UPD_TANTNM + "  " + UPD_YMD;
-                  checkAppointEditPage = KOJIAPO_KBN == "01" ? true : false;
+                  String apoKbn = (widget.HOMON_SBT == '01'
+                              ? SITAMIAPO_KBN
+                              : KOJIAPO_KBN);
+                  checkAppointEditPage = apoKbn == "01" || apoKbn == "1"
+                      ? false
+                      : true;
                   checkAllDayEditPage = ALL_DAY_FLG == "1" ? true : false;
-                  jinNumberEditPage = JININ;
-                  jikanNumberEditPage = JIKAN;
-                  commentEditPage = COMMENT;
+                  // jinNumberEditPage = JININ;
+                  // jikanNumberEditPage = JIKAN;
+                  // commentEditPage = COMMENT;
                   datetimeEditPage = DateFormat("yyyy-MM-dd")
                       .parse(data["DATA"][0]["KOJI_YMD"]);
                 });
@@ -614,7 +629,8 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                   ),
                   CustomTextField(
                     fillColor: const Color(0xFFF5F6F8),
-                    hint: commentEditPage,
+                    hint: '',
+                    initValue: commentEditPage,
                     type: TextInputType.emailAddress,
                     onChanged: (text) {
                       setState(() {

@@ -173,6 +173,9 @@ class _Page721State extends State<Page721> {
             },
             JYUCYU_ID: widget.JYUCYU_ID,
             HOMON_SBT: HOMON_SBT,
+            jinin: JININ,
+            jikan: JIKAN,
+            memo: MEMO,
           )
         : Column(
             children: [
