@@ -6,6 +6,10 @@ class ScheduleItem {
   String? homonTantCd2;
   String? homonTantCd3;
   String? homonTantCd4;
+  String? tantName1;
+  String? tantName2;
+  String? tantName3;
+  String? tantName4;
   String? setsakiName;
   String? setsakiAddress;
   String? kojiJinin;
@@ -73,6 +77,10 @@ class ScheduleItem {
     this.homonTantCd2,
     this.homonTantCd3,
     this.homonTantCd4,
+    this.tantName1,
+    this.tantName2,
+    this.tantName3,
+    this.tantName4,
     this.setsakiName,
     this.setsakiAddress,
     this.kojiJinin,
@@ -142,6 +150,10 @@ class ScheduleItem {
       homonTantCd2: json['HOMON_TANT_CD2'] ?? '',
       homonTantCd3: json['HOMON_TANT_CD3'] ?? '',
       homonTantCd4: json['HOMON_TANT_CD4'] ?? '',
+      tantName1: json['TANT_NAME1'] ?? '',
+      tantName2: json['TANT_NAME2'] ?? '',
+      tantName3: json['TANT_NAME3'] ?? '',
+      tantName4: json['TANT_NAME4'] ?? '',
       setsakiName: json['SETSAKI_NAME'] ?? '',
       setsakiAddress: json['SETSAKI_ADDRESS'] ?? '',
       kojiJinin: json['KOJI_JININ'] ?? '',

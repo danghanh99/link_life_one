@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/models/schedules.dart';
 import 'package:link_life_one/screen/page7/netto_koji/page_7_2_2_edit_item/page_7_2_2.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../../../api/sukejuuru_page_api/netto_koji/show_anken/get_lich_trinh_item.dart';
+import '../../../../components/toast.dart';
+import '../../component/dialog.dart';
 
 class Page721 extends StatefulWidget {
   final String JYUCYU_ID;
@@ -61,12 +64,14 @@ class _Page721State extends State<Page721> {
   String ADD_YMD = '';
   String UPD_TANTNM = '';
   String UPD_YMD = '';
-  String SITAMIIRAISYO_FILEPATH = '';
+  String fileName = '';
+  String filePath = '';
   String MEMO = '';
   String HOMON_SBT = '';
   String KBNMSAI_NAME = '';
   String COMMENT = '';
   List<dynamic> FILEPATH = [];
+  String tantName = '';
 
   ScheduleItem? schedule;
 
@@ -100,38 +105,46 @@ class _Page721State extends State<Page721> {
             this.schedule = schedule;
             bool isShitami = widget.HOMON_SBT == '01';
             setState(() {
-              String YMD_api = isShitami ? schedule.ymd ?? '' : schedule.kojiYmd ?? '';
+              String YMD_api =
+                  isShitami ? schedule.ymd ?? '' : schedule.kojiYmd ?? '';
               time = DateFormat("yyyy-MM-dd").parse(YMD_api);
-              JININ = isShitami ? schedule.jinin ?? '' : schedule.kojiJinin ?? '';
-              JIKAN = isShitami ? schedule.jikan ?? '' : schedule.kojiJikan ?? '';
+              JININ =
+                  isShitami ? schedule.jinin ?? '' : schedule.kojiJinin ?? '';
+              JIKAN =
+                  isShitami ? schedule.jikan ?? '' : schedule.kojiJikan ?? '';
               jikanKara = schedule.homonjikan ?? '';
               jikanMade = schedule.homonjikanEnd ?? '';
               SETSAKI_ADDRESS = schedule.setsakiAddress ?? '';
               KOJI_ITEM = schedule.kojiItem ?? '';
               SETSAKI_NAME = schedule.setsakiName ?? '';
-              HOMON_TANT_NAME1 = '';
-              HOMON_TANT_NAME2 = '';
-              HOMON_TANT_NAME3 = '';
-              HOMON_TANT_NAME4 = '';
+              tantName = isShitami
+                  ? schedule.tantName1 ?? ''
+                  : (schedule.tantName2 ?? '') +
+                      (schedule.tantName3 ?? '') +
+                      (schedule.tantName4 ?? '');
               ADD_TANTNM = schedule.addTantnm ?? '';
               ADD_YMD = schedule.addYmd ?? '';
               UPD_TANTNM = schedule.updTantnm ?? '';
               UPD_YMD = schedule.updYmd ?? '';
-              SITAMIIRAISYO_FILEPATH = schedule.sitamiiraisyoFilepath ?? '';
+              fileName = isShitami
+                  ? schedule.sitamiiraisyoFilepath?.split('/').last ?? ''
+                  : schedule.kojiiraisyoFilepath?.split('/').last ?? '';
+              filePath = isShitami
+                  ? schedule.sitamiiraisyoFilepath ?? ''
+                  : schedule.kojiiraisyoFilepath ?? '';
               MEMO = schedule.memo ?? '';
               HOMON_SBT = schedule.homonSbt ?? '';
               KBNMSAI_NAME = schedule.kbnmsaiName ?? '';
               COMMENT = schedule.comment ?? '';
               FILEPATH = schedule.filepath ?? [];
 
-              titleDateTimeADD_YMD = "$ADD_TANTNM   ${DateFormat('yyyy/MM/dd(日) hh:mm', 'ja')
-                      .format(convertDateTime(ADD_YMD))}";
-              titleDateTimeUPD_YMD = "$UPD_TANTNM   ${DateFormat('yyyy/MM/dd(日) hh:mm', 'ja')
-                      .format(convertDateTime(UPD_YMD))}";
+              titleDateTimeADD_YMD =
+                  "$ADD_TANTNM   ${DateFormat('yyyy/MM/dd(日) hh:mm', 'ja').format(convertDateTime(ADD_YMD))}";
+              titleDateTimeUPD_YMD =
+                  "$UPD_TANTNM   ${DateFormat('yyyy/MM/dd(日) hh:mm', 'ja').format(convertDateTime(UPD_YMD))}";
               titleDateTime3 = time == null
                   ? ''
-                  : "${DateFormat('yyyy年MM月dd日(E)', 'ja')
-                          .format(time!)} $jikanKara 〜 $jikanMade";
+                  : "${DateFormat('yyyy年MM月dd日(E)', 'ja').format(time!)} $jikanKara 〜 $jikanMade";
             });
           }
         });
@@ -467,23 +480,23 @@ class _Page721State extends State<Page721> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Text(
                             MEMO,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 14,
                               fontWeight: FontWeight.w300,
                             ),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           Container(
                             width: 120,
                             height: 37,
                             decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 237, 189, 116),
+                              color: const Color.fromARGB(255, 237, 189, 116),
                               borderRadius: BorderRadius.circular(26),
                             ),
                             child: TextButton(
@@ -527,18 +540,79 @@ class _Page721State extends State<Page721> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
-                          Text(
-                            '',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w300,
+                          Flexible(
+                            child: GestureDetector(
+                              onTap: () {
+                                Size size = MediaQuery.of(context).size;
+                                CustomDialog.showCustomDialog(
+                                    context: context,
+                                    title: '',
+                                    body: Container(
+                                      // width: size.width * 2 / 3,
+                                      // height: size.height * 2 / 3,
+                                      decoration: BoxDecoration(
+                                          border:
+                                              Border.all(color: Colors.black)),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text(''),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Container(
+                                                  width: 40,
+                                                  height: 30,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.red,
+                                                      border: Border.all(
+                                                          color: Colors.red)),
+                                                  child: const Icon(
+                                                    Icons.close,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            width: size.width * 4 / 5,
+                                            height: size.height * 4 / 5,
+                                            child: SfPdfViewer.network(
+                                              filePath,
+                                              key: GlobalKey(),
+                                              onDocumentLoaded: (details) {},
+                                              onDocumentLoadFailed: (detail) {
+                                                CustomToast.show(context,
+                                                    message: "PDFを取得出来ませんでした。");
+                                                // message: detail.description);
+                                              },
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ));
+                              },
+                              child: Text(
+                                fileName,
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w300,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
                             ),
                           ),
-                          Spacer(),
+                          // const Spacer(),
                         ],
                       ),
                       const Divider(
@@ -563,18 +637,18 @@ class _Page721State extends State<Page721> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Text(
-                            '',
-                            style: TextStyle(
+                            tantName,
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 14,
                               fontWeight: FontWeight.w300,
                             ),
                           ),
-                          Spacer(),
+                          const Spacer(),
                         ],
                       ),
                       const Divider(
