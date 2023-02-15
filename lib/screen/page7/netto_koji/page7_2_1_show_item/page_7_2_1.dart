@@ -111,7 +111,7 @@ class _Page721State extends State<Page721> {
               JININ =
                   isShitami ? schedule.jinin ?? '' : schedule.kojiJinin ?? '';
               JIKAN =
-                  isShitami ? schedule.jikan ?? '' : schedule.kojiJikan ?? '';
+                  isShitami ? schedule.sitamiKansanPoint ?? '' : schedule.kojiKansanPoint ?? '';
               jikanKara = schedule.homonjikan ?? '';
               jikanMade = schedule.homonjikanEnd ?? '';
               SETSAKI_ADDRESS = schedule.setsakiAddress ?? '';
