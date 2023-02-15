@@ -174,7 +174,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 sukejuuruSelectedUser = response["PERSON"][0][0];
                 selectedNhanVienName = listNhanVien[0]["TANT_NAME"];
                 selectedNhanVienTantCD = listNhanVien[0]["TANT_CD"];
-                print("111");
               });
             }
           }
@@ -492,7 +491,11 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                                 ),
                                 const SizedBox(width: 3),
                                 Text(
-                                  DateFormat('yyyy /MM / dd (E)', 'ja')
+                                  DateFormat(
+                                          value1nguoi == '個人'
+                                              ? 'yyyy / MM'
+                                              : 'yyyy /MM / dd (E)',
+                                          'ja')
                                       .format(currentDate)
                                       .toString(),
                                   style: const TextStyle(
@@ -542,7 +545,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                                             CrossAxisAlignment.start,
                                         children: _buildRows(
                                             value1nguoi == '個人'
-                                                ? 3
+                                                ? 2
                                                 : sukejuuruAllUser.length + 2,
                                             scrollController2),
                                       );
@@ -880,7 +883,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   List<Widget> _buildRows(int count, ScrollController scrollController2) {
     return List.generate(count, (index) {
       return Row(
-        children: _buildCells2(8, index, scrollController2),
+        children:
+            _buildCells2(value1nguoi == '個人' ? 7 : 8, index, scrollController2),
       );
     });
   }
@@ -948,7 +952,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       }
 
       if (row != 0) {
-        if (row == 1) {
+        if (value1nguoi != '個人' && row == 1) {
           if (col == 0) {
             return Container(
               decoration: BoxDecoration(
@@ -1137,9 +1141,17 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     ? null
                     : sukejuuruAllUser[row - 1]["TANT_CD"],
                 e["TAN_EIG_ID"],
-              )
+              ),
             ]),
           );
+          var user = sukejuuruAllUser[row - 1];
+          String tantKbnCode = user['TANT_KBN_CD'];
+          if (tantKbnCode == '01' || tantKbnCode == '1') {
+            if ((user[element] as List).isNotEmpty) {
+              var item = user[element].first;
+              xxx.addAll(_saleItems(col, row, user, item, element));
+            }
+          }
         }
       },
     );
@@ -1151,6 +1163,117 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       ),
     );
     return xxx;
+  }
+
+  List<Widget> _saleItems(
+      int col, int row, dynamic user, dynamic item, String date) {
+    DateTime dateTime = DateTime.parse(date);
+    String tantName = user['TANT_NAME'] ?? '';
+    String dailySales = user['DAYLY_SALES'] ?? '0';
+    String monthlySales = user['MONTHLY_SALES'] ?? '0';
+    String sumItakuhi = item['SUM_ITAKUHI'] ?? '0';
+    String sumItakuhiBetweenDate = item['SUM_ITAKUHI_BETWEEN_DATE'] ?? '0';
+    String percentItakuhi = item['PERCENT_ITAKUHI'] ?? '0';
+    return [
+      Padding(
+        padding: const EdgeInsets.only(bottom: 2),
+        child: Container(
+          width: colWidth()[col],
+          color: const Color(0x331e73d4),
+          child: Padding(
+            padding: const EdgeInsets.all(3),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  text: TextSpan(
+                      style: const TextStyle(color: Colors.black),
+                      children: [
+                        WidgetSpan(
+                          child: Container(
+                            // color: backgroundKojiItem(e),
+                            // color: getTitleColorByText(
+                            //   text: e["KBNMSAI_NAME"] ?? '',
+                            // ),
+                            color: const Color(0xff1e73d4),
+                            child: const Padding(
+                              padding: EdgeInsets.only(
+                                bottom: 2,
+                              ),
+                              child: Text(
+                                '日予実',
+                                style: TextStyle(
+                                  // color: kojiColorWithType(e),
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        TextSpan(
+                            text:
+                                '${dateTime.month}/${dateTime.day} $tantName: 実$sumItakuhi円/予$dailySales円',
+                            style: const TextStyle(
+                              color: Color(0xff1e73d4),
+                            )),
+                      ]),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(bottom: 2),
+        child: Container(
+          width: colWidth()[col],
+          color: const Color(0x33e0c610),
+          child: Padding(
+            padding: const EdgeInsets.all(3),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  text: TextSpan(
+                      style: const TextStyle(color: Colors.black),
+                      children: [
+                        WidgetSpan(
+                          child: Container(
+                            // color: backgroundKojiItem(e),
+                            // color: getTitleColorByText(
+                            //   text: e["KBNMSAI_NAME"] ?? '',
+                            // ),
+                            color: const Color(0xffe0c610),
+                            child: const Padding(
+                              padding: EdgeInsets.only(
+                                bottom: 2,
+                              ),
+                              child: Text(
+                                '計予実',
+                                style: TextStyle(
+                                  // color: kojiColorWithType(e),
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        TextSpan(
+                            text:
+                                '${dateTime.month}/${dateTime.day} $tantName: 実$sumItakuhiBetweenDate円/予$monthlySales円($percentItakuhi%)',
+                            style: const TextStyle(
+                              color: Color(0xff1e73d4),
+                            )),
+                      ]),
+                ),
+              ],
+            ),
+          ),
+        ),
+      )
+    ];
   }
 
   List<Widget> kojiItems1Persion(int row, int col) {
