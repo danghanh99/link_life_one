@@ -117,7 +117,7 @@ class _Page721State extends State<Page721> {
               SETSAKI_ADDRESS = schedule.setsakiAddress ?? '';
               KOJI_ITEM = schedule.kojiItem ?? '';
               SETSAKI_NAME = schedule.setsakiName ?? '';
-              if (!isShitami) {
+              if (isShitami) {
                 tantName = schedule.tantName4 ?? '';
               } else {
                 tantName = [
@@ -611,7 +611,7 @@ class _Page721State extends State<Page721> {
                                     ));
                               },
                               child: Text(
-                                fileName,
+                                tantName,
                                 style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 14,
@@ -649,7 +649,7 @@ class _Page721State extends State<Page721> {
                             width: 10,
                           ),
                           Text(
-                            tantName,
+                            fileName,
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 14,

@@ -883,8 +883,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   List<Widget> _buildRows(int count, ScrollController scrollController2) {
     return List.generate(count, (index) {
       return Row(
-        children:
-            _buildCells2(value1nguoi == '個人' ? 7 : 8, index, scrollController2),
+        children: _buildCells2(8, index, scrollController2),
       );
     });
   }
@@ -1173,12 +1172,12 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     String monthlySales = user['MONTHLY_SALES'] ?? '0';
     String sumItakuhi = item['SUM_ITAKUHI'] ?? '0';
     String sumItakuhiBetweenDate = item['SUM_ITAKUHI_BETWEEN_DATE'] ?? '0';
-    String percentItakuhi = item['PERCENT_ITAKUHI'] ?? '0';
+    String percentItakuhi = item['PERCENT_ITAKUHI'] != null ? item['PERCENT_ITAKUHI'].toString() : '0';
     return [
       Padding(
         padding: const EdgeInsets.only(bottom: 2),
         child: Container(
-          width: colWidth()[col],
+          width: colWidth()[col], 
           color: const Color(0x331e73d4),
           child: Padding(
             padding: const EdgeInsets.all(3),
