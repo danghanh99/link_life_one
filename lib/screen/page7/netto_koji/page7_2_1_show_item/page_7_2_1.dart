@@ -105,11 +105,15 @@ class _Page721State extends State<Page721> {
             this.schedule = schedule;
             bool isShitami = widget.HOMON_SBT == '01';
             setState(() {
-              String YMD_api = schedule.kojiYmd!.isEmpty ? schedule.simatiYmd! : '';
-              time = YMD_api.isEmpty ? null : DateFormat("yyyy-MM-dd").parse(YMD_api);
+              String YMD_api =
+                  schedule.kojiYmd!.isEmpty ? schedule.simatiYmd! : '';
+              time = YMD_api.isEmpty
+                  ? null
+                  : DateFormat("yyyy-MM-dd").parse(YMD_api);
               JININ = schedule.jinin ?? '';
-              JIKAN =
-                  isShitami ? schedule.sitamiKansanPoint ?? '' : schedule.kojiKansanPoint ?? '';
+              JIKAN = isShitami
+                  ? schedule.sitamiKansanPoint ?? ''
+                  : schedule.kojiKansanPoint ?? '';
               jikanKara = schedule.homonjikan ?? '';
               jikanMade = schedule.homonjikanEnd ?? '';
               SETSAKI_ADDRESS = schedule.setsakiAddress ?? '';
@@ -549,6 +553,42 @@ class _Page721State extends State<Page721> {
                           const SizedBox(
                             width: 10,
                           ),
+                          Text(
+                            tantName,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          const Spacer(),
+                        ],
+                      ),
+                      const Divider(
+                        thickness: 2,
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: 130,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                '添付ファイル',
+                                style: TextStyle(
+                                  color: Color(0xFF042C5C),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
                           Flexible(
                             child: GestureDetector(
                               onTap: () {
@@ -609,7 +649,7 @@ class _Page721State extends State<Page721> {
                                     ));
                               },
                               child: Text(
-                                tantName,
+                                fileName,
                                 style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 14,
@@ -618,43 +658,6 @@ class _Page721State extends State<Page721> {
                               ),
                             ),
                           ),
-                          // const Spacer(),
-                        ],
-                      ),
-                      const Divider(
-                        thickness: 2,
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        children: [
-                          const SizedBox(
-                            width: 130,
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                '添付ファイル',
-                                style: TextStyle(
-                                  color: Color(0xFF042C5C),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            fileName,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                          const Spacer(),
                         ],
                       ),
                       const Divider(
