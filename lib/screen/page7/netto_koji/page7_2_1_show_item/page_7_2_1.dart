@@ -105,9 +105,8 @@ class _Page721State extends State<Page721> {
             this.schedule = schedule;
             bool isShitami = widget.HOMON_SBT == '01';
             setState(() {
-              String YMD_api =
-                  isShitami ? schedule.ymd ?? '' : schedule.kojiYmd ?? '';
-              time = DateFormat("yyyy-MM-dd").parse(YMD_api);
+              String YMD_api = schedule.kojiYmd ?? schedule.simatiYmd ?? '';
+              time = YMD_api.isEmpty ? null : DateFormat("yyyy-MM-dd").parse(YMD_api);
               JININ =
                   isShitami ? schedule.jinin ?? '' : schedule.kojiJinin ?? '';
               JIKAN =

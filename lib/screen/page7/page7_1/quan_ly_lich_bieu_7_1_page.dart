@@ -1026,7 +1026,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         Text(
                           phongBanName,
                           style: const TextStyle(
-                              color: Color(0xFF042C5C),
+                              color: Color.fromARGB(255, 5, 18, 35),
                               fontSize: 20,
                               fontWeight: FontWeight.w400),
                         ),
@@ -1056,9 +1056,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             height: 400,
             child: GestureDetector(
               onTap: () {},
-              child: ListView(
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                padding: EdgeInsets.zero,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: kojiItemsPhongBan(row - 1, col),
               ),
             ),
