@@ -448,7 +448,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         const SizedBox(
                           width: 5,
                         ),
-                        leftNextButton('先週'),
+                        leftNextButton(value1nguoi == '個人' ? '先月' : '先週'),
                         const SizedBox(width: 8),
                         Padding(
                           padding: const EdgeInsets.only(
@@ -509,7 +509,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        rightNextButton('翌週'),
+                        rightNextButton(value1nguoi == '個人' ? '翌月' : '翌週'),
                       ],
                     ),
                     const SizedBox(
@@ -521,7 +521,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       scrollDirection: Axis.horizontal,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: _buildLastRows2(1),
+                        children: value1nguoi == '個人'
+                            ? _buildPersonTitleRow(1)
+                            : _buildLastRows2(1),
                       ),
                     ),
                     Expanded(
@@ -543,11 +545,13 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                                     : Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                        children: _buildRows(
-                                            value1nguoi == '個人'
-                                                ? 2
-                                                : sukejuuruAllUser.length + 2,
-                                            scrollController2),
+                                        children: value1nguoi == '個人'
+                                            ? _buildPersonRows(
+                                                _getMonthDaysRow(),
+                                                scrollController2)
+                                            : _buildRows(
+                                                sukejuuruAllUser.length + 2,
+                                                scrollController2),
                                       );
                               }),
                         ),
@@ -559,7 +563,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       scrollDirection: Axis.horizontal,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: _buildLastRows2(1),
+                        children: value1nguoi == '個人'
+                            ? _buildPersonTitleRow(1)
+                            : _buildLastRows2(1),
                       ),
                     ),
                   ],
@@ -579,11 +585,12 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          currentDate = currentDate.add(const Duration(days: -7));
-          // callGetListSukejuuru(date);
           int? index;
           if (value1nguoi == '個人') {
+            currentDate = DateTime(currentDate.year, currentDate.month - 1, 1);
             index = sukejuuruAllUser.indexOf(sukejuuruSelectedUser);
+          } else {
+            currentDate = currentDate.add(const Duration(days: -7));
           }
           callGetAnkenCuaMotPhongBan(
             kojiGyoSyaCd: phongBanId,
@@ -606,11 +613,13 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             child: GestureDetector(
               onTap: () {
                 setState(() {
-                  currentDate = currentDate.add(const Duration(days: -7));
-                  // callGetListSukejuuru(date);
                   int? index;
                   if (value1nguoi == '個人') {
+                    currentDate =
+                        DateTime(currentDate.year, currentDate.month - 1, 1);
                     index = sukejuuruAllUser.indexOf(sukejuuruSelectedUser);
+                  } else {
+                    currentDate = currentDate.add(const Duration(days: -7));
                   }
                   callGetAnkenCuaMotPhongBan(
                     kojiGyoSyaCd: phongBanId,
@@ -653,7 +662,11 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          currentDate = currentDate.add(const Duration(days: 7));
+          if (value1nguoi == '個人') {
+            currentDate = DateTime(currentDate.year, currentDate.month + 1, 1);
+          } else {
+            currentDate = currentDate.add(const Duration(days: 7));
+          }
         });
 
         int? index;
@@ -680,7 +693,12 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             child: GestureDetector(
               onTap: () {
                 setState(() {
-                  currentDate = currentDate.add(const Duration(days: 7));
+                  if (value1nguoi == '個人') {
+                    currentDate =
+                        DateTime(currentDate.year, currentDate.month + 1, 1);
+                  } else {
+                    currentDate = currentDate.add(const Duration(days: 7));
+                  }
                 });
 
                 int? index;
@@ -888,6 +906,28 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     });
   }
 
+  // TABLE begin
+  List<Widget> _buildPersonRows(int count, ScrollController scrollController2) {
+    return List.generate(count, (index) {
+      return Row(
+        children: _buildPersonCell(7, index, scrollController2),
+      );
+    });
+  }
+
+  int get _getMonthDays =>
+      DateTime(currentDate.year, currentDate.month + 1, 0).day;
+
+  int _getMonthDaysRow() {
+    return (_getMonthDays / 7).ceil();
+  }
+
+  DateTime _getFirstDayPersonMonth() {
+    DateTime firstDayOfMonth = DateTime(currentDate.year, currentDate.month, 1);
+    int weekDay = firstDayOfMonth.weekday;
+    return firstDayOfMonth.subtract(Duration(days: weekDay));
+  }
+
   List<String> _listDay() {
     DateTime firstDayOfWeek =
         currentDate.subtract(Duration(days: currentDate.weekday - 1));
@@ -906,6 +946,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     });
   }
 
+  List<Widget> _buildPersonTitleRow(int count) {
+    return List.generate(count, (index) {
+      return Row(
+        children: _buildPersonTitleCell(7, index),
+      );
+    });
+  }
+
   List<String> listDayOfWeek() {
     DateTime firstDayOfWeek =
         currentDate.subtract(Duration(days: currentDate.weekday - 1));
@@ -916,6 +964,13 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       return DateFormat(('dd  (E)'), 'ja').format(
         firstDayOfWeek.add(Duration(days: value - 1)),
       );
+    }).toList();
+  }
+
+  List<String> listPersonDay() {
+    List<String> dateSymbols = ['日', '月', '火', '水', '木', '金', '土'];
+    return List.generate(7, (index) => index).map((value) {
+      return dateSymbols.elementAt(value);
     }).toList();
   }
 
@@ -1001,8 +1056,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             height: 400,
             child: GestureDetector(
               onTap: () {},
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: ListView(
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                padding: EdgeInsets.zero,
                 children: kojiItemsPhongBan(row - 1, col),
               ),
             ),
@@ -1120,6 +1176,36 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     });
   }
 
+  List<Widget> _buildPersonCell(
+      int count, int row, ScrollController scrollController2) {
+    return List.generate(count, (col) {
+      return Container(
+        decoration: BoxDecoration(
+          border: Border.all(width: 0.5),
+          color: Colors.white,
+        ),
+        alignment: Alignment.topLeft,
+        width: colWidth()[col + 1],
+        height: 400,
+        child: GestureDetector(
+          onTap: () {
+            CustomDialog.showCustomDialog(
+              context: context,
+              title: '',
+              body: Container(),
+            );
+          },
+          child: SingleChildScrollView(
+              controller: scrollControllerItem,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: kojiItems1Persion(row, col),
+              )),
+        ),
+      );
+    });
+  }
+
   List<Widget> kojiItems(int row, int col) {
     List<Widget> xxx = [];
     _listDay().forEach(
@@ -1145,7 +1231,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
           );
           var user = sukejuuruAllUser[row - 1];
           String tantKbnCode = user['TANT_KBN_CD'];
-          if (tantKbnCode == '01' || tantKbnCode == '1') {
+          if (tantKbnCode == '03' || tantKbnCode == '3') {
             if ((user[element] as List).isNotEmpty) {
               var item = user[element].first;
               xxx.addAll(_saleItems(col, row, user, item, element));
@@ -1156,7 +1242,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     );
     xxx.add(
       insert(
-        dateSelected: listDayOfWeek()[col].split(' ').first,
+        dateSelected: DateTime(currentDate.year, currentDate.month,
+            int.parse(listDayOfWeek()[col].split(' ').first)),
         JYOKEN_CD: sukejuuruAllUser[row - 1]["TANT_CD"],
         isPhongBan: false,
       ),
@@ -1172,12 +1259,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     String monthlySales = user['MONTHLY_SALES'] ?? '0';
     String sumItakuhi = item['SUM_ITAKUHI'] ?? '0';
     String sumItakuhiBetweenDate = item['SUM_ITAKUHI_BETWEEN_DATE'] ?? '0';
-    String percentItakuhi = item['PERCENT_ITAKUHI'] != null ? item['PERCENT_ITAKUHI'].toString() : '0';
+    String percentItakuhi = item['PERCENT_ITAKUHI'] != null
+        ? item['PERCENT_ITAKUHI'].toString()
+        : '0';
     return [
       Padding(
         padding: const EdgeInsets.only(bottom: 2),
         child: Container(
-          width: colWidth()[col], 
+          width: colWidth()[col],
           color: const Color(0x331e73d4),
           child: Padding(
             padding: const EdgeInsets.all(3),
@@ -1276,40 +1365,56 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   }
 
   List<Widget> kojiItems1Persion(int row, int col) {
-    List<Widget> xxx = [];
-    _listDay().forEach(
-      (element) {
-        if (sukejuuruSelectedUser != null &&
-            sukejuuruSelectedUser.isNotEmpty &&
-            sukejuuruSelectedUser[element] != null &&
-            sukejuuruSelectedUser[element].isNotEmpty &&
-            element.split('-').last == listDayOfWeek()[col].split(' ').first) {
-          sukejuuruSelectedUser[element].forEach(
-            (e) => xxx.addAll([
-              kojiItemWithType(
-                row - 1,
-                col,
-                e,
-                false,
-                sukejuuruSelectedUser["TANT_CD"],
-                e["TAN_EIG_ID"],
-              )
-            ]),
-          );
+    List<Widget> widgets = [];
+    DateTime date =
+        _getFirstDayPersonMonth().add(Duration(days: (row * 7) + col));
+    String dateStr = DateFormat('yyyy-MM-dd').format(date);
+    String dateVisible = DateFormat('MM/dd').format(date);
+    widgets.add(Text(
+      dateVisible,
+      style: const TextStyle(fontSize: 10),
+    ));
+
+    if (sukejuuruSelectedUser != null &&
+        sukejuuruSelectedUser.isNotEmpty &&
+        sukejuuruSelectedUser[dateStr] != null &&
+        sukejuuruSelectedUser[dateStr].isNotEmpty &&
+        date.month == currentDate.month) {
+      sukejuuruSelectedUser[dateStr].forEach(
+        (e) => widgets.addAll([
+          kojiItemWithType(
+            row,
+            col,
+            e,
+            false,
+            sukejuuruSelectedUser["TANT_CD"],
+            e["TAN_EIG_ID"],
+          )
+        ]),
+      );
+
+      String tantKbnCode = sukejuuruSelectedUser['TANT_KBN_CD'];
+      if (tantKbnCode == '03' || tantKbnCode == '3') {
+        if ((sukejuuruSelectedUser[dateStr] as List).isNotEmpty) {
+          var item = sukejuuruSelectedUser[dateStr].first;
+          widgets.addAll(
+              _saleItems(col, row, sukejuuruSelectedUser, item, dateStr));
         }
-      },
-    );
+      }
+    }
+
     if (sukejuuruSelectedUser != null) {
-      xxx.add(
+      widgets.add(
         insert(
-          dateSelected: listDayOfWeek()[col].split(' ').first,
+          dateSelected:
+              _getFirstDayPersonMonth().add(Duration(days: (row * 7) + col)),
           JYOKEN_CD: sukejuuruSelectedUser["TANT_CD"],
           isPhongBan: false,
         ),
       );
     }
 
-    return xxx;
+    return widgets;
   }
 
   List<Widget> kojiItemsPhongBan(int row, int col) {
@@ -1340,7 +1445,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     );
     xxx.add(
       insert(
-        dateSelected: listDayOfWeek()[col].split(' ').first,
+        dateSelected: DateTime(currentDate.year, currentDate.month,
+            int.parse(listDayOfWeek()[col].split(' ').first)),
         JYOKEN_CD: sukejuuruPhongBan["KOJIGYOSYA_CD"],
         isPhongBan: true,
       ),
@@ -1792,12 +1898,12 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   // }
 
   Widget insert({
-    required String dateSelected,
+    required DateTime dateSelected,
     required String JYOKEN_CD,
     required bool isPhongBan,
   }) {
-    DateTime newDate = DateFormat("yyyy-MM-dd")
-        .parse("${currentDate.year}-${currentDate.month}-$dateSelected");
+    DateTime newDate = DateFormat("yyyy-MM-dd").parse(
+        "${dateSelected.year}-${dateSelected.month}-${dateSelected.day}");
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Row(
@@ -1899,6 +2005,28 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         child: const Text(
           '',
           style: TextStyle(color: Colors.black),
+        ),
+      );
+    });
+  }
+
+  List<Widget> _buildPersonTitleCell(int count, int row) {
+    return List.generate(count, (col) {
+      return Container(
+        decoration: BoxDecoration(
+          border: Border.all(width: 0.5),
+          color: const Color(0xFFA5A7A9),
+        ),
+        alignment: Alignment.center,
+        width: colWidth()[col + 1],
+        height: 30,
+        child: Text(
+          listPersonDay()[col],
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 15,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       );
     });
