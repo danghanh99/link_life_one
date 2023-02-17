@@ -35,15 +35,14 @@ class KojiHoukoku extends StatefulWidget {
   final String KOJI_ST;
   final String SYUYAKU_JYUCYU_ID;
   final String HOJIN_FLG;
-  const KojiHoukoku({
-    super.key,
-    this.initialDate,
-    required this.JYUCYU_ID,
-    required this.SINGLE_SUMMARIZE,
-    required this.KOJI_ST,
-    required this.SYUYAKU_JYUCYU_ID,
-    required this.HOJIN_FLG
-  });
+  const KojiHoukoku(
+      {super.key,
+      this.initialDate,
+      required this.JYUCYU_ID,
+      required this.SINGLE_SUMMARIZE,
+      required this.KOJI_ST,
+      required this.SYUYAKU_JYUCYU_ID,
+      required this.HOJIN_FLG});
 
   @override
   State<KojiHoukoku> createState() => _KojiHoukokuState();
@@ -692,18 +691,70 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
       children: [
         GestureDetector(
           onTap: () {
-            CustomDialog.showCustomDialog(
+            showDialog(
               context: context,
-              title: "",
-              body: ShashinTeishuutsuHoukokuPage(
-                initialDate: widget.initialDate,
-                JYUCYU_ID: '',
-                onSelectedImage: (file) {
-                  setState(() {
-                    imageFile = file;
-                  });
-                },
-              ),
+              builder: (context) {
+                return Container(
+                  width: double.infinity,
+                  child: CupertinoAlertDialog(
+                    title: const Text(
+                      "この工事を設置不可で登録を行います。\n(元に戻せません)",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    content: const Padding(
+                      padding: EdgeInsets.only(top: 15),
+                      child: Text(
+                        "操作は必ず本部へ電話報告後に行ってください。\nまたサイボウズの設置不可アプリ登録は必ず行ってください。",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context); //close Dialog
+                          },
+                          child: const Text(
+                            '戻る',
+                            style: TextStyle(
+                              color: Color(0xFFEB5757),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          )),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context); //close Dialog
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ShashinTeishuutsuGamenPage(
+                                JYUCYU_ID: widget.JYUCYU_ID,
+                                initialDate: widget.initialDate,
+                              ),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'はい',
+                          style: TextStyle(
+                            color: Color(0xFF007AFF),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              },
             );
             // showDialog(
             //   context: context,
