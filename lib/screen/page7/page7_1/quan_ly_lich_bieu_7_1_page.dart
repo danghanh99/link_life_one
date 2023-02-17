@@ -8,6 +8,7 @@ import 'package:link_life_one/screen/page7/eigyo_anken/page7_2_3_create_eigyo_an
 import 'package:link_life_one/screen/page7/eigyo_anken/page7_2_3_edit_show_anken/page_7_2_3_edit_show_anken.dart';
 import 'package:link_life_one/screen/page7/memo/page_7_2_4_create.dart';
 import 'package:link_life_one/screen/page7/memo/page_7_2_4_update.dart';
+import 'package:link_life_one/shared/box_manager.dart';
 import '../../../api/sukejuuru_page_api/get_anken_cua_mot_phong_ban.dart';
 import '../../../api/sukejuuru_page_api/get_list_phong_ban.dart';
 import '../../../components/custom_header_widget.dart';
@@ -63,9 +64,11 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
   @override
   void initState() {
-    callGetListPhongBan(() {
-      geAnkenCuaMotPhongBanFuture = callGetAnkenCuaMotPhongBan(
-          kojiGyoSyaCd: listPhongBan[0]["KOJIGYOSYA_CD"], date: currentDate);
+    callGetListPhongBan((isSuccess) {
+      if (isSuccess) {
+        geAnkenCuaMotPhongBanFuture = callGetAnkenCuaMotPhongBan(
+            kojiGyoSyaCd: phongBanId, date: currentDate);
+      }
     });
 
     scrollController2.addListener(() {
@@ -76,20 +79,27 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     super.initState();
   }
 
-  Future<List<dynamic>> callGetListPhongBan(Function onSuccess) async {
+  Future<List<dynamic>> callGetListPhongBan(Function(bool) onSuccess) async {
     final result = await GetListPhongBan().getListPhongBan(onSuccess: (list) {
       setState(() {
         listPhongBan = list;
       });
 
-      if (listPhongBan[0]["KOJIGYOSYA_CD"] != null &&
-          listPhongBan[0]["KOJIGYOSYA_CD"] != "") {
-        setState(() {
-          phongBanId = listPhongBan[0]["KOJIGYOSYA_CD"];
-          phongBanName = listPhongBan[0]["KOJIGYOSYA_NAME"];
-        });
-        onSuccess.call();
+      bool success = false;
+
+      for (var phongban in list) {
+        var code = phongban['KOJIGYOSYA_CD'];
+        if (code != null && code != '') {
+          if (BoxManager.user.SYOZOKU_CD == code) {
+            success = true;
+            setState(() {
+              phongBanId = phongban["KOJIGYOSYA_CD"];
+              phongBanName = phongban["KOJIGYOSYA_NAME"];
+            });
+          }
+        }
       }
+      onSuccess.call(success);
     }, onFailed: () {
       CustomToast.show(context,
           message: "データを取得出来ませんでした。", backGround: Colors.red);
@@ -169,12 +179,16 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   "TANT_CD": element["TANT_CD"]
                 });
               });
-              setState(() {
-                listNhanVien = listPersonTemp;
-                sukejuuruSelectedUser = response["PERSON"][0][0];
-                selectedNhanVienName = listNhanVien[0]["TANT_NAME"];
-                selectedNhanVienTantCD = listNhanVien[0]["TANT_CD"];
-              });
+              for (var person in listPerson) {
+                if (BoxManager.user.TANT_CD == person['TANT_CD']) {
+                  setState(() {
+                    listNhanVien = listPersonTemp;
+                    sukejuuruSelectedUser = person;
+                    selectedNhanVienName = person["TANT_NAME"];
+                    selectedNhanVienTantCD = person["TANT_CD"];
+                  });
+                }
+              }
             }
           }
         }
