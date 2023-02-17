@@ -483,25 +483,25 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
             const SizedBox(
               height: 5,
             ),
-            Container(
-              width: 120,
-              height: 37,
-              decoration: BoxDecoration(
-                color: const Color(0xFF4F4F4F),
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: TextButton(
-                onPressed: () {},
-                child: const Text(
-                  '続きを見る',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
+            // Container(
+            //   width: 120,
+            //   height: 37,
+            //   decoration: BoxDecoration(
+            //     color: const Color(0xFF4F4F4F),
+            //     borderRadius: BorderRadius.circular(25),
+            //   ),
+            //   child: TextButton(
+            //     onPressed: () {},
+            //     child: const Text(
+            //       '続きを見る',
+            //       style: TextStyle(
+            //         color: Colors.white,
+            //         fontSize: 16,
+            //         fontWeight: FontWeight.w600,
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Expanded(child: Container()),
             Form(
               key: _formKey,
