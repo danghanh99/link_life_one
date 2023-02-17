@@ -9,6 +9,7 @@ import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/screen/page3/shitami_houkoku_page.dart';
 import 'package:link_life_one/screen/page7/component/dialog.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import '../../api/koji/getPhotoConfirm/get_shashin_kakunin.dart';
 import '../../components/custom_header_widget.dart';
 import '../../components/text_line_down.dart';
 import '../../models/koji.dart';
@@ -51,12 +52,15 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
     '出納帳',
   ];
 
+  List<dynamic> listPhotos = [];
+
   // String SINGLE_SUMMARIZE = "01";
 
   @override
   void initState() {
     // SINGLE_SUMMARIZE = widget.isSendAList ? "02" : "01";
     callGetListPdf();
+    callGetShashinKakunin();
     super.initState();
   }
 
@@ -66,6 +70,68 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
     setState(() {
       list_pdf = list;
     });
+  }
+
+  Future<void> callGetShashinKakunin() async {
+    await GetShashinKakunin().getShashinKakunin(
+        JYUCYU_ID: widget.JYUCYU_ID,
+        SINGLE_SUMMARIZE: widget.single_summarize,
+        onSuccess: (list) {
+          listPhotos = list;
+          if (list.isNotEmpty) {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return SizedBox(
+                  width: double.infinity,
+                  child: Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: SizedBox(
+                      width: 400,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          const Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Text(
+                              '添付画像があります。確認を行ってください。',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 24, 23, 23),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          const Divider(height: 0),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              'OK',
+                              style: TextStyle(
+                                color: Color(0xFF007AFF),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+        },
+        onFailed: () {
+          CustomToast.show(context, message: "リスト写真を取得出来ませんでした。");
+        });
   }
 
   @override
@@ -370,6 +436,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                         body: ShashinKakuninPage(
                           JYUCYU_ID: widget.JYUCYU_ID,
                           SINGLE_SUMMARIZE: widget.single_summarize,
+                          listPhotos: listPhotos,
                         ),
                       );
                     },

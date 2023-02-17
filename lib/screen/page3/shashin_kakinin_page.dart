@@ -1,17 +1,10 @@
-import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:link_life_one/api/koji/postPhotoSubmissionRegistration/upload_photo_api.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
-import 'package:link_life_one/screen/page3/page_3/kojiichiran_page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 
 import '../../api/koji/getPhotoConfirm/get_shashin_kakunin.dart';
@@ -19,10 +12,12 @@ import '../../api/koji/getPhotoConfirm/get_shashin_kakunin.dart';
 class ShashinKakuninPage extends StatefulWidget {
   final String JYUCYU_ID;
   final String SINGLE_SUMMARIZE;
+  final List<dynamic> listPhotos;
   const ShashinKakuninPage({
     super.key,
     required this.JYUCYU_ID,
     required this.SINGLE_SUMMARIZE,
+    required this.listPhotos,
   });
 
   @override
@@ -30,12 +25,15 @@ class ShashinKakuninPage extends StatefulWidget {
 }
 
 class _ShashinKakuninPageState extends State<ShashinKakuninPage> {
-  Future? getShashinKakunin;
-  List<dynamic> listPhotos = [];
   // String url = "${Constant.url}";
+  List<dynamic> listPhotos = [];
   @override
   void initState() {
-    getShashinKakunin = callGetShashinKakunin();
+    if (widget.listPhotos.isNotEmpty) {
+      listPhotos = widget.listPhotos;
+    } else {
+      callGetShashinKakunin();
+    }
     super.initState();
   }
 
@@ -115,7 +113,7 @@ class _ShashinKakuninPageState extends State<ShashinKakuninPage> {
             SizedBox(height: 50.h),
             CarouselSlider.builder(
               options: CarouselOptions(
-                initialPage: listPhotos.length,
+                initialPage: 0,
                 viewportFraction: 1,
                 height: size.height * 0.7,
                 enableInfiniteScroll: false,
