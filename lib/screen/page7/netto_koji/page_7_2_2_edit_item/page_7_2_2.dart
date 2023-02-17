@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../api/sukejuuru_page_api/netto_koji/show_anken/get_lich_trinh_item_edit_page.dart';
@@ -583,10 +584,13 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                             child: CustomTextField(
                               maxLength: 10,
                               initValue: jikanNumberEditPage.toString(),
-                              validator: _validateNumber2,
+                              validator: _validateDouble,
                               fillColor: const Color(0xFFF5F6F8),
                               // hint: jikanNumberEditPage.toString(),
-                              type: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                              ],
+                              type: const TextInputType.numberWithOptions(decimal: true),
                               onChanged: (text) {
                                 setState(() {
                                   jikanNumberEditPage = text;
@@ -705,7 +709,7 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                                 ":00",
                             JININ: jinNumberEditPage,
                             JIKAN: jikanNumberEditPage,
-                            KANSAN_POINT: '',
+                            KANSAN_POINT: jikanNumberEditPage,
                             ALL_DAY_FLG: checkAllDayEditPage ? "1" : "0",
                             MEMO: commentEditPage,
                             onSuccess: () {
@@ -996,6 +1000,17 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
       return null;
     } else {
       return '整数のみ';
+    }
+  }
+
+  String? _validateDouble(String? input) {
+    if (input == null || input == '') {
+      return 'Required';
+    }
+    if (Validator.onlyDouble(input)) {
+      return null;
+    } else {
+      return '小数のみ';
     }
   }
 }
