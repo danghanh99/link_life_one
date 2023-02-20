@@ -260,6 +260,7 @@ class _MenuPageState extends State<MenuPage> {
           MaterialPageRoute(
             builder: (context) =>
                 const KojiichiranPage3BaoCaoHoanThanhCongTrinh(),
+            settings: const RouteSettings(name: 'KojiichiranPage3')
           ),
         );
         break;

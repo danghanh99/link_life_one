@@ -10,7 +10,7 @@ class CreateRiyuu {
   Future<dynamic> createRiyuu({
     required String JYUCYU_ID,
     required String SHITAMI_MENU,
-    required String FILE_PATH,
+    required List<String> FILE_PATH_LIST,
     String? MTMORI_YMD,
     String? CANCEL_RIYU,
     required Function() onSuccess,
@@ -23,7 +23,7 @@ class CreateRiyuu {
         await _getData(
           JYUCYU_ID: JYUCYU_ID,
           SHITAMI_MENU: SHITAMI_MENU,
-          FILE_PATH: FILE_PATH,
+          FILE_PATH_LIST: FILE_PATH_LIST,
           MTMORI_YMD: MTMORI_YMD,
           CANCEL_RIYU: CANCEL_RIYU,
         ),
@@ -64,19 +64,24 @@ class CreateRiyuu {
   Future<Map<String, dynamic>> _getData(
       {required String JYUCYU_ID,
       required String SHITAMI_MENU,
-      required String FILE_PATH,
+      required List<String> FILE_PATH_LIST,
       String? MTMORI_YMD,
       String? CANCEL_RIYU}) async {
+    List<MultipartFile> files = [];
+    for (var path in FILE_PATH_LIST) {
+      MultipartFile file = await MultipartFile.fromFile(path);
+      files.add(file);
+    }
     switch (SHITAMI_MENU) {
       case '1':
         return {
-          'FILE_IMAGE': await MultipartFile.fromFile(FILE_PATH),
+          'FILE_IMAGE_LIST': files,
           'JYUCYU_ID': '0301447771',
           'SHITAMI_MENU': '1',
         };
       case '2':
         return {
-          'FILE_IMAGE': await MultipartFile.fromFile(FILE_PATH),
+          'FILE_IMAGE_LIST': files,
           'JYUCYU_ID': JYUCYU_ID,
           'SHITAMI_MENU': SHITAMI_MENU,
           'MTMORI_YMD': MTMORI_YMD?.split(" ").first,
@@ -84,20 +89,20 @@ class CreateRiyuu {
         };
       case '3':
         return {
-          'FILE_IMAGE': await MultipartFile.fromFile(FILE_PATH),
+          'FILE_IMAGE_LIST': files,
           'JYUCYU_ID': JYUCYU_ID,
           'SHITAMI_MENU': SHITAMI_MENU,
           'CANCEL_RIYU': CANCEL_RIYU
         };
       case '4':
         return {
-          'FILE_IMAGE': await MultipartFile.fromFile(FILE_PATH),
+          'FILE_IMAGE_LIST': files,
           'JYUCYU_ID': JYUCYU_ID,
           'SHITAMI_MENU': SHITAMI_MENU,
         };
       default:
         return {
-          'FILE_IMAGE': await MultipartFile.fromFile(FILE_PATH),
+          'FILE_IMAGE_LIST': files,
           'JYUCYU_ID': JYUCYU_ID,
           'SHITAMI_MENU': SHITAMI_MENU,
         };

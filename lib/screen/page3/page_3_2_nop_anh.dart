@@ -141,6 +141,7 @@ class _Page32NopAnhState extends State<Page32NopAnh> {
                     MaterialPageRoute(
                       builder: (context) =>
                           const KojiichiranPage3BaoCaoHoanThanhCongTrinh(),
+                          settings: const RouteSettings(name: 'KojiichiranPage3')
                     ),
                   );
                 },

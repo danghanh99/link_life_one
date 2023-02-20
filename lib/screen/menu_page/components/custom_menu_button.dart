@@ -81,6 +81,7 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
           MaterialPageRoute(
             builder: (context) =>
                 const KojiichiranPage3BaoCaoHoanThanhCongTrinh(),
+                settings: const RouteSettings(name: 'KojiichiranPage3')
           ),
         );
         break;

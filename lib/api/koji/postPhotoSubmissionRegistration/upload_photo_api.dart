@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'package:hive_flutter/adapters.dart';
-import "package:http/http.dart" as http;
 import 'package:dio/dio.dart';
 
 import '../../../constants/constant.dart';
@@ -11,17 +8,22 @@ class UploadPhotoApi {
   Future<void> uploadPhotoApi({
     required String JYUCYU_ID,
     required String LOGIN_ID,
-    required String FILE_PATH,
+    required List<String> FILE_PATH_LIST,
     required Function onFailed,
     required Function onSuccess,
   }) async {
     try {
       var dio = Dio();
+      List<MultipartFile> files = [];
+      for (var path in FILE_PATH_LIST) {
+        MultipartFile file = await MultipartFile.fromFile(path);
+        files.add(file);
+      }
       String url =
           "${Constant.url}Request/Koji/requestPostPhotoSubmissionRegistration.php";
       FormData formData = FormData.fromMap(
         {
-          'FILE_NAME': await MultipartFile.fromFile(FILE_PATH),
+          'FILE_NAME_LIST': files,
           'JYUCYU_ID': JYUCYU_ID,
           'LOGIN_ID': LOGIN_ID,
         },

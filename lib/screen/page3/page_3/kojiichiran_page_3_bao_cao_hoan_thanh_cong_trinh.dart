@@ -339,21 +339,26 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                                                       Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              Page31YeuCauBieuMauPage(
-                                                            isShitami:
-                                                                isShitami,
-                                                            initialDate: date,
-                                                            koji: item,
-                                                            isSendAList: true,
-                                                            single_summarize:
-                                                                '01',
-                                                            JYUCYU_ID:
-                                                                item.jyucyuId,
-                                                            KOJI_ST:
-                                                                item.kojiSt,
-                                                          ),
-                                                        ),
+                                                            builder: (context) =>
+                                                                Page31YeuCauBieuMauPage(
+                                                                  isShitami:
+                                                                      isShitami,
+                                                                  initialDate:
+                                                                      date,
+                                                                  koji: item,
+                                                                  isSendAList:
+                                                                      true,
+                                                                  single_summarize:
+                                                                      '01',
+                                                                  JYUCYU_ID: item
+                                                                      .jyucyuId,
+                                                                  KOJI_ST: item
+                                                                      .kojiSt,
+                                                                ),
+                                                            settings:
+                                                                const RouteSettings(
+                                                                    name:
+                                                                        'Page31YeuCauBieuMauPage')),
                                                       );
                                                     },
                                                     child: const Text(
@@ -381,24 +386,21 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                                                               Navigator.push(
                                                                 context,
                                                                 MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          Page31YeuCauBieuMauPage(
-                                                                    isShitami:
-                                                                        isShitami,
-                                                                    initialDate:
-                                                                        date,
-                                                                    koji: item,
-                                                                    isSendAList:
-                                                                        true,
-                                                                    single_summarize:
-                                                                        '02',
-                                                                    JYUCYU_ID: item
-                                                                        .jyucyuId,
-                                                                    KOJI_ST: item
-                                                                        .kojiSt,
-                                                                  ),
-                                                                ),
+                                                                    builder:
+                                                                        (context) =>
+                                                                            Page31YeuCauBieuMauPage(
+                                                                              isShitami: isShitami,
+                                                                              initialDate: date,
+                                                                              koji: item,
+                                                                              isSendAList: true,
+                                                                              single_summarize: '02',
+                                                                              JYUCYU_ID: item.jyucyuId,
+                                                                              KOJI_ST: item.kojiSt,
+                                                                            ),
+                                                                    settings:
+                                                                        const RouteSettings(
+                                                                            name:
+                                                                                'Page31YeuCauBieuMauPage')),
                                                               );
                                                             });
                                                   },
@@ -423,17 +425,18 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          Page31YeuCauBieuMauPage(
-                                        single_summarize: '01',
-                                        JYUCYU_ID: item.jyucyuId,
-                                        isShitami: isShitami,
-                                        initialDate: date,
-                                        koji: item,
-                                        isSendAList: true,
-                                        KOJI_ST: item.kojiSt,
-                                      ),
-                                    ),
+                                        builder: (context) =>
+                                            Page31YeuCauBieuMauPage(
+                                              single_summarize: '01',
+                                              JYUCYU_ID: item.jyucyuId,
+                                              isShitami: isShitami,
+                                              initialDate: date,
+                                              koji: item,
+                                              isSendAList: true,
+                                              KOJI_ST: item.kojiSt,
+                                            ),
+                                        settings: const RouteSettings(
+                                            name: 'Page31YeuCauBieuMauPage')),
                                   );
                                 }
                               },

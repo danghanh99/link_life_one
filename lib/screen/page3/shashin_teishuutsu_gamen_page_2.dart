@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -8,18 +9,8 @@ import 'package:link_life_one/api/KojiPageApi/create_riyuu.dart';
 import 'package:link_life_one/api/KojiPageApi/get_image.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
-import 'package:link_life_one/screen/page3/page_3/kojiichiran_page_3_bao_cao_hoan_thanh_cong_trinh.dart';
 import 'package:link_life_one/shared/custom_button.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:link_life_one/components/text_line_down.dart';
-import 'package:link_life_one/screen/page3/shoudakusho.dart';
-import 'package:link_life_one/shared/custom_button.dart';
-import '../../api/shoudakusho/get_shoudakusho.dart';
-import '../../components/toast.dart';
-import '../../shared/assets.dart';
 
 class ShashinTeishuutsuGamenPage2 extends StatefulWidget {
   final DateTime? initialDate;
@@ -46,21 +37,15 @@ class _ShashinTeishuutsuGamenPage2State
     extends State<ShashinTeishuutsuGamenPage2> {
   final ImagePicker _picker = ImagePicker();
   final carouselController = CarouselController();
-  XFile? imageFile;
-  List<dynamic> listImage = [];
+  List<dynamic> selectedImages = [];
 
   void selectImage() async {
     try {
-      final XFile? selectedImage =
-          await _picker.pickImage(source: ImageSource.gallery);
-      if (selectedImage != null) {
+      List<XFile> files = await _picker.pickMultiImage();
+      if (files.isNotEmpty) {
         setState(() {
-          List<dynamic> tmp = listImage;
-          imageFile = selectedImage;
-          tmp.add(imageFile);
-          listImage = tmp;
+          selectedImages.addAll(files);
         });
-        carouselController.jumpToPage(listImage.length - 1);
       }
     } catch (e) {}
   }
@@ -80,9 +65,9 @@ class _ShashinTeishuutsuGamenPage2State
     setState(
       () {
         try {
-          listImage = result.toList();
+          selectedImages = result.toList();
         } catch (e) {
-          listImage = [];
+          selectedImages = [];
         }
       },
     );
@@ -91,7 +76,7 @@ class _ShashinTeishuutsuGamenPage2State
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
+    double imageContainerHeight = size.height.h * 2 / 3;
     return Scaffold(
       body: Container(
         color: Colors.white,
@@ -143,65 +128,75 @@ class _ShashinTeishuutsuGamenPage2State
                 ],
               ),
               const SizedBox(height: 50),
-              listImage.isEmpty
-                  ? Container(
-                      width: size.width - 50,
-                      height: size.height.h * 2 / 3,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                      ),
-                    )
-                  : Container(
-                      width: size.width - 50,
-                      height: size.height.h * 2 / 3,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        border: Border.all(color: Colors.black),
-                      ),
-                      child: CarouselSlider.builder(
-                        carouselController: carouselController,
-                        options: CarouselOptions(
-                          initialPage: listImage.length - 1,
-                          viewportFraction: 1,
-                          height: size.height.h * 0.7 - 50,
-                          enableInfiniteScroll: false,
-                          onPageChanged: (index, reason) {},
-                        ),
-                        itemCount: listImage.length,
-                        itemBuilder:
-                            (BuildContext context, int itemIndex, int idx) {
-                          String? path =
-                              "https://gamek.mediacdn.vn/133514250583805952/2020/6/28/823171412209073690918001588031818576536427n-15933186251841355750111.jpg";
-                          return SizedBox(
-                            width: 700,
-                            height: 1000,
-                            child: listImage[itemIndex].runtimeType == XFile
-                                ? Image.file(
-                                    File(listImage[idx]!.path),
-                                    width: size.width - 50,
-                                    height: size.height * 2 / 3,
-                                    fit: size.width > size.height
-                                        ? null
-                                        : BoxFit.fill,
-                                  )
-                                : CachedNetworkImage(
-                                    imageUrl: path,
-                                    placeholder: (context, url) => const Center(
-                                      child: SizedBox(
-                                        width: 100,
-                                        height: 100,
-                                        child: CircularProgressIndicator(
-                                          color: Colors.yellow,
-                                        ),
-                                      ),
-                                    ),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
-                                  ),
-                          );
-                        },
-                      ),
-                    ),
+              Container(
+                width: size.width - 50,
+                height: imageContainerHeight,
+                padding: const EdgeInsets.all(5),
+                decoration:
+                    BoxDecoration(border: Border.all(color: Colors.black)),
+                child: SingleChildScrollView(
+                  child: Wrap(
+                    spacing: 5.0,
+                    runSpacing: 5.0,
+                    children: [
+                      ...selectedImages.map((e) {
+                        log(e.toString());
+                        return SizedBox(
+                          width: (imageContainerHeight / 4) - 5,
+                          height: (imageContainerHeight / 4) - 5,
+                          child: Stack(
+                            children: [
+                              Positioned.fill(
+                                  child: e.runtimeType == XFile
+                                      ? Image.file(
+                                          File(e.path),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : CachedNetworkImage(
+                                          imageUrl: e['FILEPATH'],
+                                          placeholder: (context, url) =>
+                                              const Center(
+                                            child: SizedBox(
+                                              width: 100,
+                                              height: 100,
+                                              child: CircularProgressIndicator(
+                                                color: Colors.yellow,
+                                              ),
+                                            ),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                        )),
+                              Visibility(
+                                visible: e.runtimeType == XFile,
+                                child: Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 5, right: 5),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              selectedImages.remove(e);
+                                            });
+                                          },
+                                          padding: EdgeInsets.zero,
+                                          alignment: Alignment.topRight,
+                                          icon: const Icon(
+                                            Icons.remove_circle_rounded,
+                                            color: Colors.red,
+                                          )),
+                                    )),
+                              )
+                            ],
+                          ),
+                        );
+                      }).toList()
+                    ],
+                  ),
+                ),
+              ),
               const SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -239,19 +234,24 @@ class _ShashinTeishuutsuGamenPage2State
                     padding: const EdgeInsets.only(right: 18),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                KojiichiranPage3BaoCaoHoanThanhCongTrinh(
-                              initialDate: widget.initialDate,
-                            ),
-                          ),
-                        );
+                        // Navigator.pushReplacement(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) =>
+                        //         KojiichiranPage3BaoCaoHoanThanhCongTrinh(
+                        //       initialDate: widget.initialDate,
+                        //     ),
+                        //   ),
+                        // );
+                        Navigator.of(context).popUntil((route) =>
+                            route.settings.name == 'KojiichiranPage3');
                       },
                       child: GestureDetector(
                         onTap: () async {
-                          if (imageFile == null) {
+                          List<dynamic> newFiles = selectedImages
+                              .where((e) => e.runtimeType == XFile)
+                              .toList();
+                          if (newFiles.isEmpty) {
                             // ignore: use_build_context_synchronously
                             CustomToast.show(
                               context,
@@ -261,7 +261,9 @@ class _ShashinTeishuutsuGamenPage2State
                           } else {
                             CreateRiyuu().createRiyuu(
                                 JYUCYU_ID: widget.JYUCYU_ID,
-                                FILE_PATH: imageFile!.path,
+                                FILE_PATH_LIST: newFiles
+                                    .map((e) => e.path as String)
+                                    .toList(),
                                 onFailed: (error) {
                                   CustomToast.show(
                                     context,
@@ -282,16 +284,9 @@ class _ShashinTeishuutsuGamenPage2State
                                   //   Navigator.pop(context);
                                   // }
 
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          KojiichiranPage3BaoCaoHoanThanhCongTrinh(
-                                        initialDate: widget.initialDate ??
-                                            DateTime.now(),
-                                      ),
-                                    ),
-                                  );
+                                  Navigator.of(context).popUntil((route) =>
+                                      route.settings.name ==
+                                      'KojiichiranPage3');
                                 },
                                 SHITAMI_MENU: widget.index.toString(),
                                 CANCEL_RIYU: widget.cancelRiyuu,
