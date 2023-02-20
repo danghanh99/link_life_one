@@ -193,7 +193,7 @@ class _ShitamiHoukokuState extends State<ShitamiHoukoku> {
                           content: const Padding(
                             padding: EdgeInsets.only(top: 15),
                             child: Text(
-                              "依頼書の明細内に含む項目のみで工事に進めます。注文の案内案内などを行いませんがこのまま報告してよろしいですか？",
+                              "依頼書の明細内に含む項目のみで工事に進めます。注文の案内などを行いませんがこのまま報告してよろしいですか？",
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,
