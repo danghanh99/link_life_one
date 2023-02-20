@@ -1227,7 +1227,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             sukejuuruAllUser[row - 1] != null &&
             sukejuuruAllUser[row - 1][element] != null &&
             sukejuuruAllUser[row - 1][element].isNotEmpty &&
-            element.split('-').last == listDayOfWeek()[col].split(' ').first) {
+            element == _listDay()[col-1]) {
           sukejuuruAllUser[row - 1][element].forEach(
             (e) => xxx.addAll([
               kojiItemWithType(
@@ -1255,8 +1255,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     );
     xxx.add(
       insert(
-        dateSelected: DateTime(currentDate.year, currentDate.month,
-            int.parse(listDayOfWeek()[col].split(' ').first)),
+        dateSelected: DateTime.parse(_listDay()[col-1]),
         JYOKEN_CD: sukejuuruAllUser[row - 1]["TANT_CD"],
         isPhongBan: false,
       ),
@@ -1438,7 +1437,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         if (sukejuuruPhongBan != null &&
             sukejuuruPhongBan[element] != null &&
             sukejuuruPhongBan[element].isNotEmpty &&
-            element.split('-').last == listDayOfWeek()[col].split(' ').first) {
+            element == _listDay()[col-1]) {
           sukejuuruPhongBan[element].forEach(
             (e) => xxx.addAll([
               kojiItemWithType(
@@ -1458,8 +1457,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     );
     xxx.add(
       insert(
-        dateSelected: DateTime(currentDate.year, currentDate.month,
-            int.parse(listDayOfWeek()[col].split(' ').first)),
+        dateSelected: DateTime.parse(_listDay()[col-1]),
         JYOKEN_CD: sukejuuruPhongBan["KOJIGYOSYA_CD"],
         isPhongBan: true,
       ),
