@@ -1,4 +1,5 @@
-import "package:http/http.dart" as http;
+
+import 'package:dio/dio.dart';
 
 import '../../constants/constant.dart';
 
@@ -7,16 +8,37 @@ class RequestCorporateCompletion {
 
   Future<void> requestCorporateCompletion(
       {required String JYUCYU_ID,
+      required List<String> filePathList,
       required Function onSuccess,
       required Function onFailed}) async {
-    final response = await http.post(
-        Uri.parse("${Constant.url}Request/Koji/requestCorporateCompletion.php"),
-        body: {'JYUCYU_ID': JYUCYU_ID});
+    try {
+      List<MultipartFile> files = [];
+      for (var path in filePathList) {
+        MultipartFile file = await MultipartFile.fromFile(path);
+        files.add(file);
+      }
 
-    if (response.statusCode == 200) {
-      onSuccess.call();
-    } else {
-      onFailed.call();
+      var dio = Dio();
+      String url = '${Constant.url}Request/Koji/requestCorporateCompletion.php';
+      FormData formData = FormData.fromMap(
+        {
+          'JYUCYU_ID': JYUCYU_ID,
+          'FILE_PATH_LIST': files,
+        },
+      );
+
+      var response = await dio.post(
+        url,
+        data: formData,
+      );
+
+      if (response.statusCode == 200) {
+        onSuccess.call();
+      } else if (response.statusCode == 400) {
+        onFailed.call();
+      }
+    } catch (e) {
+      onFailed.call('画像アップロードが失敗しました。');
     }
   }
 }

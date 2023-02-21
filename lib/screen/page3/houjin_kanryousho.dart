@@ -25,7 +25,6 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
   List<dynamic> listKbn = [];
   List<dynamic> listImage = [];
   final ImagePicker _picker = ImagePicker();
-  XFile? imageSelected;
 
   @override
   void initState() {
@@ -109,14 +108,11 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                 ),
                 Container(
                   width: size.width - 100,
-                  height: 150.h,
+                  height: 160.h,
                   decoration:
                       BoxDecoration(border: Border.all(color: Colors.black)),
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 30,
-                      left: 40,
-                    ),
+                    padding: const EdgeInsets.all(8),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,8 +167,7 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                           border: Border.all(color: Colors.black),
                         ),
                       )
-                    : SizedBox(
-                        height: 500.h,
+                    : Expanded(
                         child: CarouselSlider.builder(
                           carouselController: carouselController,
                           options: CarouselOptions(
@@ -185,8 +180,6 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                           itemCount: listImage.length,
                           itemBuilder:
                               (BuildContext context, int itemIndex, int idx) {
-                            String? path =
-                                "https://gamek.mediacdn.vn/133514250583805952/2020/6/28/823171412209073690918001588031818576536427n-15933186251841355750111.jpg";
                             return SizedBox(
                               width: 700.w,
                               height: 500.h,
@@ -200,7 +193,7 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                                           : BoxFit.fill,
                                     )
                                   : CachedNetworkImage(
-                                      imageUrl: path,
+                                      imageUrl: listImage[idx]['FILEPATH'],
                                       placeholder: (context, url) =>
                                           const Center(
                                         child: SizedBox(
@@ -270,8 +263,7 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
               setState(
                 () {
                   List<dynamic> tmp = listImage;
-                  imageSelected = image;
-                  tmp.add(imageSelected);
+                  tmp.add(image);
                   listImage = tmp;
                 },
               );
@@ -302,14 +294,12 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
         ),
         GestureDetector(
           onTap: () async {
-            final XFile? image =
-                await _picker.pickImage(source: ImageSource.gallery);
-            if (image != null) {
+            final List<XFile> images = await _picker.pickMultiImage();
+            if (images.isNotEmpty) {
               setState(
                 () {
                   List<dynamic> tmp = listImage;
-                  imageSelected = image;
-                  tmp.add(imageSelected);
+                  tmp.addAll(images);
                   listImage = tmp;
                 },
               );
@@ -342,6 +332,11 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
           onTap: () {
             RequestCorporateCompletion().requestCorporateCompletion(
                 JYUCYU_ID: widget.JYUCYU_ID,
+                filePathList: listImage
+                    .where((element) => element.runtimeType == XFile)
+                    .toList()
+                    .map((e) => e.path as String)
+                    .toList(),
                 onSuccess: () {
                   CustomToast.show(
                     context,
