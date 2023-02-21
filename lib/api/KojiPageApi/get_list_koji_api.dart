@@ -28,7 +28,9 @@ class GetListKojiApi {
           .map(
             (e) => Koji(
                 sitamiHomonJikan: e["SITAMIHOMONJIKAN"] ?? '',
+                sitamiHomonJikanEnd: e['SITAMIHOMONJIKAN_END'] ?? '',
                 kojiHomonJikan: e["KOJIHOMONJIKAN"] ?? '',
+                kojiHomonJikanEnd: e['KOJIHOMONJIKAN_END'] ?? '',
                 homonSbt: e["HOMON_SBT"],
                 jyucyuId: e["JYUCYU_ID"],
                 shitamiJinin: int.parse(e['SITAMI_JININ'] ?? '0'),

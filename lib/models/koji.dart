@@ -4,7 +4,9 @@ part 'koji.g.dart';
 @JsonSerializable()
 class Koji {
   final String? sitamiHomonJikan;
+  final String? sitamiHomonJikanEnd;
   final String? kojiHomonJikan;
+  final String? kojiHomonJikanEnd;
   final String homonSbt;
   final String jyucyuId;
   final int shitamiJinin;
@@ -18,8 +20,10 @@ class Koji {
   final String hojinFlag;
 
   Koji(
-      {this.kojiHomonJikan,
-      this.sitamiHomonJikan,
+      {this.sitamiHomonJikan,
+      this.sitamiHomonJikanEnd,
+      this.kojiHomonJikan,
+      this.kojiHomonJikanEnd,
       required this.homonSbt,
       required this.jyucyuId,
       required this.shitamiJinin,

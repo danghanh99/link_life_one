@@ -460,7 +460,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "訪問時間：${formatJikan(jikan: item.kojiHomonJikan)}   報告： ${item.kojiSt == '03' ? '済' : '未'}",
+                                    "訪問時間：${isShitami ? item.sitamiHomonJikan : item.kojiHomonJikan} - ${isShitami ? item.sitamiHomonJikanEnd : item.kojiHomonJikanEnd}   報告： ${item.kojiSt == '03' ? '済' : '未'}",
                                   ),
                                   isShitami
                                       ? Text(
