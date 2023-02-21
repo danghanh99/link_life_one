@@ -200,206 +200,230 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                   width: size.width - 100,
                                   decoration: BoxDecoration(
                                       border: Border.all(color: Colors.black)),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  child: Stack(
                                     children: [
-                                      const Center(
-                                        child: Text(
-                                          'お客様確認事項',
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                      ),
-                                      const Divider(
-                                        height: 1,
-                                        color: Colors.black,
-                                        thickness: 1.1,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Text(
-                                              '担当者が以下の事情を行っていたかご確認の上、□にチェックを入れてください。',
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Center(
+                                            child: Text(
+                                              'お客様確認事項',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 20,
                                                   fontWeight: FontWeight.w700),
                                             ),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            Row(
+                                          ),
+                                          const Divider(
+                                            height: 1,
+                                            color: Colors.black,
+                                            thickness: 1.1,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Checkbox(
-                                                  activeColor: Colors.blue,
-                                                  checkColor: Colors.white,
-                                                  value: checkedValue1,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      checkedValue1 =
-                                                          newValue ?? true;
-                                                    });
-                                                  },
-                                                ),
                                                 const Text(
-                                                  '水漏れ・ガス漏れチェック （エアコン配管・水道・ガス管なのど）',
+                                                  '担当者が以下の事情を行っていたかご確認の上、□にチェックを入れてください。',
                                                   style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.w700),
                                                 ),
+                                                const SizedBox(
+                                                  height: 20,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Checkbox(
+                                                      activeColor: Colors.blue,
+                                                      checkColor: Colors.white,
+                                                      value: checkedValue1,
+                                                      onChanged: (newValue) {
+                                                        setState(() {
+                                                          checkedValue1 =
+                                                              newValue ?? true;
+                                                        });
+                                                      },
+                                                    ),
+                                                    const Text(
+                                                      '水漏れ・ガス漏れチェック （エアコン配管・水道・ガス管なのど）',
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Checkbox(
+                                                      activeColor: Colors.blue,
+                                                      checkColor: Colors.white,
+                                                      value: checkedValue2,
+                                                      onChanged: (newValue) {
+                                                        setState(() {
+                                                          checkedValue2 =
+                                                              newValue ?? true;
+                                                        });
+                                                      },
+                                                    ),
+                                                    const Text(
+                                                      '追加費用の内容説明',
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Checkbox(
+                                                      activeColor: Colors.blue,
+                                                      checkColor: Colors.white,
+                                                      value: checkedValue3,
+                                                      onChanged: (newValue) {
+                                                        setState(() {
+                                                          checkedValue3 =
+                                                              newValue ?? true;
+                                                        });
+                                                      },
+                                                    ),
+                                                    const Text(
+                                                      '保証書・取扱説明書の発行・引渡し',
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Checkbox(
+                                                      activeColor: Colors.blue,
+                                                      checkColor: Colors.white,
+                                                      value: checkedValue4,
+                                                      onChanged: (newValue) {
+                                                        setState(() {
+                                                          checkedValue4 =
+                                                              newValue ?? true;
+                                                        });
+                                                      },
+                                                    ),
+                                                    const Text(
+                                                      '作業後の清掃',
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Checkbox(
+                                                      activeColor: Colors.blue,
+                                                      checkColor: Colors.white,
+                                                      value: checkedValue5,
+                                                      onChanged: (newValue) {
+                                                        setState(() {
+                                                          checkedValue5 =
+                                                              newValue ?? true;
+                                                        });
+                                                      },
+                                                    ),
+                                                    const Text(
+                                                      '作業箇所・搬出入通路のキズ・汚れ確認',
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Checkbox(
+                                                      activeColor: Colors.blue,
+                                                      checkColor: Colors.white,
+                                                      value: checkedValue6,
+                                                      onChanged: (newValue) {
+                                                        setState(() {
+                                                          checkedValue6 =
+                                                              newValue ?? true;
+                                                        });
+                                                      },
+                                                    ),
+                                                    const Text(
+                                                      '機器の設置状況（歪み・傾き・動作）確認',
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Checkbox(
+                                                      activeColor: Colors.blue,
+                                                      checkColor: Colors.white,
+                                                      value: checkedValue7,
+                                                      onChanged: (newValue) {
+                                                        setState(() {
+                                                          checkedValue7 =
+                                                              newValue ?? true;
+                                                        });
+                                                      },
+                                                    ),
+                                                    const Text(
+                                                      '取扱い方法説明',
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const Padding(
+                                                  padding:
+                                                      EdgeInsets.only(left: 15),
+                                                  child: Text(
+                                                    '上記内容と問題なく設置機器が使用できることを確認致しました。',
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                                ),
                                               ],
                                             ),
-                                            Row(
-                                              children: [
-                                                Checkbox(
-                                                  activeColor: Colors.blue,
-                                                  checkColor: Colors.white,
-                                                  value: checkedValue2,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      checkedValue2 =
-                                                          newValue ?? true;
-                                                    });
-                                                  },
-                                                ),
-                                                const Text(
-                                                  '追加費用の内容説明',
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Checkbox(
-                                                  activeColor: Colors.blue,
-                                                  checkColor: Colors.white,
-                                                  value: checkedValue3,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      checkedValue3 =
-                                                          newValue ?? true;
-                                                    });
-                                                  },
-                                                ),
-                                                const Text(
-                                                  '保証書・取扱説明書の発行・引渡し',
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Checkbox(
-                                                  activeColor: Colors.blue,
-                                                  checkColor: Colors.white,
-                                                  value: checkedValue4,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      checkedValue4 =
-                                                          newValue ?? true;
-                                                    });
-                                                  },
-                                                ),
-                                                const Text(
-                                                  '作業後の清掃',
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Checkbox(
-                                                  activeColor: Colors.blue,
-                                                  checkColor: Colors.white,
-                                                  value: checkedValue5,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      checkedValue5 =
-                                                          newValue ?? true;
-                                                    });
-                                                  },
-                                                ),
-                                                const Text(
-                                                  '作業箇所・搬出入通路のキズ・汚れ確認',
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Checkbox(
-                                                  activeColor: Colors.blue,
-                                                  checkColor: Colors.white,
-                                                  value: checkedValue6,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      checkedValue6 =
-                                                          newValue ?? true;
-                                                    });
-                                                  },
-                                                ),
-                                                const Text(
-                                                  '機器の設置状況（歪み・傾き・動作）確認',
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Checkbox(
-                                                  activeColor: Colors.blue,
-                                                  checkColor: Colors.white,
-                                                  value: checkedValue7,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      checkedValue7 =
-                                                          newValue ?? true;
-                                                    });
-                                                  },
-                                                ),
-                                                const Text(
-                                                  '取扱い方法説明',
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
-                                              ],
-                                            ),
-                                            const Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 15),
-                                              child: Text(
-                                                '上記内容と問題なく設置機器が使用できることを確認致しました。',
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
+                                      Positioned(
+                                        top: 50,
+                                        bottom: 50,
+                                        right: 20,
+                                        child: Container(
+                                          width: 360,
+                                          alignment: Alignment.centerRight,
+                                          child: const Text(
+                                            '取付時・改修した箇所についてはその場で水漏れ・ガス漏れ等がないことを確認しております。\n 念のため、お客さんご自身でも２～３日の間は漏れ等がないかご確認をお願いします。',
+                                            style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w700,
+                                                overflow:
+                                                    TextOverflow.ellipsis),
+                                            maxLines: 10,
+                                          ),
+                                        ),
+                                      )
                                     ],
                                   ),
                                 ),
@@ -430,17 +454,13 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                   height: 300,
                                   decoration: BoxDecoration(
                                       border: Border.all(color: Colors.black)),
-                                  child: Column(
-                                    children: [
-                                      SingleChildScrollView(
-                                        child: Signature(
-                                          key: const Key('signature'),
-                                          controller: _controller,
-                                          height: 150,
-                                          backgroundColor: Colors.white,
-                                        ),
-                                      ),
-                                    ],
+                                  child: SizedBox(
+                                    child: Signature(
+                                      key: const Key('signature'),
+                                      controller: _controller,
+                                      height: 300,
+                                      backgroundColor: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ],
