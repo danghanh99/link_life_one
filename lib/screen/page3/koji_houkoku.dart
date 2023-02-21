@@ -325,15 +325,85 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
             const SizedBox(
               height: 10,
             ),
-            Container(
-              alignment: Alignment.center,
-              width: 200,
-              height: 50,
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.black)),
-              child: const Text(
-                'その他写真を添付',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+            GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return Container(
+                      width: double.infinity,
+                      child: CupertinoAlertDialog(
+                        title: const Text(
+                          "この工事を設置不可で登録を行います。\n(元に戻せません)",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        content: const Padding(
+                          padding: EdgeInsets.only(top: 15),
+                          child: Text(
+                            "操作は必ず本部へ電話報告後に行ってください。\nまたサイボウズの設置不可アプリ登録は必ず行ってください。",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context); //close Dialog
+                              },
+                              child: const Text(
+                                '戻る',
+                                style: TextStyle(
+                                  color: Color(0xFFEB5757),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context); //close Dialog
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ShashinTeishuutsuGamenPage(
+                                    JYUCYU_ID: widget.JYUCYU_ID,
+                                    initialDate: widget.initialDate,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              'はい',
+                              style: TextStyle(
+                                color: Color(0xFF007AFF),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: 200,
+                height: 50,
+                decoration:
+                    BoxDecoration(border: Border.all(color: Colors.black)),
+                child: const Text(
+                  'その他写真を添付',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                ),
               ),
             ),
           ],
@@ -519,8 +589,8 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
   }
 
   Widget leftSide1Item(int index) {
-    return Container(
-      height: widget.KOJI_ST == "3" || widget.KOJI_ST == "03" ? 400.h : 200.h,
+    return SizedBox(
+      height: widget.KOJI_ST == "3" || widget.KOJI_ST == "03" ? 400.h : 240.h,
       width: 300.w,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
