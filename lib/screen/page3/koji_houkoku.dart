@@ -233,12 +233,16 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 SizedBox(
                   height: 20.sp,
                 ),
-                Flexible(
-                  child: Text(
-                    item['BEF_SEKO_PHOTO_FILEPATH'] ?? '',
-                    style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
-                  ),
-                ),
+                Expanded(
+                    child: item['BEF_SEKO_PHOTO_FILEPATH'] == null
+                        ? const SizedBox.shrink()
+                        : Image.network(item['BEF_SEKO_PHOTO_FILEPATH'])),
+                // Flexible(
+                //   child: Text(
+                //     item['BEF_SEKO_PHOTO_FILEPATH'] ?? '',
+                //     style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -267,13 +271,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                     SizedBox(
                       height: 20.sp,
                     ),
-                    Flexible(
-                      child: Text(
-                        item['AFT_SEKO_PHOTO_FILEPATH'] ?? '',
-                        style: TextStyle(
-                            fontSize: 20.sp, fontWeight: FontWeight.w700),
-                      ),
-                    ),
+                    Expanded(
+                        child: item['AFT_SEKO_PHOTO_FILEPATH'] == null
+                            ? const SizedBox.shrink()
+                            : Image.network(item['AFT_SEKO_PHOTO_FILEPATH'])),
                   ],
                 ),
               ),
