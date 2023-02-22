@@ -179,26 +179,26 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                             border: Border.all(
                                 color:
                                     const Color.fromARGB(255, 247, 240, 240))),
-                        width: 200,
+                        width: 200.sp,
                         child: CustomButton(
                           color: Colors.white70,
                           onClick: () {},
                           name: '工事報告',
-                          textStyle: const TextStyle(
+                          textStyle: TextStyle(
                             color: Color(0xFF042C5C),
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
                     ),
-                    Container(
-                      width: 80,
+                    SizedBox(
+                      width: 80.sp,
                     )
                   ],
                 ),
-                const SizedBox(
-                  height: 40,
+                SizedBox(
+                  height: 40.sp,
                 ),
                 widget.SINGLE_SUMMARIZE == "0" ||
                         widget.SINGLE_SUMMARIZE == "00"
@@ -229,27 +229,27 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                         },
                         separatorBuilder: (BuildContext context, int index) =>
                             Padding(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          padding: EdgeInsets.only(top: 10.sp, bottom: 10.sp),
                           child: SizedBox(
-                            height: 5,
-                            width: 100.w,
+                            height: 5.sp,
+                            width: 100.w.sp,
                             child: Divider(
-                              height: 2,
+                              height: 2.sp,
                               color: Colors.black,
-                              thickness: 2,
+                              thickness: 2.sp,
                             ),
                           ),
                         ),
                       ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10.sp),
                   child: Divider(
                     color: Colors.black,
-                    thickness: 2,
+                    thickness: 2.sp,
                   ),
                 ),
-                const SizedBox(
-                  height: 100,
+                SizedBox(
+                  height: 100.sp,
                 ),
                 sendButton(),
               ],
@@ -266,71 +266,73 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
       children: [
         Container(
           alignment: Alignment.center,
-          width: 200,
-          height: 160,
+          width: 200.sp,
+          height: 160.sp,
           decoration: BoxDecoration(border: Border.all(color: Colors.black)),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0.sp),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
                   '施工前写真',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                  style:
+                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 20.sp,
                 ),
                 Text(
                   '添付後サムネイルを表示',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                  style:
+                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
                 ),
               ],
             ),
           ),
         ),
-        const SizedBox(
-          width: 10,
+        SizedBox(
+          width: 10.sp,
         ),
         Column(
           children: [
             Container(
               alignment: Alignment.center,
-              width: 200,
-              height: 160,
+              width: 200.sp,
+              height: 160.sp,
               decoration:
                   BoxDecoration(border: Border.all(color: Colors.black)),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(8.sp),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text(
                       '施工前写真',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 20.sp,
                     ),
                     Text(
                       '添付後サムネイルを表示',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(
-              height: 10,
+            SizedBox(
+              height: 10.sp,
             ),
             GestureDetector(
               onTap: () {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    return Container(
+                    return SizedBox(
                       width: double.infinity,
                       child: CupertinoAlertDialog(
                         title: const Text(
@@ -396,13 +398,14 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
               },
               child: Container(
                 alignment: Alignment.center,
-                width: 200,
-                height: 50,
+                width: 200.sp,
+                height: 50.sp,
                 decoration:
                     BoxDecoration(border: Border.all(color: Colors.black)),
-                child: const Text(
+                child: Text(
                   'その他写真を添付',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                  style:
+                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
                 ),
               ),
             ),
@@ -414,8 +417,8 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
 
   Widget leftSide() {
     return Container(
-      height: 400.h,
-      width: 300.w,
+      height: 400.h.sp,
+      width: 300.w.sp,
       child: ListView.separated(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
@@ -424,27 +427,27 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 '【施工商品情報】',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
               ),
-              const SizedBox(
-                height: 10,
+              SizedBox(
+                height: 10.sp,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(left: 10.sp),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'メーカー: ',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
                     SizedBox(
-                      width: 100,
-                      height: 50,
+                      width: 100.sp,
+                      height: 50.sp,
                       child: textUnderline(
                         initial: listKojiHoukoku[index]["MAKER_CD"],
                         onChange: (value) {
@@ -458,19 +461,19 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(left: 10.sp),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       '品番: ',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
                     SizedBox(
-                      width: 100,
-                      height: 50,
+                      width: 100.sp,
+                      height: 50.sp,
                       child: textUnderline(
                         initial: listKojiHoukoku[index]["HINBAN"],
                         onChange: (value) {
@@ -483,30 +486,30 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 10,
+              SizedBox(
+                height: 10.sp,
               ),
-              const Text(
+              Text(
                 '【既設品情報】',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
               ),
-              const SizedBox(
-                height: 10,
+              SizedBox(
+                height: 10.sp,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(left: 10.sp),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'メーカー: ',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
                     SizedBox(
-                      width: 100,
-                      height: 50,
+                      width: 100.sp,
+                      height: 50.sp,
                       child: textUnderline(
                         initial: listKojiHoukoku[index]["KISETU_MAKER_CD"],
                         onChange: (value) {
@@ -523,19 +526,19 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(left: 10.sp),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       '品番: ',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
                     SizedBox(
-                      width: 100,
-                      height: 50,
+                      width: 100.sp,
+                      height: 50.sp,
                       child: textUnderline(
                         initial: listKojiHoukoku[index]["KISETU_HINBAN"] ?? '',
                         onChange: (value) {
@@ -550,20 +553,20 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 10,
+              SizedBox(
+                height: 10.sp,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(left: 10.sp),
                 child: Row(
                   children: [
-                    const Text(
+                    Text(
                       '建築形態',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
-                    const SizedBox(
-                      width: 10,
+                    SizedBox(
+                      width: 10.sp,
                     ),
                     _dropDownButton(context, index),
                   ],
@@ -573,14 +576,14 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
           );
         },
         separatorBuilder: (BuildContext context, int index) => Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
+          padding: EdgeInsets.only(top: 10.sp, bottom: 10.sp),
           child: SizedBox(
-            height: 5,
-            width: 100.w,
+            height: 5.sp,
+            width: 100.w.sp,
             child: Divider(
-              height: 2,
+              height: 2.sp,
               color: Colors.black,
-              thickness: 2,
+              thickness: 2.sp,
             ),
           ),
         ),
@@ -590,31 +593,33 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
 
   Widget leftSide1Item(int index) {
     return SizedBox(
-      height: widget.KOJI_ST == "3" || widget.KOJI_ST == "03" ? 400.h : 240.h,
+      height:
+          widget.KOJI_ST == "3" || widget.KOJI_ST == "03" ? 400.h.sp : 240.h.sp,
       width: 300.w,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             '【施工商品情報】',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: 10.sp,
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 10),
+            padding: EdgeInsets.only(left: 10.sp),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'メーカー: ',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                  style:
+                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
                 ),
                 SizedBox(
-                  width: 100,
-                  height: 50,
+                  width: 100.sp,
+                  height: 50.sp,
                   child: textUnderline(
                     initial: listKojiHoukoku[index]["MAKER_CD"],
                     onChange: (value) {
@@ -627,19 +632,20 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10),
+          Container(
+            padding: EdgeInsets.only(left: 10.sp),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   '品番: ',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                  style:
+                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
                 ),
                 SizedBox(
-                  width: 100,
-                  height: 50,
+                  width: 100.sp,
+                  height: 50.sp,
                   child: textUnderline(
                     initial: listKojiHoukoku[index]["HINBAN"],
                     onChange: (value) {
@@ -652,35 +658,35 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
               ],
             ),
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: 10.sp,
           ),
           widget.KOJI_ST == "3" || widget.KOJI_ST == "03"
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       '【既設品情報】',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
-                    const SizedBox(
-                      height: 10,
+                    SizedBox(
+                      height: 10.sp,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 10),
+                      padding: EdgeInsets.only(left: 10.sp),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'メーカー: ',
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w700),
+                                fontSize: 20.sp, fontWeight: FontWeight.w700),
                           ),
                           SizedBox(
-                            width: 100,
-                            height: 50,
+                            width: 100.sp,
+                            height: 50.sp,
                             child: textUnderline(
                               initial: listKojiHoukoku[index]
                                   ["KISETU_MAKER_CD"],
@@ -699,19 +705,19 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 10),
+                      padding: EdgeInsets.only(left: 10.sp),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             '品番: ',
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w700),
+                                fontSize: 20.sp, fontWeight: FontWeight.w700),
                           ),
                           SizedBox(
-                            width: 100,
-                            height: 50,
+                            width: 100.sp,
+                            height: 50.sp,
                             child: textUnderline(
                               initial:
                                   listKojiHoukoku[index]["KISETU_HINBAN"] ?? '',
@@ -729,22 +735,23 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
+                    SizedBox(
+                      height: 10.sp,
                     ),
                   ],
                 )
               : Container(),
           Padding(
-            padding: const EdgeInsets.only(left: 10),
+            padding: EdgeInsets.only(left: 10.sp),
             child: Row(
               children: [
-                const Text(
+                Text(
                   '建築形態',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                  style:
+                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
                 ),
-                const SizedBox(
-                  width: 10,
+                SizedBox(
+                  width: 10.sp,
                 ),
                 _dropDownButton(context, index),
               ],
@@ -764,7 +771,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
             showDialog(
               context: context,
               builder: (context) {
-                return Container(
+                return SizedBox(
                   width: double.infinity,
                   child: CupertinoAlertDialog(
                     title: const Text(
@@ -894,14 +901,14 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
           },
           child: Container(
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1.5),
+              border: Border.all(color: Colors.black, width: 1.5.sp),
             ),
-            height: 50,
-            width: 150,
-            child: const Center(
+            height: 50.sp,
+            width: 150.sp,
+            child: Center(
               child: Text(
                 '設置不可',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w300),
               ),
             ),
           ),
@@ -940,14 +947,14 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
           },
           child: Container(
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1.5),
+              border: Border.all(color: Colors.black, width: 1.5.sp),
             ),
-            height: 50,
-            width: 150,
-            child: const Center(
+            height: 50.sp,
+            width: 150.sp,
+            child: Center(
               child: Text(
                 '次へ',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w300),
               ),
             ),
           ),
@@ -967,13 +974,13 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
       initialValue: initial,
       minLines: 1,
       maxLines: 1,
-      decoration: const InputDecoration(
-        contentPadding: EdgeInsets.only(top: 5, bottom: 5),
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.only(top: 5.sp, bottom: 5.sp),
         isDense: true,
-        enabledBorder: UnderlineInputBorder(
+        enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.black),
         ),
-        focusedBorder: UnderlineInputBorder(
+        focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.black),
         ),
       ),
@@ -989,8 +996,8 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
         if (number == 1) {}
         if (number == 2) {}
       },
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12.0))),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0.sp))),
       itemBuilder: (context) => listPullDown.map((item) {
         int index = listPullDown.indexOf(item);
         return PopupMenuItem(
@@ -1001,8 +1008,8 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
               listStateIndexDropdown[indexInsideListHoukoku] = index;
             });
           },
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
+          height: 25.sp,
+          padding: EdgeInsets.only(right: 0, left: 10.sp),
           value: 1,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1011,8 +1018,8 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    const SizedBox(
-                      width: 14,
+                    SizedBox(
+                      width: 14.sp,
                     ),
                     Text(
                       item["KBNMSAI_NAME"],
@@ -1025,13 +1032,13 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
           ),
         );
       }).toList(),
-      offset: const Offset(5, 32),
+      offset: Offset(5.sp, 32.sp),
       child: Container(
-        width: 130,
-        height: 30,
+        width: 130.sp,
+        height: 30.sp,
         decoration: BoxDecoration(border: Border.all(color: Colors.black)),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: EdgeInsets.symmetric(horizontal: 10.sp),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -1041,16 +1048,16 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                             listStateIndexDropdown[indexInsideListHoukoku]]
                         ["KBNMSAI_NAME"]
                     : '',
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.black,
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.w400,
                 ),
               ),
               Image.asset(
                 Assets.icDown,
-                width: 13,
-                height: 13,
+                width: 13.sp,
+                height: 13.sp,
               ),
             ],
           ),
