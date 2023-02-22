@@ -3,30 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/screen/page3/houjin_kanryousho.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
-import 'package:link_life_one/screen/page3/shashin_teishuutsu_houkoku_page.dart';
 import 'package:link_life_one/screen/page3/shoudaku_shoukisai.dart';
-import 'package:link_life_one/screen/page7/component/dialog.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 
 import '../../api/koji/requestConstructionReport/get_koji_houkoku.dart';
 import '../../shared/assets.dart';
-import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:link_life_one/api/koji/postPhotoSubmissionRegistration/upload_photo_api.dart';
-import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
-import 'package:link_life_one/screen/page3/page_3/kojiichiran_page_3_bao_cao_hoan_thanh_cong_trinh.dart';
-import 'package:link_life_one/shared/custom_button.dart';
-
-import '../../api/koji/getPhotoConfirm/get_shashin_kakunin.dart';
 
 class KojiHoukoku extends StatefulWidget {
   final DateTime? initialDate;
@@ -51,13 +36,10 @@ class KojiHoukoku extends StatefulWidget {
 class _KojiHoukokuState extends State<KojiHoukoku> {
   List<dynamic> listPullDown = [];
   List<dynamic> listKojiHoukoku = [];
-  List<dynamic> listStateIndexDropdown = [];
-  int currentIndexPullDown = 0;
-  String currentPullDownValue = '';
+  Map<int, int> listStateIndexDropdown = {};
   XFile? imageFile;
 
-  String? TENPO_CD = '00000';
-  String? KBN_BIKO;
+  String? TENPO_CD = '';
   @override
   void initState() {
     super.initState();
@@ -71,60 +53,29 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
         KOJI_ST: widget.KOJI_ST,
         SYUYAKU_JYUCYU_ID: widget.SYUYAKU_JYUCYU_ID,
         onSuccess: (res) {
+          if (res['DATA'] != null) {
+            setState(() {
+              listKojiHoukoku = res['DATA'];
+            });
+          }
+          if (listKojiHoukoku.isNotEmpty) {
+            Map firstItem = listKojiHoukoku.first;
+            TENPO_CD = firstItem['TENPO_CD'];
+          }
           if (res["TENPO_CD"] != null) {
             setState(() {
               TENPO_CD = res['TENPO_CD'];
             });
           }
 
-          if (res["KBN_BIKO"] == null) {
-          } else {
-            setState(() {
-              KBN_BIKO = res["KBN_BIKO"];
-            });
-          }
+          List pulldownList = res['PULLDOWN'];
 
-          if (res["PULLDOWN"] != null) {
+          if (pulldownList.isNotEmpty) {
+            for (var i = 0; i < listKojiHoukoku.length; i++) {
+              listStateIndexDropdown[i] = 0;
+            }
             setState(() {
-              listPullDown = res["PULLDOWN"];
-              currentPullDownValue = listPullDown[0]["KBNMSAI_NAME"];
-              currentIndexPullDown = 0;
-            });
-          }
-          if (res["constructionReportSUMMARIZE"] != null ||
-              res["constructionReportSINGLE"] != null) {
-            if (res["constructionReportSUMMARIZE"] != null) {
-              setState(() {
-                listKojiHoukoku = res["constructionReportSUMMARIZE"];
-              });
-            }
-            if (res["constructionReportSINGLE"] != null) {
-              setState(() {
-                listKojiHoukoku = res["constructionReportSINGLE"];
-              });
-            }
-            if (listKojiHoukoku.isNotEmpty) {
-              setState(() {
-                List<dynamic> tmp = List<dynamic>.filled(
-                    listKojiHoukoku.length, currentIndexPullDown);
-
-                listStateIndexDropdown = tmp;
-              });
-            }
-          } else {
-            setState(() {
-              listKojiHoukoku = [
-                {
-                  "MAKER_CD": "",
-                  "HINBAN": "",
-                  "KISETU_MAKER_CD": "",
-                  "KISETU_HINBAN": "",
-                  "BEF_SEKO_PHOTO_FILEPATH": "",
-                  "AFT_SEKO_PHOTO_FILEPATH": "",
-                  "OTHER_PHOTO_FOLDERPATH": ""
-                }
-              ];
-              listStateIndexDropdown = [0];
+              listPullDown = pulldownList;
             });
           }
         },
@@ -208,7 +159,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           leftSide(),
-                          rightSide(),
+                          rightSide({}),
                         ],
                       )
                     : ListView.separated(
@@ -223,7 +174,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               leftSide1Item(index),
-                              rightSide(),
+                              rightSide(listKojiHoukoku.elementAt(index)),
                             ],
                           );
                         },
@@ -260,7 +211,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
     );
   }
 
-  Widget rightSide() {
+  Widget rightSide(Map item) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -282,10 +233,11 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 SizedBox(
                   height: 20.sp,
                 ),
-                Text(
-                  '添付後サムネイルを表示',
-                  style:
-                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                Flexible(
+                  child: Text(
+                    item['BEF_SEKO_PHOTO_FILEPATH'] ?? '',
+                    style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                  ),
                 ),
               ],
             ),
@@ -308,17 +260,19 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '施工前写真',
+                      '施工後写真',
                       style: TextStyle(
                           fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
                     SizedBox(
                       height: 20.sp,
                     ),
-                    Text(
-                      '添付後サムネイルを表示',
-                      style: TextStyle(
-                          fontSize: 20.sp, fontWeight: FontWeight.w700),
+                    Flexible(
+                      child: Text(
+                        item['AFT_SEKO_PHOTO_FILEPATH'] ?? '',
+                        style: TextStyle(
+                            fontSize: 20.sp, fontWeight: FontWeight.w700),
+                      ),
                     ),
                   ],
                 ),
@@ -593,8 +547,8 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
 
   Widget leftSide1Item(int index) {
     return SizedBox(
-      height:
-          widget.KOJI_ST == "3" || widget.KOJI_ST == "03" ? 400.h.sp : 240.h.sp,
+      // height:
+      //     widget.KOJI_ST == "3" || widget.KOJI_ST == "03" ? 400.h.sp : 240.h.sp,
       width: 300.w,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1045,7 +999,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
               Text(
                 listPullDown.isNotEmpty && listStateIndexDropdown.isNotEmpty
                     ? listPullDown[
-                            listStateIndexDropdown[indexInsideListHoukoku]]
+                            listStateIndexDropdown[indexInsideListHoukoku]!]
                         ["KBNMSAI_NAME"]
                     : '',
                 style: TextStyle(

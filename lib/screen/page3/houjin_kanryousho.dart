@@ -34,7 +34,7 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
 
   Future<void> getHouJin() async {
     final result = await HouJinKanRyoShoApi().getKojiHoukoku(
-        JYUCYU_ID: '0301416579', TENPO_CD: widget.TENPO_CD, onSuccess: () {});
+        JYUCYU_ID: widget.JYUCYU_ID, TENPO_CD: widget.TENPO_CD, onSuccess: () {});
     setState(
       () {
         listKbn = result['KBN'];
@@ -108,7 +108,7 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                 ),
                 Container(
                   width: size.width - 100,
-                  height: 160.h,
+                  height: 170.h,
                   decoration:
                       BoxDecoration(border: Border.all(color: Colors.black)),
                   child: Padding(
@@ -160,11 +160,11 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                   height: 30,
                 ),
                 listImage.isEmpty
-                    ? Container(
-                        width: size.width - 100,
-                        height: size.height * 1 / 2,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
+                    ? Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                          ),
                         ),
                       )
                     : Expanded(
