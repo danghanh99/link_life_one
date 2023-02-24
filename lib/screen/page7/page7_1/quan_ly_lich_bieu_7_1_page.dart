@@ -933,13 +933,15 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       DateTime(currentDate.year, currentDate.month + 1, 0).day;
 
   int _getMonthDaysRow() {
-    return (_getMonthDays / 7).ceil();
+    DateTime firstDayOfMonth = DateTime(currentDate.year, currentDate.month, 1);
+    int weekDay = firstDayOfMonth.weekday;
+    return ((_getMonthDays + (weekDay == 7 ? 0 : weekDay)) / 7).ceil();
   }
 
   DateTime _getFirstDayPersonMonth() {
     DateTime firstDayOfMonth = DateTime(currentDate.year, currentDate.month, 1);
     int weekDay = firstDayOfMonth.weekday;
-    return firstDayOfMonth.subtract(Duration(days: weekDay));
+    return firstDayOfMonth.subtract(Duration(days: weekDay == 7 ? 0 : weekDay));
   }
 
   List<String> _listDay() {
@@ -1414,8 +1416,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     if (sukejuuruSelectedUser != null &&
         sukejuuruSelectedUser.isNotEmpty &&
         sukejuuruSelectedUser[dateStr] != null &&
-        sukejuuruSelectedUser[dateStr].isNotEmpty &&
-        date.month == currentDate.month) {
+        sukejuuruSelectedUser[dateStr].isNotEmpty) {
       sukejuuruSelectedUser[dateStr].forEach(
         (e) => widgets.addAll([
           kojiItemWithType(
