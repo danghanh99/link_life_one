@@ -23,6 +23,7 @@ class HoujinKanryousho extends StatefulWidget {
 class _HoujinKanryoushoState extends State<HoujinKanryousho> {
   final carouselController = CarouselController();
   List<dynamic> listKbn = [];
+  List<String> listKbnName = [];
   List<dynamic> listImage = [];
   final ImagePicker _picker = ImagePicker();
 
@@ -34,10 +35,17 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
 
   Future<void> getHouJin() async {
     final result = await HouJinKanRyoShoApi().getKojiHoukoku(
-        JYUCYU_ID: widget.JYUCYU_ID, TENPO_CD: widget.TENPO_CD, onSuccess: () {});
+        JYUCYU_ID: widget.JYUCYU_ID,
+        TENPO_CD: widget.TENPO_CD,
+        onSuccess: () {});
     setState(
       () {
         listKbn = result['KBN'];
+        for (var element in listKbn) {
+          element.forEach((key, value) {
+            listKbnName.add(value);
+          });
+        }
         listImage = result['FILE'] ?? [];
       },
     );
@@ -103,57 +111,30 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                     )
                   ],
                 ),
-                const SizedBox(
+                Container(
                   height: 100,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 34, vertical: 8),
+                  alignment: Alignment.bottomLeft,
+                  child: const Text('下記が必要な完了書類です',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
                 ),
                 Container(
                   width: size.width - 100,
-                  height: 170.h,
                   decoration:
                       BoxDecoration(border: Border.all(color: Colors.black)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          listKbn.isEmpty
-                              ? ''
-                              : listKbn[0]['YOBIKOMOKU1'] ?? '',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w700),
-                        ),
-                        Text(
-                          listKbn.isEmpty
-                              ? ''
-                              : listKbn[0]['YOBIKOMOKU2'] ?? '',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w700),
-                        ),
-                        Text(
-                          listKbn.isEmpty
-                              ? ''
-                              : listKbn[0]['YOBIKOMOKU3'] ?? '',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w700),
-                        ),
-                        Text(
-                          listKbn.isEmpty
-                              ? ''
-                              : listKbn[0]['YOBIKOMOKU4'] ?? '',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w700),
-                        ),
-                        Text(
-                          listKbn.isEmpty
-                              ? ''
-                              : listKbn[0]['YOBIKOMOKU5'] ?? '',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w700),
-                        ),
-                      ],
-                    ),
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ...listKbnName.map((e) => Text(
+                            e,
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w700),
+                          )),
+                    ],
                   ),
                 ),
                 const SizedBox(

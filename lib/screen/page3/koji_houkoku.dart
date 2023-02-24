@@ -61,6 +61,20 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
           if (listKojiHoukoku.isNotEmpty) {
             Map firstItem = listKojiHoukoku.first;
             TENPO_CD = firstItem['TENPO_CD'];
+          } else {
+            setState(() {
+              listKojiHoukoku = [
+                {
+                  "MAKER_CD": "",
+                  "HINBAN": "",
+                  "KISETU_MAKER_CD": "",
+                  "KISETU_HINBAN": "",
+                  "BEF_SEKO_PHOTO_FILEPATH": "",
+                  "AFT_SEKO_PHOTO_FILEPATH": "",
+                  "OTHER_PHOTO_FOLDERPATH": ""
+                }
+              ];
+            });
           }
           if (res["TENPO_CD"] != null) {
             setState(() {
@@ -80,6 +94,18 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
           }
         },
         onFailed: () {});
+  }
+
+  void selectImage() async {
+    final ImagePicker picker = ImagePicker();
+    try {
+      List<XFile> files = await picker.pickMultiImage();
+      if (files.isNotEmpty) {
+        // TODO: Chưa biết làm gì
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   //  "MAKER_CD": "★弊社★オ",
@@ -234,7 +260,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                   height: 20.sp,
                 ),
                 Expanded(
-                    child: item['BEF_SEKO_PHOTO_FILEPATH'] == null
+                    child: item['BEF_SEKO_PHOTO_FILEPATH'] == null || item['BEF_SEKO_PHOTO_FILEPATH'] == ''
                         ? const SizedBox.shrink()
                         : Image.network(item['BEF_SEKO_PHOTO_FILEPATH'])),
                 // Flexible(
@@ -272,7 +298,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                       height: 20.sp,
                     ),
                     Expanded(
-                        child: item['AFT_SEKO_PHOTO_FILEPATH'] == null
+                        child: item['AFT_SEKO_PHOTO_FILEPATH'] == null || item['AFT_SEKO_PHOTO_FILEPATH'] == ''
                             ? const SizedBox.shrink()
                             : Image.network(item['AFT_SEKO_PHOTO_FILEPATH'])),
                   ],
@@ -284,72 +310,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
             ),
             GestureDetector(
               onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return SizedBox(
-                      width: double.infinity,
-                      child: CupertinoAlertDialog(
-                        title: const Text(
-                          "この工事を設置不可で登録を行います。\n(元に戻せません)",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        content: const Padding(
-                          padding: EdgeInsets.only(top: 15),
-                          child: Text(
-                            "操作は必ず本部へ電話報告後に行ってください。\nまたサイボウズの設置不可アプリ登録は必ず行ってください。",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                              onPressed: () {
-                                Navigator.pop(context); //close Dialog
-                              },
-                              child: const Text(
-                                '戻る',
-                                style: TextStyle(
-                                  color: Color(0xFFEB5757),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              )),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context); //close Dialog
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      ShashinTeishuutsuGamenPage(
-                                    JYUCYU_ID: widget.JYUCYU_ID,
-                                    initialDate: widget.initialDate,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: const Text(
-                              'はい',
-                              style: TextStyle(
-                                color: Color(0xFF007AFF),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                );
+                selectImage();
               },
               child: Container(
                 alignment: Alignment.center,
