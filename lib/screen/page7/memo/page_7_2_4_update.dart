@@ -307,7 +307,8 @@ class _Page724UpdateState extends State<Page724Update> {
                         ),
                         Visibility(
                             visible: checkDate(),
-                            child: const Text('開始時間より遅い終了時間を選択くだだい。')),
+                            child: const Text('開始時間より遅い終了時間を選択くだだい。',
+                                style: TextStyle(color: Colors.red))),
                         Row(
                           children: [
                             Checkbox(
