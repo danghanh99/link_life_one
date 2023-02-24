@@ -183,6 +183,13 @@ class _Page723State extends State<Page723> {
     return result;
   }
 
+  bool checkDate() {
+    DateTime fromDate =
+        DateTime.parse("2023-01-01 $jikanKaraCreateAnkenPage:00");
+    DateTime toDate = DateTime.parse("2023-01-01 $jikanMadeCreateAnkenPage:00");
+    return !checkAllDayCreateAnkenPage && fromDate.compareTo(toDate) >= 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -278,20 +285,57 @@ class _Page723State extends State<Page723> {
                         height: 5,
                         width: 5,
                       ),
-                      Row(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: checkAllDayCreateAnkenPage
-                                ? CrossAxisAlignment.end
-                                : CrossAxisAlignment.start,
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Column(
+                                crossAxisAlignment: checkAllDayCreateAnkenPage
+                                    ? CrossAxisAlignment.end
+                                    : CrossAxisAlignment.start,
+                                children: [
+                                  checkAllDayCreateAnkenPage
+                                      ? Text("-")
+                                      : Column(
+                                          children: [
+                                            _moreButton2(context),
+                                            validJikanKara
+                                                ? Container()
+                                                : const Padding(
+                                                    padding:
+                                                        EdgeInsets.only(top: 5),
+                                                    child: Text(
+                                                      "未選択",
+                                                      style: TextStyle(
+                                                          color: Colors.red),
+                                                    ),
+                                                  ),
+                                          ],
+                                        ),
+                                ],
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Text(
+                                '~',
+                                style: TextStyle(
+                                  color: Color(0xFF000000),
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
                               checkAllDayCreateAnkenPage
                                   ? Text("-")
                                   : Column(
                                       children: [
-                                        _moreButton2(context),
-                                        validJikanKara
+                                        _moreButton3(context),
+                                        validJikanMade
                                             ? Container()
                                             : const Padding(
                                                 padding:
@@ -304,67 +348,42 @@ class _Page723State extends State<Page723> {
                                               ),
                                       ],
                                     ),
-                              Row(
-                                children: [
-                                  Checkbox(
-                                    activeColor: Colors.blue,
-                                    checkColor: Colors.white,
-                                    value: checkAllDayCreateAnkenPage,
-                                    onChanged: (newValue) {
-                                      if (newValue == true) {
-                                        setState(() {
-                                          checkAllDayCreateAnkenPage = true;
-
-                                          jikanKaraCreateAnkenPage = "08:00";
-                                          jikanMadeCreateAnkenPage = "19:00";
-                                        });
-                                      } else {
-                                        setState(() {
-                                          checkAllDayCreateAnkenPage =
-                                              newValue ??
-                                                  checkAllDayCreateAnkenPage;
-                                        });
-                                      }
-                                    },
-                                  ),
-                                  const Text(
-                                    '終日',
-                                  ),
-                                ],
-                              ),
                             ],
                           ),
                           const SizedBox(
-                            width: 10,
+                            height: 5,
                           ),
-                          const Text(
-                            '~',
-                            style: TextStyle(
-                              color: Color(0xFF000000),
-                              fontSize: 17,
-                              fontWeight: FontWeight.w300,
-                            ),
+                          Visibility(
+                              visible: checkDate(),
+                              child: const Text('開始時間より遅い終了時間を選択くだだい。',
+                                  style: TextStyle(color: Colors.red))),
+                          Row(
+                            children: [
+                              Checkbox(
+                                activeColor: Colors.blue,
+                                checkColor: Colors.white,
+                                value: checkAllDayCreateAnkenPage,
+                                onChanged: (newValue) {
+                                  if (newValue == true) {
+                                    setState(() {
+                                      checkAllDayCreateAnkenPage = true;
+
+                                      jikanKaraCreateAnkenPage = "08:00";
+                                      jikanMadeCreateAnkenPage = "19:00";
+                                    });
+                                  } else {
+                                    setState(() {
+                                      checkAllDayCreateAnkenPage = newValue ??
+                                          checkAllDayCreateAnkenPage;
+                                    });
+                                  }
+                                },
+                              ),
+                              const Text(
+                                '終日',
+                              ),
+                            ],
                           ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          checkAllDayCreateAnkenPage
-                              ? Text("-")
-                              : Column(
-                                  children: [
-                                    _moreButton3(context),
-                                    validJikanMade
-                                        ? Container()
-                                        : const Padding(
-                                            padding: EdgeInsets.only(top: 5),
-                                            child: Text(
-                                              "未選択",
-                                              style:
-                                                  TextStyle(color: Colors.red),
-                                            ),
-                                          ),
-                                  ],
-                                ),
                         ],
                       ),
                     ],
@@ -601,6 +620,9 @@ class _Page723State extends State<Page723> {
                   ),
                   child: TextButton(
                     onPressed: () {
+                      if (checkDate()) {
+                        return;
+                      }
                       // if (jikanKaraCreateAnkenPage == null ||
                       //     jikanMadeCreateAnkenPage == null) {
                       //   setState(() {

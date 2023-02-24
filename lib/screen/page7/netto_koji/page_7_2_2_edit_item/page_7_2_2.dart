@@ -259,12 +259,10 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                     ALL_DAY_FLG = data["DATA"][0]["ALL_DAY_FLG"];
 
                   titleEditPage = UPD_TANTNM + "  " + UPD_YMD;
-                  String apoKbn = (widget.HOMON_SBT == '01'
-                              ? SITAMIAPO_KBN
-                              : KOJIAPO_KBN);
-                  checkAppointEditPage = apoKbn == "01" || apoKbn == "1"
-                      ? false
-                      : true;
+                  String apoKbn =
+                      (widget.HOMON_SBT == '01' ? SITAMIAPO_KBN : KOJIAPO_KBN);
+                  checkAppointEditPage =
+                      apoKbn == "01" || apoKbn == "1" ? false : true;
                   checkAllDayEditPage = ALL_DAY_FLG == "1" ? true : false;
                   // jinNumberEditPage = JININ;
                   // jikanNumberEditPage = JIKAN;
@@ -280,6 +278,12 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
 
   DateTime convertDateTime(String date) {
     return DateFormat("yyyy-MM-dd hh:mm:ss").parse(date);
+  }
+
+  bool checkDate() {
+    DateTime fromDate = DateTime.parse("2023-01-01 $jikanKaraEditPage:00");
+    DateTime toDate = DateTime.parse("2023-01-01 $jikanMadeEditPage:00");
+    return !checkAllDayEditPage && fromDate.compareTo(toDate) >= 0;
   }
 
   @override
@@ -436,23 +440,67 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                             ? CrossAxisAlignment.end
                             : CrossAxisAlignment.start,
                         children: [
-                          checkAllDayEditPage
-                              ? Text("-")
-                              : Column(
-                                  children: [
-                                    _moreButton2(context),
-                                    validKaraMade
-                                        ? Container()
-                                        : const Padding(
-                                            padding: EdgeInsets.only(top: 5),
-                                            child: Text(
-                                              "未選択",
-                                              style:
-                                                  TextStyle(color: Colors.red),
-                                            ),
-                                          ),
-                                  ],
+                          Row(
+                            children: [
+                              checkAllDayEditPage
+                                  ? Text("-")
+                                  : Column(
+                                      children: [
+                                        _moreButton2(context),
+                                        validKaraMade
+                                            ? Container()
+                                            : const Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 5),
+                                                child: Text(
+                                                  "未選択",
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                ),
+                                              ),
+                                      ],
+                                    ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Text(
+                                '~',
+                                style: TextStyle(
+                                  color: Color(0xFF000000),
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w300,
                                 ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              checkAllDayEditPage
+                                  ? Text("-")
+                                  : Column(
+                                      children: [
+                                        _moreButton3(context),
+                                        validKaraMade
+                                            ? Container()
+                                            : const Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 5),
+                                                child: Text(
+                                                  "未選択",
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                ),
+                                              ),
+                                      ],
+                                    ),
+                            ],
+                          ),
+                          const SizedBox(height: 5),
+                          Visibility(
+                              visible: checkDate(),
+                              child: const Text(
+                                '開始時間より遅い終了時間を選択くだだい。',
+                                style: TextStyle(color: Colors.red),
+                              )),
                           Row(
                             children: [
                               Checkbox(
@@ -482,36 +530,6 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Text(
-                        '~',
-                        style: TextStyle(
-                          color: Color(0xFF000000),
-                          fontSize: 17,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      checkAllDayEditPage
-                          ? Text("-")
-                          : Column(
-                              children: [
-                                _moreButton3(context),
-                                validKaraMade
-                                    ? Container()
-                                    : const Padding(
-                                        padding: EdgeInsets.only(top: 5),
-                                        child: Text(
-                                          "未選択",
-                                          style: TextStyle(color: Colors.red),
-                                        ),
-                                      ),
-                              ],
-                            ),
                     ],
                   ),
                   Row(
@@ -588,9 +606,11 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                               fillColor: const Color(0xFFF5F6F8),
                               // hint: jikanNumberEditPage.toString(),
                               inputFormatters: [
-                                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d+\.?\d{0,2}')),
                               ],
-                              type: const TextInputType.numberWithOptions(decimal: true),
+                              type: const TextInputType.numberWithOptions(
+                                  decimal: true),
                               onChanged: (text) {
                                 setState(() {
                                   jikanNumberEditPage = text;
@@ -664,6 +684,9 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                   ),
                   child: TextButton(
                     onPressed: () {
+                      if (checkDate()) {
+                        return;
+                      }
                       if (jikanKaraEditPage == null ||
                           jikanMadeEditPage == null) {
                         setState(() {

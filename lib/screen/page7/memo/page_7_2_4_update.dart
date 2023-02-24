@@ -168,6 +168,12 @@ class _Page724UpdateState extends State<Page724Update> {
     });
   }
 
+  bool checkDate() {
+    DateTime fromDate = DateTime.parse("2023-01-01 $kara:00");
+    DateTime toDate = DateTime.parse("2023-01-01 $made:00");
+    return !checkedValue && fromDate.compareTo(toDate) >= 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -264,60 +270,70 @@ class _Page724UpdateState extends State<Page724Update> {
                       height: 5,
                       width: 5,
                     ),
-                    Row(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: checkedValue
-                              ? CrossAxisAlignment.end
-                              : CrossAxisAlignment.start,
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Column(
+                              crossAxisAlignment: checkedValue
+                                  ? CrossAxisAlignment.end
+                                  : CrossAxisAlignment.start,
+                              children: [
+                                checkedValue
+                                    ? const Text("-")
+                                    : _moreButton2(context),
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Text(
+                              '~',
+                              style: TextStyle(
+                                color: Color(0xFF000000),
+                                fontSize: 17,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
                             checkedValue
                                 ? const Text("-")
-                                : _moreButton2(context),
-                            Row(
-                              children: [
-                                Checkbox(
-                                  activeColor: Colors.blue,
-                                  checkColor: Colors.white,
-                                  value: checkedValue,
-                                  onChanged: (newValue) {
-                                    if (newValue == true) {
-                                      setState(() {
-                                        checkedValue = true;
+                                : _moreButton3(context),
+                          ],
+                        ),
+                        Visibility(
+                            visible: checkDate(),
+                            child: const Text('開始時間より遅い終了時間を選択くだだい。')),
+                        Row(
+                          children: [
+                            Checkbox(
+                              activeColor: Colors.blue,
+                              checkColor: Colors.white,
+                              value: checkedValue,
+                              onChanged: (newValue) {
+                                if (newValue == true) {
+                                  setState(() {
+                                    checkedValue = true;
 
-                                        kara = "08:00";
-                                        made = "19:00";
-                                      });
-                                    } else {
-                                      setState(() {
-                                        checkedValue = newValue ?? checkedValue;
-                                      });
-                                    }
-                                  },
-                                ),
-                                const Text(
-                                  '終日',
-                                ),
-                              ],
+                                    kara = "08:00";
+                                    made = "19:00";
+                                  });
+                                } else {
+                                  setState(() {
+                                    checkedValue = newValue ?? checkedValue;
+                                  });
+                                }
+                              },
+                            ),
+                            const Text(
+                              '終日',
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Text(
-                          '~',
-                          style: TextStyle(
-                            color: Color(0xFF000000),
-                            fontSize: 17,
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        checkedValue ? const Text("-") : _moreButton3(context),
                       ],
                     ),
                   ],
@@ -376,6 +392,9 @@ class _Page724UpdateState extends State<Page724Update> {
                 ),
                 child: TextButton(
                   onPressed: () {
+                    if (checkDate()) {
+                      return;
+                    }
                     CreateMemo().createMemo(
                         KBNMSAI_CD: pullDownSelected['KBNMSAI_CD'],
                         JYOKEN_CD: widget.JYOKEN_CD,

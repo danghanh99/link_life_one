@@ -1227,7 +1227,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             sukejuuruAllUser[row - 1] != null &&
             sukejuuruAllUser[row - 1][element] != null &&
             sukejuuruAllUser[row - 1][element].isNotEmpty &&
-            element == _listDay()[col-1]) {
+            element == _listDay()[col - 1]) {
           sukejuuruAllUser[row - 1][element].forEach(
             (e) => xxx.addAll([
               kojiItemWithType(
@@ -1255,7 +1255,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     );
     xxx.add(
       insert(
-        dateSelected: DateTime.parse(_listDay()[col-1]),
+        dateSelected: DateTime.parse(_listDay()[col - 1]),
         JYOKEN_CD: sukejuuruAllUser[row - 1]["TANT_CD"],
         isPhongBan: false,
       ),
@@ -1266,6 +1266,13 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
   List<Widget> _saleItems(
       int col, int row, dynamic user, dynamic item, String date) {
     DateTime dateTime = DateTime.parse(date);
+    bool isShitami = item['HOMON_SBT'] == '01' || item['HOMON_SBT'] == '1';
+    String jyucyuId = item['JYUCYU_ID'] ?? '';
+    String jinin =
+        isShitami ? item['SITAMI_JININ'] ?? '' : item['KOJI_JININ'] ?? '';
+    String kansanPoint = isShitami
+        ? item['SITAMI_KANSAN_POINT'] ?? ''
+        : item['KOJI_KANSAN_POINT'] ?? '';
     String tantName = user['TANT_NAME'] ?? '';
     String dailySales = user['DAYLY_SALES'] ?? '0';
     String monthlySales = user['MONTHLY_SALES'] ?? '0';
@@ -1274,6 +1281,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     String percentItakuhi = item['PERCENT_ITAKUHI'] != null
         ? item['PERCENT_ITAKUHI'].toString()
         : '0';
+
     return [
       Padding(
         padding: const EdgeInsets.only(bottom: 2),
@@ -1311,6 +1319,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                             ),
                           ),
                         ),
+                        jyucyuId.isNotEmpty
+                            ? TextSpan(
+                                text:
+                                    '\n<<$jyucyuId>>・$jinin 人 $kansanPoint 時間\n',
+                                style: const TextStyle(
+                                  color: Color(0xff1e73d4),
+                                ))
+                            : const TextSpan(),
                         TextSpan(
                             text:
                                 '${dateTime.month}/${dateTime.day} $tantName: 実$sumItakuhi円/予$dailySales円',
@@ -1360,6 +1376,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                             ),
                           ),
                         ),
+                        jyucyuId.isNotEmpty
+                            ? TextSpan(
+                                text:
+                                    '\n<<$jyucyuId>>・$jinin 人 $kansanPoint 時間\n',
+                                style: const TextStyle(
+                                  color: Color(0xff1e73d4),
+                                ))
+                            : const TextSpan(),
                         TextSpan(
                             text:
                                 '${dateTime.month}/${dateTime.day} $tantName: 実$sumItakuhiBetweenDate円/予$monthlySales円($percentItakuhi%)',
@@ -1437,7 +1461,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         if (sukejuuruPhongBan != null &&
             sukejuuruPhongBan[element] != null &&
             sukejuuruPhongBan[element].isNotEmpty &&
-            element == _listDay()[col-1]) {
+            element == _listDay()[col - 1]) {
           sukejuuruPhongBan[element].forEach(
             (e) => xxx.addAll([
               kojiItemWithType(
@@ -1457,7 +1481,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     );
     xxx.add(
       insert(
-        dateSelected: DateTime.parse(_listDay()[col-1]),
+        dateSelected: DateTime.parse(_listDay()[col - 1]),
         JYOKEN_CD: sukejuuruPhongBan["KOJIGYOSYA_CD"],
         isPhongBan: true,
       ),
@@ -1638,6 +1662,18 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
   Widget kojiItemWithType(int row, int col, e, bool isPhongBanData,
       String? tantCd, String? TAN_EIG_ID) {
+    bool isShitami = e['HOMON_SBT'] == '01' || e['HOMON_SBT'] == '1';
+    String jyucyuId = e['JYUCYU_ID'] ?? '';
+    String jinin = isShitami ? e['SITAMI_JININ'] ?? '' : e['KOJI_JININ'] ?? '';
+    String kansanPoint = isShitami
+        ? e['SITAMI_KANSAN_POINT'] ?? ''
+        : e['KOJI_KANSAN_POINT'] ?? '';
+    String naiyo = e['NAIYO'] ?? '';
+    String setsakiAddress = e['SETSAKI_ADDRESS'] ?? '';
+    String kbnmsaiName = e['KBNMSAI_NAME'] ?? '';
+    if (kbnmsaiName == '日予実' || kbnmsaiName == '計予実') {
+      return const SizedBox.shrink();
+    }
     return GestureDetector(
       onTap: () {
         if (isPhongBanData) {
@@ -1878,7 +1914,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                                 bottom: 2,
                               ),
                               child: Text(
-                                e['KBNMSAI_NAME'] ?? '',
+                                kbnmsaiName,
                                 style: const TextStyle(
                                   // color: kojiColorWithType(e),
                                   color: Colors.white,
@@ -1888,11 +1924,16 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                             ),
                           ),
                         ),
+                        jyucyuId.isNotEmpty
+                            ? TextSpan(
+                                text:
+                                    '\n<<$jyucyuId>>・$jinin 人 $kansanPoint 時間\n')
+                            : const TextSpan(),
                         TextSpan(
-                          text: e['SETSAKI_ADDRESS'],
+                          text: setsakiAddress,
                         ),
                         TextSpan(
-                          text: e['NAIYO'],
+                          text: naiyo,
                         ),
                       ]),
                 ),

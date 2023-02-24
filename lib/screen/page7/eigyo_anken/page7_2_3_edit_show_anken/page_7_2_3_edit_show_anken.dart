@@ -1,20 +1,13 @@
-import 'package:check_points/check_point.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:intl/intl.dart';
-import 'package:link_life_one/api/sukejuuru_page_api/eigyo_anken/create_eigyo_anken_api/create_eigyo_anken.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/eigyo_anken/delete_eigyo_anken.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/eigyo_anken/update_anken_middle/update_anken_middle.dart';
 import 'package:link_life_one/components/toast.dart';
-import 'package:link_life_one/screen/page7/memo/page_7_2_4_create.dart';
 
-import '../../../../api/sukejuuru_page_api/eigyo_anken/details_vs_pull_down_eigyo_anken/get_sales_construction_sales_preview_contents.dart';
 import '../../../../api/sukejuuru_page_api/eigyo_anken/show_eigyo_anken/get_anken_detail.dart';
 import '../../../../components/custom_text_field.dart';
 import '../../../../shared/assets.dart';
 import '../../../../shared/validator.dart';
-import '../../../page6/saibuhachuulist_danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
-import 'package:flutter/cupertino.dart';
 
 class Page723EditShowAnken extends StatefulWidget {
   final DateTime initialDate;
@@ -255,6 +248,13 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
     return result;
   }
 
+  bool checkDate() {
+    DateTime fromDate =
+        DateTime.parse("2023-01-01 $jikanKaraCreateAnkenPage:00");
+    DateTime toDate = DateTime.parse("2023-01-01 $jikanMadeCreateAnkenPage:00");
+    return !checkAllDayCreateAnkenPage && fromDate.compareTo(toDate) >= 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -352,20 +352,58 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                         height: 5,
                         width: 5,
                       ),
-                      Row(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: checkAllDayCreateAnkenPage
-                                ? CrossAxisAlignment.end
-                                : CrossAxisAlignment.start,
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Column(
+                                crossAxisAlignment: checkAllDayCreateAnkenPage
+                                    ? CrossAxisAlignment.end
+                                    : CrossAxisAlignment.start,
+                                children: [
+                                  checkAllDayCreateAnkenPage
+                                      ? const Text("-")
+                                      : Column(
+                                          children: [
+                                            // showTimePicker(),
+                                            _moreButton2(context,
+                                                !checkAllDayCreateAnkenPage),
+                                            validKaraMade
+                                                ? Container()
+                                                : const Padding(
+                                                    padding:
+                                                        EdgeInsets.only(top: 5),
+                                                    child: Text(
+                                                      "未選択",
+                                                      style: TextStyle(
+                                                          color: Colors.red),
+                                                    ),
+                                                  ),
+                                          ],
+                                        ),
+                                ],
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Text(
+                                '~',
+                                style: TextStyle(
+                                  color: Color(0xFF000000),
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
                               checkAllDayCreateAnkenPage
                                   ? Text("-")
                                   : Column(
                                       children: [
-                                        // showTimePicker(),
-                                        _moreButton2(context,
+                                        _moreButton3(context,
                                             !checkAllDayCreateAnkenPage),
                                         validKaraMade
                                             ? Container()
@@ -380,68 +418,42 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                                               ),
                                       ],
                                     ),
-                              Row(
-                                children: [
-                                  Checkbox(
-                                    activeColor: Colors.blue,
-                                    checkColor: Colors.white,
-                                    value: checkAllDayCreateAnkenPage,
-                                    onChanged: (newValue) {
-                                      if (newValue == true) {
-                                        setState(() {
-                                          checkAllDayCreateAnkenPage = true;
-
-                                          jikanKaraCreateAnkenPage = "08:00";
-                                          jikanMadeCreateAnkenPage = "19:00";
-                                        });
-                                      } else {
-                                        setState(() {
-                                          checkAllDayCreateAnkenPage =
-                                              newValue ??
-                                                  checkAllDayCreateAnkenPage;
-                                        });
-                                      }
-                                    },
-                                  ),
-                                  const Text(
-                                    '終日',
-                                  ),
-                                ],
-                              ),
                             ],
                           ),
                           const SizedBox(
-                            width: 10,
+                            height: 5,
                           ),
-                          const Text(
-                            '~',
-                            style: TextStyle(
-                              color: Color(0xFF000000),
-                              fontSize: 17,
-                              fontWeight: FontWeight.w300,
-                            ),
+                          Visibility(
+                              visible: checkDate(),
+                              child: const Text('開始時間より遅い終了時間を選択くだだい。',
+                                  style: TextStyle(color: Colors.red))),
+                          Row(
+                            children: [
+                              Checkbox(
+                                activeColor: Colors.blue,
+                                checkColor: Colors.white,
+                                value: checkAllDayCreateAnkenPage,
+                                onChanged: (newValue) {
+                                  if (newValue == true) {
+                                    setState(() {
+                                      checkAllDayCreateAnkenPage = true;
+
+                                      jikanKaraCreateAnkenPage = "08:00";
+                                      jikanMadeCreateAnkenPage = "19:00";
+                                    });
+                                  } else {
+                                    setState(() {
+                                      checkAllDayCreateAnkenPage = newValue ??
+                                          checkAllDayCreateAnkenPage;
+                                    });
+                                  }
+                                },
+                              ),
+                              const Text(
+                                '終日',
+                              ),
+                            ],
                           ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          checkAllDayCreateAnkenPage
-                              ? Text("-")
-                              : Column(
-                                  children: [
-                                    _moreButton3(
-                                        context, !checkAllDayCreateAnkenPage),
-                                    validKaraMade
-                                        ? Container()
-                                        : const Padding(
-                                            padding: EdgeInsets.only(top: 5),
-                                            child: Text(
-                                              "未選択",
-                                              style:
-                                                  TextStyle(color: Colors.red),
-                                            ),
-                                          ),
-                                  ],
-                                ),
                         ],
                       ),
                     ],
@@ -682,6 +694,9 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                   ),
                   child: TextButton(
                     onPressed: () {
+                      if (checkDate()) {
+                        return;
+                      }
                       if (jikanKaraCreateAnkenPage == null ||
                           jikanMadeCreateAnkenPage == null) {
                         setState(() {
