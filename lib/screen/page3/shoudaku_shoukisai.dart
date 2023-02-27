@@ -6,11 +6,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/screen/page3/shoudakusho.dart';
 import 'package:link_life_one/shared/custom_button.dart';
+import 'package:link_life_one/shared/number_input_formatter.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tuple/tuple.dart';
 import '../../api/shoudakusho/get_shoudakusho.dart';
 import '../../components/toast.dart';
 import '../../shared/assets.dart';
+import '../../shared/extension.dart';
 
 class ShoudakuShoukisai extends StatefulWidget {
   final DateTime? initialDate;
@@ -352,27 +354,47 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                                 ),
                               ],
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
                               children: [
-                                Text(
-                                  KOJI_DATA['CO_NAME'] ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600),
+                                SizedBox(
+                                  width: 250,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        KOJI_DATA['CO_NAME'] ?? '',
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      Text(
+                                        postFormat(KOJI_DATA['CO_POSTNO']),
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      Text(
+                                        KOJI_DATA['CO_ADDRESS'] ?? '',
+                                        maxLines: 2,
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Text(
-                                  postFormat(KOJI_DATA['CO_POSTNO']),
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                Text(
-                                  KOJI_DATA['CO_ADDRESS'] ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600),
-                                ),
+                                SizedBox(
+                                  width: 120,
+                                  height: 120,
+                                  child: Visibility(
+                                      visible: KOJI_DATA['CO_CD'] != null &&
+                                          KOJI_DATA['CO_CD'] != '',
+                                      child: Image.network(
+                                        KOJI_DATA['CO_CD'],
+                                      )),
+                                )
                               ],
                             ),
                           ],
@@ -757,6 +779,9 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
       if (item is Map) {
         text = TABLE_DATA[row - 1][list[col]] ?? '';
       }
+      if (col == 2 || col == 3 || col == 4) {
+        text = text.formatNumber;
+      }
       return Text(
         text,
         style: const TextStyle(color: Colors.black),
@@ -817,13 +842,16 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
           textValue = data['TUIKA_JISYA_CD'] ?? '';
           break;
         case 2:
-          textValue = data['SURYO'] ?? '';
+          textValue = data['SURYO'] != null ? data['SURYO']!.formatNumber : '';
           break;
         case 3:
-          textValue = data['HANBAI_TANKA'] ?? '';
+          textValue = data['HANBAI_TANKA'] != null
+              ? data['HANBAI_TANKA']!.formatNumber
+              : '';
           break;
         case 4:
-          textValue = data['KINGAK'] ?? '';
+          textValue =
+              data['KINGAK'] != null ? data['KINGAK']!.formatNumber : '';
           break;
         default:
           break;
@@ -861,7 +889,8 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
           FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
           // for version 2 and greater youcan also use this
           FilteringTextInputFormatter.digitsOnly,
-          LengthLimitingTextInputFormatter(col == 1 ? 4 : 100)
+          LengthLimitingTextInputFormatter(col == 1 ? 4 : 100),
+          if (col == 2) NumberInputFormatter(),
         ],
         onChanged: (value) {
           onChange(value, row, col);
@@ -903,7 +932,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
               context,
               MaterialPageRoute(
                 builder: (context) => ShoudakuSho(
-                  DATA_TABLE: TABLE_DATA,
+                  DATA_TABLE: NEW_TABLE_DATA.values.toList(),
                   JYUCYU_ID: widget.JYUCYU_ID,
                   SINGLE_SUMMARIZE: widget.SINGLE_SUMMARIZE,
                   initialDate: widget.initialDate,
@@ -1071,7 +1100,8 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
       // quantity
       Map? data = NEW_TABLE_DATA[row];
       if (data != null) {
-        int quantity = value.isNotEmpty ? int.parse(value) : 0;
+        int quantity =
+            value.isNotEmpty ? int.parse(value.replaceAll(',', '')) : 0;
         String unitPriceStr = data['HANBAI_TANKA'] ?? '';
         int unitPrice = unitPriceStr.isNotEmpty ? int.parse(unitPriceStr) : 0;
 

@@ -13,7 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ShoudakuSho extends StatefulWidget {
   final DateTime? initialDate;
-  final List<dynamic> DATA_TABLE;
+  final List<Map<String, dynamic>> DATA_TABLE;
   final String SINGLE_SUMMARIZE;
   final String JYUCYU_ID;
   const ShoudakuSho({
@@ -34,8 +34,6 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
     penColor: Colors.blue,
     exportBackgroundColor: Colors.blue,
     exportPenColor: Colors.black,
-    onDrawStart: () => log('onDrawStart called!'),
-    onDrawEnd: () => log('onDrawEnd called!'),
   );
 
   File? file;
@@ -46,7 +44,11 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
   late bool checkedValue5;
   late bool checkedValue6;
   late bool checkedValue7;
-  late bool checkedValue8;
+
+  bool registeredSignature = false;
+  bool checkBoxError = false;
+  bool signatureEmptyError = false;
+  bool signatureNotRegistedError = false;
 
   @override
   void initState() {
@@ -57,16 +59,31 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
     checkedValue5 = false;
     checkedValue6 = false;
     checkedValue7 = false;
-    checkedValue8 = false;
     file = null;
     _controller.addListener(() => log('Value changed'));
+    _controller.onDrawStart = onDrawStart;
+    _controller.onDrawEnd = onDrawEnd;
     super.initState();
   }
 
   @override
   void dispose() {
     _controller.dispose();
+
     super.dispose();
+  }
+
+  void onDrawStart() {
+    if (signatureEmptyError) {
+      setState(() {
+        signatureEmptyError = false;
+      });
+    }
+    log('onDrawStart called!');
+  }
+
+  void onDrawEnd() {
+    log('onDrawEnd called!');
   }
 
   // Future<void> exportSVG(BuildContext context) async {
@@ -100,17 +117,17 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
   //   );
   // }
 
-  Future<Uint8List?> exportImage(BuildContext context) async {
-    if (_controller.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          key: Key('snackbarPNG'),
-          content: Text('No content'),
-        ),
-      );
-      return null;
-    }
+  bool validateCheckbox() {
+    return (checkedValue1 ||
+        checkedValue2 ||
+        checkedValue3 ||
+        checkedValue4 ||
+        checkedValue5 ||
+        checkedValue6 ||
+        checkedValue7);
+  }
 
+  Future<Uint8List?> exportImage(BuildContext context) async {
     final Uint8List? data =
         await _controller.toPngBytes(height: 1000, width: 1000);
     if (data == null) {
@@ -245,6 +262,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                                         setState(() {
                                                           checkedValue1 =
                                                               newValue ?? true;
+                                                          checkBoxError = false;
                                                         });
                                                       },
                                                     ),
@@ -267,6 +285,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                                         setState(() {
                                                           checkedValue2 =
                                                               newValue ?? true;
+                                                          checkBoxError = false;
                                                         });
                                                       },
                                                     ),
@@ -289,6 +308,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                                         setState(() {
                                                           checkedValue3 =
                                                               newValue ?? true;
+                                                          checkBoxError = false;
                                                         });
                                                       },
                                                     ),
@@ -311,6 +331,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                                         setState(() {
                                                           checkedValue4 =
                                                               newValue ?? true;
+                                                          checkBoxError = false;
                                                         });
                                                       },
                                                     ),
@@ -333,6 +354,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                                         setState(() {
                                                           checkedValue5 =
                                                               newValue ?? true;
+                                                          checkBoxError = false;
                                                         });
                                                       },
                                                     ),
@@ -355,6 +377,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                                         setState(() {
                                                           checkedValue6 =
                                                               newValue ?? true;
+                                                          checkBoxError = false;
                                                         });
                                                       },
                                                     ),
@@ -377,6 +400,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                                         setState(() {
                                                           checkedValue7 =
                                                               newValue ?? true;
+                                                          checkBoxError = false;
                                                         });
                                                       },
                                                     ),
@@ -429,9 +453,21 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                 ),
                               ],
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                            Visibility(
+                                visible: checkBoxError,
+                                child: const SizedBox(
+                                  height: 10,
+                                )),
+                            Visibility(
+                                visible: checkBoxError,
+                                child: Container(
+                                  alignment: Alignment.centerLeft,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: const Text('お客様確認事項に確認不足があります。',
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.red)),
+                                )),
                             Column(
                               children: [
                                 Padding(
@@ -463,6 +499,26 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                     ),
                                   ),
                                 ),
+                                Visibility(
+                                    visible: signatureEmptyError ||
+                                        signatureNotRegistedError,
+                                    child: const SizedBox(
+                                      height: 10,
+                                    )),
+                                Visibility(
+                                    visible: signatureEmptyError ||
+                                        signatureNotRegistedError,
+                                    child: Container(
+                                      alignment: Alignment.centerLeft,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Text(
+                                          signatureEmptyError
+                                              ? '未入力'
+                                              : 'サインが未登録です。',
+                                          style: const TextStyle(
+                                              fontSize: 16, color: Colors.red)),
+                                    )),
                               ],
                             ),
                             const SizedBox(
@@ -503,6 +559,26 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
         GestureDetector(
           onTap: () {
             // Navigator.pop(context);
+            if (!validateCheckbox()) {
+              setState(() {
+                checkBoxError = true;
+              });
+              return;
+            }
+
+            if (_controller.isEmpty) {
+              setState(() {
+                signatureEmptyError = true;
+              });
+            }
+
+            if (!registeredSignature) {
+              // CustomToast.show(context, message: 'サインが未登録です。');
+              setState(() {
+                signatureNotRegistedError = true;
+              });
+              return;
+            }
             SubmitLastPage().submitLastPage(
               SINGLE_SUMMARIZE: widget.SINGLE_SUMMARIZE,
               JYUCYU_ID: widget.JYUCYU_ID,
@@ -580,12 +656,15 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
         ),
         GestureDetector(
           onTap: () async {
+            if (_controller.isEmpty) {
+              setState(() {
+                signatureEmptyError = true;
+              });
+              return;
+            }
             // Export to File
             final fileExport = await exportFile();
 
-            // Export to Image
-            var bytes = await exportImage(context);
-            var y = Image.memory(bytes!);
             setState(
               () {
                 file = fileExport;
