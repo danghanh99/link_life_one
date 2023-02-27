@@ -116,7 +116,7 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 34, vertical: 8),
                   alignment: Alignment.bottomLeft,
-                  child: const Text('下記が必要な完了書類です',
+                  child: const Text('！下記が必要な完了書類です',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
                 ),
