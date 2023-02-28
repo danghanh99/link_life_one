@@ -436,15 +436,24 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                         child: Container(
                                           width: 360,
                                           alignment: Alignment.centerRight,
-                                          child: const Text(
-                                            '取付時・改修した箇所についてはその場で水漏れ・ガス漏れ等がないことを確認しております。\n 念のため、お客さんご自身でも２～３日の間は漏れ等がないかご確認をお願いします。',
-                                            style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w700,
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                            maxLines: 10,
+                                          child: RichText(
+                                            text: const TextSpan(
+                                              children: [
+                                                TextSpan(
+                                                    text: '※',
+                                                    style: TextStyle(
+                                                        fontSize: 23)),
+                                                TextSpan(
+                                                    text:
+                                                        '取付時・改修した箇所についてはその場で水漏れ・ガス漏れ等がないことを確認しております。\n念のため、お客さんご自身でも２～３日の間は漏れ等がないかご確認をお願いします。')
+                                              ],
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w700,
+                                                  overflow:
+                                                      TextOverflow.ellipsis),
+                                            ),
                                           ),
                                         ),
                                       )

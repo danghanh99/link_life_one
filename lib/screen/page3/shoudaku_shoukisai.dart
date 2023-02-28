@@ -391,9 +391,11 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                                   child: Visibility(
                                       visible: KOJI_DATA['CO_CD'] != null &&
                                           KOJI_DATA['CO_CD'] != '',
-                                      child: Image.network(
-                                        KOJI_DATA['CO_CD'],
-                                      )),
+                                      child: KOJI_DATA['CO_CD'] != null
+                                          ? Image.network(
+                                              KOJI_DATA['CO_CD'],
+                                            )
+                                          : const SizedBox.shrink()),
                                 )
                               ],
                             ),
