@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:link_life_one/api/menu/get_thong_bao_menu_api.dart';
 import 'package:link_life_one/components/toast.dart';
@@ -10,6 +9,7 @@ import 'package:link_life_one/screen/page4/xac_nhan_thanh_tich_page.dart';
 
 import '../../api/menu/post_update_koji_read_flg.dart';
 import '../../components/custom_header_widget.dart';
+import '../../main.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../page3/page_3/kojiichiran_page_3_bao_cao_hoan_thanh_cong_trinh.dart';
@@ -26,7 +26,7 @@ class MenuPage extends StatefulWidget {
   State<MenuPage> createState() => _MenuPageState();
 }
 
-class _MenuPageState extends State<MenuPage> {
+class _MenuPageState extends State<MenuPage> with RouteAware {
   List<String> listNames = [
     '工事完了報告',
     'スケジュール管理',
@@ -69,10 +69,31 @@ class _MenuPageState extends State<MenuPage> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
+  }
+
+  @override
+  void didPush() {
+    // Called when the current route has been pushed.
+  }
+
+  @override
+  void didPopNext() {
+    callGetThongBaoMenuApi();
+  }
+
   Future<dynamic> callGetThongBaoMenuApi() async {
     final dynamic result =
         await GetThongBaoMenuApi().getThongBaoMenuApi(onSuccess: (res) {
-
       if (res["COMMENT"] != null) {
         setState(() {
           listComments = res["COMMENT"];
@@ -258,10 +279,9 @@ class _MenuPageState extends State<MenuPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                const KojiichiranPage3BaoCaoHoanThanhCongTrinh(),
-            settings: const RouteSettings(name: 'KojiichiranPage3')
-          ),
+              builder: (context) =>
+                  const KojiichiranPage3BaoCaoHoanThanhCongTrinh(),
+              settings: const RouteSettings(name: 'KojiichiranPage3')),
         );
         break;
 

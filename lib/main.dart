@@ -9,6 +9,8 @@ import 'package:link_life_one/models/user.dart';
 import 'package:path_provider/path_provider.dart';
 import 'screen/login_page.dart';
 
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+
 void main() async {
   initializeDateFormatting();
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +30,7 @@ class MyApp extends StatelessWidget {
         builder: (context, _) => MaterialApp(
               theme: ThemeData(scaffoldBackgroundColor: Colors.white),
               debugShowCheckedModeBanner: false,
+              navigatorObservers: [routeObserver],
               home: const LoginPage(),
             ));
     ;
