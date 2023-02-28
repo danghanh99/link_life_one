@@ -1037,16 +1037,12 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 5, left: 5),
-                    child: Row(
-                      children: [
-                        Text(
-                          phongBanName,
-                          style: const TextStyle(
-                              color: Color.fromARGB(255, 5, 18, 35),
-                              fontSize: 20,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ],
+                    child: Text(
+                      phongBanName,
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 5, 18, 35),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400),
                     ),
                   ),
                   Row(
@@ -1152,22 +1148,13 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             alignment: Alignment.topLeft,
             width: colWidth()[col],
             height: 400,
-            child: GestureDetector(
-              onTap: () {
-                CustomDialog.showCustomDialog(
-                  context: context,
-                  title: '',
-                  body: Container(),
-                );
-              },
-              child: SingleChildScrollView(
-                controller: scrollControllerItem,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: value1nguoi == '個人'
-                      ? kojiItems1Persion(row - 1, col)
-                      : kojiItems(row - 1, col),
-                ),
+            child: SingleChildScrollView(
+              controller: scrollControllerItem,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: value1nguoi == '個人'
+                    ? kojiItems1Persion(row - 1, col)
+                    : kojiItems(row - 1, col),
               ),
             ),
           );
@@ -1321,14 +1308,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                             ),
                           ),
                         ),
-                        jyucyuId.isNotEmpty
-                            ? TextSpan(
-                                text:
-                                    '\n<<$jyucyuId>>・$jinin 人 $kansanPoint 時間\n',
-                                style: const TextStyle(
-                                  color: Color(0xff1e73d4),
-                                ))
-                            : const TextSpan(),
                         TextSpan(
                             text:
                                 '${dateTime.month}/${dateTime.day} $tantName: 実$sumItakuhi円/予$dailySales円',
@@ -1378,14 +1357,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                             ),
                           ),
                         ),
-                        jyucyuId.isNotEmpty
-                            ? TextSpan(
-                                text:
-                                    '\n<<$jyucyuId>>・$jinin 人 $kansanPoint 時間\n',
-                                style: const TextStyle(
-                                  color: Color(0xff1e73d4),
-                                ))
-                            : const TextSpan(),
                         TextSpan(
                             text:
                                 '${dateTime.month}/${dateTime.day} $tantName: 実$sumItakuhiBetweenDate円/予$monthlySales円($percentItakuhi%)',
