@@ -442,7 +442,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                                 TextSpan(
                                                     text: '※',
                                                     style: TextStyle(
-                                                        fontSize: 23)),
+                                                        fontSize: 24, fontWeight: FontWeight.w100)),
                                                 TextSpan(
                                                     text:
                                                         '取付時・改修した箇所についてはその場で水漏れ・ガス漏れ等がないことを確認しております。\n念のため、お客さんご自身でも２～３日の間は漏れ等がないかご確認をお願いします。')
