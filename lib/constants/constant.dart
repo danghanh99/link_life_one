@@ -12,4 +12,5 @@ class Constant {
   static const String getListDefaultInventory = '${url}src/APIs/InventoryList/getListDefaultInventory.php?';
   static const String getListInventoryByCheckList = '${url}src/APIs/InventoryList/getListInventoryByCheckList.php?';
 
+  static const int compressTargetWidth = 600;
 }

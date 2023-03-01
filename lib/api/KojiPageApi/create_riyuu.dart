@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
 
 import '../../constants/constant.dart';
 
@@ -69,19 +71,30 @@ class CreateRiyuu {
       String? CANCEL_RIYU}) async {
     List<MultipartFile> files = [];
     for (var path in FILE_PATH_LIST) {
-      MultipartFile file = await MultipartFile.fromFile(path);
+      ImageProperties properties =
+          await FlutterNativeImage.getImageProperties(path);
+      int propWidth = properties.width ?? 1;
+      int propHeight = properties.height ?? 1;
+      File compressedFile = await FlutterNativeImage.compressImage(
+        path,
+        quality: 80,
+        targetWidth: Constant.compressTargetWidth,
+        targetHeight:
+            (propHeight * Constant.compressTargetWidth / propWidth).round(),
+      );
+      MultipartFile file = await MultipartFile.fromFile(compressedFile.path);
       files.add(file);
     }
     switch (SHITAMI_MENU) {
       case '1':
         return {
-          'FILE_IMAGE_LIST': files,
+          'FILE_IMAGE_LIST[]': files,
           'JYUCYU_ID': '0301447771',
           'SHITAMI_MENU': '1',
         };
       case '2':
         return {
-          'FILE_IMAGE_LIST': files,
+          'FILE_IMAGE_LIST[]': files,
           'JYUCYU_ID': JYUCYU_ID,
           'SHITAMI_MENU': SHITAMI_MENU,
           'MTMORI_YMD': MTMORI_YMD?.split(" ").first,
@@ -89,20 +102,20 @@ class CreateRiyuu {
         };
       case '3':
         return {
-          'FILE_IMAGE_LIST': files,
+          'FILE_IMAGE_LIST[]': files,
           'JYUCYU_ID': JYUCYU_ID,
           'SHITAMI_MENU': SHITAMI_MENU,
           'CANCEL_RIYU': CANCEL_RIYU
         };
       case '4':
         return {
-          'FILE_IMAGE_LIST': files,
+          'FILE_IMAGE_LIST[]': files,
           'JYUCYU_ID': JYUCYU_ID,
           'SHITAMI_MENU': SHITAMI_MENU,
         };
       default:
         return {
-          'FILE_IMAGE_LIST': files,
+          'FILE_IMAGE_LIST[]': files,
           'JYUCYU_ID': JYUCYU_ID,
           'SHITAMI_MENU': SHITAMI_MENU,
         };
