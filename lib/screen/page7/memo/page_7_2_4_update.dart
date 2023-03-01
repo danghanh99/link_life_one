@@ -144,6 +144,8 @@ class _Page724UpdateState extends State<Page724Update> {
   List<dynamic> pullDownMemo = [];
   dynamic pullDownSelected;
 
+  bool showEmptyTextError = false;
+
   @override
   void initState() {
     kara = listDateTime1.firstWhere((e) => widget.START_TIME.contains(e));
@@ -172,6 +174,16 @@ class _Page724UpdateState extends State<Page724Update> {
     DateTime fromDate = DateTime.parse("2023-01-01 $kara:00");
     DateTime toDate = DateTime.parse("2023-01-01 $made:00");
     return !checkedValue && fromDate.compareTo(toDate) >= 0;
+  }
+
+  bool validateTextBox() {
+    String kbnsaiCode = pullDownSelected['KBNMSAI_CD'] ?? '';
+    String kbnsaiName = pullDownSelected['KBNMSAI_NAME'] ?? '';
+    bool isForceText = kbnsaiCode == '01' ||
+        kbnsaiCode == '06' ||
+        kbnsaiName == 'メモ' ||
+        kbnsaiName == '重要';
+    return isForceText && dateinput.text.isNotEmpty;
   }
 
   @override
@@ -366,7 +378,14 @@ class _Page724UpdateState extends State<Page724Update> {
                         hint: '',
                         controller: dateinput,
                         type: TextInputType.emailAddress,
-                        onChanged: (text) {},
+                        errorText: showEmptyTextError ? '内容が入力されていません。' : '',
+                        onChanged: (text) {
+                          if (showEmptyTextError) {
+                            setState(() {
+                              showEmptyTextError = false;
+                            });
+                          }
+                        },
                         maxLines: 6,
                       ),
                     ),
@@ -396,6 +415,14 @@ class _Page724UpdateState extends State<Page724Update> {
                     if (checkDate()) {
                       return;
                     }
+
+                    if (!validateTextBox()) {
+                      setState(() {
+                        showEmptyTextError = true;
+                      });
+                      return;
+                    }
+
                     CreateMemo().createMemo(
                         KBNMSAI_CD: pullDownSelected['KBNMSAI_CD'],
                         JYOKEN_CD: widget.JYOKEN_CD,

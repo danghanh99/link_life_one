@@ -38,6 +38,7 @@ class CustomTextField extends StatefulWidget {
   final DateTime? initialDate;
   final String? initValue;
   final Color? borderColor;
+  final String? errorText;
   const CustomTextField({
     this.borderColor,
     this.initialDate,
@@ -69,6 +70,7 @@ class CustomTextField extends StatefulWidget {
     this.maxLength,
     this.isNameField = false,
     this.textInputAction,
+    this.errorText
   });
 
   @override
@@ -139,6 +141,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           FocusScope.of(context).requestFocus(widget.nextFocus),
       onChanged: widget.onChanged,
       decoration: InputDecoration(
+        errorText: widget.errorText,
         counterText: '',
         errorStyle: TextStyles.BODY_14.apply(
           color: AppColors.ERROR_VALIDATE,

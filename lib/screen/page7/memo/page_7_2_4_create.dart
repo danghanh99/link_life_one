@@ -135,6 +135,8 @@ class _Page724CreateState extends State<Page724Create> {
   List<dynamic> pullDownMemo = [];
   dynamic pullDownSelected;
 
+  bool showEmptyTextError = false;
+
   @override
   void initState() {
     date = widget.initialDate;
@@ -160,6 +162,16 @@ class _Page724CreateState extends State<Page724Create> {
     DateTime fromDate = DateTime.parse("2023-01-01 $kara:00");
     DateTime toDate = DateTime.parse("2023-01-01 $made:00");
     return !checkedValue && fromDate.compareTo(toDate) >= 0;
+  }
+
+  bool validateTextBox() {
+    String kbnsaiCode = pullDownSelected['KBNMSAI_CD'] ?? '';
+    String kbnsaiName = pullDownSelected['KBNMSAI_NAME'] ?? '';
+    bool isForceText = kbnsaiCode == '01' ||
+        kbnsaiCode == '06' ||
+        kbnsaiName == 'メモ' ||
+        kbnsaiName == '重要';
+    return isForceText && dateinput.text.isNotEmpty;
   }
 
   @override
@@ -360,7 +372,15 @@ class _Page724CreateState extends State<Page724Create> {
                               hint: '',
                               type: TextInputType.text,
                               controller: dateinput,
-                              onChanged: (text) {},
+                              errorText:
+                                  showEmptyTextError ? '内容が入力されていません。' : '',
+                              onChanged: (text) {
+                                if (showEmptyTextError) {
+                                  setState(() {
+                                    showEmptyTextError = false;
+                                  });
+                                }
+                              },
                               maxLines: 6,
                             ),
                           ],
@@ -392,6 +412,14 @@ class _Page724CreateState extends State<Page724Create> {
                       if (checkDate()) {
                         return;
                       }
+
+                      if (!validateTextBox()) {
+                        setState(() {
+                          showEmptyTextError = true;
+                        });
+                        return;
+                      }
+
                       if (_formKey.currentState?.validate() == true) {
                         CreateMemo().createMemo(
                             KBNMSAI_CD: pullDownSelected['KBNMSAI_CD'],
