@@ -46,10 +46,19 @@ class GetListKojiApi {
           .toList();
       List<Koji> sorted = list;
       sorted.sort((a, b) {
-        if (a.homonSbt == '01') { // isShitami
-          return a.sitamiHomonJikan!.compareTo(b.sitamiHomonJikan!);
+        if (a.homonSbt == '01') {
+          // isShitami
+          if (b.homonSbt == '01') {
+            return a.sitamiHomonJikan!.compareTo(b.sitamiHomonJikan!);
+          } else {
+            return a.sitamiHomonJikan!.compareTo(b.kojiHomonJikan!);
+          }
         } else {
-          return a.kojiHomonJikan!.compareTo(b.kojiHomonJikan!);
+          if (b.homonSbt == '01') {
+            return a.kojiHomonJikan!.compareTo(b.sitamiHomonJikan!);
+          } else {
+            return a.kojiHomonJikan!.compareTo(b.kojiHomonJikan!);
+          }
         }
       });
 
