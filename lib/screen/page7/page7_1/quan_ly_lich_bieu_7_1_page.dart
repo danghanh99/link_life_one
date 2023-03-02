@@ -1189,21 +1189,12 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         alignment: Alignment.topLeft,
         width: colWidth()[col + 1],
         height: 400,
-        child: GestureDetector(
-          onTap: () {
-            CustomDialog.showCustomDialog(
-              context: context,
-              title: '',
-              body: Container(),
-            );
-          },
-          child: SingleChildScrollView(
-              controller: scrollControllerItem,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: kojiItems1Persion(row, col),
-              )),
-        ),
+        child: SingleChildScrollView(
+            controller: scrollControllerItem,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: kojiItems1Persion(row, col),
+            )),
       );
     });
   }
@@ -1232,7 +1223,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             ]),
           );
           var user = sukejuuruAllUser[row - 1];
-          String tantKbnCode = user['TANT_KBN_CD'];
+          String tantKbnCode = user['TANT_KBN_CD'] ?? '';
           if (tantKbnCode == '03' || tantKbnCode == '3') {
             if ((user[element] as List).isNotEmpty) {
               var item = user[element].first;
@@ -1401,7 +1392,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         ]),
       );
 
-      String tantKbnCode = sukejuuruSelectedUser['TANT_KBN_CD'];
+      String tantKbnCode = sukejuuruSelectedUser['TANT_KBN_CD'] ?? '';
       if (tantKbnCode == '03' || tantKbnCode == '3') {
         if ((sukejuuruSelectedUser[dateStr] as List).isNotEmpty) {
           var item = sukejuuruSelectedUser[dateStr].first;
