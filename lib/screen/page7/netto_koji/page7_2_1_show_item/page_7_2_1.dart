@@ -72,6 +72,7 @@ class _Page721State extends State<Page721> {
   String COMMENT = '';
   List<dynamic> FILEPATH = [];
   String tantName = '';
+  bool appointed = false;
 
   ScheduleItem? schedule;
 
@@ -105,8 +106,14 @@ class _Page721State extends State<Page721> {
             this.schedule = schedule;
             bool isShitami = widget.HOMON_SBT == '01';
             setState(() {
-              String YMD_api =
-                  schedule.kojiYmd!.isEmpty ? schedule.simatiYmd! : '';
+              String YMD_api = schedule.ymd!;
+              if (YMD_api.isEmpty) {
+                if (isShitami) {
+                  YMD_api = schedule.sitamiYmd!;
+                } else {
+                  YMD_api = schedule.kojiYmd!;
+                }
+              }
               time = YMD_api.isEmpty
                   ? null
                   : DateFormat("yyyy-MM-dd").parse(YMD_api);
@@ -144,11 +151,15 @@ class _Page721State extends State<Page721> {
               KBNMSAI_NAME = schedule.kbnmsaiName ?? '';
               COMMENT = schedule.comment ?? '';
               FILEPATH = schedule.filepath ?? [];
+              String apoKbn = isShitami
+                  ? schedule.sitamiapoKbn ?? ''
+                  : schedule.kojiapoKbn ?? '';
+              appointed = apoKbn == '01' || apoKbn == '1' ? false : true;
 
               titleDateTimeADD_YMD =
-                  "$ADD_TANTNM   ${DateFormat('yyyy/MM/dd(日) hh:mm', 'ja').format(convertDateTime(ADD_YMD))}";
+                  "$ADD_TANTNM   ${DateFormat('yyyy/MM/dd(日) HH:mm', 'ja').format(convertDateTime(ADD_YMD))}";
               titleDateTimeUPD_YMD =
-                  "$UPD_TANTNM   ${DateFormat('yyyy/MM/dd(日) hh:mm', 'ja').format(convertDateTime(UPD_YMD))}";
+                  "$UPD_TANTNM   ${DateFormat('yyyy/MM/dd(日) HH:mm', 'ja').format(convertDateTime(UPD_YMD))}";
               titleDateTime3 = time == null
                   ? ''
                   : "${DateFormat('yyyy年MM月dd日(E)', 'ja').format(time!)} $jikanKara 〜 $jikanMade";
@@ -188,12 +199,12 @@ class _Page721State extends State<Page721> {
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          "ネット工事(アポ済み)",
-                          style: TextStyle(
+                          KBNMSAI_NAME + (appointed ? '(アポ済み)' : ''),
+                          style: const TextStyle(
                             color: Color(0xFF042C5C),
                             fontSize: 18,
                             fontWeight: FontWeight.w600,

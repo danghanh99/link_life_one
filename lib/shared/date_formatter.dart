@@ -27,7 +27,8 @@ abstract class DateFormatter {
   }
 
   static String dayMonthDayYear(DateTime date) {
-    String stringDate = DateFormat(DateFormats.weekDayMonthDayYear, 'vi').format(date);
+    String stringDate =
+        DateFormat(DateFormats.weekDayMonthDayYear, 'vi').format(date);
 
     return addDateSuffix(stringDate, date, 1);
   }
@@ -44,7 +45,8 @@ abstract class DateFormatter {
     String result = '';
     if (arr.length > 1)
       arr.forEach((element) {
-        result = result + element.toString() + (arr.last != element ? space : '');
+        result =
+            result + element.toString() + (arr.last != element ? space : '');
       });
     return result;
   }
@@ -60,21 +62,24 @@ abstract class DateFormatter {
   }
 
   static String get_hh_mm_EEE(DateTime date) {
-    String stringDate = DateFormat(DateFormats.hh_mm_EEE, 'vi').format(date).toString();
+    String stringDate =
+        DateFormat(DateFormats.hh_mm_EEE, 'vi').format(date).toString();
     if ('vi' == 'vi') return replace(stringDate, r'Th ', 'Th');
 
     return stringDate;
   }
 
   static String get_hh_mm_EEE_d_MMM(DateTime date) {
-    String stringDate = DateFormat(DateFormats.hh_mm_EEE_d_MMM, 'vi').format(date);
+    String stringDate =
+        DateFormat(DateFormats.hh_mm_EEE_d_MMM, 'vi').format(date);
     stringDate = addDateSuffix(stringDate, date, 2);
     if ('vi' == 'vi') return replace(stringDate, r'Th ', 'Th');
     return stringDate;
   }
 
   static String get_hh_mm_EEE_d_MMM_yyyy(DateTime date) {
-    String stringDate = DateFormat(DateFormats.hh_mm_EEE_d_MMM_yyyy, 'vi').format(date);
+    String stringDate =
+        DateFormat(DateFormats.hh_mm_EEE_d_MMM_yyyy, 'vi').format(date);
     stringDate = addDateSuffix(stringDate, date, 2);
     if ('vi' == 'vi') return replace(stringDate, r'Th ', 'Th');
     return stringDate;
@@ -98,7 +103,8 @@ abstract class DateFormatter {
   }
 
   static String monthInNameYear(DateTime date) {
-    return capitalize(DateFormat(DateFormats.monthInNameYear, 'vi').format(date));
+    return capitalize(
+        DateFormat(DateFormats.monthInNameYear, 'vi').format(date));
   }
 
   static String day(DateTime date) {
@@ -118,7 +124,8 @@ abstract class DateFormatter {
   }
 
   static String weekDayMonthDayYear(DateTime date) {
-    String stringDate = DateFormat(DateFormats.weekDayMonthDayYear, 'vi').format(date);
+    String stringDate =
+        DateFormat(DateFormats.weekDayMonthDayYear, 'vi').format(date);
 
     return addDateSuffix(stringDate, date, 1);
   }
@@ -136,12 +143,36 @@ abstract class DateFormatter {
     }
     return suffix;
   }
+
+  static String formatDateTimeToTime(String dateTimeString) {
+    final formats = [
+      'yyyy-MM-dd HH:mm:ss',
+      'yyyy-MM-dd HH:mm',
+      'yyyy/MM/dd HH:mm:ss',
+      'yyyy/MM/dd HH:mm',
+      'HH:mm:ss',
+      'HH:mm'
+    ];
+
+    for (final format in formats) {
+      try {
+        final dateTime = DateFormat(format).parse(dateTimeString);
+        final formattedTime = DateFormat('HH:mm').format(dateTime);
+        return formattedTime;
+      } catch (e) {
+        continue;
+      }
+    }
+
+    return '';
+  }
 }
 
 extension DateTimeExt on DateTime {
   String get displayTime {
     final dayMonthDay = DateFormat(DateFormats.dayMonthDay, 'vi').format(this);
-    final monthInNameYear = DateFormat(DateFormats.monthInNameYear, 'vi').format(this);
+    final monthInNameYear =
+        DateFormat(DateFormats.monthInNameYear, 'vi').format(this);
 
     if ('vi' == 'en') {
       String suffixDay = 'th';

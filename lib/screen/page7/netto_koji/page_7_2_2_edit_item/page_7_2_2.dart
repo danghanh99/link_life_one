@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:link_life_one/shared/date_formatter.dart';
 
 import '../../../../api/sukejuuru_page_api/netto_koji/show_anken/get_lich_trinh_item_edit_page.dart';
 import '../../../../api/sukejuuru_page_api/netto_koji/update_anken/update_lich_trinh.dart';
@@ -151,6 +152,7 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
   late String KBNMSAI_NAME;
 
   bool validKaraMade = true;
+  bool showCommentError = false;
 
   String TAG_KBN = '';
   String HOMONJIKAN = '00:00';
@@ -204,26 +206,21 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                     TAG_KBN = data["DATA"][0]["TAG_KBN"];
 
                   if (data["DATA"][0]["HOMONJIKAN"] != null) {
-                    if (data["DATA"][0]["HOMONJIKAN"]
-                            .toString()
-                            .split(" ")
-                            .length >=
-                        2) {
-                      HOMONJIKAN = data["DATA"][0]["HOMONJIKAN"];
-                      final String tmp1 = HOMONJIKAN.split(" ")[1];
-                      jikanKaraEditPage = tmp1.split(":")[0] + ":00";
+                    HOMONJIKAN = data["DATA"][0]["HOMONJIKAN"];
+                    jikanKaraEditPage =
+                        DateFormatter.formatDateTimeToTime(HOMONJIKAN);
+                    if (jikanKaraEditPage.isEmpty) {
+                      jikanKaraEditPage = '00:00';
                     }
                   }
                   if (data["DATA"][0]["HOMONJIKAN_END"] != null) {
-                    if (data["DATA"][0]["HOMONJIKAN_END"]
-                            .toString()
-                            .split(" ")
-                            .length >=
-                        2) {
-                      HOMONJIKAN_END = data["DATA"][0]["HOMONJIKAN_END"];
-                      final String tmp2 = HOMONJIKAN_END.split(" ")[1];
-                      jikanMadeEditPage = tmp2.split(":")[0] + ":00";
+                    HOMONJIKAN_END = data["DATA"][0]["HOMONJIKAN_END"];
+                    jikanMadeEditPage =
+                        DateFormatter.formatDateTimeToTime(HOMONJIKAN_END);
+                    if (jikanMadeEditPage.isEmpty) {
+                      jikanMadeEditPage = '00:00';
                     }
+                    ;
                   }
 
                   if (data["DATA"][0]["JININ"] != null)
@@ -267,8 +264,11 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                   // jinNumberEditPage = JININ;
                   // jikanNumberEditPage = JIKAN;
                   // commentEditPage = COMMENT;
-                  datetimeEditPage = DateFormat("yyyy-MM-dd")
-                      .parse(data["DATA"][0]["KOJI_YMD"]);
+                  String kojiYmd = widget.HOMON_SBT == '01'
+                      ? data["DATA"][0]["SITAMI_YMD"] ?? ''
+                      : data["DATA"][0]["KOJI_YMD"] ?? '';
+
+                  datetimeEditPage = DateFormat("yyyy-MM-dd").parse(kojiYmd);
                 });
               }
             });
@@ -303,12 +303,12 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'ネット工事(アポ済み)',
-                        style: TextStyle(
+                        KBNMSAI_NAME + (checkAppointEditPage ? '(アポ済み)' : ''),
+                        style: const TextStyle(
                           color: Color(0xFF042C5C),
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -565,6 +565,10 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                               fillColor: const Color(0xFFF5F6F8),
                               // hint: jinNumberEditPage.toString(),
                               type: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d+?\d{0,2}')),
+                              ],
                               onChanged: (text) {
                                 setState(() {
                                   jinNumberEditPage = text;
@@ -656,9 +660,11 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                     hint: '',
                     initValue: commentEditPage,
                     type: TextInputType.emailAddress,
+                    errorText: showCommentError ? '必須項目です' : '',
                     onChanged: (text) {
                       setState(() {
                         commentEditPage = text;
+                        showCommentError = false;
                       });
                     },
                     maxLines: 5,
@@ -693,8 +699,11 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                           validKaraMade = false;
                         });
                       }
-                      if (int.parse(jikanKaraEditPage.split(":")[0]) >=
-                          int.parse(jikanMadeEditPage.split(":")[0])) {
+                      DateTime fromDate =
+                          DateTime.parse("2023-01-01 $jikanKaraEditPage:00");
+                      DateTime toDate =
+                          DateTime.parse("2023-01-01 $jikanMadeEditPage:00");
+                      if (fromDate.compareTo(toDate) >= 0) {
                         setState(() {
                           validKaraMade = false;
                         });
@@ -702,6 +711,12 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                         setState(() {
                           validKaraMade = true;
                         });
+                      }
+                      if (commentEditPage.isEmpty) {
+                        setState(() {
+                          showCommentError = true;
+                        });
+                        return;
                       }
                       if (_formKey.currentState?.validate() == true &&
                           validKaraMade) {
@@ -718,21 +733,12 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                             JYUCYU_ID: widget.JYUCYU_ID,
                             TAG_KBN: '0' + selectedPullDownIndex.toString(),
                             KBN: checkAppointEditPage ? "1" : "0",
-                            JIKAN_START: DateFormat(('yyyy-MM-dd'))
-                                    .format(datetimeEditPage)
-                                    .toString() +
-                                " " +
-                                jikanKaraEditPage +
-                                ":00",
-                            JIKAN_END: DateFormat(('yyyy-MM-dd'))
-                                    .format(datetimeEditPage)
-                                    .toString() +
-                                " " +
-                                jikanMadeEditPage +
-                                ":00",
+                            JIKAN_START: jikanKaraEditPage,
+                            JIKAN_END: jikanMadeEditPage,
                             JININ: jinNumberEditPage,
                             JIKAN: jikanNumberEditPage,
-                            KANSAN_POINT: jikanNumberEditPage,
+                            KANSAN_POINT: double.parse(jikanNumberEditPage)
+                                .toStringAsFixed(1),
                             ALL_DAY_FLG: checkAllDayEditPage ? "1" : "0",
                             MEMO: commentEditPage,
                             onSuccess: () {
@@ -1006,7 +1012,7 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
 
   String? _validateNumber(String? input) {
     if (input == null || input == '') {
-      return 'Required';
+      return '未入力';
     }
     if (Validator.onlyNumber(input!)) {
       return null;
@@ -1017,7 +1023,7 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
 
   String? _validateNumber2(String? input) {
     if (input == null || input == '') {
-      return 'Required';
+      return '未入力';
     }
     if (Validator.onlyNumber(input!)) {
       return null;
@@ -1028,7 +1034,7 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
 
   String? _validateDouble(String? input) {
     if (input == null || input == '') {
-      return 'Required';
+      return '未入力';
     }
     if (Validator.onlyDouble(input)) {
       return null;

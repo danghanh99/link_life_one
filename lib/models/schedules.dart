@@ -1,7 +1,7 @@
 class ScheduleItem {
   String? jyucyuId;
   String? ymd;
-  String? simatiYmd;
+  String? sitamiYmd;
   String? kojiYmd;
   String? homonTantCd1;
   String? homonTantCd2;
@@ -73,7 +73,7 @@ class ScheduleItem {
   ScheduleItem({
     this.jyucyuId,
     this.ymd,
-    this.simatiYmd,
+    this.sitamiYmd,
     this.kojiYmd,
     this.homonTantCd1,
     this.homonTantCd2,
@@ -147,7 +147,7 @@ class ScheduleItem {
     return ScheduleItem(
       jyucyuId: json['JYUCYU_ID'] ?? '',
       ymd: json['YMD'] ?? '',
-      simatiYmd: json['SITAMI_YMD'] ?? '',
+      sitamiYmd: json['SITAMI_YMD'] ?? '',
       kojiYmd: json['KOJI_YMD'] ?? '',
       homonTantCd1: json['HOMON_TANT_CD1'] ?? '',
       homonTantCd2: json['HOMON_TANT_CD2'] ?? '',
