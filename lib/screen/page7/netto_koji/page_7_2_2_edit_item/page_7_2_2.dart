@@ -606,13 +606,13 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                         ],
                       ),
                       // const Spacer(),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
+                          SizedBox(
                             // width: size.width / 2 - 80,
                             width: 80,
                             child: CustomTextField(
@@ -743,7 +743,7 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                                     ["KBNMSAI_CD"],
                             HOMON_SBT: widget.HOMON_SBT,
                             JYUCYU_ID: widget.JYUCYU_ID,
-                            TAG_KBN: '0' + selectedPullDownIndex.toString(),
+                            TAG_KBN: '0$selectedPullDownIndex',
                             KBN: checkAppointEditPage ? "02" : "01",
                             JIKAN_START: jikanKaraEditPage,
                             JIKAN_END: jikanMadeEditPage,
@@ -1023,7 +1023,7 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
     if (input == null || input == '') {
       return '未入力';
     }
-    if (Validator.onlyNumber(input!)) {
+    if (Validator.onlyNumber(input)) {
       return null;
     } else {
       return '整数のみ';
@@ -1034,7 +1034,7 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
     if (input == null || input == '') {
       return '未入力';
     }
-    if (Validator.onlyNumber(input!)) {
+    if (Validator.onlyNumber(input)) {
       return null;
     } else {
       return '整数のみ';

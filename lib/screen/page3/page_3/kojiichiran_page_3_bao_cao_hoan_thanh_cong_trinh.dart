@@ -244,9 +244,8 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                         ],
                       );
                     }
-                    print(listKoji!.length);
 
-                    if (listKoji!.isEmpty) {
+                    if (listKoji.isEmpty) {
                       return const Center(
                           child: Text(
                         "案件はありません",
@@ -261,9 +260,9 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                       shrinkWrap: true,
                       physics: const ClampingScrollPhysics(),
                       padding: const EdgeInsets.only(right: 15, left: 15),
-                      itemCount: listKoji!.length,
+                      itemCount: listKoji.length,
                       itemBuilder: (ctx, index) {
-                        final item = listKoji![index];
+                        final item = listKoji[index];
                         bool isShitami = item.homonSbt == '01';
                         return GestureDetector(
                           onTap: () {
