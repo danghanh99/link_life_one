@@ -249,11 +249,6 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                 },
               );
               carouselController.jumpToPage(listImage.length - 1);
-            } else {
-              // ignore: use_build_context_synchronously
-              CustomToast.show(context,
-                  message: '写真を選択してください。',
-                  textStyle: const TextStyle(color: Colors.red));
             }
           },
           child: Container(
@@ -285,11 +280,6 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                 },
               );
               carouselController.jumpToPage(listImage.length - 1);
-            } else {
-              // ignore: use_build_context_synchronously
-              CustomToast.show(context,
-                  message: '写真を選択してください。',
-                  textStyle: const TextStyle(color: Colors.red));
             }
           },
           child: Container(
