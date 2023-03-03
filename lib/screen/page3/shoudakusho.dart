@@ -16,13 +16,14 @@ class ShoudakuSho extends StatefulWidget {
   final List<Map<String, dynamic>> DATA_TABLE;
   final String SINGLE_SUMMARIZE;
   final String JYUCYU_ID;
-  const ShoudakuSho({
-    super.key,
-    this.initialDate,
-    required this.DATA_TABLE,
-    required this.SINGLE_SUMMARIZE,
-    required this.JYUCYU_ID,
-  });
+  final Function() onSaveSuccess;
+  const ShoudakuSho(
+      {super.key,
+      this.initialDate,
+      required this.DATA_TABLE,
+      required this.SINGLE_SUMMARIZE,
+      required this.JYUCYU_ID,
+      required this.onSaveSuccess});
 
   @override
   State<ShoudakuSho> createState() => _ShoudakuShoState();
@@ -128,8 +129,9 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
   }
 
   Future<Uint8List?> exportImage(BuildContext context) async {
-    final Uint8List? data =
-        await _controller.toPngBytes(height: 1000, width: 1000);
+    Size size = MediaQuery.of(context).size;
+    final Uint8List? data = await _controller.toPngBytes(
+        height: 600, width: ((size.width - 100) * 2).toInt());
     if (data == null) {
       return null;
     }
@@ -442,7 +444,9 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                                 TextSpan(
                                                     text: '※',
                                                     style: TextStyle(
-                                                        fontSize: 24, fontWeight: FontWeight.w100)),
+                                                        fontSize: 24,
+                                                        fontWeight:
+                                                            FontWeight.w100)),
                                                 TextSpan(
                                                     text:
                                                         '取付時・改修した箇所についてはその場で水漏れ・ガス漏れ等がないことを確認しております。\n念のため、お客さんご自身でも２～３日の間は漏れ等がないかご確認をお願いします。')
@@ -499,7 +503,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                   height: 300,
                                   decoration: BoxDecoration(
                                       border: Border.all(color: Colors.black)),
-                                  child: SizedBox(
+                                  child: ClipRRect(
                                     child: Signature(
                                       key: const Key('signature'),
                                       controller: _controller,
@@ -588,7 +592,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
               });
               return;
             }
-            SubmitLastPage().submitLastPage(
+            SubmitLastPage.shared.submitLastPage(
               SINGLE_SUMMARIZE: widget.SINGLE_SUMMARIZE,
               JYUCYU_ID: widget.JYUCYU_ID,
               CHECK_FLG1: checkedValue1 ? "1" : "0",
@@ -600,6 +604,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
               CHECK_FLG7: checkedValue7 ? "1" : "0",
               list: widget.DATA_TABLE,
               onSuccess: () {
+                widget.onSaveSuccess();
                 CustomToast.show(context,
                     message: "登録出来ました。", backGround: Colors.green);
               },
@@ -679,6 +684,25 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                 file = fileExport;
               },
             );
+
+            SubmitLastPage.shared.uploadSignImage(
+                jyucyuId: widget.JYUCYU_ID,
+                file: file!,
+                onSuccess: () {
+                  log('register signature success');
+                  setState(() {
+                    registeredSignature = true;
+                  });
+                  CustomToast.show(context,
+                      message: "登録出来ました。", backGround: Colors.green);
+                },
+                onFailed: () {
+                  setState(() {
+                    registeredSignature = false;
+                  });
+                  CustomToast.show(context,
+                      message: "登録できませんでした。。", backGround: Colors.red);
+                });
           },
           child: Container(
             decoration: BoxDecoration(

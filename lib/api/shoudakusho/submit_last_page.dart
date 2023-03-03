@@ -1,15 +1,16 @@
-import 'dart:developer';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:hive_flutter/adapters.dart';
-import "package:http/http.dart" as http;
 
 import '../../constants/constant.dart';
 import '../../models/consent.dart';
 import '../base/rest_api.dart';
 
 class SubmitLastPage {
-  SubmitLastPage() : super();
+  static final SubmitLastPage _instance = SubmitLastPage._internal();
+  static SubmitLastPage get shared => _instance;
+  SubmitLastPage._internal();
 
   Future<void> submitLastPage(
       {required String SINGLE_SUMMARIZE,
@@ -35,7 +36,7 @@ class SubmitLastPage {
 
       String url = "${Constant.url}Request/Koji/requestConsent.php";
       ConsentModel consentModel = ConsentModel(
-          singleSummarize: '',
+          singleSummarize: SINGLE_SUMMARIZE,
           jyucyuId: JYUCYU_ID,
           biko: '',
           kensetukeitai: '',
@@ -57,15 +58,12 @@ class SubmitLastPage {
       final Response response =
           await RestAPI.shared.postData(url, consentModel.toJson());
 
-      log('response.body: ${response.data}');
-
       if (response.statusCode == 200) {
         onSuccess.call();
       } else {
         onFailed.call();
       }
     } catch (e) {
-      log('error: $e');
       onFailed.call();
     }
   }
@@ -76,5 +74,29 @@ class SubmitLastPage {
     if (box.isOpen) {
       onsuccess.call(box);
     }
+  }
+
+  Future<void> uploadSignImage(
+      {required String jyucyuId,
+      required File file,
+      required Function() onSuccess,
+      required Function() onFailed}) async {
+    String urlEndpoint = Constant.requestPostUploadRegisterSignImage;
+    MultipartFile multipartFile = MultipartFile.fromFileSync(file.path);
+
+    Map<String, dynamic> body = {
+      'JYUCYU_ID': jyucyuId,
+      'FILE_NAME': multipartFile,
+    };
+
+    final Response response =
+        await RestAPI.shared.postDataWithFormData(urlEndpoint, body);
+
+    if (response.statusCode == 200) {
+      onSuccess();
+    } else {
+      onFailed();
+    }
+    return;
   }
 }

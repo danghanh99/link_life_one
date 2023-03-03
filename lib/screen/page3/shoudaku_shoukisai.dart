@@ -76,7 +76,17 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
     });
   }
 
+  void resetData() {
+    KOJI_DATA = {};
+    TABLE_DATA = [];
+    KOJI_KAKAKU = [];
+    NEW_TABLE_DATA = {};
+    codeCtrls.clear();
+    quantityCtrls.clear();
+  }
+
   Future<dynamic> callGetKojiHoukoku() async {
+    resetData();
     final dynamic result = await GetShoudakusho().getShoudakusho(
         JYUCYU_ID: widget.JYUCYU_ID,
         KOJI_ST: widget.KOJI_ST,
@@ -938,6 +948,9 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                   JYUCYU_ID: widget.JYUCYU_ID,
                   SINGLE_SUMMARIZE: widget.SINGLE_SUMMARIZE,
                   initialDate: widget.initialDate,
+                  onSaveSuccess: () {
+                    callGetKojiHoukoku();
+                  },
                 ),
               ),
             );
