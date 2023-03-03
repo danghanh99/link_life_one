@@ -18,7 +18,8 @@ class NettoKojiPage722 extends StatefulWidget {
   final String jikan;
   final String memo;
 
-  final Function onSuccessUpdate;
+  final Function() onSuccessUpdate;
+  final Function() onCancel;
   const NettoKojiPage722({
     required this.JYUCYU_ID,
     required this.HOMON_SBT,
@@ -27,6 +28,7 @@ class NettoKojiPage722 extends StatefulWidget {
     required this.jikan,
     required this.memo,
     required this.onSuccessUpdate,
+    required this.onCancel,
     Key? key,
   }) : super(key: key);
 
@@ -198,6 +200,16 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
               if (data["PULLDOWN"] != null) {
                 setState(() {
                   listPullDownEditPage = data["PULLDOWN"];
+
+                  var selectedItems = listPullDownEditPage
+                      .where((element) =>
+                          element['KBNMSAI_NAME'] == widget.KBNMSAI_NAME)
+                      .toList();
+                  if (selectedItems.isNotEmpty) {
+                    var selectedItem = selectedItems.first;
+                    int index = listPullDownEditPage.indexOf(selectedItem);
+                    selectedPullDownIndex = index;
+                  }
                 });
               }
               if (data["DATA"] != null) {
@@ -732,7 +744,7 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                             HOMON_SBT: widget.HOMON_SBT,
                             JYUCYU_ID: widget.JYUCYU_ID,
                             TAG_KBN: '0' + selectedPullDownIndex.toString(),
-                            KBN: checkAppointEditPage ? "1" : "0",
+                            KBN: checkAppointEditPage ? "02" : "01",
                             JIKAN_START: jikanKaraEditPage,
                             JIKAN_END: jikanMadeEditPage,
                             JININ: jinNumberEditPage,
@@ -742,11 +754,10 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                             ALL_DAY_FLG: checkAllDayEditPage ? "1" : "0",
                             MEMO: commentEditPage,
                             onSuccess: () {
-                              Navigator.pop(context);
                               CustomToast.show(context,
                                   message: "変更出来ました。",
                                   backGround: Colors.green);
-                              widget.onSuccessUpdate.call();
+                              widget.onSuccessUpdate();
                             });
                       }
                     },
@@ -772,9 +783,7 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: widget.onCancel,
                     child: const Text(
                       'キャンセル',
                       style: TextStyle(

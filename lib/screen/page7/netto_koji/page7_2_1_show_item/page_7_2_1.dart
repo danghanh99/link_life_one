@@ -174,6 +174,12 @@ class _Page721State extends State<Page721> {
     return DateFormat("yyyy-MM-dd hh:mm:ss").parse(date);
   }
 
+  void setShowUpdatePage(bool isUpdate) {
+    setState(() {
+      showUpdatePage = isUpdate;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -182,7 +188,12 @@ class _Page721State extends State<Page721> {
         ? NettoKojiPage722(
             KBNMSAI_NAME: KBNMSAI_NAME,
             onSuccessUpdate: () {
+              setShowUpdatePage(false);
+              getLichTrinhDetail = callGetLichTrinhItem();
               widget.onSuccessUpdate.call();
+            },
+            onCancel: () {
+              setShowUpdatePage(false);
             },
             JYUCYU_ID: widget.JYUCYU_ID,
             HOMON_SBT: HOMON_SBT,
