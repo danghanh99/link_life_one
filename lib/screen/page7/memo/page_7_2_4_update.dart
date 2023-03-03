@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/memo/delete_memo.dart';
+import 'package:link_life_one/shared/date_formatter.dart';
 
 import '../../../api/sukejuuru_page_api/memo/create_memo.dart';
 import '../../../components/custom_text_field.dart';
@@ -148,8 +149,10 @@ class _Page724UpdateState extends State<Page724Update> {
 
   @override
   void initState() {
-    kara = listDateTime1.firstWhere((e) => widget.START_TIME.contains(e));
-    made = listDateTime1.firstWhere((e) => widget.END_TIME.contains(e));
+    String startTime = DateFormatter.formatDateTimeToTime(widget.START_TIME);
+    String endTime = DateFormatter.formatDateTimeToTime(widget.END_TIME);
+    kara = listDateTime1.firstWhere((e) => startTime.contains(e));
+    made = listDateTime1.firstWhere((e) => endTime.contains(e));
     dateinput.text = widget.NAIYO;
     checkedValue = widget.checkedValue;
     callGetListPullDownMemo(widget.TAN_CAL_ID);
