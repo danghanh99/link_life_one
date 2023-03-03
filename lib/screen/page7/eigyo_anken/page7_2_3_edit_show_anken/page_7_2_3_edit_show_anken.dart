@@ -703,22 +703,18 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                           validKaraMade = false;
                         });
                       }
-                      if (int.parse(jikanKaraCreateAnkenPage.split(":")[0]) >
-                          int.parse(jikanMadeCreateAnkenPage.split(":")[0])) {
+                      DateTime fromDate = DateTime.parse(
+                          "2023-01-01 $jikanKaraCreateAnkenPage:00");
+                      DateTime toDate = DateTime.parse(
+                          "2023-01-01 $jikanMadeCreateAnkenPage:00");
+                      if (fromDate.compareTo(toDate) >= 0) {
                         setState(() {
                           validKaraMade = false;
                         });
                       } else {
-                        if (int.parse(jikanKaraCreateAnkenPage.split(":")[1]) >
-                            int.parse(jikanMadeCreateAnkenPage.split(":")[1])) {
-                          setState(() {
-                            validKaraMade = false;
-                          });
-                        } else {
-                          setState(() {
-                            validKaraMade = true;
-                          });
-                        }
+                        setState(() {
+                          validKaraMade = true;
+                        });
                       }
                       if (_formKey.currentState?.validate() == true &&
                           validKaraMade) {
@@ -728,8 +724,8 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                           JYOKEN_CD: widget.TANT_CD,
                           JYOKEN_SYBET_FLG: widget.isPhongBan ? '1' : '0',
                           TAG_KBN: TAG_KBN,
-                          START_TIME: jikanKaraCreateAnkenPage + ":00",
-                          END_TIME: jikanMadeCreateAnkenPage + ":00",
+                          START_TIME: "$jikanKaraCreateAnkenPage:00",
+                          END_TIME: "$jikanMadeCreateAnkenPage:00",
                           JININ: jinNumberCreateAnkenPage,
                           JIKAN: jikanNumberCreateAnkenPage,
                           GUEST_NAME: okyakuSamaCreateAnkenPage,

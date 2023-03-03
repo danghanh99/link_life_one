@@ -635,8 +635,11 @@ class _Page723State extends State<Page723> {
                       //     validJikanKara = false;
                       //   });
                       // }
-                      if (int.parse(jikanKaraCreateAnkenPage.split(":")[0]) >=
-                          int.parse(jikanMadeCreateAnkenPage.split(":")[0])) {
+                      DateTime fromDate = DateTime.parse(
+                          "2023-01-01 $jikanKaraCreateAnkenPage:00");
+                      DateTime toDate = DateTime.parse(
+                          "2023-01-01 $jikanMadeCreateAnkenPage:00");
+                      if (fromDate.compareTo(toDate) >= 0) {
                         setState(() {
                           validJikanKara = false;
                           validJikanMade = false;
@@ -660,8 +663,8 @@ class _Page723State extends State<Page723> {
                               listPullDownCreateAnkenPage[selectedPullDownIndex]
                                       ["KBN_CD"] ??
                                   '', // ??
-                          START_TIME: jikanKaraCreateAnkenPage + ":00",
-                          END_TIME: jikanMadeCreateAnkenPage + ":00",
+                          START_TIME: "$jikanKaraCreateAnkenPage:00",
+                          END_TIME: "$jikanMadeCreateAnkenPage:00",
                           JININ: jinNumberCreateAnkenPage,
                           JIKAN: jikanNumberCreateAnkenPage,
                           GUEST_NAME: okyakuSamaCreateAnkenPage,
