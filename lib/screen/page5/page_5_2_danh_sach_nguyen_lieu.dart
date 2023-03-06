@@ -2,10 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/api/material/material_api.dart';
 import 'package:link_life_one/models/default_inventory.dart';
 import 'package:link_life_one/models/material_model.dart';
 import 'package:link_life_one/screen/page5/page_5_2_1_danh_sach_ton_kho.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../components/custom_header_widget.dart';
 import '../../components/custom_text_field.dart';
 import '../../components/toast.dart';
@@ -27,6 +29,10 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
   late int currentRadioRow;
   List<MaterialModel> materials = [];
   Map<String, TextEditingController> textControllers = {};
+  QRViewController? controller;
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  Barcode? result;
+  bool isShowScandQR = false;
 
   List<Widget> _buildCells(int count) {
     return List.generate(
@@ -365,6 +371,32 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
             const SizedBox(
               height: 10,
             ),
+            isShowScandQR
+                ? SizedBox(
+                    height: 300.h,
+                    child: Column(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 5,
+                          child: QRView(
+                            key: qrKey,
+                            onQRViewCreated: (controller) {
+                              this.controller = controller;
+                              controller.scannedDataStream.listen((scanData) {
+                                log('scanData ${scanData.code}');
+                                setState(() {
+                                  result = scanData;
+                                  isShowScandQR = false;
+                                });
+                              });
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+                  )
+                : const SizedBox.shrink(),
             Row(
               children: [
                 Container(
@@ -375,7 +407,11 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        isShowScandQR = !isShowScandQR;
+                      });
+                    },
                     child: const Text(
                       'QR読取',
                       style: TextStyle(
@@ -462,7 +498,8 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                       currentRadioRow <= materials.length) {
                     MaterialModel material =
                         materials.elementAt(currentRadioRow - 1);
-                    TextEditingController? textEditingController = textControllers[material.jisyaCode];
+                    TextEditingController? textEditingController =
+                        textControllers[material.jisyaCode];
                     int quantity = 0;
                     if (textEditingController == null) {
                       quantity = int.parse(material.suryo ?? '0');
