@@ -12,6 +12,8 @@ class Constant {
   static const String getListDefaultInventory = '${url}src/APIs/InventoryList/getListDefaultInventory.php?';
   static const String getListInventoryByCheckList = '${url}src/APIs/InventoryList/getListInventoryByCheckList.php?';
   static const String requestPostUploadRegisterSignImage = '${url}Request/Koji/requestPostUploadRegisterSignImage.php';
+  static const String deleteMaterialById = '${url}src/APIs/Material/deleteMaterialById.php';
+  static const String getDataQRById = '${url}src/APIs/Material/getDataQRById.php?';
 
   static const int compressTargetWidth = 600;
 }

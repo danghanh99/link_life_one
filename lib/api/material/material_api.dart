@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:link_life_one/api/base/rest_api.dart';
+import 'package:link_life_one/models/default_inventory.dart';
 import 'package:link_life_one/models/user.dart';
 import 'package:link_life_one/shared/box_manager.dart';
 
@@ -42,6 +43,7 @@ class MaterialAPI {
   }) async {
     String urlEndpoint =
         '${Constant.getListDefaultFromEditMaterial}TANT_CD=${user.TANT_CD}&show_popup=$showPopup';
+    log(urlEndpoint);
 
     final Response response = await RestAPI.shared.getData(urlEndpoint);
 
@@ -71,6 +73,47 @@ class MaterialAPI {
         message = data.first['message'];
       }
       onSuccess(message);
+    } else {
+      onFailed();
+    }
+  }
+
+  Future<void> deleteMaterialById({
+    required String syukkoId,
+    required Function(String) onSuccess,
+    required Function onFailed,
+  }) async {
+    String urlEndpoint = Constant.deleteMaterialById;
+
+    final Response response = await RestAPI.shared
+        .postDataWithFormData(urlEndpoint, {'SYUKKO_ID': syukkoId});
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = response.data;
+      String message = '';
+      if (data.isNotEmpty) {
+        message = data.first['message'];
+      }
+      onSuccess(message);
+    } else {
+      onFailed();
+    }
+  }
+
+  Future<void> getDataQRById({
+    required zaikoId,
+    required Function(List<DefaultInventory>) onSuccess,
+    required Function onFailed,
+  }) async {
+    String urlEndpoint = '${Constant.getDataQRById}ZAIKO_ID=$zaikoId';
+
+    final Response response = await RestAPI.shared.getData(urlEndpoint);
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = response.data;
+      List<DefaultInventory> materials =
+          data.map((e) => DefaultInventory.fromJson(e)).toList();
+      onSuccess(materials);
     } else {
       onFailed();
     }

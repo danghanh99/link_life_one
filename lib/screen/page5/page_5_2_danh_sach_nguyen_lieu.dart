@@ -261,11 +261,42 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
   void deleteMaterial() {
     MaterialAPI.shared.deleteListMaterial(onSuccess: (message) {
       log('deleteListMaterial onSuccess');
-      CustomToast.show(context, message: message);
+      CustomToast.show(context, message: message, backGround: Colors.green);
     }, onFailed: () {
       log('deleteListMaterial onFailed');
       CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
     });
+  }
+
+  void deleteMaterialItem(MaterialModel item) {
+    MaterialAPI.shared.deleteMaterialById(
+        syukkoId: item.syukkoId ?? '',
+        onSuccess: (message) {
+          log('deleteListMaterial onSuccess');
+          CustomToast.show(context, message: message, backGround: Colors.green);
+        },
+        onFailed: () {
+          log('deleteListMaterial onFailed');
+          CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+        });
+  }
+
+  void getDataQRById(String zaikoId) {
+    MaterialAPI.shared.getDataQRById(
+        zaikoId: zaikoId,
+        onSuccess: (result) {
+          log('getDataQRById onSuccess: $result');
+          List<MaterialModel> materialList =
+              result.map((e) => MaterialModel.fromDefaultInventory(e)).toList();
+
+          setState(() {
+            materials.addAll(materialList);
+          });
+        },
+        onFailed: () {
+          log('getDataQRById onFailed');
+          CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+        });
   }
 
   void getEditMaterial(bool showPopup) {
@@ -383,7 +414,8 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                             onQRViewCreated: (controller) {
                               this.controller = controller;
                               controller.scannedDataStream.listen((scanData) {
-                                log('scanData ${scanData.code}');
+                                String zaikoId = scanData.code ?? '';
+                                getDataQRById(zaikoId);
                                 setState(() {
                                   result = scanData;
                                   isShowScandQR = false;
@@ -470,7 +502,19 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: currentRadioRow < 0 ? null : () {},
+                    onPressed: currentRadioRow < 1
+                        ? null
+                        : () {
+                            MaterialModel selectedItem =
+                                materials.elementAt(currentRadioRow - 1);
+                            log('selectedItem: ${selectedItem.ctgoryName}');
+                            if (selectedItem.syukkoId != null) {
+                              deleteMaterialItem(selectedItem);
+                            } else {
+                              materials.remove(selectedItem);
+                              setState(() {});
+                            }
+                          },
                     child: const Text(
                       '削除',
                       style: TextStyle(
