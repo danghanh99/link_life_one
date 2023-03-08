@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
 import 'package:link_life_one/api/base/rest_api.dart';
 import 'package:link_life_one/models/default_inventory.dart';
+import 'package:link_life_one/models/material_take_back_model.dart';
 import 'package:link_life_one/models/user.dart';
 import 'package:link_life_one/shared/box_manager.dart';
 
@@ -115,6 +117,46 @@ class MaterialAPI {
           data.map((e) => DefaultInventory.fromJson(e)).toList();
       onSuccess(materials);
     } else {
+      onFailed();
+    }
+  }
+
+  Future<void> getListDefaultMaterialTakeBack({
+    required Function(List<MaterialTakeBackModel>) onSuccess,
+    required Function onFailed,
+  }) async {
+    String currentDate = DateFormat(('yyyy-MM-dd')).format(DateTime.now());
+    log('user: ${user}');
+    String urlEndpoint =
+        '${Constant.getListDefaultMaterialTakeBack}SYOZOKU_CD=${user.SYOZOKU_CD}&SYUKKO_DATE=$currentDate';
+
+    final Response response = await RestAPI.shared.getData(urlEndpoint);
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = response.data;
+      List<MaterialTakeBackModel> materials =
+          data.map((e) => MaterialTakeBackModel.fromJson(e)).toList();
+      onSuccess(materials);
+    } else {
+      onFailed();
+    }
+  }
+
+  Future<void> insertMaterialTakeBackById({
+    required String syukkoId,
+    required int suryo,
+    required Function(dynamic) onSuccess,
+    required Function onFailed,
+  }) async {
+    String urlEndpoint = Constant.insertMaterialTakeBackById;
+
+    final Response response = await RestAPI.shared.postDataWithFormData(
+        urlEndpoint, {'SYUKKO_ID': syukkoId, 'SURYO': suryo});
+
+    if (response.statusCode == 200) {
+      onSuccess(response);
+    } else {
+      log('fail with: ${response.data}');
       onFailed();
     }
   }

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:link_life_one/api/material/material_api.dart';
+import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/models/material_take_back_model.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:link_life_one/screen/page5/page_5_2_danh_sach_nguyen_lieu.dart';
+import 'package:link_life_one/shared/colors.dart';
 
 import '../../components/custom_header_widget.dart';
 import '../../components/login_widget.dart';
@@ -22,17 +26,24 @@ class Page53DanhSachNhanLaiVatLieu extends StatefulWidget {
 class _Page53DanhSachNhanLaiVatLieuState
     extends State<Page53DanhSachNhanLaiVatLieu> {
   late int currentRadioRow;
-  List<String> listNames = [
-    '入出庫管理',
-    '部材管理',
-    '出納帳',
-  ];
+  List<MaterialTakeBackModel> materials = [];
+  Map<String, TextEditingController> textControllers = {};
 
   @override
   void initState() {
     currentRadioRow = -1;
-
+    getMaterialTakeBack();
     super.initState();
+  }
+
+  void getMaterialTakeBack() {
+    MaterialAPI.shared.getListDefaultMaterialTakeBack(onSuccess: (materials) {
+      setState(() {
+        materials = materials;
+      });
+    }, onFailed: () {
+      CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+    });
   }
 
   @override
@@ -68,7 +79,7 @@ class _Page53DanhSachNhanLaiVatLieuState
                         scrollDirection: Axis.horizontal,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: _buildRows(4),
+                          children: _buildRows(materials.length + 1),
                         ),
                       ),
                     )
@@ -86,12 +97,22 @@ class _Page53DanhSachNhanLaiVatLieuState
               ),
               child: TextButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Page52DanhSachNguyenLieu(),
-                    ),
-                  );
+                  if (currentRadioRow < 1) {
+                    return;
+                  }
+                  MaterialTakeBackModel material =
+                      materials.elementAt(currentRadioRow - 1);
+
+                  MaterialAPI.shared.insertMaterialTakeBackById(
+                      syukkoId: '0000000001',
+                      suryo: int.tryParse(
+                              textControllers[material.jisyaCode]?.text ??
+                                  '0') ??
+                          0,
+                      onSuccess: (result) {},
+                      onFailed: () {
+                        CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+                      });
                 },
                 child: const Text(
                   '在庫に戻す',
@@ -271,25 +292,35 @@ class _Page53DanhSachNhanLaiVatLieuState
 
   Widget contentTable(int col, int row) {
     if (col == 6) {
-      return Row(
-        children: [
-          const Text(''),
-          const Spacer(),
-          Container(
-            decoration: const BoxDecoration(
-              border: Border(
-                left: BorderSide(
-                  color: Colors.black,
-                  width: 0.7,
-                ),
-              ),
-            ),
+      MaterialTakeBackModel material = materials.elementAt(row - 1);
+      TextEditingController? textController =
+          textControllers[material.jisyaCode];
+      if (textController == null) {
+        textController = TextEditingController(text: material.suryo ?? '');
+        textControllers[material.jisyaCode ?? ''] = textController;
+      }
+      OutlineInputBorder borderOutline = const OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(0)),
+        borderSide: BorderSide(color: AppColors.BORDER, width: 1),
+      );
+      return Container(
+        height: 80,
+        alignment: Alignment.center,
+        child: Center(
+          child: TextField(
+            controller: textController,
+            decoration: InputDecoration(
+                hintText: '0',
+                contentPadding: EdgeInsets.zero,
+                enabledBorder: borderOutline,
+                focusedBorder: borderOutline,
+                disabledBorder: borderOutline),
+            textAlign: TextAlign.center,
+            onChanged: (text) {},
+            keyboardType: TextInputType.number,
+            maxLines: 1,
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 7, left: 7),
-            child: _moreButton(context),
-          ),
-        ],
+        ),
       );
     }
 
@@ -298,15 +329,33 @@ class _Page53DanhSachNhanLaiVatLieuState
             value: row,
             groupValue: currentRadioRow,
             onChanged: (e) {
-              setState(() {
-                currentRadioRow = row;
-              });
+              if (row <= materials.length) {
+                setState(() {
+                  currentRadioRow = row;
+                });
+              }
             },
           )
-        : const Text(
-            '',
-            style: TextStyle(color: Colors.black),
+        : Text(
+            valueFrom(col, row),
+            style: const TextStyle(color: Colors.black),
           );
+  }
+
+  String valueFrom(int column, int row) {
+    MaterialTakeBackModel material = materials.elementAt(row - 1);
+    switch (column) {
+      case 1:
+        return material.ctgoryName ?? '';
+      case 2:
+        return material.makerName ?? '';
+      case 3:
+        return material.jisyaCode ?? '';
+      case 4:
+        return material.syohinName ?? '';
+      default:
+        return '';
+    }
   }
 
   List<Widget> _buildRows(int count) {
