@@ -83,7 +83,8 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
         },
         onFailed: () {
           log('getListDefaultInventory onFailed');
-          CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+          CustomToast.show(context,
+              message: 'getListDefaultInventory failure message');
         });
   }
 
@@ -166,8 +167,9 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      String categoryCode =
-                          members.elementAt(currentDropdownIndex).kbnCode ?? '';
+                      // String categoryCode =
+                      //     members.elementAt(currentDropdownIndex).kbnCode ?? '';
+                      String categoryCode = '';
                       String makerName = _makerNameController.text;
                       String jisyaCode = _jisyaCodeController.text;
                       String syohinName = _syohinNameController.text;
