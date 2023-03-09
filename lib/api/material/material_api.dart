@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/base/rest_api.dart';
@@ -53,7 +51,6 @@ class MaterialAPI {
   }) async {
     String urlEndpoint =
         '${Constant.getListDefaultFromEditMaterial}TANT_CD=${user.TANT_CD}&show_popup=$showPopup';
-    log(urlEndpoint);
 
     final Response response = await RestAPI.shared.getData(urlEndpoint);
 
@@ -134,7 +131,6 @@ class MaterialAPI {
     required Function onFailed,
   }) async {
     String currentDate = DateFormat(('yyyy-MM-dd')).format(DateTime.now());
-    log('user: ${user}');
     String urlEndpoint =
         '${Constant.getListDefaultMaterialTakeBack}SYOZOKU_CD=${user.SYOZOKU_CD}&SYUKKO_DATE=$currentDate';
 
@@ -164,7 +160,6 @@ class MaterialAPI {
     if (response.statusCode == 200) {
       onSuccess(response);
     } else {
-      log('fail with: ${response.data}');
       onFailed();
     }
   }

@@ -3,16 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:link_life_one/api/material/material_api.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/models/material_take_back_model.dart';
-import 'package:link_life_one/screen/login_page.dart';
-import 'package:link_life_one/screen/page5/page_5_2_danh_sach_nguyen_lieu.dart';
 import 'package:link_life_one/shared/colors.dart';
 
 import '../../components/custom_header_widget.dart';
-import '../../components/login_widget.dart';
-import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
-import '../menu_page/menu_page.dart';
 
 class Page53DanhSachNhanLaiVatLieu extends StatefulWidget {
   const Page53DanhSachNhanLaiVatLieu({
@@ -40,7 +35,7 @@ class _Page53DanhSachNhanLaiVatLieuState
   void getMaterialTakeBack() {
     MaterialAPI.shared.getListDefaultMaterialTakeBack(onSuccess: (materials) {
       setState(() {
-        materials = materials;
+        this.materials = materials;
       });
     }, onFailed: () {
       CustomToast.show(context,
@@ -108,7 +103,12 @@ class _Page53DanhSachNhanLaiVatLieuState
                   MaterialAPI.shared.insertMaterialTakeBackById(
                       syukkoId: material.syukkoId ?? '',
                       suryo: int.tryParse(material.suryo ?? '0') ?? 0,
-                      onSuccess: (result) {},
+                      onSuccess: (result) {
+                        CustomToast.show(context,
+                            message:
+                                'insertMaterialTakeBackById success message',
+                            backGround: Colors.green);
+                      },
                       onFailed: () {
                         CustomToast.show(context,
                             message:
