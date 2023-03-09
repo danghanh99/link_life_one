@@ -1,4 +1,5 @@
 class MaterialTakeBackModel {
+  String? syukkoId;
   String? ctgoryName;
   String? makerName;
   String? jisyaCode;
@@ -6,13 +7,15 @@ class MaterialTakeBackModel {
   String? suryo;
 
   MaterialTakeBackModel(
-      {this.ctgoryName,
+      {this.syukkoId,
+      this.ctgoryName,
       this.makerName,
       this.jisyaCode,
       this.syohinName,
       this.suryo});
 
   factory MaterialTakeBackModel.fromJson(Map json) => MaterialTakeBackModel(
+        syukkoId: json['SYUKKO_ID'] ?? '',
         ctgoryName: json['CTGORY_NAME'] ?? '',
         makerName: json['MAKER_NAME'] ?? '',
         jisyaCode: json['JISYA_CD'] ?? '',

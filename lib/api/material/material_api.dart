@@ -20,6 +20,7 @@ class MaterialAPI {
 
   Future<void> checkSave({
     required Function(bool) onSuccess,
+    required Function(List<MaterialModel>) onSuccessList,
     required Function onFailed,
   }) async {
     String urlEndpoint = '${Constant.checkSaveMaterial}TANT_CD=${user.TANT_CD}';
@@ -30,9 +31,16 @@ class MaterialAPI {
       List<dynamic> data = response.data;
       bool showPopup = false;
       if (data.isNotEmpty) {
-        showPopup = data.first['show_popup'];
+        Map<String, dynamic> firstData = data.first;
+        if (firstData.containsKey(['show_poup'])) {
+          showPopup = firstData['show_popup'];
+          onSuccess(showPopup);
+        } else {
+          List<MaterialModel> materials =
+              data.map((e) => MaterialModel.fromJson(e)).toList();
+          onSuccessList(materials);
+        }
       }
-      onSuccess(showPopup);
     } else {
       onFailed();
     }
@@ -157,6 +165,31 @@ class MaterialAPI {
       onSuccess(response);
     } else {
       log('fail with: ${response.data}');
+      onFailed();
+    }
+  }
+
+  Future<void> registerMaterialItem({
+    required MaterialModel item,
+    required Function(String) onSuccess,
+    required Function onFailed,
+  }) async {
+    String urlEndpoint = Constant.registrationMaterialById;
+
+    Map<String, dynamic> itemJson = item.toJson();
+    itemJson['TANT_CD'] = user.TANT_CD;
+
+    final Response response =
+        await RestAPI.shared.postDataWithFormData(urlEndpoint, itemJson);
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = response.data;
+      String message = '';
+      if (data.isNotEmpty) {
+        message = data.first['message'];
+      }
+      onSuccess(message);
+    } else {
       onFailed();
     }
   }

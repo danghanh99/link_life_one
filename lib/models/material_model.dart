@@ -58,4 +58,19 @@ class MaterialModel {
     jissu: inventory.jissu,
     suryo: ''
   );
+
+  Map<String, dynamic> toJson() => {
+    'SYUKKO_ID': syukkoId ?? '',
+    'CTGORY_CD': ctgoryCode ?? '',
+    'CTGORY_NAME': ctgoryName ?? '',
+    'MAKER_CD': makerCode ?? '',
+    'MAKER_NAME': makerName ?? '',
+    'JISYA_CD': jisyaCode ?? '',
+    'SYOHIN_NAME': syoshinName ?? '',
+    'GENKA': genka ?? '',
+    'SURYO': suryo ?? '',
+    'BASYO_GYOSYA_SYBET_CD': basyoGyosyaSybetCode ?? '',
+    'SOKO_CD': sokoCode ?? '',
+    'ZAIKO_SYBET_CD': zaikoSybetCode ?? ''
+  };
 }

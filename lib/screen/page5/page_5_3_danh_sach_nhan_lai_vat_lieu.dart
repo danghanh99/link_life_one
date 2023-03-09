@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:link_life_one/api/material/material_api.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/models/material_take_back_model.dart';
@@ -42,7 +43,8 @@ class _Page53DanhSachNhanLaiVatLieuState
         materials = materials;
       });
     }, onFailed: () {
-      CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+      CustomToast.show(context,
+          message: 'getListDefaultMaterialTakeBack failure message');
     });
   }
 
@@ -104,14 +106,13 @@ class _Page53DanhSachNhanLaiVatLieuState
                       materials.elementAt(currentRadioRow - 1);
 
                   MaterialAPI.shared.insertMaterialTakeBackById(
-                      syukkoId: '0000000001',
-                      suryo: int.tryParse(
-                              textControllers[material.jisyaCode]?.text ??
-                                  '0') ??
-                          0,
+                      syukkoId: material.syukkoId ?? '',
+                      suryo: int.tryParse(material.suryo ?? '0') ?? 0,
                       onSuccess: (result) {},
                       onFailed: () {
-                        CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+                        CustomToast.show(context,
+                            message:
+                                'insertMaterialTakeBackById failure message');
                       });
                 },
                 child: const Text(
@@ -316,8 +317,16 @@ class _Page53DanhSachNhanLaiVatLieuState
                 focusedBorder: borderOutline,
                 disabledBorder: borderOutline),
             textAlign: TextAlign.center,
-            onChanged: (text) {},
+            onChanged: (text) {
+              materials.elementAt(row - 1).suryo = text;
+            },
             keyboardType: TextInputType.number,
+            inputFormatters: [
+              // for below version 2 use this
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              // for version 2 and greater youcan also use this
+              FilteringTextInputFormatter.digitsOnly,
+            ],
             maxLines: 1,
           ),
         ),

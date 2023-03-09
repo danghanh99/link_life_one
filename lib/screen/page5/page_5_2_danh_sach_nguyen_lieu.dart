@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/api/material/material_api.dart';
 import 'package:link_life_one/models/default_inventory.dart';
@@ -129,7 +130,8 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
           textControllers[material.jisyaCode];
       if (textController == null) {
         textController = TextEditingController(text: material.suryo ?? '');
-        textControllers[material.jisyaCode ?? ''] = textController;
+        textControllers[material.syukkoId ?? material.jisyaCode ?? ''] =
+            textController;
       }
       OutlineInputBorder borderOutline = const OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(0)),
@@ -148,8 +150,16 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                 focusedBorder: borderOutline,
                 disabledBorder: borderOutline),
             textAlign: TextAlign.center,
-            onChanged: (text) {},
+            onChanged: (text) {
+              materials.elementAt(row - 1).suryo = text;
+            },
             keyboardType: TextInputType.number,
+            inputFormatters: [
+              // for below version 2 use this
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              // for version 2 and greater youcan also use this
+              FilteringTextInputFormatter.digitsOnly,
+            ],
             maxLines: 1,
           ),
         ),
@@ -252,6 +262,10 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
           },
         );
       } else {}
+    }, onSuccessList: (listMaterials) {
+      setState(() {
+        materials = listMaterials;
+      });
     }, onFailed: () {
       log('checkSave onFailed');
       CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
@@ -311,6 +325,22 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
         onFailed: () {
           log('getEditMaterial onFailed');
           CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+        });
+  }
+
+  void registerMaterialItem(MaterialModel item) {
+    MaterialAPI.shared.registerMaterialItem(
+        item: item,
+        onSuccess: (message) {
+          log('registerMaterialItem onSuccess');
+          CustomToast.show(context,
+              message: 'registerMaterialItem success message',
+              backGround: Colors.green);
+        },
+        onFailed: () {
+          log('registerMaterialItem onFailed');
+          CustomToast.show(context,
+              message: 'registerMaterialItem fail message');
         });
   }
 
@@ -473,10 +503,18 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                           builder: (context) => const Page521DanhSachTonKho(),
                         ),
                       );
-                      setState(() {
-                        materials
-                            .add(MaterialModel.fromDefaultInventory(inventory));
-                      });
+                      bool existed = false;
+                      for (var element in materials) {
+                        if (element.jisyaCode == inventory.jisyaCode) {
+                          existed = true;
+                        }
+                      }
+                      if (!existed) {
+                        setState(() {
+                          materials.add(
+                              MaterialModel.fromDefaultInventory(inventory));
+                        });
+                      }
                     },
                     child: const Text(
                       'リストから選択',
@@ -542,23 +580,20 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                       currentRadioRow <= materials.length) {
                     MaterialModel material =
                         materials.elementAt(currentRadioRow - 1);
-                    TextEditingController? textEditingController =
-                        textControllers[material.jisyaCode];
+
                     int quantity = 0;
-                    if (textEditingController == null) {
-                      quantity = int.parse(material.suryo ?? '0');
+
+                    String text = material.suryo ?? '0';
+                    if (text.isEmpty) {
+                      quantity = 0;
                     } else {
-                      String text = textEditingController.text;
-                      if (text.isEmpty) {
-                        quantity = 0;
-                      } else {
-                        quantity = int.parse(text);
-                      }
+                      quantity = int.parse(text);
                     }
+
                     if (quantity == 0) {
                       showAlertEmptyQuantity();
                     } else {
-                      // TODO: Regis 2 API
+                      registerMaterialItem(material);
                     }
                   } else {
                     CustomToast.show(context, message: "一つを選択してください。");
