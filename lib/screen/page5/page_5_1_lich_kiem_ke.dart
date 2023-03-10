@@ -40,23 +40,22 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
 
   Future<void> getData() async {
     InventoryAPI.shared.getListInventorySchedule(onSuccess: (result) {
-      log('getListInventorySchedule onSuccess');
       setState(() {
         schedules = result;
       });
+      CustomToast.show(context,
+          message: 'データリストを取得できました。', backGround: Colors.green);
     }, onFailed: (dynamic) {
-      log('getListInventorySchedule onFailed');
-      CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+      CustomToast.show(context, message: 'データリストを取得できません。');
     });
   }
 
   Future<void> updateSchedule(int id) async {
     InventoryAPI.shared.updateInventorySchedule(id, onSuccess: (dynamic) {
-      log('updateInventorySchedule onSuccess');
-      CustomToast.show(context, message: '登録出来ました。', backGround: Colors.green);
+      CustomToast.show(context,
+          message: 'リストで選択した項目のデータを更新できました。', backGround: Colors.green);
     }, onFailed: (dynamic) {
-      log('updateInventorySchedule onFailed');
-      CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+      CustomToast.show(context, message: 'リストで選択した項目のデータを更新できません。');
     });
   }
 

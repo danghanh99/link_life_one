@@ -211,7 +211,6 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
 
   void checkSave() {
     MaterialAPI.shared.checkSave(onSuccess: (showPopUp) {
-      log('checkSave onSuccess: $showPopUp');
       if (showPopUp) {
         showDialog(
           context: context,
@@ -266,19 +265,19 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
       setState(() {
         materials = listMaterials;
       });
+      CustomToast.show(context,
+          message: '保存したデータを確認できました。', backGround: Colors.green);
     }, onFailed: () {
-      log('checkSave onFailed');
-      CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+      CustomToast.show(context, message: '保存したデータを確認できません。');
     });
   }
 
   void deleteMaterial() {
     MaterialAPI.shared.deleteListMaterial(onSuccess: (message) {
-      log('deleteListMaterial onSuccess');
-      CustomToast.show(context, message: message, backGround: Colors.green);
+      CustomToast.show(context,
+          message: '保存したリストを削除できました。', backGround: Colors.green);
     }, onFailed: () {
-      log('deleteListMaterial onFailed');
-      CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+      CustomToast.show(context, message: '保存したリストを削除できません。');
     });
   }
 
@@ -287,11 +286,12 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
         syukkoId: item.syukkoId ?? '',
         onSuccess: (message) {
           log('deleteListMaterial onSuccess');
-          CustomToast.show(context, message: message, backGround: Colors.green);
+          CustomToast.show(context,
+              message: '選択した項目を削除できました。', backGround: Colors.green);
         },
         onFailed: () {
           log('deleteListMaterial onFailed');
-          CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+          CustomToast.show(context, message: '選択した項目を削除できません。');
         });
   }
 
@@ -299,17 +299,17 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     MaterialAPI.shared.getDataQRById(
         zaikoId: zaikoId,
         onSuccess: (result) {
-          log('getDataQRById onSuccess: $result');
           List<MaterialModel> materialList =
               result.map((e) => MaterialModel.fromDefaultInventory(e)).toList();
 
           setState(() {
             materials.addAll(materialList);
           });
+          CustomToast.show(context,
+              message: 'QRコードからデータを取得できました。', backGround: Colors.green);
         },
         onFailed: () {
-          log('getDataQRById onFailed');
-          CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+          CustomToast.show(context, message: 'QRコードからデータを取得できません。');
         });
   }
 
@@ -317,14 +317,16 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     MaterialAPI.shared.getListDefaultFromEditMaterial(
         showPopup: showPopup,
         onSuccess: (result) {
-          log('getEditMaterial onSuccess: $result');
           setState(() {
             materials = result;
           });
+          CustomToast.show(context,
+              message: 'ポップアップで「破壊して新規リスト」を選択したデータを取得できました。',
+              backGround: Colors.green);
         },
         onFailed: () {
-          log('getEditMaterial onFailed');
-          CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+          CustomToast.show(context,
+              message: 'ポップアップで「破壊して新規リスト」を選択したデータを取得できません。');
         });
   }
 
@@ -332,15 +334,11 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     MaterialAPI.shared.registerMaterialItem(
         item: item,
         onSuccess: (message) {
-          log('registerMaterialItem onSuccess');
           CustomToast.show(context,
-              message: 'registerMaterialItem success message',
-              backGround: Colors.green);
+              message: '選択した項目を登録できました。', backGround: Colors.green);
         },
         onFailed: () {
-          log('registerMaterialItem onFailed');
-          CustomToast.show(context,
-              message: 'registerMaterialItem fail message');
+          CustomToast.show(context, message: '選択した項目を登録できません。');
         });
   }
 

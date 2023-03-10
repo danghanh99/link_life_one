@@ -37,9 +37,10 @@ class _Page53DanhSachNhanLaiVatLieuState
       setState(() {
         this.materials = materials;
       });
-    }, onFailed: () {
       CustomToast.show(context,
-          message: 'getListDefaultMaterialTakeBack failure message');
+          message: '「部材持ち戻り登録リスト」画面からデータを取得できました。', backGround: Colors.green);
+    }, onFailed: () {
+      CustomToast.show(context, message: '「部材持ち戻り登録リスト」画面からデータを取得できません。');
     });
   }
 
@@ -105,14 +106,12 @@ class _Page53DanhSachNhanLaiVatLieuState
                       suryo: int.tryParse(material.suryo ?? '0') ?? 0,
                       onSuccess: (result) {
                         CustomToast.show(context,
-                            message:
-                                'insertMaterialTakeBackById success message',
+                            message: '画面で選択した項目を挿入できました。',
                             backGround: Colors.green);
                       },
                       onFailed: () {
                         CustomToast.show(context,
-                            message:
-                                'insertMaterialTakeBackById failure message');
+                            message: '画面で選択した項目を挿入できません。');
                       });
                 },
                 child: const Text(

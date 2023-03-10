@@ -58,10 +58,12 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
           currentDropdownIndex = 0;
           this.members = members;
         });
+        CustomToast.show(context,
+            message: 'ドロップダウンリストから選択したデータを取得できました。', backGround: Colors.green);
       }
     }, onFailed: () {
       log('getListMemberCategory onFailed');
-      CustomToast.show(context, message: 'プルダウンを取得出来ませんでした。');
+      CustomToast.show(context, message: 'ドロップダウンリストから選択したデータを取得できません。');
     });
   }
 
@@ -76,15 +78,14 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
         jisyaCode: jisyaCode,
         syohinName: syohinName,
         onSuccess: (inventories) {
-          log('getListDefaultInventory onSuccess');
           setState(() {
             this.inventories = inventories;
           });
+          CustomToast.show(context,
+              message: 'データリストを取得できました。', backGround: Colors.green);
         },
         onFailed: () {
-          log('getListDefaultInventory onFailed');
-          CustomToast.show(context,
-              message: 'getListDefaultInventory failure message');
+          CustomToast.show(context, message: 'データリストを取得できません。');
         });
   }
 
