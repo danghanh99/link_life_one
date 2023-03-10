@@ -692,7 +692,16 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
   }
 
   Widget header() {
-    return const CustomHeaderWidget();
+    return CustomHeaderWidget(onBack: () async {
+      MaterialAPI.shared.onBackMaterial(
+          items: materials,
+          onSuccess: () {
+            Navigator.pop(context);
+          },
+          onFailed: () {
+            Navigator.pop(context);
+          });
+    });
   }
 
   Widget title() {

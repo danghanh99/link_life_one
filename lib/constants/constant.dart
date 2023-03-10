@@ -17,6 +17,7 @@ class Constant {
   static const String getListDefaultMaterialTakeBack = '${url}src/APIs/MaterialTakeBack/getListDefaultMaterialTakeBack.php?';
   static const String insertMaterialTakeBackById = '${url}src/APIs/MaterialTakeBack/insertMaterialTakeBackById.php';
   static const String registrationMaterialById = '${url}src/APIs/Material/registrationMaterialById.php';
+  static const String backMaterial = '${url}src/APIs/Material/backMaterial.php';
 
   static const int compressTargetWidth = 600;
 }

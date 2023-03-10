@@ -188,4 +188,25 @@ class MaterialAPI {
       onFailed();
     }
   }
+
+  void onBackMaterial({
+    required List<MaterialModel> items,
+    required Function() onSuccess,
+    required Function() onFailed,
+  }) async {
+    String urlEndpoint = Constant.backMaterial;
+
+    Map<String, dynamic> body = {
+      'TANT_CD': user.TANT_CD,
+      'materials': items.map((e) => e.toJson()).toList()
+    };
+
+    final Response response = await RestAPI.shared.postData(urlEndpoint, body);
+
+    if (response.statusCode == 200) {
+      onSuccess();
+    } else {
+      onFailed();
+    }
+  }
 }
