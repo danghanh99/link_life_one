@@ -59,11 +59,11 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
           this.members = members;
         });
         CustomToast.show(context,
-            message: 'ドロップダウンリストから選択したデータを取得できました。', backGround: Colors.green);
+            message: 'ドロップダウンリストのデータを取得できました。', backGround: Colors.green);
       }
     }, onFailed: () {
       log('getListMemberCategory onFailed');
-      CustomToast.show(context, message: 'ドロップダウンリストから選択したデータを取得できません。');
+      CustomToast.show(context, message: 'ドロップダウンリストのデータを取得できません。');
     });
   }
 

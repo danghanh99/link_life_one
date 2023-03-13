@@ -38,9 +38,9 @@ class _Page53DanhSachNhanLaiVatLieuState
         this.materials = materials;
       });
       CustomToast.show(context,
-          message: '「部材持ち戻り登録リスト」画面からデータを取得できました。', backGround: Colors.green);
+          message: 'データを取得できました。', backGround: Colors.green);
     }, onFailed: () {
-      CustomToast.show(context, message: '「部材持ち戻り登録リスト」画面からデータを取得できません。');
+      CustomToast.show(context, message: 'データを取得できません。');
     });
   }
 
@@ -106,12 +106,12 @@ class _Page53DanhSachNhanLaiVatLieuState
                       suryo: int.tryParse(material.suryo ?? '0') ?? 0,
                       onSuccess: (result) {
                         CustomToast.show(context,
-                            message: '画面で選択した項目を挿入できました。',
+                            message: '画面で選択した項目を登録できました。',
                             backGround: Colors.green);
                       },
                       onFailed: () {
                         CustomToast.show(context,
-                            message: '画面で選択した項目を挿入できません。');
+                            message: '画面で選択した項目を登録できません。');
                       });
                 },
                 child: const Text(

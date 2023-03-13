@@ -321,12 +321,10 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
             materials = result;
           });
           CustomToast.show(context,
-              message: 'ポップアップで「破壊して新規リスト」を選択したデータを取得できました。',
-              backGround: Colors.green);
+              message: 'データを取得できました。', backGround: Colors.green);
         },
         onFailed: () {
-          CustomToast.show(context,
-              message: 'ポップアップで「破壊して新規リスト」を選択したデータを取得できません。');
+          CustomToast.show(context, message: 'データを取得できません。');
         });
   }
 
@@ -495,12 +493,15 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                   ),
                   child: TextButton(
                     onPressed: () async {
-                      DefaultInventory inventory = await Navigator.push(
+                      DefaultInventory? inventory = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const Page521DanhSachTonKho(),
                         ),
                       );
+                      if (inventory == null) {
+                        return;
+                      }
                       bool existed = false;
                       for (var element in materials) {
                         if (element.jisyaCode == inventory.jisyaCode) {
