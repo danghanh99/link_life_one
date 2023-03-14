@@ -171,7 +171,11 @@ class _Page724CreateState extends State<Page724Create> {
         kbnsaiCode == '06' ||
         kbnsaiName == 'メモ' ||
         kbnsaiName == '重要';
-    return isForceText && dateinput.text.isNotEmpty;
+    if (isForceText) {
+      return dateinput.text.isNotEmpty;
+    } else {
+      return true;
+    }
   }
 
   @override
