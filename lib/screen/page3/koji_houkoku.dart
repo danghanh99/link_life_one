@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:link_life_one/components/text_line_down.dart';
@@ -38,6 +40,8 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
   List<dynamic> listKojiHoukoku = [];
   Map<int, int> listStateIndexDropdown = {};
   XFile? imageFile;
+  XFile? befImage;
+  XFile? aftImage;
 
   String? TENPO_CD = '';
   @override
@@ -93,7 +97,21 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
             });
           }
         },
-        onFailed: () {});
+        onFailed: () {
+          setState(() {
+            listKojiHoukoku = [
+              {
+                "MAKER_CD": "",
+                "HINBAN": "",
+                "KISETU_MAKER_CD": "",
+                "KISETU_HINBAN": "",
+                "BEF_SEKO_PHOTO_FILEPATH": "",
+                "AFT_SEKO_PHOTO_FILEPATH": "",
+                "OTHER_PHOTO_FOLDERPATH": ""
+              }
+            ];
+          });
+        });
   }
 
   void selectImage() async {
@@ -106,6 +124,30 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
     } catch (e) {
       print(e);
     }
+  }
+
+  void selectBeforeImage() async {
+    final ImagePicker picker = ImagePicker();
+    try {
+      XFile? file = await picker.pickImage(source: ImageSource.gallery);
+      if (file != null) {
+        setState(() {
+          befImage = file;
+        });
+      }
+    } catch (e) {}
+  }
+
+  void selectafterImage() async {
+    final ImagePicker picker = ImagePicker();
+    try {
+      XFile? file = await picker.pickImage(source: ImageSource.gallery);
+      if (file != null) {
+        setState(() {
+          aftImage = file;
+        });
+      }
+    } catch (e) {}
   }
 
   //  "MAKER_CD": "★弊社★オ",
@@ -185,6 +227,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           leftSide(),
+                          SizedBox(width: 20.sp),
                           rightSide({}),
                         ],
                       )
@@ -200,6 +243,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               leftSide1Item(index),
+                              SizedBox(width: 20.sp),
                               rightSide(listKojiHoukoku.elementAt(index)),
                             ],
                           );
@@ -241,35 +285,43 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          alignment: Alignment.center,
-          width: 200.sp,
-          height: 160.sp,
-          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: Padding(
-            padding: EdgeInsets.all(8.0.sp),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '施工前写真',
-                  style:
-                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
-                ),
-                SizedBox(
-                  height: 20.sp,
-                ),
-                Expanded(
-                    child: item['BEF_SEKO_PHOTO_FILEPATH'] == null || item['BEF_SEKO_PHOTO_FILEPATH'] == ''
-                        ? const SizedBox.shrink()
-                        : Image.network(item['BEF_SEKO_PHOTO_FILEPATH'])),
-                // Flexible(
-                //   child: Text(
-                //     item['BEF_SEKO_PHOTO_FILEPATH'] ?? '',
-                //     style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
-                //   ),
-                // ),
-              ],
+        GestureDetector(
+          onTap: () {
+            selectBeforeImage();
+          },
+          child: Container(
+            alignment: Alignment.center,
+            width: 180.sp,
+            height: 140.sp,
+            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+            child: Padding(
+              padding: EdgeInsets.all(8.0.sp),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    '施工前写真',
+                    style:
+                        TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                  ),
+                  SizedBox(
+                    height: 20.sp,
+                  ),
+                  Expanded(
+                      child: befImage != null
+                          ? Image.file(File(befImage!.path))
+                          : item['BEF_SEKO_PHOTO_FILEPATH'] == null ||
+                                  item['BEF_SEKO_PHOTO_FILEPATH'] == ''
+                              ? const SizedBox.shrink()
+                              : Image.network(item['BEF_SEKO_PHOTO_FILEPATH'])),
+                  // Flexible(
+                  //   child: Text(
+                  //     item['BEF_SEKO_PHOTO_FILEPATH'] ?? '',
+                  //     style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                  //   ),
+                  // ),
+                ],
+              ),
             ),
           ),
         ),
@@ -278,30 +330,39 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
         ),
         Column(
           children: [
-            Container(
-              alignment: Alignment.center,
-              width: 200.sp,
-              height: 160.sp,
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Padding(
-                padding: EdgeInsets.all(8.sp),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '施工後写真',
-                      style: TextStyle(
-                          fontSize: 20.sp, fontWeight: FontWeight.w700),
-                    ),
-                    SizedBox(
-                      height: 20.sp,
-                    ),
-                    Expanded(
-                        child: item['AFT_SEKO_PHOTO_FILEPATH'] == null || item['AFT_SEKO_PHOTO_FILEPATH'] == ''
-                            ? const SizedBox.shrink()
-                            : Image.network(item['AFT_SEKO_PHOTO_FILEPATH'])),
-                  ],
+            GestureDetector(
+              onTap: () {
+                selectafterImage();
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: 180.sp,
+                height: 140.sp,
+                decoration:
+                    BoxDecoration(border: Border.all(color: Colors.black)),
+                child: Padding(
+                  padding: EdgeInsets.all(8.sp),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        '施工後写真',
+                        style: TextStyle(
+                            fontSize: 20.sp, fontWeight: FontWeight.w700),
+                      ),
+                      SizedBox(
+                        height: 20.sp,
+                      ),
+                      Expanded(
+                          child: aftImage != null
+                              ? Image.file(File(aftImage!.path))
+                              : item['AFT_SEKO_PHOTO_FILEPATH'] == null ||
+                                      item['AFT_SEKO_PHOTO_FILEPATH'] == ''
+                                  ? const SizedBox.shrink()
+                                  : Image.network(
+                                      item['AFT_SEKO_PHOTO_FILEPATH'])),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -314,7 +375,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
               },
               child: Container(
                 alignment: Alignment.center,
-                width: 200.sp,
+                width: 180.sp,
                 height: 50.sp,
                 decoration:
                     BoxDecoration(border: Border.all(color: Colors.black)),
@@ -332,9 +393,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
   }
 
   Widget leftSide() {
-    return Container(
-      height: 400.h.sp,
-      width: 300.w.sp,
+    return Expanded(
       child: ListView.separated(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
@@ -362,7 +421,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                           fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
                     SizedBox(
-                      width: 100.sp,
+                      width: 200.sp,
                       height: 50.sp,
                       child: textUnderline(
                         initial: listKojiHoukoku[index]["MAKER_CD"],
@@ -388,7 +447,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                           fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
                     SizedBox(
-                      width: 100.sp,
+                      width: 200.sp,
                       height: 50.sp,
                       child: textUnderline(
                         initial: listKojiHoukoku[index]["HINBAN"],
@@ -424,7 +483,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                           fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
                     SizedBox(
-                      width: 100.sp,
+                      width: 200.sp,
                       height: 50.sp,
                       child: textUnderline(
                         initial: listKojiHoukoku[index]["KISETU_MAKER_CD"],
@@ -453,7 +512,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                           fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
                     SizedBox(
-                      width: 100.sp,
+                      width: 200.sp,
                       height: 50.sp,
                       child: textUnderline(
                         initial: listKojiHoukoku[index]["KISETU_HINBAN"] ?? '',
@@ -508,12 +567,11 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
   }
 
   Widget leftSide1Item(int index) {
-    return SizedBox(
+    return Expanded(
       // height:
       //     widget.KOJI_ST == "3" || widget.KOJI_ST == "03" ? 400.h.sp : 240.h.sp,
-      width: 300.w,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
             '【施工商品情報】',
@@ -534,7 +592,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                       TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
                 ),
                 SizedBox(
-                  width: 100.sp,
+                  width: 200.sp,
                   height: 50.sp,
                   child: textUnderline(
                     initial: listKojiHoukoku[index]["MAKER_CD"],
@@ -560,7 +618,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                       TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
                 ),
                 SizedBox(
-                  width: 100.sp,
+                  width: 200.sp,
                   height: 50.sp,
                   child: textUnderline(
                     initial: listKojiHoukoku[index]["HINBAN"],
@@ -601,7 +659,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                                 fontSize: 20.sp, fontWeight: FontWeight.w700),
                           ),
                           SizedBox(
-                            width: 100.sp,
+                            width: 200.sp,
                             height: 50.sp,
                             child: textUnderline(
                               initial: listKojiHoukoku[index]
@@ -632,7 +690,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                                 fontSize: 20.sp, fontWeight: FontWeight.w700),
                           ),
                           SizedBox(
-                            width: 100.sp,
+                            width: 200.sp,
                             height: 50.sp,
                             child: textUnderline(
                               initial:
@@ -887,6 +945,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
       onChanged: (value) {
         onChange.call(value);
       },
+      style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
       initialValue: initial,
       minLines: 1,
       maxLines: 1,

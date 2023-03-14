@@ -52,7 +52,6 @@ class GetKojiHoukoku {
       return body;
     } else {
       onFailed.call();
-      throw Exception('Failed to GetShashinKakunin');
     }
   }
 }
