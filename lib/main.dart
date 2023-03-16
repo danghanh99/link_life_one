@@ -1,18 +1,14 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:link_life_one/hive.dart';
 import 'package:link_life_one/models/user.dart';
-import 'package:path_provider/path_provider.dart';
 import 'screen/login_page.dart';
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 void main() async {
-  initializeDateFormatting();
   WidgetsFlutterBinding.ensureInitialized();
 
   Hive.initFlutter();
@@ -31,6 +27,13 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(scaffoldBackgroundColor: Colors.white),
               debugShowCheckedModeBanner: false,
               navigatorObservers: [routeObserver],
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              locale: const Locale('ja', 'JP'),
+              supportedLocales: const [Locale('ja', 'JP')],
               home: const LoginPage(),
             ));
     ;
