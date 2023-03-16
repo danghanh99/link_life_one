@@ -1884,7 +1884,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         jyucyuId.isNotEmpty
                             ? TextSpan(
                                 text:
-                                    '\n<<$jyucyuId>>・$jinin 人 $kansanPoint 時間\n')
+                                    '\n<<${jyucyuId.length == 10 ? jyucyuId : jyucyuId.substring(0, 10)}>>・$jinin 人 $kansanPoint 時間\n')
                             : const TextSpan(),
                         TextSpan(
                           text: setsakiAddress,

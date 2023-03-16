@@ -463,9 +463,9 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                                   ),
                                   isShitami
                                       ? Text(
-                                          '受注ID： ${item.jyucyuId}　人数：${item.shitamiJinin}人　目安作業時間：${item.shitamiJikan ?? ''}(m)')
+                                          '受注ID： ${item.jyucyuId.length == 10 ? item.jyucyuId : item.jyucyuId.substring(0, 10)}　人数：${item.shitamiJinin}人　目安作業時間：${item.shitamiJikan ?? ''}(m)')
                                       : Text(
-                                          '受注ID： ${item.jyucyuId}　人数：${item.kojiJinin}人　目安作業時間：${item.kojiJikan ?? ''}(m)'),
+                                          '受注ID： ${item.jyucyuId.length == 10 ? item.jyucyuId : item.jyucyuId.substring(0, 10)}　人数：${item.kojiJinin}人　目安作業時間：${item.kojiJikan ?? ''}(m)'),
                                   Text('工事アイテム： ${item.kojiItem}'),
                                   Text('住所： ${item.setsakiAddress}'),
                                   Text('氏名： ${item.setsakiName}'),

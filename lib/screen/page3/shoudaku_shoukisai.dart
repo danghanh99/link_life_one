@@ -471,7 +471,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         bgColor = const Color(0xFFEBBDA9);
       }
       if (col == 1) {
-        text = widget.JYUCYU_ID;
+        text = widget.JYUCYU_ID.length == 10 ? widget.JYUCYU_ID : widget.JYUCYU_ID.substring(0, 10);
       }
       if (col == 2) {
         text = "お客様名";

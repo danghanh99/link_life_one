@@ -13,8 +13,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class HoujinKanryousho extends StatefulWidget {
   final String JYUCYU_ID;
   final String TENPO_CD;
+  final XFile? befImage;
+  final XFile? aftImage;
   const HoujinKanryousho(
-      {super.key, required this.JYUCYU_ID, required this.TENPO_CD});
+      {super.key, required this.JYUCYU_ID, required this.TENPO_CD, this.befImage, this.aftImage});
 
   @override
   State<HoujinKanryousho> createState() => _HoujinKanryoushoState();
@@ -303,6 +305,8 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
           onTap: () {
             RequestCorporateCompletion().requestCorporateCompletion(
                 JYUCYU_ID: widget.JYUCYU_ID,
+                befImagePath: widget.befImage?.path,
+                aftImagePath: widget.aftImage?.path,
                 filePathList: listImage
                     .where((element) => element.runtimeType == XFile)
                     .toList()
