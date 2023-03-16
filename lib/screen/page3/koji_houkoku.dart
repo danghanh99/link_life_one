@@ -22,6 +22,7 @@ class KojiHoukoku extends StatefulWidget {
   final String KOJI_ST;
   final String SYUYAKU_JYUCYU_ID;
   final String HOJIN_FLG;
+  final String HOMON_SBT;
   const KojiHoukoku(
       {super.key,
       this.initialDate,
@@ -29,7 +30,8 @@ class KojiHoukoku extends StatefulWidget {
       required this.SINGLE_SUMMARIZE,
       required this.KOJI_ST,
       required this.SYUYAKU_JYUCYU_ID,
-      required this.HOJIN_FLG});
+      required this.HOJIN_FLG,
+      required this.HOMON_SBT});
 
   @override
   State<KojiHoukoku> createState() => _KojiHoukokuState();
@@ -788,6 +790,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                             MaterialPageRoute(
                               builder: (context) => ShashinTeishuutsuGamenPage(
                                 JYUCYU_ID: widget.JYUCYU_ID,
+                                HOMON_SBT: widget.HOMON_SBT,
                                 initialDate: widget.initialDate,
                               ),
                             ),

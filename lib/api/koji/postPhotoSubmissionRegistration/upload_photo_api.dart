@@ -11,6 +11,7 @@ class UploadPhotoApi {
   Future<void> uploadPhotoApi({
     required String JYUCYU_ID,
     required String LOGIN_ID,
+    required String HOMON_SBT,
     required List<String> FILE_PATH_LIST,
     required Function onFailed,
     required Function onSuccess,
@@ -39,6 +40,7 @@ class UploadPhotoApi {
         {
           'FILE_NAME_LIST[]': files,
           'JYUCYU_ID': JYUCYU_ID,
+          'HOMON_SBT': HOMON_SBT,
           'LOGIN_ID': LOGIN_ID,
         },
       );

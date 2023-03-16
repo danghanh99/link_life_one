@@ -526,7 +526,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                 border: border),
             _buildHeaderItem(
                 flex: 3,
-                title: widget.JYUCYU_ID,
+                title: widget.JYUCYU_ID.length == 10 ? widget.JYUCYU_ID : widget.JYUCYU_ID.substring(0, 10),
                 bgColor: Colors.white,
                 border: border),
             _buildHeaderItem(

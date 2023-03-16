@@ -11,6 +11,7 @@ import 'package:link_life_one/shared/custom_button.dart';
 class ShashinTeishuutsuGamenPage extends StatefulWidget {
   final DateTime? initialDate;
   final String JYUCYU_ID;
+  final String HOMON_SBT;
   final String? cancelRiyuu;
   final DateTime? mitmoriYmd;
   const ShashinTeishuutsuGamenPage({
@@ -18,6 +19,7 @@ class ShashinTeishuutsuGamenPage extends StatefulWidget {
     this.initialDate,
     this.cancelRiyuu,
     required this.JYUCYU_ID,
+    required this.HOMON_SBT,
     this.mitmoriYmd,
   });
 
@@ -200,6 +202,7 @@ class _ShashinTeishuutsuGamenPageState
                             UploadPhotoApi().uploadPhotoApi(
                                 JYUCYU_ID: widget.JYUCYU_ID,
                                 LOGIN_ID: loginID,
+                                HOMON_SBT: widget.HOMON_SBT,
                                 FILE_PATH_LIST:
                                     selectedImages.map((e) => e.path).toList(),
                                 onFailed: () {

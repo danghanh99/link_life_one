@@ -387,6 +387,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                                         builder: (context) =>
                                             ShashinTeishuutsuGamenPage(
                                           JYUCYU_ID: widget.JYUCYU_ID,
+                                          HOMON_SBT: widget.koji.homonSbt,
                                           initialDate: widget.initialDate,
                                         ),
                                       ),
@@ -482,6 +483,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                               KOJI_ST: widget.KOJI_ST,
                               SYUYAKU_JYUCYU_ID: widget.JYUCYU_ID,
                               HOJIN_FLG: widget.koji.hojinFlag,
+                              HOMON_SBT: widget.koji.homonSbt,
                             ),
                           ),
                         );
