@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
@@ -592,26 +593,82 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
               });
               return;
             }
-            SubmitLastPage.shared.submitLastPage(
-              SINGLE_SUMMARIZE: widget.SINGLE_SUMMARIZE,
-              JYUCYU_ID: widget.JYUCYU_ID,
-              CHECK_FLG1: checkedValue1 ? "1" : "0",
-              CHECK_FLG2: checkedValue2 ? "1" : "0",
-              CHECK_FLG3: checkedValue3 ? "1" : "0",
-              CHECK_FLG4: checkedValue4 ? "1" : "0",
-              CHECK_FLG5: checkedValue5 ? "1" : "0",
-              CHECK_FLG6: checkedValue6 ? "1" : "0",
-              CHECK_FLG7: checkedValue7 ? "1" : "0",
-              list: widget.DATA_TABLE,
-              onSuccess: () {
-                widget.onSaveSuccess();
-                CustomToast.show(context,
-                    message: "登録出来ました。", backGround: Colors.green);
-              },
-              onFailed: () {
-                CustomToast.show(
-                  context,
-                  message: "登録できませんでした。。",
+            showDialog(
+              context: context,
+              builder: (context) {
+                return SizedBox(
+                  width: double.infinity,
+                  child: CupertinoAlertDialog(
+                    title: const Text(
+                      "",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    content: const Padding(
+                      padding: EdgeInsets.only(top: 15),
+                      child: Text(
+                        "承諾書を発行し、一覧画面に戻ります",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 24, 23, 23),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                          onPressed: () {
+                            SubmitLastPage.shared.submitLastPage(
+                              SINGLE_SUMMARIZE: widget.SINGLE_SUMMARIZE,
+                              JYUCYU_ID: widget.JYUCYU_ID,
+                              CHECK_FLG1: checkedValue1 ? "1" : "0",
+                              CHECK_FLG2: checkedValue2 ? "1" : "0",
+                              CHECK_FLG3: checkedValue3 ? "1" : "0",
+                              CHECK_FLG4: checkedValue4 ? "1" : "0",
+                              CHECK_FLG5: checkedValue5 ? "1" : "0",
+                              CHECK_FLG6: checkedValue6 ? "1" : "0",
+                              CHECK_FLG7: checkedValue7 ? "1" : "0",
+                              list: widget.DATA_TABLE,
+                              onSuccess: () {
+                                widget.onSaveSuccess();
+                                CustomToast.show(context,
+                                    message: "登録出来ました。",
+                                    backGround: Colors.green);
+                              },
+                              onFailed: () {
+                                CustomToast.show(
+                                  context,
+                                  message: "登録できませんでした。。",
+                                );
+                              },
+                            );
+                          },
+                          child: const Text(
+                            'はい',
+                            style: TextStyle(
+                              color: Color(0xFF007AFF),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          )),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          'いいえ',
+                          style: TextStyle(
+                            color: Color(0xFFEB5757),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 );
               },
             );
