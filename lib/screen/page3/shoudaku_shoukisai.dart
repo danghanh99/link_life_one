@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,8 +38,10 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
   List<dynamic> TABLE_DATA = [];
   List<dynamic> KOJI_KAKAKU = [];
   Map<int, Map<String, String>> NEW_TABLE_DATA = {};
+  Map<int, Tuple2<TextEditingController?, FocusNode?>> nameCtrls = {};
   Map<int, Tuple2<TextEditingController?, FocusNode?>> codeCtrls = {};
   Map<int, Tuple2<TextEditingController?, FocusNode?>> quantityCtrls = {};
+  Map<int, Tuple2<TextEditingController?, FocusNode?>> unitPriceCtrls = {};
   TextEditingController remarkCtrl = TextEditingController();
 
   late AutoScrollController _scrollController;
@@ -81,6 +84,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
     TABLE_DATA = [];
     KOJI_KAKAKU = [];
     NEW_TABLE_DATA = {};
+    nameCtrls.clear();
     codeCtrls.clear();
     quantityCtrls.clear();
   }
@@ -194,7 +198,8 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                         const SizedBox(
                           height: 10,
                         ),
-                        title2(),
+                        // title2(),
+                        _buildHeader(),
                         const SizedBox(
                           height: 10,
                         ),
@@ -206,7 +211,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Container(
+                        SizedBox(
                           height: 400.h,
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
@@ -264,6 +269,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                         const SizedBox(
                           height: 10,
                         ),
+                        _buildSum(getSum()),
                         const Text(
                           '担当者情報',
                           style: TextStyle(
@@ -272,98 +278,62 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                         const SizedBox(
                           height: 5,
                         ),
-                        title3(),
+                        _buildFooter(),
                         const SizedBox(
                           height: 10,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                              children: [
-                                Container(
-                                  width: 400,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.black)),
-                                  child: Column(
-                                    children: [
-                                      const Text(
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black)),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Container(
+                                      color: const Color(0xFFCCCCCC),
+                                      alignment: Alignment.center,
+                                      child: const Text(
                                         '備考欄',
                                         style: TextStyle(
-                                            fontSize: 20,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.w700),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: TextFormField(
-                                          controller: remarkCtrl,
-                                          maxLines: 3,
-                                          decoration: const InputDecoration(
-                                            contentPadding: EdgeInsets.only(
-                                                top: 5, bottom: 5),
-                                            isDense: true,
-                                            enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black),
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black),
-                                            ),
+                                    ),
+                                    const Divider(
+                                      height: 1,
+                                      thickness: 1,
+                                      color: Colors.black,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: TextFormField(
+                                        controller: remarkCtrl,
+                                        maxLines: 3,
+                                        decoration: const InputDecoration(
+                                          contentPadding: EdgeInsets.only(
+                                              top: 5, bottom: 5),
+                                          isDense: true,
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.black),
                                           ),
-                                          cursorColor: Colors.black,
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.black),
+                                          ),
                                         ),
+                                        cursorColor: Colors.black,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                                Container(
-                                  width: 400,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text(''),
-                                      Container(
-                                        decoration: const BoxDecoration(
-                                          border: Border(
-                                            left: BorderSide(
-                                              //                   <--- left side
-                                              color: Colors.black,
-                                              width: 1.2,
-                                            ),
-                                            right: BorderSide(
-                                              //                   <--- left side
-                                              color: Colors.black,
-                                              width: 1.2,
-                                            ),
-                                            bottom: BorderSide(
-                                              //                    <--- top side
-                                              color: Colors.black,
-                                              width: 1.2,
-                                            ),
-                                          ),
-                                        ),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            remarkCtrl.text = '';
-                                          },
-                                          child: const Padding(
-                                            padding: EdgeInsets.all(4.0),
-                                            child: Text(
-                                              '備考欄をリセット',
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
+                            const SizedBox(width: 20),
                             Row(
                               children: [
                                 SizedBox(
@@ -427,6 +397,23 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
     );
   }
 
+  int getSum() {
+    int result = 0;
+    for (var element in TABLE_DATA) {
+      if (element['KINGAK'] != null) {
+        result += int.tryParse(element['KINGAK']) ?? 0;
+      }
+    }
+
+    for (var key in NEW_TABLE_DATA.keys) {
+      Map? data = NEW_TABLE_DATA[key];
+      if (data != null && data['KINGAK'] != null) {
+        result += int.tryParse(data['KINGAK']) ?? 0;
+      }
+    }
+    return result;
+  }
+
   String postFormat(String? postNo) {
     if (postNo == null || postNo.isEmpty || postNo.length != 7) {
       return '';
@@ -474,29 +461,38 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
 
     return List.generate(count, (col) {
       String text = '';
+      Color bgColor = Colors.white;
+      BorderSide borderSide =
+          const BorderSide(color: Color(0xFFDB4158), width: 2);
+      Border border =
+          Border(left: borderSide, top: borderSide, bottom: borderSide);
       if (col == 0) {
         text = "受注ID";
+        bgColor = const Color(0xFFEBBDA9);
       }
       if (col == 1) {
         text = widget.JYUCYU_ID;
       }
       if (col == 2) {
         text = "お客様名";
+        bgColor = const Color(0xFFEBBDA9);
       }
       if (col == 3) {
         text = KOJI_DATA["SETSAKI_NAME"] ?? "";
       }
       if (col == 4) {
         text = "ご訪問日";
+        bgColor = const Color(0xFFEBBDA9);
       }
       if (col == 5) {
         text = KOJI_DATA["KOJI_YMD"] ?? "";
+        border = Border.all(width: 2, color: const Color(0xFFDB4158));
       }
 
       return Container(
         decoration: BoxDecoration(
-          border: Border.all(width: 1),
-          color: Colors.white,
+          border: border,
+          color: bgColor,
         ),
         alignment: Alignment.center,
         width: colwidth[col],
@@ -511,6 +507,153 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         ),
       );
     });
+  }
+
+  Widget _buildHeader() {
+    BorderSide borderSide =
+        const BorderSide(color: Color(0xFFDB4158), width: 2);
+    Border border =
+        Border(left: borderSide, top: borderSide, bottom: borderSide);
+    return Column(
+      children: [
+        Row(
+          children: [
+            _buildHeaderItem(
+                flex: 1,
+                title: '受注ID',
+                textColor: const Color(0xFFDB4158),
+                bgColor: const Color(0xFFEBBDA9),
+                border: border),
+            _buildHeaderItem(
+                flex: 3,
+                title: widget.JYUCYU_ID,
+                bgColor: Colors.white,
+                border: border),
+            _buildHeaderItem(
+                flex: 1,
+                title: 'ご訪問日',
+                textColor: const Color(0xFFDB4158),
+                bgColor: const Color(0xFFEBBDA9),
+                border: border),
+            _buildHeaderItem(
+                flex: 3,
+                title: KOJI_DATA["KOJI_YMD"] ?? "",
+                bgColor: Colors.white,
+                border: Border.all(color: const Color(0xFFDB4158), width: 2)),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            _buildHeaderItem(
+                flex: 1,
+                title: 'お客様名',
+                textColor: const Color(0xFFDB4158),
+                bgColor: const Color(0xFFEBBDA9),
+                border: border),
+            _buildHeaderItem(
+                flex: 7,
+                title: KOJI_DATA["SETSAKI_NAME"] ?? "",
+                bgColor: Colors.white,
+                border: Border.all(color: const Color(0xFFDB4158), width: 2),
+                alignment: Alignment.centerLeft),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFooter() {
+    BorderSide borderSide =
+        const BorderSide(color: Color(0xFFDB4158), width: 2);
+    Border border =
+        Border(left: borderSide, top: borderSide, bottom: borderSide);
+    return Row(
+      children: [
+        _buildHeaderItem(
+            flex: 3,
+            title: '担当営業所・担当店',
+            textColor: const Color(0xFFDB4158),
+            bgColor: const Color(0xFFEBBDA9),
+            border: border),
+        _buildHeaderItem(
+            flex: 5,
+            title: KOJI_DATA["KOJIGYOSYA_NAME"] ?? "",
+            bgColor: Colors.white,
+            border: border),
+        _buildHeaderItem(
+            flex: 2,
+            title: '担当者名',
+            textColor: const Color(0xFFDB4158),
+            bgColor: const Color(0xFFEBBDA9),
+            border: border),
+        _buildHeaderItem(
+            flex: 4,
+            title: [
+              KOJI_DATA["HOMON_TANT_NAME1"] ?? "",
+              KOJI_DATA["HOMON_TANT_NAME2"] ?? "",
+              KOJI_DATA["HOMON_TANT_NAME3"] ?? ""
+            ].where((s) => s != null && s.isNotEmpty).join(', '),
+            bgColor: Colors.white,
+            border: Border.all(color: const Color(0xFFDB4158), width: 2)),
+      ],
+    );
+  }
+
+  Widget _buildSum(int value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        const Text('追加費用合計金額 (税込み)',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(width: 8),
+        Container(
+          width: 200,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          alignment: Alignment.centerRight,
+          decoration:
+              BoxDecoration(border: Border.all(width: 3, color: Colors.black)),
+          child: Text(value.formatNumber),
+        ),
+        const SizedBox(width: 8),
+        const Text(
+          '円',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeaderItem(
+      {int flex = 1,
+      String title = '',
+      Color? textColor,
+      Color bgColor = Colors.white,
+      Border? border,
+      Alignment alignment = Alignment.center}) {
+    return Expanded(
+      flex: flex,
+      child: Container(
+        decoration: BoxDecoration(
+          border: border,
+          color: bgColor,
+        ),
+        alignment: alignment,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        height: 40,
+        child: Text(
+          title,
+          style: TextStyle(
+            color: textColor,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
   }
 
   List<Widget> _buildLastRowCells2(int? count) {
@@ -685,45 +828,24 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                 200,
               ]
             : [
-                2 * (size.width - 33) / 6,
-                (size.width - 33) / 6,
-                (size.width - 33) / 6,
-                (size.width - 33) / 6,
-                (size.width - 33) / 6,
-                (size.width - 33) / 6,
-                (size.width - 33) / 6,
+                4 * (size.width - 33) / 10,
+                (size.width - 33) / 10,
+                2 * (size.width - 33) / 10,
+                (size.width - 33) / 10,
+                2 * (size.width - 33) / 10,
               ];
 
     return List.generate(count, (col) {
-      // if (row == 0) {
-      //   return Container(
-      //     decoration: BoxDecoration(
-      //       border: Border.all(width: 0.5),
-      //       color: Colors.white,
-      //     ),
-      //     alignment: Alignment.center,
-      //     width: colwidth[col],
-      //     height: 30,
-      //     child: Text(
-      //       colNames[col],
-      //       style: const TextStyle(
-      //         color: Colors.black,
-      //         fontSize: 15,
-      //         fontWeight: FontWeight.w700,
-      //       ),
-      //     ),
-      //   );
-      // }
-
       return Container(
         decoration: BoxDecoration(
           border: Border.all(width: 0.5),
-          color: Colors.white,
+          color: col == 1 ? const Color(0xFFEBBDA9) : Colors.white,
         ),
-        alignment: Alignment.center,
+        alignment: Alignment.centerRight,
         width: colwidth[col],
         height: 30,
-        child: contentTable(col: col, row: row + 1),
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: contentTable(col: col, row: row),
       );
     });
   }
@@ -732,8 +854,8 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
     List<String> colNames = [
       '内容',
       'コード',
-      '数量',
       '単価（税込）',
+      '数量',
       '小計（税込）',
     ];
     Size size = MediaQuery.of(context).size;
@@ -747,20 +869,18 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                 200,
               ]
             : [
-                2 * (size.width - 33) / 6,
-                (size.width - 33) / 6,
-                (size.width - 33) / 6,
-                (size.width - 33) / 6,
-                (size.width - 33) / 6,
-                (size.width - 33) / 6,
-                (size.width - 33) / 6,
+                4 * (size.width - 33) / 10,
+                (size.width - 33) / 10,
+                2 * (size.width - 33) / 10,
+                (size.width - 33) / 10,
+                2 * (size.width - 33) / 10,
               ];
 
     return List.generate(count, (col) {
       return Container(
         decoration: BoxDecoration(
           border: Border.all(width: 0.5),
-          color: Colors.white,
+          color: const Color(0xFFCCCCCC),
         ),
         alignment: Alignment.center,
         width: colwidth[col],
@@ -778,7 +898,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
   }
 
   Widget contentTable({required int col, required int row, String? initial}) {
-    if (TABLE_DATA.isNotEmpty && row <= TABLE_DATA.length) {
+    if (TABLE_DATA.isNotEmpty && row < TABLE_DATA.length) {
       List<String> list = [
         "TUIKA_SYOHIN_NAME",
         "TUIKA_JISYA_CD",
@@ -786,80 +906,44 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         "HANBAI_TANKA",
         "KINGAK",
       ];
-      var item = TABLE_DATA.elementAt(row - 1);
+      var item = TABLE_DATA.elementAt(row);
       String text = '';
       if (item is Map) {
-        text = TABLE_DATA[row - 1][list[col]] ?? '';
+        text = TABLE_DATA[row][list[col]] ?? '';
       }
       if (col == 2 || col == 3 || col == 4) {
         text = text.formatNumber;
       }
       return Text(
         text,
+        textAlign: align(col),
         style: const TextStyle(color: Colors.black),
       );
     }
 
-    // if (NEW_TABLE_DATA.isNotEmpty && row <= NEW_TABLE_DATA.length) {
-    //   List<String> list = [
-    //     "TUIKA_SYOHIN_NAME",
-    //     "TUIKA_JISYA_CD",
-    //     "SURYO",
-    //     "HANBAI_TANKA",
-    //     "KINGAK",
-    //   ];
-    //   var item = NEW_TABLE_DATA.elementAt(row - 1);
-    //   String text = '';
-    //   if (item is Map) {
-    //     text = NEW_TABLE_DATA[row - 1][list[col]] ?? '';
-    //   }
-
-    //   if (col == 1 || col == 2) {
-    //     return TextFormField(
-    //       inputFormatters: [],
-    //       onChanged: (value) {
-    //         onChange(value, row, col);
-    //       },
-    //       initialValue: text,
-    //       minLines: 1,
-    //       maxLines: 1,
-    //       decoration: const InputDecoration(
-    //         contentPadding: EdgeInsets.only(top: 5, bottom: 5),
-    //         isDense: true,
-    //         enabledBorder: UnderlineInputBorder(
-    //           borderSide: BorderSide(color: Colors.black),
-    //         ),
-    //         focusedBorder: UnderlineInputBorder(
-    //           borderSide: BorderSide(color: Colors.black),
-    //         ),
-    //       ),
-    //       cursorColor: Colors.black,
-    //     );
-    //   }
-    //   return Text(
-    //     text,
-    //     style: const TextStyle(color: Colors.black),
-    //   );
-    // }
-
     Map<String, String>? data = NEW_TABLE_DATA[row];
 
     String textValue = initial ?? '';
+    bool canEditUnitPrice = false;
     if (data != null) {
+      canEditUnitPrice = data['CHANGE_FLG'] == '1';
+      dev.log('change_flag = ${data['CHANGE_FLG']}');
       switch (col) {
         case 0:
           textValue = data['TUIKA_SYOHIN_NAME'] ?? '';
+          dev.log('name: $textValue');
           break;
         case 1:
           textValue = data['TUIKA_JISYA_CD'] ?? '';
           break;
         case 2:
-          textValue = data['SURYO'] != null ? data['SURYO']!.formatNumber : '';
-          break;
-        case 3:
           textValue = data['HANBAI_TANKA'] != null
               ? data['HANBAI_TANKA']!.formatNumber
               : '';
+          break;
+        case 3:
+          textValue = data['SURYO'] != null ? data['SURYO']!.formatNumber : '';
+
           break;
         case 4:
           textValue =
@@ -868,51 +952,81 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         default:
           break;
       }
-      if (col == 1) {
-        textValue = data['TUIKA_JISYA_CD'] ?? '';
-      }
-      if (col == 2) {
-        textValue = data['SURYO'] ?? '';
-      }
     }
 
-    if (col == 1 || col == 2) {
+    if (col == 0 || col == 1 || col == 2 || col == 3) {
       TextEditingController? ctrl;
       FocusNode? focusNode;
-      if (col == 1) {
-        ctrl = codeCtrls[row]?.item1;
-        if (ctrl == null) {
-          ctrl = TextEditingController(text: textValue);
-          focusNode = FocusNode();
-          codeCtrls[row] = Tuple2(ctrl, focusNode);
-        }
-      } else {
-        ctrl = quantityCtrls[row]?.item1;
-        if (ctrl == null) {
-          ctrl = TextEditingController(text: textValue);
-          focusNode = FocusNode();
-          quantityCtrls[row] = Tuple2(ctrl, focusNode);
-        }
+      switch (col) {
+        case 0:
+          ctrl = nameCtrls[row]?.item1;
+          if (ctrl == null) {
+            ctrl = TextEditingController(text: textValue);
+            focusNode = FocusNode();
+            nameCtrls[row] = Tuple2(ctrl, focusNode);
+          } else {
+            ctrl.text = textValue;
+            ctrl.selection = TextSelection.fromPosition(
+                TextPosition(offset: textValue.length));
+          }
+          break;
+        case 1:
+          ctrl = codeCtrls[row]?.item1;
+          if (ctrl == null) {
+            ctrl = TextEditingController(text: textValue);
+            focusNode = FocusNode();
+            codeCtrls[row] = Tuple2(ctrl, focusNode);
+          }
+          break;
+        case 2:
+          ctrl = unitPriceCtrls[row]?.item1;
+          if (ctrl == null) {
+            ctrl = TextEditingController(text: textValue);
+            focusNode = FocusNode();
+            unitPriceCtrls[row] = Tuple2(ctrl, focusNode);
+          } else {
+            ctrl.text = textValue;
+            ctrl.selection = TextSelection.fromPosition(
+                TextPosition(offset: textValue.length));
+          }
+          break;
+        case 3:
+          ctrl = quantityCtrls[row]?.item1;
+          if (ctrl == null) {
+            ctrl = TextEditingController(text: textValue);
+            focusNode = FocusNode();
+            quantityCtrls[row] = Tuple2(ctrl, focusNode);
+          } else {
+            ctrl.text = textValue;
+            ctrl.selection = TextSelection.fromPosition(
+                TextPosition(offset: textValue.length));
+          }
+
+          break;
+        default:
       }
 
       return TextFormField(
-        inputFormatters: [
-          // for below version 2 use this
-          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-          // for version 2 and greater youcan also use this
-          FilteringTextInputFormatter.digitsOnly,
-          LengthLimitingTextInputFormatter(col == 1 ? 4 : 100),
-          if (col == 2) NumberInputFormatter(),
-        ],
+        inputFormatters: col == 0
+            ? []
+            : [
+                // for below version 2 use this
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                // for version 2 and greater youcan also use this
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(col == 1 ? 4 : 100),
+                if (col == 2 || col == 3) NumberInputFormatter(),
+              ],
         onChanged: (value) {
           onChange(value, row, col);
         },
+        readOnly: col != 2 ? false : !canEditUnitPrice,
         controller: ctrl,
         focusNode: focusNode,
         keyboardType: TextInputType.number,
         minLines: 1,
         maxLines: 1,
-        textAlign: TextAlign.center,
+        textAlign: align(col),
         decoration: const InputDecoration(
           contentPadding: EdgeInsets.only(top: 5, bottom: 5),
           isDense: true,
@@ -928,8 +1042,26 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
     }
     return Text(
       textValue,
+      textAlign: align(col),
       style: const TextStyle(color: Colors.black),
     );
+  }
+
+  TextAlign align(int col) {
+    switch (col) {
+      case 0:
+        return TextAlign.left;
+      case 1:
+        return TextAlign.center;
+      case 2:
+        return TextAlign.right;
+      case 3:
+        return TextAlign.center;
+      case 4:
+        return TextAlign.right;
+      default:
+        return TextAlign.center;
+    }
   }
 
   Widget sendButton() {
@@ -1077,61 +1209,111 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
 
   void onChange(String value, int row, int col) {
     String jisyaCode = 'KOJ-$value';
-    if (col == 1) {
-      // code
-      var item = KOJI_KAKAKU
-          .firstWhere((element) => (element['JISYA_CD'] as String) == jisyaCode,
-              orElse: () {
-        return null;
-      });
-
-      if (item != null) {
-        Map<String, String>? data = NEW_TABLE_DATA[row];
-        int quantity = 0;
+    switch (col) {
+      case 0:
+        // quantity
+        dev.log('on change $value');
+        Map? data = NEW_TABLE_DATA[row];
         if (data != null) {
-          String quantityStr = data['SURYO'] ?? '';
-          quantity = quantityStr.isNotEmpty ? int.parse(quantityStr) : 0;
+          Map<String, String> newData = {
+            'TUIKA_SYOHIN_NAME': value,
+            'TUIKA_JISYA_CD': data['TUIKA_JISYA_CD'] ?? '',
+            'SURYO': data['SURYO'],
+            'HANBAI_TANKA': data['HANBAI_TANKA'] ?? '',
+            'KINGAK': data['KINGAK'],
+            'CHANGE_FLG': data['CHANGE_FLG'] ?? '0'
+          };
+
+          setDataNew(newData, row, col);
         }
-
-        String unitPriceStr = item['HANBAI_TANKA'] ?? '';
-        int unitPrice = unitPriceStr.isNotEmpty ? int.parse(unitPriceStr) : 0;
-        Map<String, String> newData = {
-          'TUIKA_SYOHIN_NAME': item['SYOHIN_NAME'] ?? '',
-          'TUIKA_JISYA_CD': value,
-          'SURYO': quantity > 0 ? '$quantity' : '',
-          'HANBAI_TANKA': item['HANBAI_TANKA'] ?? '',
-          'KINGAK': (quantity > 0) && (unitPrice) > 0
-              ? '${quantity * unitPrice}'
-              : '',
-        };
-        setDataNew(newData, row, col);
-      } else {
-        setState(() {
-          quantityCtrls[row]?.item1!.text = '';
-          NEW_TABLE_DATA.remove(row);
+        break;
+      case 1:
+        // code
+        var item = KOJI_KAKAKU.firstWhere(
+            (element) => (element['JISYA_CD'] as String) == jisyaCode,
+            orElse: () {
+          return null;
         });
-      }
-    } else {
-      // quantity
-      Map? data = NEW_TABLE_DATA[row];
-      if (data != null) {
-        int quantity =
-            value.isNotEmpty ? int.parse(value.replaceAll(',', '')) : 0;
-        String unitPriceStr = data['HANBAI_TANKA'] ?? '';
-        int unitPrice = unitPriceStr.isNotEmpty ? int.parse(unitPriceStr) : 0;
 
-        Map<String, String> newData = {
-          'TUIKA_SYOHIN_NAME': data['TUIKA_SYOHIN_NAME'] ?? '',
-          'TUIKA_JISYA_CD': data['TUIKA_JISYA_CD'] ?? '',
-          'SURYO': quantity.toString(),
-          'HANBAI_TANKA': data['HANBAI_TANKA'] ?? '',
-          'KINGAK': (quantity > 0) && (unitPrice) > 0
-              ? '${quantity * unitPrice}'
-              : '',
-        };
+        if (item != null) {
+          Map<String, String>? data = NEW_TABLE_DATA[row];
+          setState(() {
+            nameCtrls[row]?.item1!.text = item['SYOHIN_NAME'] ?? '';
+          });
+          int quantity = 0;
+          if (data != null) {
+            String quantityStr = data['SURYO'] ?? '';
+            quantity = quantityStr.isNotEmpty ? int.parse(quantityStr) : 0;
+          }
 
-        setDataNew(newData, row, col);
-      }
+          String unitPriceStr = item['HANBAI_TANKA'] ?? '';
+          int unitPrice = unitPriceStr.isNotEmpty ? int.parse(unitPriceStr) : 0;
+          Map<String, String> newData = {
+            'TUIKA_SYOHIN_NAME': item['SYOHIN_NAME'] ?? '',
+            'TUIKA_JISYA_CD': value,
+            'SURYO': quantity > 0 ? '$quantity' : '',
+            'HANBAI_TANKA': item['HANBAI_TANKA'] ?? '',
+            'KINGAK': (quantity > 0) && (unitPrice) > 0
+                ? '${quantity * unitPrice}'
+                : '',
+            'CHANGE_FLG': item['CHANGE_FLG'] ?? '0'
+          };
+          setDataNew(newData, row, col);
+        } else {
+          setState(() {
+            nameCtrls[row]?.item1!.text = '';
+            quantityCtrls[row]?.item1!.text = '';
+            NEW_TABLE_DATA.remove(row);
+          });
+        }
+        break;
+      case 3:
+        // quantity
+        Map? data = NEW_TABLE_DATA[row];
+        if (data != null) {
+          int quantity =
+              value.isNotEmpty ? int.parse(value.replaceAll(',', '')) : 0;
+          String unitPriceStr = data['HANBAI_TANKA'] ?? '';
+          int unitPrice = unitPriceStr.isNotEmpty ? int.parse(unitPriceStr) : 0;
+
+          Map<String, String> newData = {
+            'TUIKA_SYOHIN_NAME': data['TUIKA_SYOHIN_NAME'] ?? '',
+            'TUIKA_JISYA_CD': data['TUIKA_JISYA_CD'] ?? '',
+            'SURYO': quantity.toString(),
+            'HANBAI_TANKA': data['HANBAI_TANKA'] ?? '',
+            'KINGAK': (quantity > 0) && (unitPrice) > 0
+                ? '${quantity * unitPrice}'
+                : '',
+            'CHANGE_FLG': data['CHANGE_FLG'] ?? '0'
+          };
+
+          setDataNew(newData, row, col);
+        }
+        break;
+      case 2:
+        // unit price
+        Map? data = NEW_TABLE_DATA[row];
+        if (data != null) {
+          int unitPrice =
+              value.isNotEmpty ? int.parse(value.replaceAll(',', '')) : 0;
+          String quantity = data['SURYO'] ?? '';
+          int quantityNumber = quantity.isNotEmpty ? int.parse(quantity) : 0;
+
+          Map<String, String> newData = {
+            'TUIKA_SYOHIN_NAME': data['TUIKA_SYOHIN_NAME'] ?? '',
+            'TUIKA_JISYA_CD': data['TUIKA_JISYA_CD'] ?? '',
+            'SURYO': data['SURYO'] ?? '',
+            'HANBAI_TANKA': unitPrice.toString(),
+            'KINGAK': (quantityNumber > 0) && (unitPrice) > 0
+                ? '${quantityNumber * unitPrice}'
+                : '',
+            'CHANGE_FLG': data['CHANGE_FLG'] ?? '0'
+          };
+
+          setDataNew(newData, row, col);
+        }
+        break;
+      default:
     }
   }
 
