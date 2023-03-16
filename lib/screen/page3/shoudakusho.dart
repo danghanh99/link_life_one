@@ -692,6 +692,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                   log('register signature success');
                   setState(() {
                     registeredSignature = true;
+                    signatureNotRegistedError = false;
                   });
                   CustomToast.show(context,
                       message: "登録出来ました。", backGround: Colors.green);
