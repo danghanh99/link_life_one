@@ -1,15 +1,14 @@
-import 'package:check_points/check_point.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/eigyo_anken/create_eigyo_anken_api/create_eigyo_anken.dart';
 import 'package:link_life_one/components/toast.dart';
-import 'package:link_life_one/screen/page7/memo/page_7_2_4_create.dart';
 
 import '../../../../api/sukejuuru_page_api/eigyo_anken/details_vs_pull_down_eigyo_anken/get_sales_construction_sales_preview_contents.dart';
 import '../../../../components/custom_text_field.dart';
 import '../../../../shared/assets.dart';
+import '../../../../shared/byte_limit_formatter.dart';
 import '../../../../shared/validator.dart';
-import '../../../page6/saibuhachuulist_danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
 class Page723 extends StatefulWidget {
   final DateTime initialDate;
@@ -515,6 +514,9 @@ class _Page723State extends State<Page723> {
                           fillColor: const Color(0xFFF5F6F8),
                           hint: '',
                           type: TextInputType.emailAddress,
+                          inputFormatters: [
+                            ByteLimitInputFormatter(byteLimit: 60)
+                          ],
                           onChanged: (text) {
                             setState(() {
                               okyakuSamaCreateAnkenPage = text;
@@ -555,6 +557,9 @@ class _Page723State extends State<Page723> {
                               fillColor: const Color(0xFFF5F6F8),
                               hint: '',
                               type: TextInputType.emailAddress,
+                              inputFormatters: [
+                                ByteLimitInputFormatter(byteLimit: 60)
+                              ],
                               onChanged: (text) {
                                 setState(() {
                                   sankasha1CreateAnkenPage = text;

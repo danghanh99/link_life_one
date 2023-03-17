@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/eigyo_anken/delete_eigyo_anken.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/eigyo_anken/update_anken_middle/update_anken_middle.dart';
 import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/shared/byte_limit_formatter.dart';
 
 import '../../../../api/sukejuuru_page_api/eigyo_anken/show_eigyo_anken/get_anken_detail.dart';
 import '../../../../components/custom_text_field.dart';
@@ -586,6 +587,9 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                           fillColor: const Color(0xFFF5F6F8),
                           hint: '',
                           type: TextInputType.emailAddress,
+                          inputFormatters: [
+                            ByteLimitInputFormatter(byteLimit: 60)
+                          ],
                           onChanged: (text) {
                             setState(() {
                               okyakuSamaCreateAnkenPage = text;
@@ -627,6 +631,9 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                               fillColor: const Color(0xFFF5F6F8),
                               hint: '',
                               type: TextInputType.emailAddress,
+                              inputFormatters: [
+                                ByteLimitInputFormatter(byteLimit: 60)
+                              ],
                               onChanged: (text) {
                                 setState(() {
                                   sankasha1CreateAnkenPage = text;
