@@ -1,9 +1,10 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/api/KojiPageApi/get_list_pdf.dart';
-import 'package:link_life_one/components/login_widget.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:link_life_one/models/pdf_file.dart';
 import 'package:link_life_one/screen/page3/shashin_kakinin_page.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/screen/page3/shitami_houkoku_page.dart';
@@ -11,11 +12,9 @@ import 'package:link_life_one/screen/page7/component/dialog.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../api/koji/getPhotoConfirm/get_shashin_kakunin.dart';
 import '../../components/custom_header_widget.dart';
-import '../../components/text_line_down.dart';
 import '../../models/koji.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
-import '../menu_page/menu_page.dart';
 import 'koji_houkoku.dart';
 
 class Page31YeuCauBieuMauPage extends StatefulWidget {
@@ -45,7 +44,7 @@ class Page31YeuCauBieuMauPage extends StatefulWidget {
 
 class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
-  List<dynamic> list_pdf = [];
+  List<PdfFile> list_pdf = [];
   List<String> listNames = [
     '入出庫管理',
     '部材管理',
@@ -53,6 +52,8 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
   ];
 
   List<dynamic> listPhotos = [];
+
+  int currentPage = 0;
 
   // String SINGLE_SUMMARIZE = "01";
 
@@ -64,8 +65,14 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
     super.initState();
   }
 
+  void onChangePage(int page) {
+    setState(() {
+      currentPage = page;
+    });
+  }
+
   Future<void> callGetListPdf() async {
-    List<dynamic> list = await GetListPdf().getListPdf(
+    List<PdfFile> list = await GetListPdf().getListPdf(
         koji: widget.koji, SINGLE_SUMMARIZE: widget.single_summarize);
     setState(() {
       list_pdf = list;
@@ -234,101 +241,69 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
             const SizedBox(
               height: 5,
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 10,
-              ),
-              decoration: BoxDecoration(
-                border: Border.all(),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  physics: const ClampingScrollPhysics(),
-                  padding: const EdgeInsets.only(right: 15, left: 15),
-                  itemCount: list_pdf.length,
-                  itemBuilder: (ctx, index) {
-                    final item = list_pdf[index];
-                    return GestureDetector(
-                      onTap: () {
-                        CustomDialog.showCustomDialog(
-                            context: context,
-                            title: '',
-                            body: Container(
-                              // width: size.width * 2 / 3,
-                              // height: size.height * 2 / 3,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black)),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text(''),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Container(
-                                          width: 40,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                              color: Colors.red,
-                                              border: Border.all(
-                                                  color: Colors.red)),
-                                          child: const Icon(
-                                            Icons.close,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    width: size.width.w * 4 / 5,
-                                    height: size.height.h * 4 / 5,
-                                    child: SfPdfViewer.network(
-                                      item['SITAMIIRAISYO_FILEPATH'],
-                                      key: _pdfViewerKey,
-                                      onDocumentLoaded: (details) {},
-                                      onDocumentLoadFailed: (detail) {
-                                        CustomToast.show(context,
-                                            message: "PDFを取得出来ませんでした。");
-                                        // message: detail.description);
-                                      },
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ));
+            Expanded(
+              child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                  ),
+                  child: CarouselSlider.builder(
+                      itemCount: list_pdf.length,
+                      itemBuilder: (ctx, index, realIndex) {
+                        PdfFile file = list_pdf.elementAt(index);
+                        String filePath = file.homonSbt == '01'
+                            ? file.sitamiiraisyoFilePath ?? ''
+                            : file.kojiiraisyoFilePath ?? '';
+                        return filePath.isEmpty
+                            ? const Center(
+                                child: Text(
+                                  'PDFを取得出来ませんでした。',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              )
+                            : SfPdfViewer.network(
+                                file.homonSbt == '01'
+                                    ? file.sitamiiraisyoFilePath ?? ''
+                                    : file.kojiiraisyoFilePath ?? '',
+                                // key: _pdfViewerKey,
+                                onDocumentLoaded: (details) {},
+                                onDocumentLoadFailed: (detail) {
+                                  CustomToast.show(context,
+                                      message: "PDFを取得出来ませんでした。");
+                                  // message: detail.description);
+                                },
+                              );
                       },
-                      child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: const Color.fromARGB(255, 111, 177, 224),
-                            border: Border.all(
-                              color: const Color.fromARGB(255, 111, 177, 224),
-                            ),
-                          ),
-                          child: Text(item != null && item['FILE_NAME'] != null
-                              ? item['FILE_NAME']
-                              : "PDF $index")),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const SizedBox(
-                    height: 5,
+                      options: CarouselOptions(
+                        viewportFraction: 1,
+                        enableInfiniteScroll: false,
+                        onPageChanged: (index, reason) {
+                          onChangePage(index);
+                        },
+                      ))),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Visibility(
+              visible: list_pdf.isNotEmpty,
+              child: Center(
+                child: Text(
+                  "${currentPage + 1}/${list_pdf.length}",
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ),
             ),
             const SizedBox(
-              height: 5,
+              height: 20,
             ),
-            Expanded(child: Container()),
             Row(
               children: [
                 Container(
