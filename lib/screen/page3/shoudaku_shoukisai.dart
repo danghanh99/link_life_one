@@ -317,14 +317,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                                           contentPadding: EdgeInsets.only(
                                               top: 5, bottom: 5),
                                           isDense: true,
-                                          enabledBorder: UnderlineInputBorder(
-                                            borderSide:
-                                                BorderSide(color: Colors.black),
-                                          ),
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide:
-                                                BorderSide(color: Colors.black),
-                                          ),
+                                          border: InputBorder.none,
                                         ),
                                         cursorColor: Colors.black,
                                       ),
@@ -902,8 +895,8 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
       List<String> list = [
         "TUIKA_SYOHIN_NAME",
         "TUIKA_JISYA_CD",
-        "SURYO",
         "HANBAI_TANKA",
+        "SURYO",
         "KINGAK",
       ];
       var item = TABLE_DATA.elementAt(row);
