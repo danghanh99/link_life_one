@@ -128,37 +128,43 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
     }
   }
 
-  void selectBeforeImage() async {
+  void selectBeforeImage(int? index) async {
     final ImagePicker picker = ImagePicker();
     try {
       XFile? file = await picker.pickImage(source: ImageSource.gallery);
       if (file != null) {
-        setState(() {
-          befImage = file;
-        });
+        if (index != null) {
+          setState(() {
+            listKojiHoukoku.elementAt(index)['BEF_SEKO_PHOTO_FILEPATH'] =
+                file.path;
+          });
+        } else {
+          setState(() {
+            befImage = file;
+          });
+        }
       }
     } catch (e) {}
   }
 
-  void selectafterImage() async {
+  void selectafterImage(int? index) async {
     final ImagePicker picker = ImagePicker();
     try {
       XFile? file = await picker.pickImage(source: ImageSource.gallery);
       if (file != null) {
-        setState(() {
-          aftImage = file;
-        });
+        if (index != null) {
+          setState(() {
+            listKojiHoukoku.elementAt(index)['AFT_SEKO_PHOTO_FILEPATH'] =
+                file.path;
+          });
+        } else {
+          setState(() {
+            aftImage = file;
+          });
+        }
       }
     } catch (e) {}
   }
-
-  //  "MAKER_CD": "★弊社★オ",
-  //           "HINBAN": "KOJ-3318",
-  //           "KISETU_MAKER_CD": null,
-  //           "KISETU_HINBAN": null,
-  //           "BEF_SEKO_PHOTO_FILEPATH": "img/honey_spice_at_hyper_japan_summer_2015.jpeg",
-  //           "AFT_SEKO_PHOTO_FILEPATH": "img/honey_spice_at_hyper_japan_summer_2015.jpeg",
-  //           "OTHER_PHOTO_FOLDERPATH": null
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +236,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                         children: [
                           leftSide(),
                           SizedBox(width: 20.sp),
-                          rightSide({}),
+                          rightSide({}, null),
                         ],
                       )
                     : ListView.separated(
@@ -246,7 +252,8 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                             children: [
                               leftSide1Item(index),
                               SizedBox(width: 20.sp),
-                              rightSide(listKojiHoukoku.elementAt(index)),
+                              rightSide(
+                                  listKojiHoukoku.elementAt(index), index),
                             ],
                           );
                         },
@@ -283,13 +290,18 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
     );
   }
 
-  Widget rightSide(Map item) {
+  bool isNetworkPath(String path) {
+    final uri = Uri.parse(path);
+    return uri.scheme.startsWith('http') || uri.scheme.startsWith('ftp');
+  }
+
+  Widget rightSide(Map item, int? index) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GestureDetector(
           onTap: () {
-            selectBeforeImage();
+            selectBeforeImage(index);
           },
           child: Container(
             alignment: Alignment.center,
@@ -310,12 +322,13 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                     height: 20.sp,
                   ),
                   Expanded(
-                      child: befImage != null
-                          ? Image.file(File(befImage!.path))
-                          : item['BEF_SEKO_PHOTO_FILEPATH'] == null ||
-                                  item['BEF_SEKO_PHOTO_FILEPATH'] == ''
-                              ? const SizedBox.shrink()
-                              : Image.network(item['BEF_SEKO_PHOTO_FILEPATH'])),
+                      child: item['BEF_SEKO_PHOTO_FILEPATH'] == null ||
+                              item['BEF_SEKO_PHOTO_FILEPATH'] == ''
+                          ? const SizedBox.shrink()
+                          : isNetworkPath(item['BEF_SEKO_PHOTO_FILEPATH'])
+                              ? Image.network(item['BEF_SEKO_PHOTO_FILEPATH'])
+                              : Image.file(
+                                  File(item['BEF_SEKO_PHOTO_FILEPATH']))),
                   // Flexible(
                   //   child: Text(
                   //     item['BEF_SEKO_PHOTO_FILEPATH'] ?? '',
@@ -334,7 +347,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
           children: [
             GestureDetector(
               onTap: () {
-                selectafterImage();
+                selectafterImage(index);
               },
               child: Container(
                 alignment: Alignment.center,
@@ -356,13 +369,14 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                         height: 20.sp,
                       ),
                       Expanded(
-                          child: aftImage != null
-                              ? Image.file(File(aftImage!.path))
-                              : item['AFT_SEKO_PHOTO_FILEPATH'] == null ||
-                                      item['AFT_SEKO_PHOTO_FILEPATH'] == ''
-                                  ? const SizedBox.shrink()
-                                  : Image.network(
-                                      item['AFT_SEKO_PHOTO_FILEPATH'])),
+                          child: item['AFT_SEKO_PHOTO_FILEPATH'] == null ||
+                                  item['AFT_SEKO_PHOTO_FILEPATH'] == ''
+                              ? const SizedBox.shrink()
+                              : isNetworkPath(item['BEF_SEKO_PHOTO_FILEPATH'])
+                                  ? Image.network(
+                                      item['AFT_SEKO_PHOTO_FILEPATH'])
+                                  : Image.file(
+                                      File(item['AFT_SEKO_PHOTO_FILEPATH']))),
                     ],
                   ),
                 ),
@@ -907,6 +921,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                       JYUCYU_ID: widget.JYUCYU_ID,
                       KOJI_ST: widget.KOJI_ST,
                       initialDate: widget.initialDate,
+                      kojiHoukoku: listKojiHoukoku,
                     ),
                   ),
                 );

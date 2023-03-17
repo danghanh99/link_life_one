@@ -18,13 +18,15 @@ class ShoudakuSho extends StatefulWidget {
   final String SINGLE_SUMMARIZE;
   final String JYUCYU_ID;
   final Function() onSaveSuccess;
+  final List<dynamic> kojiHoukoku;
   const ShoudakuSho(
       {super.key,
       this.initialDate,
       required this.DATA_TABLE,
       required this.SINGLE_SUMMARIZE,
       required this.JYUCYU_ID,
-      required this.onSaveSuccess});
+      required this.onSaveSuccess,
+      required this.kojiHoukoku});
 
   @override
   State<ShoudakuSho> createState() => _ShoudakuShoState();
@@ -637,6 +639,8 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                 CustomToast.show(context,
                                     message: "登録出来ました。",
                                     backGround: Colors.green);
+                                Navigator.of(context).popUntil((route) =>
+                                    route.settings.name == 'KojiichiranPage3');
                               },
                               onFailed: () {
                                 CustomToast.show(

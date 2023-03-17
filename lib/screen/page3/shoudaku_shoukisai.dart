@@ -20,6 +20,7 @@ class ShoudakuShoukisai extends StatefulWidget {
   final String JYUCYU_ID;
   final String KOJI_ST;
   final String SINGLE_SUMMARIZE;
+  final List<dynamic> kojiHoukoku;
 
   const ShoudakuShoukisai({
     super.key,
@@ -27,6 +28,7 @@ class ShoudakuShoukisai extends StatefulWidget {
     required this.JYUCYU_ID,
     required this.SINGLE_SUMMARIZE,
     required this.KOJI_ST,
+    required this.kojiHoukoku
   });
 
   @override
@@ -464,7 +466,9 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         bgColor = const Color(0xFFEBBDA9);
       }
       if (col == 1) {
-        text = widget.JYUCYU_ID.length == 10 ? widget.JYUCYU_ID : widget.JYUCYU_ID.substring(0, 10);
+        text = widget.JYUCYU_ID.length == 10
+            ? widget.JYUCYU_ID
+            : widget.JYUCYU_ID.substring(0, 10);
       }
       if (col == 2) {
         text = "お客様名";
@@ -519,7 +523,9 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                 border: border),
             _buildHeaderItem(
                 flex: 3,
-                title: widget.JYUCYU_ID.length == 10 ? widget.JYUCYU_ID : widget.JYUCYU_ID.substring(0, 10),
+                title: widget.JYUCYU_ID.length == 10
+                    ? widget.JYUCYU_ID
+                    : widget.JYUCYU_ID.substring(0, 10),
                 bgColor: Colors.white,
                 border: border),
             _buildHeaderItem(
@@ -834,7 +840,6 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
           border: Border.all(width: 0.5),
           color: col == 1 ? const Color(0xFFEBBDA9) : Colors.white,
         ),
-        alignment: Alignment.centerRight,
         width: colwidth[col],
         height: 30,
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -907,10 +912,13 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
       if (col == 2 || col == 3 || col == 4) {
         text = text.formatNumber;
       }
-      return Text(
-        text,
-        textAlign: align(col),
-        style: const TextStyle(color: Colors.black),
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 3.0),
+        child: Text(
+          text,
+          textAlign: align(col),
+          style: const TextStyle(color: Colors.black, fontSize: 16),
+        ),
       );
     }
 
@@ -1031,12 +1039,13 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
           ),
         ),
         cursorColor: Colors.black,
+        style: const TextStyle(color: Colors.black, fontSize: 16),
       );
     }
     return Text(
       textValue,
       textAlign: align(col),
-      style: const TextStyle(color: Colors.black),
+      style: const TextStyle(color: Colors.black, fontSize: 16),
     );
   }
 
@@ -1076,6 +1085,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                   onSaveSuccess: () {
                     callGetKojiHoukoku();
                   },
+                  kojiHoukoku: widget.kojiHoukoku,
                 ),
               ),
             );
