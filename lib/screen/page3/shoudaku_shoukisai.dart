@@ -22,14 +22,13 @@ class ShoudakuShoukisai extends StatefulWidget {
   final String SINGLE_SUMMARIZE;
   final List<dynamic> kojiHoukoku;
 
-  const ShoudakuShoukisai({
-    super.key,
-    this.initialDate,
-    required this.JYUCYU_ID,
-    required this.SINGLE_SUMMARIZE,
-    required this.KOJI_ST,
-    required this.kojiHoukoku
-  });
+  const ShoudakuShoukisai(
+      {super.key,
+      this.initialDate,
+      required this.JYUCYU_ID,
+      required this.SINGLE_SUMMARIZE,
+      required this.KOJI_ST,
+      required this.kojiHoukoku});
 
   @override
   State<ShoudakuShoukisai> createState() => _ShoudakuShoukisaiState();
@@ -545,17 +544,25 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         Row(
           children: [
             _buildHeaderItem(
-                flex: 1,
+                flex: 2,
                 title: 'お客様名',
                 textColor: const Color(0xFFDB4158),
                 bgColor: const Color(0xFFEBBDA9),
                 border: border),
             _buildHeaderItem(
-                flex: 7,
+                flex: 17,
                 title: KOJI_DATA["SETSAKI_NAME"] ?? "",
                 bgColor: Colors.white,
-                border: Border.all(color: const Color(0xFFDB4158), width: 2),
+                border: border,
                 alignment: Alignment.centerLeft),
+            _buildHeaderItem(
+                flex: 1,
+                title: '様',
+                textColor: const Color(0xFFDB4158),
+                bgColor: Colors.white,
+                border: Border(
+                    right: borderSide, top: borderSide, bottom: borderSide),
+                alignment: Alignment.centerRight),
           ],
         ),
       ],
