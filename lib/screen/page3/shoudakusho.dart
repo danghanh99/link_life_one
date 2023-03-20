@@ -12,19 +12,23 @@ import 'package:signature/signature.dart';
 import '../../api/shoudakusho/submit_last_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../models/koji_houkoku_model.dart';
+
 class ShoudakuSho extends StatefulWidget {
   final DateTime? initialDate;
   final List<Map<String, dynamic>> DATA_TABLE;
   final String SINGLE_SUMMARIZE;
   final String JYUCYU_ID;
+  final String biko;
   final Function() onSaveSuccess;
-  final List<dynamic> kojiHoukoku;
+  final List<KojiHoukokuModel> kojiHoukoku;
   const ShoudakuSho(
       {super.key,
       this.initialDate,
       required this.DATA_TABLE,
       required this.SINGLE_SUMMARIZE,
       required this.JYUCYU_ID,
+      required this.biko,
       required this.onSaveSuccess,
       required this.kojiHoukoku});
 
@@ -51,8 +55,9 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
 
   bool registeredSignature = false;
   bool checkBoxError = false;
-  bool signatureEmptyError = false;
-  bool signatureNotRegistedError = false;
+  // bool signatureEmptyError = false;
+  // bool signatureNotRegistedError = false;
+  String msgSignature = '';
 
   @override
   void initState() {
@@ -67,6 +72,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
     _controller.addListener(() => log('Value changed'));
     _controller.onDrawStart = onDrawStart;
     _controller.onDrawEnd = onDrawEnd;
+    log(widget.biko);
     super.initState();
   }
 
@@ -78,9 +84,9 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
   }
 
   void onDrawStart() {
-    if (signatureEmptyError) {
+    if (msgSignature.isNotEmpty) {
       setState(() {
-        signatureEmptyError = false;
+        msgSignature = '';
       });
     }
     log('onDrawStart called!');
@@ -516,22 +522,17 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                   ),
                                 ),
                                 Visibility(
-                                    visible: signatureEmptyError ||
-                                        signatureNotRegistedError,
+                                    visible: msgSignature.isNotEmpty,
                                     child: const SizedBox(
                                       height: 10,
                                     )),
                                 Visibility(
-                                    visible: signatureEmptyError ||
-                                        signatureNotRegistedError,
+                                    visible: msgSignature.isNotEmpty,
                                     child: Container(
                                       alignment: Alignment.centerLeft,
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10),
-                                      child: Text(
-                                          signatureEmptyError
-                                              ? '未入力'
-                                              : 'サインが未登録です。',
+                                      child: Text(msgSignature,
                                           style: const TextStyle(
                                               fontSize: 16, color: Colors.red)),
                                     )),
@@ -582,19 +583,19 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
               return;
             }
 
-            if (_controller.isEmpty) {
-              setState(() {
-                signatureEmptyError = true;
-              });
-            }
+            // if (_controller.isEmpty) {
+            //   setState(() {
+            //     signatureEmptyError = true;
+            //   });
+            // }
 
-            if (!registeredSignature) {
-              // CustomToast.show(context, message: 'サインが未登録です。');
-              setState(() {
-                signatureNotRegistedError = true;
-              });
-              return;
-            }
+            // if (!registeredSignature) {
+            //   // CustomToast.show(context, message: 'サインが未登録です。');
+            //   setState(() {
+            //     signatureNotRegistedError = true;
+            //   });
+            //   return;
+            // }
             showDialog(
               context: context,
               builder: (context) {
@@ -633,7 +634,9 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                               CHECK_FLG5: checkedValue5 ? "1" : "0",
                               CHECK_FLG6: checkedValue6 ? "1" : "0",
                               CHECK_FLG7: checkedValue7 ? "1" : "0",
+                              biko: widget.biko,
                               list: widget.DATA_TABLE,
+                              kojiHoukoku: widget.kojiHoukoku,
                               onSuccess: () {
                                 widget.onSaveSuccess();
                                 CustomToast.show(context,
@@ -642,11 +645,15 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                 Navigator.of(context).popUntil((route) =>
                                     route.settings.name == 'KojiichiranPage3');
                               },
-                              onFailed: () {
+                              onFailed: (msg) {
+                                Navigator.pop(context);
                                 CustomToast.show(
                                   context,
-                                  message: "登録できませんでした。。",
+                                  message: "登録できませんでした。",
                                 );
+                                setState(() {
+                                  msgSignature = msg;
+                                });
                               },
                             );
                           },
@@ -733,7 +740,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
           onTap: () async {
             if (_controller.isEmpty) {
               setState(() {
-                signatureEmptyError = true;
+                msgSignature = '未入力';
               });
               return;
             }
@@ -753,7 +760,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                   log('register signature success');
                   setState(() {
                     registeredSignature = true;
-                    signatureNotRegistedError = false;
+                    msgSignature = '';
                   });
                   CustomToast.show(context,
                       message: "登録出来ました。", backGround: Colors.green);

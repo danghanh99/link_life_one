@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:link_life_one/components/text_line_down.dart';
+import 'package:link_life_one/models/koji_houkoku_model.dart';
 import 'package:link_life_one/screen/page3/houjin_kanryousho.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/screen/page3/shoudaku_shoukisai.dart';
@@ -39,7 +41,7 @@ class KojiHoukoku extends StatefulWidget {
 
 class _KojiHoukokuState extends State<KojiHoukoku> {
   List<dynamic> listPullDown = [];
-  List<dynamic> listKojiHoukoku = [];
+  List<KojiHoukokuModel> listKojiHoukoku = [];
   Map<int, int> listStateIndexDropdown = {};
   XFile? imageFile;
   XFile? befImage;
@@ -61,25 +63,18 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
         onSuccess: (res) {
           if (res['DATA'] != null) {
             setState(() {
-              listKojiHoukoku = res['DATA'];
+              List<dynamic> kojiListJson = res['DATA'];
+              listKojiHoukoku = kojiListJson
+                  .map((e) => KojiHoukokuModel.fromJson(e))
+                  .toList();
             });
           }
           if (listKojiHoukoku.isNotEmpty) {
-            Map firstItem = listKojiHoukoku.first;
-            TENPO_CD = firstItem['TENPO_CD'];
+            KojiHoukokuModel firstItem = listKojiHoukoku.first;
+            TENPO_CD = firstItem.tenpoCd;
           } else {
             setState(() {
-              listKojiHoukoku = [
-                {
-                  "MAKER_CD": "",
-                  "HINBAN": "",
-                  "KISETU_MAKER_CD": "",
-                  "KISETU_HINBAN": "",
-                  "BEF_SEKO_PHOTO_FILEPATH": "",
-                  "AFT_SEKO_PHOTO_FILEPATH": "",
-                  "OTHER_PHOTO_FOLDERPATH": ""
-                }
-              ];
+              listKojiHoukoku = [KojiHoukokuModel.empty()];
             });
           }
           if (res["TENPO_CD"] != null) {
@@ -101,17 +96,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
         },
         onFailed: () {
           setState(() {
-            listKojiHoukoku = [
-              {
-                "MAKER_CD": "",
-                "HINBAN": "",
-                "KISETU_MAKER_CD": "",
-                "KISETU_HINBAN": "",
-                "BEF_SEKO_PHOTO_FILEPATH": "",
-                "AFT_SEKO_PHOTO_FILEPATH": "",
-                "OTHER_PHOTO_FOLDERPATH": ""
-              }
-            ];
+            listKojiHoukoku = [KojiHoukokuModel.empty()];
           });
         });
   }
@@ -135,8 +120,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
       if (file != null) {
         if (index != null) {
           setState(() {
-            listKojiHoukoku.elementAt(index)['BEF_SEKO_PHOTO_FILEPATH'] =
-                file.path;
+            listKojiHoukoku.elementAt(index).befSekiPhotoFilePath = file.path;
           });
         } else {
           setState(() {
@@ -154,8 +138,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
       if (file != null) {
         if (index != null) {
           setState(() {
-            listKojiHoukoku.elementAt(index)['AFT_SEKO_PHOTO_FILEPATH'] =
-                file.path;
+            listKojiHoukoku.elementAt(index).aftSekoPhotoFilePath = file.path;
           });
         } else {
           setState(() {
@@ -236,7 +219,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                         children: [
                           leftSide(),
                           SizedBox(width: 20.sp),
-                          rightSide({}, null),
+                          rightSide(null, null),
                         ],
                       )
                     : ListView.separated(
@@ -295,7 +278,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
     return uri.scheme.startsWith('http') || uri.scheme.startsWith('ftp');
   }
 
-  Widget rightSide(Map item, int? index) {
+  Widget rightSide(KojiHoukokuModel? item, int? index) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -322,13 +305,13 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                     height: 20.sp,
                   ),
                   Expanded(
-                      child: item['BEF_SEKO_PHOTO_FILEPATH'] == null ||
-                              item['BEF_SEKO_PHOTO_FILEPATH'] == ''
+                      child: item?.befSekiPhotoFilePath == null ||
+                              item?.befSekiPhotoFilePath == ''
                           ? const SizedBox.shrink()
-                          : isNetworkPath(item['BEF_SEKO_PHOTO_FILEPATH'])
-                              ? Image.network(item['BEF_SEKO_PHOTO_FILEPATH'])
+                          : isNetworkPath(item?.befSekiPhotoFilePath ?? '')
+                              ? Image.network(item?.befSekiPhotoFilePath ?? '')
                               : Image.file(
-                                  File(item['BEF_SEKO_PHOTO_FILEPATH']))),
+                                  File(item?.befSekiPhotoFilePath ?? ''))),
                   // Flexible(
                   //   child: Text(
                   //     item['BEF_SEKO_PHOTO_FILEPATH'] ?? '',
@@ -369,14 +352,14 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                         height: 20.sp,
                       ),
                       Expanded(
-                          child: item['AFT_SEKO_PHOTO_FILEPATH'] == null ||
-                                  item['AFT_SEKO_PHOTO_FILEPATH'] == ''
+                          child: item?.aftSekoPhotoFilePath == null ||
+                                  item?.aftSekoPhotoFilePath == ''
                               ? const SizedBox.shrink()
-                              : isNetworkPath(item['BEF_SEKO_PHOTO_FILEPATH'])
+                              : isNetworkPath(item?.aftSekoPhotoFilePath ?? '')
                                   ? Image.network(
-                                      item['AFT_SEKO_PHOTO_FILEPATH'])
+                                      item?.aftSekoPhotoFilePath ?? '')
                                   : Image.file(
-                                      File(item['AFT_SEKO_PHOTO_FILEPATH']))),
+                                      File(item?.aftSekoPhotoFilePath ?? ''))),
                     ],
                   ),
                 ),
@@ -440,10 +423,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                       width: 200.sp,
                       height: 50.sp,
                       child: textUnderline(
-                        initial: listKojiHoukoku[index]["MAKER_CD"],
+                        initial: listKojiHoukoku[index].makerCd,
                         onChange: (value) {
                           setState(() {
-                            listKojiHoukoku[index]["MAKER_CD"] = value;
+                            listKojiHoukoku[index].makerCd = value;
                           });
                         },
                       ),
@@ -466,10 +449,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                       width: 200.sp,
                       height: 50.sp,
                       child: textUnderline(
-                        initial: listKojiHoukoku[index]["HINBAN"],
+                        initial: listKojiHoukoku[index].hinban,
                         onChange: (value) {
                           setState(() {
-                            listKojiHoukoku[index]["HINBAN"] = value;
+                            listKojiHoukoku[index].hinban = value;
                           });
                         },
                       ),
@@ -502,12 +485,11 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                       width: 200.sp,
                       height: 50.sp,
                       child: textUnderline(
-                        initial: listKojiHoukoku[index]["KISETU_MAKER_CD"],
+                        initial: listKojiHoukoku[index].kisetuMakerCd,
                         onChange: (value) {
-                          if (listKojiHoukoku[index]["KISETU_MAKER_CD"] !=
-                              null) {
+                          if (listKojiHoukoku[index].kisetuMakerCd != null) {
                             setState(() {
-                              listKojiHoukoku[index]["KISETU_MAKER_CD"] = value;
+                              listKojiHoukoku[index].kisetuMakerCd = value;
                             });
                           }
                         },
@@ -531,11 +513,11 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                       width: 200.sp,
                       height: 50.sp,
                       child: textUnderline(
-                        initial: listKojiHoukoku[index]["KISETU_HINBAN"] ?? '',
+                        initial: listKojiHoukoku[index].kisetuHinban ?? '',
                         onChange: (value) {
-                          if (listKojiHoukoku[index]["KISETU_HINBAN"] != null) {
+                          if (listKojiHoukoku[index].kisetuHinban != null) {
                             setState(() {
-                              listKojiHoukoku[index]["KISETU_HINBAN"] = value;
+                              listKojiHoukoku[index].kisetuHinban = value;
                             });
                           }
                         },
@@ -611,10 +593,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                   width: 200.sp,
                   height: 50.sp,
                   child: textUnderline(
-                    initial: listKojiHoukoku[index]["MAKER_CD"],
+                    initial: listKojiHoukoku[index].makerCd,
                     onChange: (value) {
                       setState(() {
-                        listKojiHoukoku[index]["MAKER_CD"] = value;
+                        listKojiHoukoku[index].makerCd = value;
                       });
                     },
                   ),
@@ -637,10 +619,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                   width: 200.sp,
                   height: 50.sp,
                   child: textUnderline(
-                    initial: listKojiHoukoku[index]["HINBAN"],
+                    initial: listKojiHoukoku[index].hinban,
                     onChange: (value) {
                       setState(() {
-                        listKojiHoukoku[index]["HINBAN"] = value;
+                        listKojiHoukoku[index].hinban = value;
                       });
                     },
                   ),
@@ -678,13 +660,12 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                             width: 200.sp,
                             height: 50.sp,
                             child: textUnderline(
-                              initial: listKojiHoukoku[index]
-                                  ["KISETU_MAKER_CD"],
+                              initial: listKojiHoukoku[index].kisetuMakerCd,
                               onChange: (value) {
-                                if (listKojiHoukoku[index]["KISETU_MAKER_CD"] !=
+                                if (listKojiHoukoku[index].kisetuMakerCd !=
                                     null) {
                                   setState(() {
-                                    listKojiHoukoku[index]["KISETU_MAKER_CD"] =
+                                    listKojiHoukoku[index].kisetuMakerCd =
                                         value;
                                   });
                                 }
@@ -710,13 +691,12 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                             height: 50.sp,
                             child: textUnderline(
                               initial:
-                                  listKojiHoukoku[index]["KISETU_HINBAN"] ?? '',
+                                  listKojiHoukoku[index].kisetuHinban ?? '',
                               onChange: (value) {
-                                if (listKojiHoukoku[index]["KISETU_HINBAN"] !=
+                                if (listKojiHoukoku[index].kisetuHinban !=
                                     null) {
                                   setState(() {
-                                    listKojiHoukoku[index]["KISETU_HINBAN"] =
-                                        value;
+                                    listKojiHoukoku[index].kisetuHinban = value;
                                   });
                                 }
                               },
@@ -931,7 +911,11 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => HoujinKanryousho(
-                        JYUCYU_ID: widget.JYUCYU_ID, TENPO_CD: TENPO_CD!),
+                      JYUCYU_ID: widget.JYUCYU_ID,
+                      TENPO_CD: TENPO_CD!,
+                      befImage: befImage,
+                      aftImage: aftImage,
+                    ),
                   ),
                 );
               }

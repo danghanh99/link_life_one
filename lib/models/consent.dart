@@ -1,33 +1,31 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:link_life_one/models/koji_houkoku_model.dart';
+
 class ConsentModel {
   String? singleSummarize;
   String? jyucyuId;
   String? biko;
   String? kensetukeitai;
-  String? befSekoPhotoFilePath;
-  String? aftSekoPhotoFilePath;
-  String? otherSekoPhotoFilePath;
   List<CheckFlagList>? checkFlagList;
   List<TableDetailModel>? tableDetails;
+  List<KojiHoukokuModel>? kojiHoukoku;
 
   ConsentModel(
       {this.singleSummarize,
       this.jyucyuId,
       this.biko,
       this.kensetukeitai,
-      this.befSekoPhotoFilePath,
-      this.aftSekoPhotoFilePath,
-      this.otherSekoPhotoFilePath,
       this.checkFlagList,
-      this.tableDetails});
+      this.tableDetails,
+      this.kojiHoukoku});
 
   ConsentModel.fromJson(Map<String, dynamic> json) {
     singleSummarize = json['SINGLE_SUMMARIZE'];
     jyucyuId = json['JYUCYU_ID'];
     biko = json['BIKO'];
     kensetukeitai = json['KENSETU_KEITAI'];
-    befSekoPhotoFilePath = json['BEF_SEKO_PHOTO_FILEPATH'];
-    aftSekoPhotoFilePath = json['AFT_SEKO_PHOTO_FILEPATH'];
-    otherSekoPhotoFilePath = json['OTHER_PHOTO_FOLDERPATH'];
     if (json['CHECK_FLG'] != null) {
       checkFlagList = [];
       json['CHECK_FLG'].forEach((v) {
@@ -40,6 +38,7 @@ class ConsentModel {
         tableDetails?.add(TableDetailModel.fromJson(v));
       });
     }
+    kojiHoukoku = json['KOJI_HOUKOKU'] ?? [];
   }
 
   Map<String, dynamic> toJson() {
@@ -48,16 +47,38 @@ class ConsentModel {
     data['JYUCYU_ID'] = jyucyuId;
     data['BIKO'] = biko;
     data['KENSETU_KEITAI'] = kensetukeitai;
-    data['BEF_SEKO_PHOTO_FILEPATH'] = befSekoPhotoFilePath;
-    data['AFT_SEKO_PHOTO_FILEPATH'] = aftSekoPhotoFilePath;
-    data['OTHER_PHOTO_FOLDERPATH'] = otherSekoPhotoFilePath;
     if (checkFlagList != null) {
       data['CHECK_FLG'] = checkFlagList?.map((v) => v.toJson()).toList();
     }
     if (tableDetails != null) {
       data['NEW_DETAIL'] = tableDetails?.map((v) => v.toJson()).toList();
     }
+    if (kojiHoukoku != null) {
+      List<Map<String, dynamic>> listKojiHoukoku = [];
+      kojiHoukoku?.forEach((element) {
+        Map<String, dynamic> jsonElement = element.toJson();
+        if (!isNetworkPath(jsonElement['BEF_SEKO_PHOTO_FILEPATH']) && jsonElement['BEF_SEKO_PHOTO_FILEPATH'] != '') {
+          File imageFile = File(jsonElement['BEF_SEKO_PHOTO_FILEPATH']);
+          List<int> imageBytes = imageFile.readAsBytesSync();
+          String base64Image = base64Encode(imageBytes);
+          jsonElement['BEF_SEKO_PHOTO_FILEPATH'] = base64Image;
+        }
+        if (!isNetworkPath(jsonElement['AFT_SEKO_PHOTO_FILEPATH']) && jsonElement['AFT_SEKO_PHOTO_FILEPATH'] != '') {
+          File imageFile = File(jsonElement['AFT_SEKO_PHOTO_FILEPATH']);
+          List<int> imageBytes = imageFile.readAsBytesSync();
+          String base64Image = base64Encode(imageBytes);
+          jsonElement['AFT_SEKO_PHOTO_FILEPATH'] = base64Image;
+        }
+        listKojiHoukoku.add(jsonElement);
+      });
+      data['KOJI_HOUKOKU'] = listKojiHoukoku;
+    }
     return data;
+  }
+
+  bool isNetworkPath(String path) {
+    final uri = Uri.parse(path);
+    return uri.scheme.startsWith('http') || uri.scheme.startsWith('ftp');
   }
 }
 

@@ -5,6 +5,7 @@ import 'package:hive_flutter/adapters.dart';
 
 import '../../constants/constant.dart';
 import '../../models/consent.dart';
+import '../../models/koji_houkoku_model.dart';
 import '../base/rest_api.dart';
 
 class SubmitLastPage {
@@ -22,9 +23,11 @@ class SubmitLastPage {
       required String CHECK_FLG5,
       required String CHECK_FLG6,
       required String CHECK_FLG7,
+      required String biko,
+      required List<KojiHoukokuModel> kojiHoukoku,
       required List<Map<String, dynamic>> list,
       required Function onSuccess,
-      required onFailed}) async {
+      required Function(String) onFailed}) async {
     try {
       List<TableDetailModel> tableList = [];
 
@@ -38,11 +41,8 @@ class SubmitLastPage {
       ConsentModel consentModel = ConsentModel(
           singleSummarize: SINGLE_SUMMARIZE,
           jyucyuId: JYUCYU_ID,
-          biko: '',
+          biko: biko,
           kensetukeitai: '',
-          befSekoPhotoFilePath: '',
-          aftSekoPhotoFilePath: '',
-          otherSekoPhotoFilePath: '',
           checkFlagList: [
             CheckFlagList(
               checkFlag1: CHECK_FLG1,
@@ -54,17 +54,24 @@ class SubmitLastPage {
               checkFlag7: CHECK_FLG7,
             )
           ],
-          tableDetails: tableList);
+          tableDetails: tableList,
+          kojiHoukoku: kojiHoukoku);
       final Response response =
           await RestAPI.shared.postData(url, consentModel.toJson());
 
       if (response.statusCode == 200) {
-        onSuccess.call();
+        dynamic data = response.data;
+        if (data is Map && data['msg'] != null) {
+          String msg = data['msg'].first;
+          onFailed(msg);
+        } else {
+          onSuccess();
+        }
       } else {
-        onFailed.call();
+        onFailed('');
       }
     } catch (e) {
-      onFailed.call();
+      onFailed('');
     }
   }
 

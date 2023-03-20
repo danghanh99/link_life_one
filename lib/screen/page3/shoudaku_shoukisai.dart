@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/components/text_line_down.dart';
+import 'package:link_life_one/models/koji_houkoku_model.dart';
 import 'package:link_life_one/screen/page3/shoudakusho.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 import 'package:link_life_one/shared/number_input_formatter.dart';
@@ -20,7 +21,7 @@ class ShoudakuShoukisai extends StatefulWidget {
   final String JYUCYU_ID;
   final String KOJI_ST;
   final String SINGLE_SUMMARIZE;
-  final List<dynamic> kojiHoukoku;
+  final List<KojiHoukokuModel> kojiHoukoku;
 
   const ShoudakuShoukisai(
       {super.key,
@@ -1088,6 +1089,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                   DATA_TABLE: NEW_TABLE_DATA.values.toList(),
                   JYUCYU_ID: widget.JYUCYU_ID,
                   SINGLE_SUMMARIZE: widget.SINGLE_SUMMARIZE,
+                  biko: remarkCtrl.text,
                   initialDate: widget.initialDate,
                   onSaveSuccess: () {
                     callGetKojiHoukoku();
