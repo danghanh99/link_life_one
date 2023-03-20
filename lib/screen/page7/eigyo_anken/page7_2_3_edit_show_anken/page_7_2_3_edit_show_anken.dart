@@ -652,6 +652,9 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                               fillColor: const Color(0xFFF5F6F8),
                               hint: '',
                               type: TextInputType.emailAddress,
+                              inputFormatters: [
+                                ByteLimitInputFormatter(byteLimit: 60)
+                              ],
                               onChanged: (text) {
                                 setState(() {
                                   sankasha2CreateAnkenPage = text;
@@ -670,6 +673,9 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                               fillColor: const Color(0xFFF5F6F8),
                               hint: '',
                               type: TextInputType.emailAddress,
+                              inputFormatters: [
+                                ByteLimitInputFormatter(byteLimit: 60)
+                              ],
                               onChanged: (text) {
                                 setState(() {
                                   sankasha3CreateAnkenPage = text;

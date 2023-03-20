@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/eigyo_anken/create_eigyo_anken_api/create_eigyo_anken.dart';
@@ -577,6 +576,9 @@ class _Page723State extends State<Page723> {
                               fillColor: const Color(0xFFF5F6F8),
                               hint: '',
                               type: TextInputType.emailAddress,
+                              inputFormatters: [
+                                ByteLimitInputFormatter(byteLimit: 60)
+                              ],
                               onChanged: (text) {
                                 setState(() {
                                   sankasha2CreateAnkenPage = text;
@@ -594,6 +596,9 @@ class _Page723State extends State<Page723> {
                               fillColor: const Color(0xFFF5F6F8),
                               hint: '',
                               type: TextInputType.emailAddress,
+                              inputFormatters: [
+                                ByteLimitInputFormatter(byteLimit: 60)
+                              ],
                               onChanged: (text) {
                                 setState(() {
                                   sankasha3CreateAnkenPage = text;
