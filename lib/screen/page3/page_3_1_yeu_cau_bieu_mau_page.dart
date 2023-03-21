@@ -77,6 +77,10 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
     setState(() {
       list_pdf = list;
     });
+
+    if (list_pdf.length > 1) {
+      showPopup('添付ファイルを確認して下さい。');
+    }
   }
 
   Future<void> callGetShashinKakunin() async {
@@ -86,59 +90,64 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
         onSuccess: (list) {
           listPhotos = list;
           if (list.isNotEmpty) {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return SizedBox(
-                  width: double.infinity,
-                  child: Dialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: SizedBox(
-                      width: 400,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          const Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: Text(
-                              '添付画像があります。確認を行ってください。',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 24, 23, 23),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          const Divider(height: 0),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text(
-                              'OK',
-                              style: TextStyle(
-                                color: Color(0xFF007AFF),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
+            showPopup('添付画像があります。確認を行ってください。');
           }
         },
         onFailed: () {
           CustomToast.show(context, message: "リスト写真を取得出来ませんでした。");
         });
+  }
+
+  void showPopup(String content) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return SizedBox(
+          width: double.infinity,
+          child: Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: SizedBox(
+              width: 400,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      content,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Color.fromARGB(255, 24, 23, 23),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  const Divider(height: 0),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      'OK',
+                      style: TextStyle(
+                        color: Color(0xFF007AFF),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
