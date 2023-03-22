@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -551,7 +550,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                 bgColor: const Color(0xFFEBBDA9),
                 border: border),
             _buildHeaderItem(
-                flex: 17,
+                flex: 13,
                 title: KOJI_DATA["SETSAKI_NAME"] ?? "",
                 bgColor: Colors.white,
                 border: border,
@@ -936,11 +935,9 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
     bool canEditUnitPrice = false;
     if (data != null) {
       canEditUnitPrice = data['CHANGE_FLG'] == '1';
-      dev.log('change_flag = ${data['CHANGE_FLG']}');
       switch (col) {
         case 0:
           textValue = data['TUIKA_SYOHIN_NAME'] ?? '';
-          dev.log('name: $textValue');
           break;
         case 1:
           textValue = data['TUIKA_JISYA_CD'] ?? '';
@@ -1086,9 +1083,11 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
               context,
               MaterialPageRoute(
                 builder: (context) => ShoudakuSho(
-                  DATA_TABLE: NEW_TABLE_DATA.values.toList(),
-                  JYUCYU_ID: widget.JYUCYU_ID,
-                  SINGLE_SUMMARIZE: widget.SINGLE_SUMMARIZE,
+                  kojiData: KOJI_DATA,
+                  tableData: TABLE_DATA,
+                  newTableData: NEW_TABLE_DATA.values.toList(),
+                  jyucyuId: widget.JYUCYU_ID,
+                  singleSummarize: widget.SINGLE_SUMMARIZE,
                   biko: remarkCtrl.text,
                   initialDate: widget.initialDate,
                   onSaveSuccess: () {
@@ -1224,7 +1223,6 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
     switch (col) {
       case 0:
         // quantity
-        dev.log('on change $value');
         Map? data = NEW_TABLE_DATA[row];
         if (data != null) {
           Map<String, String> newData = {

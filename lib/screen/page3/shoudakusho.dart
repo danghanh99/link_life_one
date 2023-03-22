@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/shared/custom_button.dart';
+import 'package:link_life_one/shared/extension.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
 
@@ -16,18 +16,22 @@ import '../../models/koji_houkoku_model.dart';
 
 class ShoudakuSho extends StatefulWidget {
   final DateTime? initialDate;
-  final List<Map<String, dynamic>> DATA_TABLE;
-  final String SINGLE_SUMMARIZE;
-  final String JYUCYU_ID;
+  final Map<String, dynamic> kojiData;
+  final List<dynamic> tableData;
+  final List<Map<String, dynamic>> newTableData;
+  final String singleSummarize;
+  final String jyucyuId;
   final String biko;
   final Function() onSaveSuccess;
   final List<KojiHoukokuModel> kojiHoukoku;
   const ShoudakuSho(
       {super.key,
       this.initialDate,
-      required this.DATA_TABLE,
-      required this.SINGLE_SUMMARIZE,
-      required this.JYUCYU_ID,
+      required this.kojiData,
+      required this.tableData,
+      required this.newTableData,
+      required this.singleSummarize,
+      required this.jyucyuId,
       required this.biko,
       required this.onSaveSuccess,
       required this.kojiHoukoku});
@@ -69,10 +73,9 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
     checkedValue6 = false;
     checkedValue7 = false;
     file = null;
-    _controller.addListener(() => log('Value changed'));
+    _controller.addListener(() => debugPrint('Value changed'));
     _controller.onDrawStart = onDrawStart;
     _controller.onDrawEnd = onDrawEnd;
-    log(widget.biko);
     super.initState();
   }
 
@@ -89,12 +92,9 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
         msgSignature = '';
       });
     }
-    log('onDrawStart called!');
   }
 
-  void onDrawEnd() {
-    log('onDrawEnd called!');
-  }
+  void onDrawEnd() {}
 
   // Future<void> exportSVG(BuildContext context) async {
   //   if (_controller.isEmpty) {
@@ -214,6 +214,16 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                     const SizedBox(
                       height: 10,
                     ),
+                    const Center(
+                      child: Text(
+                        '完了確認書　兼　追加請求明細書',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Container(
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.black)),
@@ -222,6 +232,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            _buildShoudakuShoukisai(),
                             Column(
                               children: [
                                 Container(
@@ -568,6 +579,426 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
     );
   }
 
+  Widget _buildShoudakuShoukisai() {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 10,
+          ),
+          Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text(
+                  '請求明細',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(height: 30.h, child: Row(children: _buildTitle(5))),
+                ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount:
+                      widget.tableData.length + widget.newTableData.length,
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      height: 30.h,
+                      child: Row(
+                        children: _buildCells2(5, index),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                _buildSum(getSum()),
+                const Text(
+                  '担当者情報',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                _buildFooter(),
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  height: 130,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Container(
+                                color: const Color(0xFFCCCCCC),
+                                alignment: Alignment.center,
+                                child: const Text(
+                                  '備考欄',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                              const Divider(
+                                height: 1,
+                                thickness: 1,
+                                color: Colors.black,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Text(
+                                  widget.biko,
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 250,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  widget.kojiData['CO_NAME'] ?? '',
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  postFormat(widget.kojiData['CO_POSTNO']),
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  widget.kojiData['CO_ADDRESS'] ?? '',
+                                  maxLines: 2,
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 120,
+                            height: 120,
+                            child: Visibility(
+                                visible: widget.kojiData['CO_CD'] != null &&
+                                    widget.kojiData['CO_CD'] != '',
+                                child: widget.kojiData['CO_CD'] != null
+                                    ? Image.network(
+                                        widget.kojiData['CO_CD'],
+                                      )
+                                    : const SizedBox.shrink()),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    BorderSide borderSide =
+        const BorderSide(color: Color(0xFFDB4158), width: 2);
+    Border border =
+        Border(left: borderSide, top: borderSide, bottom: borderSide);
+    return Column(
+      children: [
+        Row(
+          children: [
+            _buildHeaderItem(
+                flex: 1,
+                title: '受注ID',
+                textColor: const Color(0xFFDB4158),
+                bgColor: const Color(0xFFEBBDA9),
+                border: border),
+            _buildHeaderItem(
+                flex: 3,
+                title: widget.jyucyuId.length == 10
+                    ? widget.jyucyuId
+                    : widget.jyucyuId.substring(0, 10),
+                bgColor: Colors.white,
+                border: border),
+            _buildHeaderItem(
+                flex: 1,
+                title: 'ご訪問日',
+                textColor: const Color(0xFFDB4158),
+                bgColor: const Color(0xFFEBBDA9),
+                border: border),
+            _buildHeaderItem(
+                flex: 3,
+                title: widget.kojiData["KOJI_YMD"] ?? "",
+                bgColor: Colors.white,
+                border: Border.all(color: const Color(0xFFDB4158), width: 2)),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            _buildHeaderItem(
+                flex: 2,
+                title: 'お客様名',
+                textColor: const Color(0xFFDB4158),
+                bgColor: const Color(0xFFEBBDA9),
+                border: border),
+            _buildHeaderItem(
+                flex: 13,
+                title: widget.kojiData["SETSAKI_NAME"] ?? "",
+                bgColor: Colors.white,
+                border: border,
+                alignment: Alignment.centerLeft),
+            _buildHeaderItem(
+                flex: 1,
+                title: '様',
+                textColor: const Color(0xFFDB4158),
+                bgColor: Colors.white,
+                border: Border(
+                    right: borderSide, top: borderSide, bottom: borderSide),
+                alignment: Alignment.centerRight),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFooter() {
+    BorderSide borderSide =
+        const BorderSide(color: Color(0xFFDB4158), width: 2);
+    Border border =
+        Border(left: borderSide, top: borderSide, bottom: borderSide);
+    return Row(
+      children: [
+        _buildHeaderItem(
+            flex: 3,
+            title: '担当営業所・担当店',
+            textColor: const Color(0xFFDB4158),
+            bgColor: const Color(0xFFEBBDA9),
+            border: border),
+        _buildHeaderItem(
+            flex: 5,
+            title: widget.kojiData["KOJIGYOSYA_NAME"] ?? "",
+            bgColor: Colors.white,
+            border: border),
+        _buildHeaderItem(
+            flex: 2,
+            title: '担当者名',
+            textColor: const Color(0xFFDB4158),
+            bgColor: const Color(0xFFEBBDA9),
+            border: border),
+        _buildHeaderItem(
+            flex: 4,
+            title: [
+              widget.kojiData["HOMON_TANT_NAME1"] ?? "",
+              widget.kojiData["HOMON_TANT_NAME2"] ?? "",
+              widget.kojiData["HOMON_TANT_NAME3"] ?? ""
+            ].where((s) => s != null && s.isNotEmpty).join(', '),
+            bgColor: Colors.white,
+            border: Border.all(color: const Color(0xFFDB4158), width: 2)),
+      ],
+    );
+  }
+
+  Widget _buildSum(int value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        const Text('追加費用合計金額 (税込み)',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(width: 8),
+        Container(
+          width: 200,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          alignment: Alignment.centerRight,
+          decoration:
+              BoxDecoration(border: Border.all(width: 3, color: Colors.black)),
+          child: Text(value.formatNumber),
+        ),
+        const SizedBox(width: 8),
+        const Text(
+          '円',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeaderItem(
+      {int flex = 1,
+      String title = '',
+      Color? textColor,
+      Color bgColor = Colors.white,
+      Border? border,
+      Alignment alignment = Alignment.center}) {
+    return Expanded(
+      flex: flex,
+      child: Container(
+        decoration: BoxDecoration(
+          border: border,
+          color: bgColor,
+        ),
+        alignment: alignment,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        height: 40,
+        child: Text(
+          title,
+          style: TextStyle(
+            color: textColor,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildTitle(int count) {
+    List<String> colNames = [
+      '内容',
+      'コード',
+      '単価（税込）',
+      '数量',
+      '小計（税込）',
+    ];
+    List<int> flexs = [15, 3, 3, 2, 3];
+
+    return List.generate(count, (col) {
+      return Expanded(
+        flex: flexs[col],
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(width: 0.5),
+            color: const Color(0xFFCCCCCC),
+          ),
+          alignment: Alignment.center,
+          height: 30,
+          child: Text(
+            colNames[col],
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      );
+    });
+  }
+
+  List<Widget> _buildCells2(int count, int row) {
+    List<String> colNames = [
+      '内容',
+      'コード',
+      '数量',
+      '単価（税込）',
+      '小計（税込）',
+    ];
+    List<int> flexs = [15, 3, 3, 2, 3];
+
+    return List.generate(count, (col) {
+      return Expanded(
+        flex: flexs[col],
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(width: 0.5),
+            color: col == 1 ? const Color(0xFFEBBDA9) : Colors.white,
+          ),
+          height: 30,
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: contentTable(col: col, row: row),
+        ),
+      );
+    });
+  }
+
+  Widget contentTable({required int col, required int row, String? initial}) {
+    List<String> list = [
+      "TUIKA_SYOHIN_NAME",
+      "TUIKA_JISYA_CD",
+      "HANBAI_TANKA",
+      "SURYO",
+      "KINGAK",
+    ];
+    Map? item;
+    String text = '';
+    if (row < widget.tableData.length) {
+      item = widget.tableData.elementAt(row);
+    } else {
+      item = widget.newTableData.elementAt(row - widget.tableData.length);
+    }
+
+    if (item != null) {
+      text = item[list[col]] ?? '';
+    }
+
+    if (col == 2 || col == 3 || col == 4) {
+      text = text.formatNumber;
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3.0),
+      child: Text(
+        text,
+        textAlign: align(col),
+        style: const TextStyle(color: Colors.black, fontSize: 16),
+      ),
+    );
+  }
+
+  TextAlign align(int col) {
+    switch (col) {
+      case 0:
+        return TextAlign.left;
+      case 1:
+        return TextAlign.center;
+      case 2:
+        return TextAlign.right;
+      case 3:
+        return TextAlign.center;
+      case 4:
+        return TextAlign.right;
+      default:
+        return TextAlign.center;
+    }
+  }
+
   Widget sendButton() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -625,8 +1056,8 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                       TextButton(
                           onPressed: () {
                             SubmitLastPage.shared.submitLastPage(
-                              SINGLE_SUMMARIZE: widget.SINGLE_SUMMARIZE,
-                              JYUCYU_ID: widget.JYUCYU_ID,
+                              SINGLE_SUMMARIZE: widget.singleSummarize,
+                              JYUCYU_ID: widget.jyucyuId,
                               CHECK_FLG1: checkedValue1 ? "1" : "0",
                               CHECK_FLG2: checkedValue2 ? "1" : "0",
                               CHECK_FLG3: checkedValue3 ? "1" : "0",
@@ -635,7 +1066,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                               CHECK_FLG6: checkedValue6 ? "1" : "0",
                               CHECK_FLG7: checkedValue7 ? "1" : "0",
                               biko: widget.biko,
-                              list: widget.DATA_TABLE,
+                              list: widget.newTableData,
                               kojiHoukoku: widget.kojiHoukoku,
                               onSuccess: () {
                                 widget.onSaveSuccess();
@@ -702,6 +1133,29 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
     );
   }
 
+  int getSum() {
+    int result = 0;
+    for (var element in widget.tableData) {
+      if (element['KINGAK'] != null) {
+        result += int.tryParse(element['KINGAK']) ?? 0;
+      }
+    }
+
+    for (var data in widget.newTableData) {
+      if (data['KINGAK'] != null) {
+        result += int.tryParse(data['KINGAK']) ?? 0;
+      }
+    }
+    return result;
+  }
+
+  String postFormat(String? postNo) {
+    if (postNo == null || postNo.isEmpty || postNo.length != 7) {
+      return '';
+    }
+    return '〒${postNo.substring(0, 3)}-${postNo.substring(3, 7)}';
+  }
+
   Future<File> exportFile() async {
     var bytes = await exportImage(context);
     Uint8List imageInUnit8List = bytes!;
@@ -754,10 +1208,9 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
             );
 
             SubmitLastPage.shared.uploadSignImage(
-                jyucyuId: widget.JYUCYU_ID,
+                jyucyuId: widget.jyucyuId,
                 file: file!,
                 onSuccess: () {
-                  log('register signature success');
                   setState(() {
                     registeredSignature = true;
                     msgSignature = '';
