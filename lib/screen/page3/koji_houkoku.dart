@@ -419,11 +419,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                       style: TextStyle(
                           fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
-                    SizedBox(
-                      width: 200.sp,
-                      height: 50.sp,
+                    Expanded(
                       child: textUnderline(
                         initial: listKojiHoukoku[index].makerCd,
+                        enable: false,
                         onChange: (value) {
                           setState(() {
                             listKojiHoukoku[index].makerCd = value;
@@ -445,11 +444,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                       style: TextStyle(
                           fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
-                    SizedBox(
-                      width: 200.sp,
-                      height: 50.sp,
+                    Expanded(
                       child: textUnderline(
                         initial: listKojiHoukoku[index].hinban,
+                        enable: false,
                         onChange: (value) {
                           setState(() {
                             listKojiHoukoku[index].hinban = value;
@@ -481,9 +479,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                       style: TextStyle(
                           fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
-                    SizedBox(
-                      width: 200.sp,
-                      height: 50.sp,
+                    Expanded(
                       child: textUnderline(
                         initial: listKojiHoukoku[index].kisetuMakerCd,
                         onChange: (value) {
@@ -509,9 +505,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                       style: TextStyle(
                           fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
-                    SizedBox(
-                      width: 200.sp,
-                      height: 50.sp,
+                    Expanded(
                       child: textUnderline(
                         initial: listKojiHoukoku[index].kisetuHinban ?? '',
                         onChange: (value) {
@@ -589,11 +583,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                   style:
                       TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
                 ),
-                SizedBox(
-                  width: 200.sp,
-                  height: 50.sp,
+                Expanded(
                   child: textUnderline(
                     initial: listKojiHoukoku[index].makerCd,
+                    enable: false,
                     onChange: (value) {
                       setState(() {
                         listKojiHoukoku[index].makerCd = value;
@@ -615,11 +608,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                   style:
                       TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
                 ),
-                SizedBox(
-                  width: 200.sp,
-                  height: 50.sp,
+                Expanded(
                   child: textUnderline(
                     initial: listKojiHoukoku[index].hinban,
+                    enable: false,
                     onChange: (value) {
                       setState(() {
                         listKojiHoukoku[index].hinban = value;
@@ -656,9 +648,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                             style: TextStyle(
                                 fontSize: 20.sp, fontWeight: FontWeight.w700),
                           ),
-                          SizedBox(
-                            width: 200.sp,
-                            height: 50.sp,
+                          Expanded(
                             child: textUnderline(
                               initial: listKojiHoukoku[index].kisetuMakerCd,
                               onChange: (value) {
@@ -686,9 +676,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                             style: TextStyle(
                                 fontSize: 20.sp, fontWeight: FontWeight.w700),
                           ),
-                          SizedBox(
-                            width: 200.sp,
-                            height: 50.sp,
+                          Expanded(
                             child: textUnderline(
                               initial:
                                   listKojiHoukoku[index].kisetuHinban ?? '',
@@ -941,12 +929,14 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
 
   Widget textUnderline({
     required Function(String) onChange,
+    bool enable = true,
     String? initial,
   }) {
     return TextFormField(
       onChanged: (value) {
         onChange.call(value);
       },
+      enabled: enable,
       style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
       initialValue: initial,
       minLines: 1,
