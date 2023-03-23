@@ -611,8 +611,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                   itemCount:
                       widget.tableData.length + widget.newTableData.length,
                   itemBuilder: (context, index) {
-                    return SizedBox(
-                      height: 30.h,
+                    return IntrinsicHeight(
                       child: Row(
                         children: _buildCells2(5, index),
                       ),
@@ -743,48 +742,48 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
         Row(
           children: [
             _buildHeaderItem(
-                flex: 1,
                 title: '受注ID',
                 textColor: const Color(0xFFDB4158),
                 bgColor: const Color(0xFFEBBDA9),
                 border: border),
+            Expanded(
+              child: _buildHeaderItem(
+                  title: widget.jyucyuId.length == 10
+                      ? widget.jyucyuId
+                      : widget.jyucyuId.substring(0, 10),
+                  bgColor: Colors.white,
+                  border: border),
+            ),
             _buildHeaderItem(
-                flex: 3,
-                title: widget.jyucyuId.length == 10
-                    ? widget.jyucyuId
-                    : widget.jyucyuId.substring(0, 10),
-                bgColor: Colors.white,
-                border: border),
-            _buildHeaderItem(
-                flex: 1,
                 title: 'ご訪問日',
                 textColor: const Color(0xFFDB4158),
                 bgColor: const Color(0xFFEBBDA9),
                 border: border),
-            _buildHeaderItem(
-                flex: 3,
-                title: widget.kojiData["KOJI_YMD"] ?? "",
-                bgColor: Colors.white,
-                border: Border.all(color: const Color(0xFFDB4158), width: 2)),
+            Expanded(
+              child: _buildHeaderItem(
+                  title: widget.kojiData["KOJI_YMD"] ?? "",
+                  bgColor: Colors.white,
+                  border: Border.all(color: const Color(0xFFDB4158), width: 2)),
+            ),
           ],
         ),
         const SizedBox(height: 10),
         Row(
           children: [
             _buildHeaderItem(
-                flex: 2,
                 title: 'お客様名',
                 textColor: const Color(0xFFDB4158),
                 bgColor: const Color(0xFFEBBDA9),
                 border: border),
+            Expanded(
+              child: _buildHeaderItem(
+                  flex: 13,
+                  title: widget.kojiData["SETSAKI_NAME"] ?? "",
+                  bgColor: Colors.white,
+                  border: border,
+                  alignment: Alignment.centerLeft),
+            ),
             _buildHeaderItem(
-                flex: 13,
-                title: widget.kojiData["SETSAKI_NAME"] ?? "",
-                bgColor: Colors.white,
-                border: border,
-                alignment: Alignment.centerLeft),
-            _buildHeaderItem(
-                flex: 1,
                 title: '様',
                 textColor: const Color(0xFFDB4158),
                 bgColor: Colors.white,
@@ -805,31 +804,31 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
     return Row(
       children: [
         _buildHeaderItem(
-            flex: 3,
             title: '担当営業所・担当店',
             textColor: const Color(0xFFDB4158),
             bgColor: const Color(0xFFEBBDA9),
             border: border),
+        Expanded(
+          child: _buildHeaderItem(
+              title: widget.kojiData["KOJIGYOSYA_NAME"] ?? "",
+              bgColor: Colors.white,
+              border: border),
+        ),
         _buildHeaderItem(
-            flex: 5,
-            title: widget.kojiData["KOJIGYOSYA_NAME"] ?? "",
-            bgColor: Colors.white,
-            border: border),
-        _buildHeaderItem(
-            flex: 2,
             title: '担当者名',
             textColor: const Color(0xFFDB4158),
             bgColor: const Color(0xFFEBBDA9),
             border: border),
-        _buildHeaderItem(
-            flex: 4,
-            title: [
-              widget.kojiData["HOMON_TANT_NAME1"] ?? "",
-              widget.kojiData["HOMON_TANT_NAME2"] ?? "",
-              widget.kojiData["HOMON_TANT_NAME3"] ?? ""
-            ].where((s) => s != null && s.isNotEmpty).join(', '),
-            bgColor: Colors.white,
-            border: Border.all(color: const Color(0xFFDB4158), width: 2)),
+        Expanded(
+          child: _buildHeaderItem(
+              title: [
+                widget.kojiData["HOMON_TANT_NAME1"] ?? "",
+                widget.kojiData["HOMON_TANT_NAME2"] ?? "",
+                widget.kojiData["HOMON_TANT_NAME3"] ?? ""
+              ].where((s) => s != null && s.isNotEmpty).join(', '),
+              bgColor: Colors.white,
+              border: Border.all(color: const Color(0xFFDB4158), width: 2)),
+        ),
       ],
     );
   }
@@ -868,23 +867,20 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
       Color bgColor = Colors.white,
       Border? border,
       Alignment alignment = Alignment.center}) {
-    return Expanded(
-      flex: flex,
-      child: Container(
-        decoration: BoxDecoration(
-          border: border,
-          color: bgColor,
-        ),
-        alignment: alignment,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        height: 40,
-        child: Text(
-          title,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        border: border,
+        color: bgColor,
+      ),
+      alignment: alignment,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      height: 40,
+      child: Text(
+        title,
+        style: TextStyle(
+          color: textColor,
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );
@@ -898,7 +894,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
       '数量',
       '小計（税込）',
     ];
-    List<int> flexs = [15, 3, 3, 2, 3];
+    List<int> flexs = [16, 4, 4, 2, 4];
 
     return List.generate(count, (col) {
       return Expanded(
@@ -931,7 +927,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
       '単価（税込）',
       '小計（税込）',
     ];
-    List<int> flexs = [15, 3, 3, 2, 3];
+    List<int> flexs = [16, 4, 4, 2, 4];
 
     return List.generate(count, (col) {
       return Expanded(
@@ -941,8 +937,9 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
             border: Border.all(width: 0.5),
             color: col == 1 ? const Color(0xFFEBBDA9) : Colors.white,
           ),
-          height: 30,
+          // height: 30,
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          alignment: align(col),
           child: contentTable(col: col, row: row),
         ),
       );
@@ -976,26 +973,25 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
       padding: const EdgeInsets.symmetric(horizontal: 3.0),
       child: Text(
         text,
-        textAlign: align(col),
         style: const TextStyle(color: Colors.black, fontSize: 16),
       ),
     );
   }
 
-  TextAlign align(int col) {
+  Alignment align(int col) {
     switch (col) {
       case 0:
-        return TextAlign.left;
+        return Alignment.centerLeft;
       case 1:
-        return TextAlign.center;
+        return Alignment.center;
       case 2:
-        return TextAlign.right;
+        return Alignment.centerRight;
       case 3:
-        return TextAlign.center;
+        return Alignment.center;
       case 4:
-        return TextAlign.right;
+        return Alignment.centerRight;
       default:
-        return TextAlign.center;
+        return Alignment.center;
     }
   }
 

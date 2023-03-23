@@ -35,6 +35,7 @@ class ShoudakuShoukisai extends StatefulWidget {
 }
 
 class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
+  GlobalKey _listKey = GlobalKey();
   dynamic KOJI_DATA = {};
   List<dynamic> TABLE_DATA = [];
   List<dynamic> KOJI_KAKAKU = [];
@@ -74,10 +75,29 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
   }
 
   void _scrollListener() {
+    RenderBox? renderBox =
+        _listKey.currentContext?.findRenderObject() as RenderBox;
+    Offset offset = renderBox.localToGlobal(Offset.zero);
+    double top = offset.dy;
+    double bottom = top + renderBox.size.height;
+    int startIndex = _getItemIndexAtOffset(top);
+    int endIndex = _getItemIndexAtOffset(bottom);
+    print("Visible items from $startIndex to $endIndex");
     setState(() {
-      _firstVisibleItemIndex =
-          (_scrollController.position.pixels / 30.h).floor();
+      _firstVisibleItemIndex = startIndex;
     });
+  }
+
+  int _getItemIndexAtOffset(double offset) {
+    RenderBox? renderBox =
+        _listKey.currentContext?.findRenderObject() as RenderBox;
+    int index = 0;
+    for (double h = 0;
+        h < offset && index < TABLE_DATA.length + NEW_TABLE_DATA.length;
+        index++) {
+      h += renderBox.size.height;
+    }
+    return index - 1;
   }
 
   void resetData() {
@@ -214,57 +234,54 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                         ),
                         SizedBox(
                           height: 400.h,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                    height: 30.h,
-                                    child: Row(children: _buildTitle(5))),
-                                NotificationListener<ScrollNotification>(
-                                  onNotification: (scrollNotification) {
-                                    if (scrollNotification
-                                        is ScrollEndNotification) {
-                                      if (_firstVisibleItemIndex >= 0) {
-                                        _scrollController.scrollToIndex(
-                                            _firstVisibleItemIndex);
-                                      }
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              SizedBox(
+                                  height: 30.h,
+                                  child: Row(children: _buildTitle(5))),
+                              NotificationListener<ScrollNotification>(
+                                onNotification: (scrollNotification) {
+                                  if (scrollNotification
+                                      is ScrollEndNotification) {
+                                    if (_firstVisibleItemIndex >= 0) {
+                                      // _scrollController.scrollToIndex(
+                                      //     _firstVisibleItemIndex);
                                     }
-                                    return true;
-                                  },
-                                  child: SizedBox(
-                                    height: 370.h,
-                                    width: MediaQuery.of(context).orientation ==
-                                            Orientation.portrait
-                                        ? 760
-                                        : MediaQuery.of(context).size.width -
-                                            33,
-                                    child: ListView.builder(
-                                      padding: EdgeInsets.zero,
-                                      controller: _scrollController,
-                                      itemCount: max(
-                                          TABLE_DATA.length +
-                                              NEW_TABLE_DATA.length +
-                                              5,
-                                          20),
-                                      itemBuilder: (context, index) {
-                                        return AutoScrollTag(
-                                          key: ValueKey(index),
-                                          index: index,
-                                          controller: _scrollController,
-                                          child: SizedBox(
-                                            height: 30.h,
-                                            child: Row(
-                                              children: _buildCells2(5, index),
-                                            ),
+                                  }
+                                  return true;
+                                },
+                                child: SizedBox(
+                                  height: 370.h,
+                                  width: MediaQuery.of(context).orientation ==
+                                          Orientation.portrait
+                                      ? 760
+                                      : MediaQuery.of(context).size.width - 33,
+                                  child: ListView.builder(
+                                    key: _listKey,
+                                    padding: EdgeInsets.zero,
+                                    controller: _scrollController,
+                                    itemCount: max(
+                                        TABLE_DATA.length +
+                                            NEW_TABLE_DATA.length +
+                                            5,
+                                        20),
+                                    itemBuilder: (context, index) {
+                                      return AutoScrollTag(
+                                        key: ValueKey(index),
+                                        index: index,
+                                        controller: _scrollController,
+                                        child: IntrinsicHeight(
+                                          child: Row(
+                                            children: _buildCells2(5, index),
                                           ),
-                                        );
-                                      },
-                                    ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                         const SizedBox(
@@ -515,48 +532,47 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         Row(
           children: [
             _buildHeaderItem(
-                flex: 1,
                 title: '受注ID',
                 textColor: const Color(0xFFDB4158),
                 bgColor: const Color(0xFFEBBDA9),
                 border: border),
+            Expanded(
+              child: _buildHeaderItem(
+                  title: widget.JYUCYU_ID.length == 10
+                      ? widget.JYUCYU_ID
+                      : widget.JYUCYU_ID.substring(0, 10),
+                  bgColor: Colors.white,
+                  border: border),
+            ),
             _buildHeaderItem(
-                flex: 3,
-                title: widget.JYUCYU_ID.length == 10
-                    ? widget.JYUCYU_ID
-                    : widget.JYUCYU_ID.substring(0, 10),
-                bgColor: Colors.white,
-                border: border),
-            _buildHeaderItem(
-                flex: 1,
                 title: 'ご訪問日',
                 textColor: const Color(0xFFDB4158),
                 bgColor: const Color(0xFFEBBDA9),
                 border: border),
-            _buildHeaderItem(
-                flex: 3,
-                title: KOJI_DATA["KOJI_YMD"] ?? "",
-                bgColor: Colors.white,
-                border: Border.all(color: const Color(0xFFDB4158), width: 2)),
+            Expanded(
+              child: _buildHeaderItem(
+                  title: KOJI_DATA["KOJI_YMD"] ?? "",
+                  bgColor: Colors.white,
+                  border: Border.all(color: const Color(0xFFDB4158), width: 2)),
+            ),
           ],
         ),
         const SizedBox(height: 10),
         Row(
           children: [
             _buildHeaderItem(
-                flex: 2,
                 title: 'お客様名',
                 textColor: const Color(0xFFDB4158),
                 bgColor: const Color(0xFFEBBDA9),
                 border: border),
+            Expanded(
+              child: _buildHeaderItem(
+                  title: KOJI_DATA["SETSAKI_NAME"] ?? "",
+                  bgColor: Colors.white,
+                  border: border,
+                  alignment: Alignment.centerLeft),
+            ),
             _buildHeaderItem(
-                flex: 13,
-                title: KOJI_DATA["SETSAKI_NAME"] ?? "",
-                bgColor: Colors.white,
-                border: border,
-                alignment: Alignment.centerLeft),
-            _buildHeaderItem(
-                flex: 1,
                 title: '様',
                 textColor: const Color(0xFFDB4158),
                 bgColor: Colors.white,
@@ -577,31 +593,32 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
     return Row(
       children: [
         _buildHeaderItem(
-            flex: 3,
             title: '担当営業所・担当店',
             textColor: const Color(0xFFDB4158),
             bgColor: const Color(0xFFEBBDA9),
             border: border),
+        Expanded(
+          child: _buildHeaderItem(
+              title: KOJI_DATA["KOJIGYOSYA_NAME"] ?? "",
+              bgColor: Colors.white,
+              border: border),
+        ),
         _buildHeaderItem(
-            flex: 5,
-            title: KOJI_DATA["KOJIGYOSYA_NAME"] ?? "",
-            bgColor: Colors.white,
-            border: border),
-        _buildHeaderItem(
-            flex: 2,
             title: '担当者名',
             textColor: const Color(0xFFDB4158),
             bgColor: const Color(0xFFEBBDA9),
             border: border),
-        _buildHeaderItem(
-            flex: 4,
-            title: [
-              KOJI_DATA["HOMON_TANT_NAME1"] ?? "",
-              KOJI_DATA["HOMON_TANT_NAME2"] ?? "",
-              KOJI_DATA["HOMON_TANT_NAME3"] ?? ""
-            ].where((s) => s != null && s.isNotEmpty).join(', '),
-            bgColor: Colors.white,
-            border: Border.all(color: const Color(0xFFDB4158), width: 2)),
+        Expanded(
+          child: _buildHeaderItem(
+              flex: 4,
+              title: [
+                KOJI_DATA["HOMON_TANT_NAME1"] ?? "",
+                KOJI_DATA["HOMON_TANT_NAME2"] ?? "",
+                KOJI_DATA["HOMON_TANT_NAME3"] ?? ""
+              ].where((s) => s != null && s.isNotEmpty).join(', '),
+              bgColor: Colors.white,
+              border: Border.all(color: const Color(0xFFDB4158), width: 2)),
+        ),
       ],
     );
   }
@@ -640,23 +657,20 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
       Color bgColor = Colors.white,
       Border? border,
       Alignment alignment = Alignment.center}) {
-    return Expanded(
-      flex: flex,
-      child: Container(
-        decoration: BoxDecoration(
-          border: border,
-          color: bgColor,
-        ),
-        alignment: alignment,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        height: 40,
-        child: Text(
-          title,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        border: border,
+        color: bgColor,
+      ),
+      alignment: alignment,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      height: 40,
+      child: Text(
+        title,
+        style: TextStyle(
+          color: textColor,
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );
@@ -823,34 +837,22 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
       '単価（税込）',
       '小計（税込）',
     ];
-    Size size = MediaQuery.of(context).size;
-    List<double> colwidth =
-        MediaQuery.of(context).orientation == Orientation.portrait
-            ? [
-                200,
-                130,
-                130,
-                100,
-                200,
-              ]
-            : [
-                4 * (size.width - 33) / 10,
-                (size.width - 33) / 10,
-                2 * (size.width - 33) / 10,
-                (size.width - 33) / 10,
-                2 * (size.width - 33) / 10,
-              ];
+    List<int> flexs = [16, 4, 4, 2, 4];
 
     return List.generate(count, (col) {
-      return Container(
-        decoration: BoxDecoration(
-          border: Border.all(width: 0.5),
-          color: col == 1 ? const Color(0xFFEBBDA9) : Colors.white,
+      return Expanded(
+        flex: flexs[col],
+        child: Container(
+          height: double.infinity,
+          decoration: BoxDecoration(
+            border: Border.all(width: 0.5),
+            color: col == 1 ? const Color(0xFFEBBDA9) : Colors.white,
+          ),
+          // height: 30,
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          alignment: align(col),
+          child: contentTable(col: col, row: row),
         ),
-        width: colwidth[col],
-        height: 30,
-        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-        child: contentTable(col: col, row: row),
       );
     });
   }
@@ -863,39 +865,26 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
       '数量',
       '小計（税込）',
     ];
-    Size size = MediaQuery.of(context).size;
-    List<double> colwidth =
-        MediaQuery.of(context).orientation == Orientation.portrait
-            ? [
-                200,
-                130,
-                130,
-                100,
-                200,
-              ]
-            : [
-                4 * (size.width - 33) / 10,
-                (size.width - 33) / 10,
-                2 * (size.width - 33) / 10,
-                (size.width - 33) / 10,
-                2 * (size.width - 33) / 10,
-              ];
+    List<int> flexs = [16, 4, 4, 2, 4];
 
     return List.generate(count, (col) {
-      return Container(
-        decoration: BoxDecoration(
-          border: Border.all(width: 0.5),
-          color: const Color(0xFFCCCCCC),
-        ),
-        alignment: Alignment.center,
-        width: colwidth[col],
-        height: 30,
-        child: Text(
-          colNames[col],
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
+      return Expanded(
+        flex: flexs[col],
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(width: 0.5),
+            color: const Color(0xFFCCCCCC),
+          ),
+          alignment: Alignment.center,
+          // width: colwidth[col],
+          height: 30,
+          child: Text(
+            colNames[col],
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
       );
@@ -923,7 +912,8 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         padding: const EdgeInsets.symmetric(horizontal: 3.0),
         child: Text(
           text,
-          textAlign: align(col),
+          // textAlign: align(col),
+          softWrap: true,
           style: const TextStyle(color: Colors.black, fontSize: 16),
         ),
       );
@@ -1032,7 +1022,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         keyboardType: TextInputType.number,
         minLines: 1,
         maxLines: 1,
-        textAlign: align(col),
+        textAlign: textAlign(col),
         decoration: const InputDecoration(
           contentPadding: EdgeInsets.only(top: 5, bottom: 5),
           isDense: true,
@@ -1049,12 +1039,30 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
     }
     return Text(
       textValue,
-      textAlign: align(col),
+      // textAlign: align(col),
+      softWrap: true,
       style: const TextStyle(color: Colors.black, fontSize: 16),
     );
   }
 
-  TextAlign align(int col) {
+  Alignment align(int col) {
+    switch (col) {
+      case 0:
+        return Alignment.centerLeft;
+      case 1:
+        return Alignment.center;
+      case 2:
+        return Alignment.centerRight;
+      case 3:
+        return Alignment.center;
+      case 4:
+        return Alignment.centerRight;
+      default:
+        return Alignment.center;
+    }
+  }
+
+  TextAlign textAlign(int col) {
     switch (col) {
       case 0:
         return TextAlign.left;
