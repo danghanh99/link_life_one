@@ -205,282 +205,283 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
             const SizedBox(
               height: 5,
             ),
-            Container(
-              height: 400.h,
-              padding: const EdgeInsets.symmetric(
-                vertical: 10,
-              ),
-              decoration: BoxDecoration(
-                border: Border.all(),
-              ),
-              child: FutureBuilder<List<Koji>>(
-                  future: getListKojiApi,
-                  builder: (context, response) {
-                    if (isLoading == true) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment
-                            .center, //Center Row contents horizontally,
-                        crossAxisAlignment: CrossAxisAlignment
-                            .center, //Center Row contents vertically,
-                        children: const [
-                          SizedBox(
-                            width: 15,
-                            height: 15,
-                            child: CircularProgressIndicator(
-                              color: Colors.grey,
-                              strokeWidth: 3,
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                ),
+                child: FutureBuilder<List<Koji>>(
+                    future: getListKojiApi,
+                    builder: (context, response) {
+                      if (isLoading == true) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment
+                              .center, //Center Row contents horizontally,
+                          crossAxisAlignment: CrossAxisAlignment
+                              .center, //Center Row contents vertically,
+                          children: const [
+                            SizedBox(
+                              width: 15,
+                              height: 15,
+                              child: CircularProgressIndicator(
+                                color: Colors.grey,
+                                strokeWidth: 3,
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "読み込み中です。",
-                            style: TextStyle(
-                              fontSize: 17,
-                              color: Color.fromARGB(255, 118, 114, 114),
+                            SizedBox(
+                              width: 10,
                             ),
+                            Text(
+                              "読み込み中です。",
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: Color.fromARGB(255, 118, 114, 114),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+            
+                      if (listKoji.isEmpty) {
+                        return const Center(
+                            child: Text(
+                          "案件はありません",
+                          style: TextStyle(
+                            fontSize: 17,
+                            color: Color.fromARGB(255, 118, 114, 114),
                           ),
-                        ],
-                      );
-                    }
-
-                    if (listKoji.isEmpty) {
-                      return const Center(
-                          child: Text(
-                        "案件はありません",
-                        style: TextStyle(
-                          fontSize: 17,
-                          color: Color.fromARGB(255, 118, 114, 114),
-                        ),
-                      ));
-                    }
-
-                    return ListView.separated(
-                      shrinkWrap: true,
-                      physics: const ClampingScrollPhysics(),
-                      padding: const EdgeInsets.only(right: 15, left: 15),
-                      itemCount: listKoji.length,
-                      itemBuilder: (ctx, index) {
-                        final item = listKoji[index];
-                        bool isShitami = item.homonSbt == '01';
-                        return GestureDetector(
-                          onTap: () {
-                            ShowPopUp().isShowPopup(
-                              YMD: date,
-                              SETSAKI_ADDRESS: item.setsakiAddress,
-                              JYUCYU_ID: item.jyucyuId,
-                              onSuccess: (count) {
-                                if (count > 0) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return CupertinoAlertDialog(
-                                        title: const Text(
-                                          "同一のお客様がいます完了確認書を1枚にまとめますか？",
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        content: const Padding(
-                                          padding: EdgeInsets.only(top: 15),
-                                          child: Text(
-                                            "いいえの場合、それぞれの完了書にサインをもらってください。",
+                        ));
+                      }
+            
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        physics: const ClampingScrollPhysics(),
+                        padding: const EdgeInsets.only(right: 15, left: 15),
+                        itemCount: listKoji.length,
+                        itemBuilder: (ctx, index) {
+                          final item = listKoji[index];
+                          bool isShitami = item.homonSbt == '01';
+                          return GestureDetector(
+                            onTap: () {
+                              ShowPopUp().isShowPopup(
+                                YMD: date,
+                                SETSAKI_ADDRESS: item.setsakiAddress,
+                                JYUCYU_ID: item.jyucyuId,
+                                onSuccess: (count) {
+                                  if (count > 0) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return CupertinoAlertDialog(
+                                          title: const Text(
+                                            "同一のお客様がいます完了確認書を1枚にまとめますか？",
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 16,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
-                                        ),
-                                        actions: <Widget>[
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                width: 90,
-                                                child: TextButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: const Text(
-                                                      '戻る',
-                                                      style: TextStyle(
-                                                        color:
-                                                            Color(0xFFEB5757),
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                    )),
+                                          content: const Padding(
+                                            padding: EdgeInsets.only(top: 15),
+                                            child: Text(
+                                              "いいえの場合、それぞれの完了書にサインをもらってください。",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
                                               ),
-                                              Container(
-                                                width: 90,
-                                                decoration: const BoxDecoration(
-                                                  border: Border(
-                                                    left: BorderSide(
-                                                      //                   <--- left side
-                                                      color: Colors.grey,
-                                                      width: 1.5,
-                                                    ),
-                                                    right: BorderSide(
-                                                      //                    <--- top side
-                                                      color: Colors.grey,
-                                                      width: 1.5,
-                                                    ),
-                                                  ),
-                                                ),
-                                                child: TextButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(
-                                                          context); //close Dialog
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                Page31YeuCauBieuMauPage(
-                                                                  isShitami:
-                                                                      isShitami,
-                                                                  initialDate:
-                                                                      date,
-                                                                  koji: item,
-                                                                  isSendAList:
-                                                                      true,
-                                                                  single_summarize:
-                                                                      '01',
-                                                                  JYUCYU_ID: item
-                                                                      .jyucyuId,
-                                                                  KOJI_ST: item
-                                                                      .kojiSt,
-                                                                ),
-                                                            settings:
-                                                                const RouteSettings(
-                                                                    name:
-                                                                        'Page31YeuCauBieuMauPage')),
-                                                      );
-                                                    },
-                                                    child: const Text(
-                                                      'いいえ',
-                                                      style: TextStyle(
-                                                        color:
-                                                            Color(0xFFEB5757),
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                    )),
-                                              ),
-                                              SizedBox(
-                                                width: 90,
-                                                child: TextButton(
-                                                  onPressed: () {
-                                                    RequestPostCount()
-                                                        .requestPostCount(
-                                                            koji: item,
-                                                            date: date,
-                                                            onSuccess: () {
-                                                              Navigator.pop(
-                                                                  context); //close Dialog
-                                                              Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
-                                                                            Page31YeuCauBieuMauPage(
-                                                                              isShitami: isShitami,
-                                                                              initialDate: date,
-                                                                              koji: item,
-                                                                              isSendAList: true,
-                                                                              single_summarize: '02',
-                                                                              JYUCYU_ID: item.jyucyuId,
-                                                                              KOJI_ST: item.kojiSt,
-                                                                            ),
-                                                                    settings:
-                                                                        const RouteSettings(
-                                                                            name:
-                                                                                'Page31YeuCauBieuMauPage')),
-                                                              );
-                                                            });
-                                                  },
-                                                  child: const Text(
-                                                    'はい',
-                                                    style: TextStyle(
-                                                      color: Color(0xFF007AFF),
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                } else {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            Page31YeuCauBieuMauPage(
-                                              single_summarize: '01',
-                                              JYUCYU_ID: item.jyucyuId,
-                                              isShitami: isShitami,
-                                              initialDate: date,
-                                              koji: item,
-                                              isSendAList: true,
-                                              KOJI_ST: item.kojiSt,
                                             ),
-                                        settings: const RouteSettings(
-                                            name: 'Page31YeuCauBieuMauPage')),
-                                  );
-                                }
-                              },
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: showMauXanh(item.kojiSt)
-                                  ? const Color(0xffc5d8f1)
-                                  : const Color(0xfffce9d9),
-                              border: Border.all(
+                                          ),
+                                          actions: <Widget>[
+                                            Row(
+                                              children: [
+                                                SizedBox(
+                                                  width: 90,
+                                                  child: TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: const Text(
+                                                        '戻る',
+                                                        style: TextStyle(
+                                                          color:
+                                                              Color(0xFFEB5757),
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      )),
+                                                ),
+                                                Container(
+                                                  width: 90,
+                                                  decoration: const BoxDecoration(
+                                                    border: Border(
+                                                      left: BorderSide(
+                                                        //                   <--- left side
+                                                        color: Colors.grey,
+                                                        width: 1.5,
+                                                      ),
+                                                      right: BorderSide(
+                                                        //                    <--- top side
+                                                        color: Colors.grey,
+                                                        width: 1.5,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  child: TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(
+                                                            context); //close Dialog
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  Page31YeuCauBieuMauPage(
+                                                                    isShitami:
+                                                                        isShitami,
+                                                                    initialDate:
+                                                                        date,
+                                                                    koji: item,
+                                                                    isSendAList:
+                                                                        true,
+                                                                    single_summarize:
+                                                                        '01',
+                                                                    JYUCYU_ID: item
+                                                                        .jyucyuId,
+                                                                    KOJI_ST: item
+                                                                        .kojiSt,
+                                                                  ),
+                                                              settings:
+                                                                  const RouteSettings(
+                                                                      name:
+                                                                          'Page31YeuCauBieuMauPage')),
+                                                        );
+                                                      },
+                                                      child: const Text(
+                                                        'いいえ',
+                                                        style: TextStyle(
+                                                          color:
+                                                              Color(0xFFEB5757),
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      )),
+                                                ),
+                                                SizedBox(
+                                                  width: 90,
+                                                  child: TextButton(
+                                                    onPressed: () {
+                                                      RequestPostCount()
+                                                          .requestPostCount(
+                                                              koji: item,
+                                                              date: date,
+                                                              onSuccess: () {
+                                                                Navigator.pop(
+                                                                    context); //close Dialog
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              Page31YeuCauBieuMauPage(
+                                                                                isShitami: isShitami,
+                                                                                initialDate: date,
+                                                                                koji: item,
+                                                                                isSendAList: true,
+                                                                                single_summarize: '02',
+                                                                                JYUCYU_ID: item.jyucyuId,
+                                                                                KOJI_ST: item.kojiSt,
+                                                                              ),
+                                                                      settings:
+                                                                          const RouteSettings(
+                                                                              name:
+                                                                                  'Page31YeuCauBieuMauPage')),
+                                                                );
+                                                              });
+                                                    },
+                                                    child: const Text(
+                                                      'はい',
+                                                      style: TextStyle(
+                                                        color: Color(0xFF007AFF),
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              Page31YeuCauBieuMauPage(
+                                                single_summarize: '01',
+                                                JYUCYU_ID: item.jyucyuId,
+                                                isShitami: isShitami,
+                                                initialDate: date,
+                                                koji: item,
+                                                isSendAList: true,
+                                                KOJI_ST: item.kojiSt,
+                                              ),
+                                          settings: const RouteSettings(
+                                              name: 'Page31YeuCauBieuMauPage')),
+                                    );
+                                  }
+                                },
+                              );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
                                 color: showMauXanh(item.kojiSt)
                                     ? const Color(0xffc5d8f1)
                                     : const Color(0xfffce9d9),
+                                border: Border.all(
+                                  color: showMauXanh(item.kojiSt)
+                                      ? const Color(0xffc5d8f1)
+                                      : const Color(0xfffce9d9),
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "訪問時間：${isShitami ? item.sitamiHomonJikan : item.kojiHomonJikan} - ${isShitami ? item.sitamiHomonJikanEnd : item.kojiHomonJikanEnd}   報告： ${item.kojiSt == '03' ? '済' : '未'}",
+                                    ),
+                                    isShitami
+                                        ? Text(
+                                            '受注ID： ${item.jyucyuId.length == 10 ? item.jyucyuId : item.jyucyuId.substring(0, 10)}　人数：${item.shitamiJinin}人　目安作業時間：${item.shitamiJikan ?? ''}(m)')
+                                        : Text(
+                                            '受注ID： ${item.jyucyuId.length == 10 ? item.jyucyuId : item.jyucyuId.substring(0, 10)}　人数：${item.kojiJinin}人　目安作業時間：${item.kojiJikan ?? ''}(m)'),
+                                    Text('工事アイテム： ${item.kojiItem}'),
+                                    Text('住所： ${item.setsakiAddress}'),
+                                    Text('氏名： ${item.setsakiName}'),
+                                  ],
+                                ),
                               ),
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "訪問時間：${isShitami ? item.sitamiHomonJikan : item.kojiHomonJikan} - ${isShitami ? item.sitamiHomonJikanEnd : item.kojiHomonJikanEnd}   報告： ${item.kojiSt == '03' ? '済' : '未'}",
-                                  ),
-                                  isShitami
-                                      ? Text(
-                                          '受注ID： ${item.jyucyuId.length == 10 ? item.jyucyuId : item.jyucyuId.substring(0, 10)}　人数：${item.shitamiJinin}人　目安作業時間：${item.shitamiJikan ?? ''}(m)')
-                                      : Text(
-                                          '受注ID： ${item.jyucyuId.length == 10 ? item.jyucyuId : item.jyucyuId.substring(0, 10)}　人数：${item.kojiJinin}人　目安作業時間：${item.kojiJikan ?? ''}(m)'),
-                                  Text('工事アイテム： ${item.kojiItem}'),
-                                  Text('住所： ${item.setsakiAddress}'),
-                                  Text('氏名： ${item.setsakiName}'),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const SizedBox(
-                        height: 5,
-                      ),
-                    );
-                  }),
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const SizedBox(
+                          height: 5,
+                        ),
+                      );
+                    }),
+              ),
             ),
             const SizedBox(
               height: 5,
@@ -504,7 +505,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
             //     ),
             //   ),
             // ),
-            Expanded(child: Container()),
+            const SizedBox(height: 10),
             Form(
               key: _formKey,
               child: Container(
