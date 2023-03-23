@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -87,8 +87,15 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
 
           if (pulldownList.isNotEmpty) {
             for (var i = 0; i < listKojiHoukoku.length; i++) {
-              listStateIndexDropdown[i] = 0;
+            KojiHoukokuModel koji = listKojiHoukoku[i];
+            for (var j = 0; j < pulldownList.length; j++) {
+              Map<String, dynamic> pulldownItem = pulldownList[j];
+              if (koji.kensetuKeitai == pulldownItem['KBNMSAI_CD']) {
+                listStateIndexDropdown[i] = j;
+              }
             }
+            
+          }
             setState(() {
               listPullDown = pulldownList;
             });
@@ -562,6 +569,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
     return Expanded(
       // height:
       //     widget.KOJI_ST == "3" || widget.KOJI_ST == "03" ? 400.h.sp : 240.h.sp,
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -650,12 +658,12 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                           ),
                           Expanded(
                             child: textUnderline(
-                              initial: listKojiHoukoku[index].kisetuMakerCd,
+                              initial: listKojiHoukoku[index].kisetuMaker,
                               onChange: (value) {
-                                if (listKojiHoukoku[index].kisetuMakerCd !=
+                                if (listKojiHoukoku[index].kisetuMaker !=
                                     null) {
                                   setState(() {
-                                    listKojiHoukoku[index].kisetuMakerCd =
+                                    listKojiHoukoku[index].kisetuMaker =
                                         value;
                                   });
                                 }
