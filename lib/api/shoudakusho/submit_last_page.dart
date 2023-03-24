@@ -38,8 +38,11 @@ class SubmitLastPage {
       }
 
       String url = "${Constant.url}Request/Koji/requestConsent.php";
+      final box = await Hive.openBox<String>('user');
+      String loginID = box.values.last;
       ConsentModel consentModel = ConsentModel(
           singleSummarize: SINGLE_SUMMARIZE,
+          loginId: loginID,
           jyucyuId: JYUCYU_ID,
           biko: biko,
           kensetukeitai: '',

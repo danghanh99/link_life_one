@@ -5,6 +5,7 @@ import 'package:link_life_one/models/koji_houkoku_model.dart';
 
 class ConsentModel {
   String? singleSummarize;
+  String? loginId;
   String? jyucyuId;
   String? biko;
   String? kensetukeitai;
@@ -14,6 +15,7 @@ class ConsentModel {
 
   ConsentModel(
       {this.singleSummarize,
+      this.loginId,
       this.jyucyuId,
       this.biko,
       this.kensetukeitai,
@@ -23,6 +25,7 @@ class ConsentModel {
 
   ConsentModel.fromJson(Map<String, dynamic> json) {
     singleSummarize = json['SINGLE_SUMMARIZE'];
+    loginId = json['LOGIN_ID'];
     jyucyuId = json['JYUCYU_ID'];
     biko = json['BIKO'];
     kensetukeitai = json['KENSETU_KEITAI'];
@@ -44,6 +47,7 @@ class ConsentModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['SINGLE_SUMMARIZE'] = singleSummarize;
+    data['LOGIN_ID'] = loginId;
     data['JYUCYU_ID'] = jyucyuId;
     data['BIKO'] = biko;
     data['KENSETU_KEITAI'] = kensetukeitai;

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../constants/constant.dart';
 
@@ -19,11 +20,14 @@ class CreateRiyuu {
     required Function(String? errorMessage) onFailed,
   }) async {
     try {
+      final box = await Hive.openBox<String>('user');
+      String loginID = box.values.last;
       var dio = Dio();
       String url = _getUrl(SHITAMI_MENU);
       FormData formData = FormData.fromMap(
         await _getData(
           JYUCYU_ID: JYUCYU_ID,
+          loginId: loginID,
           SHITAMI_MENU: SHITAMI_MENU,
           FILE_PATH_LIST: FILE_PATH_LIST,
           MTMORI_YMD: MTMORI_YMD,
@@ -65,6 +69,7 @@ class CreateRiyuu {
 
   Future<Map<String, dynamic>> _getData(
       {required String JYUCYU_ID,
+      required String loginId,
       required String SHITAMI_MENU,
       required List<String> FILE_PATH_LIST,
       String? MTMORI_YMD,
@@ -88,12 +93,14 @@ class CreateRiyuu {
     switch (SHITAMI_MENU) {
       case '1':
         return {
+          'LOGIN_ID': loginId,
           'FILE_IMAGE_LIST[]': files,
-          'JYUCYU_ID': '0301447771',
+          'JYUCYU_ID': JYUCYU_ID,
           'SHITAMI_MENU': '1',
         };
       case '2':
         return {
+          'LOGIN_ID': loginId,
           'FILE_IMAGE_LIST[]': files,
           'JYUCYU_ID': JYUCYU_ID,
           'SHITAMI_MENU': SHITAMI_MENU,
@@ -102,6 +109,7 @@ class CreateRiyuu {
         };
       case '3':
         return {
+          'LOGIN_ID': loginId,
           'FILE_IMAGE_LIST[]': files,
           'JYUCYU_ID': JYUCYU_ID,
           'SHITAMI_MENU': SHITAMI_MENU,
@@ -109,12 +117,14 @@ class CreateRiyuu {
         };
       case '4':
         return {
+          'LOGIN_ID': loginId,
           'FILE_IMAGE_LIST[]': files,
           'JYUCYU_ID': JYUCYU_ID,
           'SHITAMI_MENU': SHITAMI_MENU,
         };
       default:
         return {
+          'LOGIN_ID': loginId,
           'FILE_IMAGE_LIST[]': files,
           'JYUCYU_ID': JYUCYU_ID,
           'SHITAMI_MENU': SHITAMI_MENU,
