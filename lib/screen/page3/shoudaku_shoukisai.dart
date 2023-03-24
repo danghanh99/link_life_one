@@ -300,97 +300,99 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black)),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Container(
-                                      color: const Color(0xFFCCCCCC),
-                                      alignment: Alignment.center,
-                                      child: const Text(
-                                        '備考欄',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                    ),
-                                    const Divider(
-                                      height: 1,
-                                      thickness: 1,
-                                      color: Colors.black,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: TextFormField(
-                                        controller: remarkCtrl,
-                                        maxLines: 3,
-                                        decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.only(
-                                              top: 5, bottom: 5),
-                                          isDense: true,
-                                          border: InputBorder.none,
-                                        ),
-                                        cursorColor: Colors.black,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 20),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 250,
+                        IntrinsicHeight(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black)),
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.stretch,
                                     children: [
-                                      Text(
-                                        KOJI_DATA['CO_NAME'] ?? '',
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600),
+                                      Container(
+                                        color: const Color(0xFFCCCCCC),
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          '備考欄',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700),
+                                        ),
                                       ),
-                                      Text(
-                                        postFormat(KOJI_DATA['CO_POSTNO']),
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600),
+                                      const Divider(
+                                        height: 1,
+                                        thickness: 1,
+                                        color: Colors.black,
                                       ),
-                                      Text(
-                                        KOJI_DATA['CO_ADDRESS'] ?? '',
-                                        maxLines: 2,
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600),
-                                        overflow: TextOverflow.ellipsis,
+                                      Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: TextFormField(
+                                          controller: remarkCtrl,
+                                          maxLines: 3,
+                                          decoration: const InputDecoration(
+                                            contentPadding: EdgeInsets.only(
+                                                top: 5, bottom: 5),
+                                            isDense: true,
+                                            border: InputBorder.none,
+                                          ),
+                                          cursorColor: Colors.black,
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 120,
-                                  height: 120,
-                                  child: Visibility(
-                                      visible: KOJI_DATA['CO_CD'] != null &&
-                                          KOJI_DATA['CO_CD'] != '',
-                                      child: KOJI_DATA['CO_CD'] != null
-                                          ? Image.network(
-                                              KOJI_DATA['CO_CD'],
-                                            )
-                                          : const SizedBox.shrink()),
-                                )
-                              ],
-                            ),
-                          ],
+                              ),
+                              const SizedBox(width: 20),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: 250,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          KOJI_DATA['CO_NAME'] ?? '',
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        Text(
+                                          postFormat(KOJI_DATA['CO_POSTNO']),
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        Text(
+                                          KOJI_DATA['CO_ADDRESS'] ?? '',
+                                          maxLines: 2,
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 120,
+                                    height: 120,
+                                    child: Visibility(
+                                        visible: KOJI_DATA['CO_CD'] != null &&
+                                            KOJI_DATA['CO_CD'] != '',
+                                        child: KOJI_DATA['CO_CD'] != null
+                                            ? Image.network(
+                                                KOJI_DATA['CO_CD'],
+                                              )
+                                            : const SizedBox.shrink()),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -529,57 +531,61 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         Border(left: borderSide, top: borderSide, bottom: borderSide);
     return Column(
       children: [
-        Row(
-          children: [
-            _buildHeaderItem(
-                title: '受注ID',
-                textColor: const Color(0xFFDB4158),
-                bgColor: const Color(0xFFEBBDA9),
-                border: border),
-            Expanded(
-              child: _buildHeaderItem(
-                  title: widget.JYUCYU_ID.length == 10
-                      ? widget.JYUCYU_ID
-                      : widget.JYUCYU_ID.substring(0, 10),
-                  bgColor: Colors.white,
+        IntrinsicHeight(
+          child: Row(
+            children: [
+              _buildHeaderItem(
+                  title: '受注ID',
+                  textColor: const Color(0xFFDB4158),
+                  bgColor: const Color(0xFFEBBDA9),
                   border: border),
-            ),
-            _buildHeaderItem(
-                title: 'ご訪問日',
-                textColor: const Color(0xFFDB4158),
-                bgColor: const Color(0xFFEBBDA9),
-                border: border),
-            Expanded(
-              child: _buildHeaderItem(
-                  title: KOJI_DATA["KOJI_YMD"] ?? "",
-                  bgColor: Colors.white,
-                  border: Border.all(color: const Color(0xFFDB4158), width: 2)),
-            ),
-          ],
+              Expanded(
+                child: _buildHeaderItem(
+                    title: widget.JYUCYU_ID.length == 10
+                        ? widget.JYUCYU_ID
+                        : widget.JYUCYU_ID.substring(0, 10),
+                    bgColor: Colors.white,
+                    border: border),
+              ),
+              _buildHeaderItem(
+                  title: 'ご訪問日',
+                  textColor: const Color(0xFFDB4158),
+                  bgColor: const Color(0xFFEBBDA9),
+                  border: border),
+              Expanded(
+                child: _buildHeaderItem(
+                    title: KOJI_DATA["KOJI_YMD"] ?? "",
+                    bgColor: Colors.white,
+                    border: Border.all(color: const Color(0xFFDB4158), width: 2)),
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 10),
-        Row(
-          children: [
-            _buildHeaderItem(
-                title: 'お客様名',
-                textColor: const Color(0xFFDB4158),
-                bgColor: const Color(0xFFEBBDA9),
-                border: border),
-            Expanded(
-              child: _buildHeaderItem(
-                  title: KOJI_DATA["SETSAKI_NAME"] ?? "",
+        IntrinsicHeight(
+          child: Row(
+            children: [
+              _buildHeaderItem(
+                  title: 'お客様名',
+                  textColor: const Color(0xFFDB4158),
+                  bgColor: const Color(0xFFEBBDA9),
+                  border: border),
+              Expanded(
+                child: _buildHeaderItem(
+                    title: KOJI_DATA["SETSAKI_NAME"] ?? "",
+                    bgColor: Colors.white,
+                    border: border,
+                    alignment: Alignment.centerLeft),
+              ),
+              _buildHeaderItem(
+                  title: '様',
+                  textColor: const Color(0xFFDB4158),
                   bgColor: Colors.white,
-                  border: border,
-                  alignment: Alignment.centerLeft),
-            ),
-            _buildHeaderItem(
-                title: '様',
-                textColor: const Color(0xFFDB4158),
-                bgColor: Colors.white,
-                border: Border(
-                    right: borderSide, top: borderSide, bottom: borderSide),
-                alignment: Alignment.centerRight),
-          ],
+                  border: Border(
+                      right: borderSide, top: borderSide, bottom: borderSide),
+                  alignment: Alignment.centerRight),
+            ],
+          ),
         ),
       ],
     );
@@ -590,36 +596,38 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         const BorderSide(color: Color(0xFFDB4158), width: 2);
     Border border =
         Border(left: borderSide, top: borderSide, bottom: borderSide);
-    return Row(
-      children: [
-        _buildHeaderItem(
-            title: '担当営業所・担当店',
-            textColor: const Color(0xFFDB4158),
-            bgColor: const Color(0xFFEBBDA9),
-            border: border),
-        Expanded(
-          child: _buildHeaderItem(
-              title: KOJI_DATA["KOJIGYOSYA_NAME"] ?? "",
-              bgColor: Colors.white,
+    return IntrinsicHeight(
+      child: Row(
+        children: [
+          _buildHeaderItem(
+              title: '担当営業所・担当店',
+              textColor: const Color(0xFFDB4158),
+              bgColor: const Color(0xFFEBBDA9),
               border: border),
-        ),
-        _buildHeaderItem(
-            title: '担当者名',
-            textColor: const Color(0xFFDB4158),
-            bgColor: const Color(0xFFEBBDA9),
-            border: border),
-        Expanded(
-          child: _buildHeaderItem(
-              flex: 4,
-              title: [
-                KOJI_DATA["HOMON_TANT_NAME1"] ?? "",
-                KOJI_DATA["HOMON_TANT_NAME2"] ?? "",
-                KOJI_DATA["HOMON_TANT_NAME3"] ?? ""
-              ].where((s) => s != null && s.isNotEmpty).join(', '),
-              bgColor: Colors.white,
-              border: Border.all(color: const Color(0xFFDB4158), width: 2)),
-        ),
-      ],
+          Expanded(
+            child: _buildHeaderItem(
+                title: KOJI_DATA["KOJIGYOSYA_NAME"] ?? '',
+                bgColor: Colors.white,
+                border: border),
+          ),
+          _buildHeaderItem(
+              title: '担当者名',
+              textColor: const Color(0xFFDB4158),
+              bgColor: const Color(0xFFEBBDA9),
+              border: border),
+          Expanded(
+            child: _buildHeaderItem(
+                flex: 4,
+                title: [
+                  KOJI_DATA["HOMON_TANT_NAME1"] ?? "",
+                  KOJI_DATA["HOMON_TANT_NAME2"] ?? "",
+                  KOJI_DATA["HOMON_TANT_NAME3"] ?? ""
+                ].where((s) => s != null && s.isNotEmpty).join(', '),
+                bgColor: Colors.white,
+                border: Border.all(color: const Color(0xFFDB4158), width: 2)),
+          ),
+        ],
+      ),
     );
   }
 
@@ -664,13 +672,14 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
       ),
       alignment: alignment,
       padding: const EdgeInsets.symmetric(horizontal: 12),
-      height: 40,
-      child: Text(
-        title,
-        style: TextStyle(
-          color: textColor,
-          fontSize: 18,
-          fontWeight: FontWeight.w700,
+      child: Flexible(
+        child: Text(
+          title,
+          style: TextStyle(
+            color: textColor,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
     );
@@ -1021,7 +1030,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         focusNode: focusNode,
         keyboardType: TextInputType.number,
         minLines: 1,
-        maxLines: 1,
+        maxLines: 100,
         textAlign: textAlign(col),
         decoration: const InputDecoration(
           contentPadding: EdgeInsets.only(top: 5, bottom: 5),

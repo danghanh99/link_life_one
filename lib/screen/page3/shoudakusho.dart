@@ -633,8 +633,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                 const SizedBox(
                   height: 10,
                 ),
-                SizedBox(
-                  height: 130,
+                IntrinsicHeight(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -739,58 +738,63 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
         Border(left: borderSide, top: borderSide, bottom: borderSide);
     return Column(
       children: [
-        Row(
-          children: [
-            _buildHeaderItem(
-                title: '受注ID',
-                textColor: const Color(0xFFDB4158),
-                bgColor: const Color(0xFFEBBDA9),
-                border: border),
-            Expanded(
-              child: _buildHeaderItem(
-                  title: widget.jyucyuId.length == 10
-                      ? widget.jyucyuId
-                      : widget.jyucyuId.substring(0, 10),
-                  bgColor: Colors.white,
+        IntrinsicHeight(
+          child: Row(
+            children: [
+              _buildHeaderItem(
+                  title: '受注ID',
+                  textColor: const Color(0xFFDB4158),
+                  bgColor: const Color(0xFFEBBDA9),
                   border: border),
-            ),
-            _buildHeaderItem(
-                title: 'ご訪問日',
-                textColor: const Color(0xFFDB4158),
-                bgColor: const Color(0xFFEBBDA9),
-                border: border),
-            Expanded(
-              child: _buildHeaderItem(
-                  title: widget.kojiData["KOJI_YMD"] ?? "",
-                  bgColor: Colors.white,
-                  border: Border.all(color: const Color(0xFFDB4158), width: 2)),
-            ),
-          ],
+              Expanded(
+                child: _buildHeaderItem(
+                    title: widget.jyucyuId.length == 10
+                        ? widget.jyucyuId
+                        : widget.jyucyuId.substring(0, 10),
+                    bgColor: Colors.white,
+                    border: border),
+              ),
+              _buildHeaderItem(
+                  title: 'ご訪問日',
+                  textColor: const Color(0xFFDB4158),
+                  bgColor: const Color(0xFFEBBDA9),
+                  border: border),
+              Expanded(
+                child: _buildHeaderItem(
+                    title: widget.kojiData["KOJI_YMD"] ?? "",
+                    bgColor: Colors.white,
+                    border:
+                        Border.all(color: const Color(0xFFDB4158), width: 2)),
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 10),
-        Row(
-          children: [
-            _buildHeaderItem(
-                title: 'お客様名',
-                textColor: const Color(0xFFDB4158),
-                bgColor: const Color(0xFFEBBDA9),
-                border: border),
-            Expanded(
-              child: _buildHeaderItem(
-                  flex: 13,
-                  title: widget.kojiData["SETSAKI_NAME"] ?? "",
+        IntrinsicHeight(
+          child: Row(
+            children: [
+              _buildHeaderItem(
+                  title: 'お客様名',
+                  textColor: const Color(0xFFDB4158),
+                  bgColor: const Color(0xFFEBBDA9),
+                  border: border),
+              Expanded(
+                child: _buildHeaderItem(
+                    flex: 13,
+                    title: widget.kojiData["SETSAKI_NAME"] ?? "",
+                    bgColor: Colors.white,
+                    border: border,
+                    alignment: Alignment.centerLeft),
+              ),
+              _buildHeaderItem(
+                  title: '様',
+                  textColor: const Color(0xFFDB4158),
                   bgColor: Colors.white,
-                  border: border,
-                  alignment: Alignment.centerLeft),
-            ),
-            _buildHeaderItem(
-                title: '様',
-                textColor: const Color(0xFFDB4158),
-                bgColor: Colors.white,
-                border: Border(
-                    right: borderSide, top: borderSide, bottom: borderSide),
-                alignment: Alignment.centerRight),
-          ],
+                  border: Border(
+                      right: borderSide, top: borderSide, bottom: borderSide),
+                  alignment: Alignment.centerRight),
+            ],
+          ),
         ),
       ],
     );
@@ -801,35 +805,37 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
         const BorderSide(color: Color(0xFFDB4158), width: 2);
     Border border =
         Border(left: borderSide, top: borderSide, bottom: borderSide);
-    return Row(
-      children: [
-        _buildHeaderItem(
-            title: '担当営業所・担当店',
-            textColor: const Color(0xFFDB4158),
-            bgColor: const Color(0xFFEBBDA9),
-            border: border),
-        Expanded(
-          child: _buildHeaderItem(
-              title: widget.kojiData["KOJIGYOSYA_NAME"] ?? "",
-              bgColor: Colors.white,
+    return IntrinsicHeight(
+      child: Row(
+        children: [
+          _buildHeaderItem(
+              title: '担当営業所・担当店',
+              textColor: const Color(0xFFDB4158),
+              bgColor: const Color(0xFFEBBDA9),
               border: border),
-        ),
-        _buildHeaderItem(
-            title: '担当者名',
-            textColor: const Color(0xFFDB4158),
-            bgColor: const Color(0xFFEBBDA9),
-            border: border),
-        Expanded(
-          child: _buildHeaderItem(
-              title: [
-                widget.kojiData["HOMON_TANT_NAME1"] ?? "",
-                widget.kojiData["HOMON_TANT_NAME2"] ?? "",
-                widget.kojiData["HOMON_TANT_NAME3"] ?? ""
-              ].where((s) => s != null && s.isNotEmpty).join(', '),
-              bgColor: Colors.white,
-              border: Border.all(color: const Color(0xFFDB4158), width: 2)),
-        ),
-      ],
+          Expanded(
+            child: _buildHeaderItem(
+                title: widget.kojiData["KOJIGYOSYA_NAME"] ?? '',
+                bgColor: Colors.white,
+                border: border),
+          ),
+          _buildHeaderItem(
+              title: '担当者名',
+              textColor: const Color(0xFFDB4158),
+              bgColor: const Color(0xFFEBBDA9),
+              border: border),
+          Expanded(
+            child: _buildHeaderItem(
+                title: [
+                  widget.kojiData["HOMON_TANT_NAME1"] ?? "",
+                  widget.kojiData["HOMON_TANT_NAME2"] ?? "",
+                  widget.kojiData["HOMON_TANT_NAME3"] ?? ""
+                ].where((s) => s != null && s.isNotEmpty).join(', '),
+                bgColor: Colors.white,
+                border: Border.all(color: const Color(0xFFDB4158), width: 2)),
+          ),
+        ],
+      ),
     );
   }
 
@@ -874,13 +880,14 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
       ),
       alignment: alignment,
       padding: const EdgeInsets.symmetric(horizontal: 12),
-      height: 40,
-      child: Text(
-        title,
-        style: TextStyle(
-          color: textColor,
-          fontSize: 18,
-          fontWeight: FontWeight.w700,
+      child: Flexible(
+        child: Text(
+          title,
+          style: TextStyle(
+            color: textColor,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
     );
