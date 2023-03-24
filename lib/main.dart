@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:link_life_one/models/user.dart';
+import 'package:link_life_one/shared/cache_notifier.dart';
+import 'package:provider/provider.dart';
 import 'screen/login_page.dart';
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
@@ -13,7 +15,10 @@ void main() async {
 
   Hive.initFlutter();
   Hive.registerAdapter(UserAdapter());
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (_) => EditCache(),
+      child: const MyApp(),
+    ),);
 }
 
 class MyApp extends StatelessWidget {

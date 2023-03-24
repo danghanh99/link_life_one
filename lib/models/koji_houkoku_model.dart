@@ -112,4 +112,27 @@ class KojiHoukokuModel {
     data['TENPO_CD'] = tenpoCd;
     return data;
   }
+
+  bool get isEmpty {
+    return jyucyuMsaiId == '' &&
+        jyucyuMsaiIdKikan == '' &&
+        hinban == '' &&
+        makerCd == '' &&
+        ctgoryCd == '' &&
+        suryo == '' &&
+        kingak == '' &&
+        kisetuHinban == '' &&
+        kisetuMaker == '' &&
+        kisetuMakerCd == '' &&
+        kensetuKeitai == '' &&
+        befSekiPhotoFilePath == '' &&
+        aftSekoPhotoFilePath == '' &&
+        otherPhotoFolderPath == '' &&
+        tuikaJisyaCd == '' &&
+        tuikaSyohinName == '' &&
+        kojijiTuikaFlg == '' &&
+        kojiSt == '' &&
+        hojinFlg == '' &&
+        tenpoCd == '';
+  }
 }

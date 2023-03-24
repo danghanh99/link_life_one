@@ -909,8 +909,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                     builder: (context) => HoujinKanryousho(
                       JYUCYU_ID: widget.JYUCYU_ID,
                       TENPO_CD: TENPO_CD!,
-                      befImage: befImage,
-                      aftImage: aftImage,
+                      kojiHoukoku: listKojiHoukoku,
                     ),
                   ),
                 );

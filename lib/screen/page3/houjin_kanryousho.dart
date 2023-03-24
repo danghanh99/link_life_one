@@ -10,13 +10,14 @@ import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../models/koji_houkoku_model.dart';
+
 class HoujinKanryousho extends StatefulWidget {
   final String JYUCYU_ID;
   final String TENPO_CD;
-  final XFile? befImage;
-  final XFile? aftImage;
+  final List<KojiHoukokuModel> kojiHoukoku;
   const HoujinKanryousho(
-      {super.key, required this.JYUCYU_ID, required this.TENPO_CD, this.befImage, this.aftImage});
+      {super.key, required this.JYUCYU_ID, required this.TENPO_CD, required this.kojiHoukoku});
 
   @override
   State<HoujinKanryousho> createState() => _HoujinKanryoushoState();
@@ -305,8 +306,7 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
           onTap: () {
             RequestCorporateCompletion().requestCorporateCompletion(
                 JYUCYU_ID: widget.JYUCYU_ID,
-                befImagePath: widget.befImage?.path,
-                aftImagePath: widget.aftImage?.path,
+                kojiHoukokuList: widget.kojiHoukoku,
                 filePathList: listImage
                     .where((element) => element.runtimeType == XFile)
                     .toList()

@@ -55,7 +55,10 @@ class ConsentModel {
     }
     if (kojiHoukoku != null) {
       List<Map<String, dynamic>> listKojiHoukoku = [];
-      kojiHoukoku?.forEach((element) {
+      for (var element in kojiHoukoku!) {
+         if (element.isEmpty) {
+          continue;
+        }
         Map<String, dynamic> jsonElement = element.toJson();
         if (!isNetworkPath(jsonElement['BEF_SEKO_PHOTO_FILEPATH']) && jsonElement['BEF_SEKO_PHOTO_FILEPATH'] != '') {
           File imageFile = File(jsonElement['BEF_SEKO_PHOTO_FILEPATH']);
@@ -70,7 +73,7 @@ class ConsentModel {
           jsonElement['AFT_SEKO_PHOTO_FILEPATH'] = base64Image;
         }
         listKojiHoukoku.add(jsonElement);
-      });
+      }
       data['KOJI_HOUKOKU'] = listKojiHoukoku;
     }
     return data;
