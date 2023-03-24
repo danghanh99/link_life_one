@@ -70,21 +70,23 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
   Future<void> callGetListPdf() async {
     List<PdfFile> list = await GetListPdf().getListPdf(
         koji: widget.koji, SINGLE_SUMMARIZE: widget.single_summarize);
-        List<String> listURL = [];
-        list.forEach((element) {
-          String kojiiraisyoFilePath = element.kojiiraisyoFilePath ?? '';
-          String sitamiiraisyoFilePath = element.sitamiiraisyoFilePath ?? '';
-          String filePath = element.filePath ?? '';
-          if (kojiiraisyoFilePath.isNotEmpty && kojiiraisyoFilePath.endsWith('.pdf')) {
-            listURL.add(kojiiraisyoFilePath);
-          }
-          if (sitamiiraisyoFilePath.isNotEmpty && sitamiiraisyoFilePath.endsWith('.pdf')) {
-            listURL.add(sitamiiraisyoFilePath);
-          }
-          if (filePath.isNotEmpty && filePath.endsWith('.pdf')) {
-            listURL.add(filePath);
-          }
-        });
+    List<String> listURL = [];
+    list.forEach((element) {
+      String kojiiraisyoFilePath = element.kojiiraisyoFilePath ?? '';
+      String sitamiiraisyoFilePath = element.sitamiiraisyoFilePath ?? '';
+      String filePath = element.filePath ?? '';
+      if (kojiiraisyoFilePath.isNotEmpty &&
+          kojiiraisyoFilePath.endsWith('.pdf')) {
+        listURL.add(kojiiraisyoFilePath);
+      }
+      if (sitamiiraisyoFilePath.isNotEmpty &&
+          sitamiiraisyoFilePath.endsWith('.pdf')) {
+        listURL.add(sitamiiraisyoFilePath);
+      }
+      if (filePath.isNotEmpty && filePath.endsWith('.pdf')) {
+        listURL.add(filePath);
+      }
+    });
     setState(() {
       list_pdf = list;
       listPdfURL = listURL;
@@ -263,42 +265,47 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
               height: 5,
             ),
             Expanded(
-              child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                  ),
-                  child: CarouselSlider.builder(
-                      itemCount: listPdfURL.length,
-                      itemBuilder: (ctx, index, realIndex) {
-                       String filePath = listPdfURL.elementAt(index);
-                        return filePath.isEmpty
-                            ? const Center(
-                                child: Text(
-                                  'PDFを取得出来ませんでした。',
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                              )
-                            : SfPdfViewer.network(
-                                filePath,
-                                onDocumentLoaded: (details) {},
-                                onDocumentLoadFailed: (detail) {
-                                  CustomToast.show(context,
-                                      message: "PDFを取得出来ませんでした。");
-                                  // message: detail.description);
-                                },
-                              );
-                      },
-                      options: CarouselOptions(
-                        viewportFraction: 1,
-                        enableInfiniteScroll: false,
-                        onPageChanged: (index, reason) {
-                          onChangePage(index);
+              child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                return Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                    ),
+                    child: CarouselSlider.builder(
+                        itemCount: listPdfURL.length,
+                        itemBuilder: (ctx, index, realIndex) {
+                          String filePath = listPdfURL.elementAt(index);
+                          return filePath.isEmpty
+                              ? const Center(
+                                  child: Text(
+                                    'PDFを取得出来ませんでした。',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                )
+                              : SfPdfViewer.network(
+                                  filePath,
+                                  onDocumentLoaded: (details) {},
+                                  onDocumentLoadFailed: (detail) {
+                                    CustomToast.show(context,
+                                        message: "PDFを取得出来ませんでした。");
+                                    // message: detail.description);
+                                  },
+                                );
                         },
-                      ))),
+                        options: CarouselOptions(
+                          viewportFraction: 1,
+                          aspectRatio:
+                              constraints.maxWidth / constraints.maxHeight,
+                          enableInfiniteScroll: false,
+                          onPageChanged: (index, reason) {
+                            onChangePage(index);
+                          },
+                        )));
+              }),
             ),
             const SizedBox(
               height: 10,
