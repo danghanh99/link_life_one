@@ -672,14 +672,12 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
       ),
       alignment: alignment,
       padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Flexible(
-        child: Text(
-          title,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
+      child: Text(
+        title,
+        style: TextStyle(
+          color: textColor,
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );
