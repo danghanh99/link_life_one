@@ -65,7 +65,7 @@ class CreateMemo {
   }) async {
     try {
       String url =
-          "${Constant.url}Request/Schedule/requestGetMemoRegistration.php?TAN_CAL_ID=1234567789";
+          "${Constant.url}Request/Schedule/requestGetMemoRegistration.php?TAN_CAL_ID=$TAN_CAL_ID";
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
