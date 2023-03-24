@@ -44,7 +44,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
   final SignatureController _controller = SignatureController(
     penStrokeWidth: 4,
     penColor: Colors.blue,
-    exportBackgroundColor: Colors.blue,
+    exportBackgroundColor: Colors.white,
     exportPenColor: Colors.black,
   );
 
