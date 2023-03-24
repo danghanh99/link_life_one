@@ -12,6 +12,7 @@ class PdfFile {
   String? fileName;
   String? kojiiraisyoFilePath;
   String? sitamiiraisyoFilePath;
+  String? filePath;
   String? jyucyuId;
   String? homonSbt;
   String? kojiSt;
@@ -21,6 +22,7 @@ class PdfFile {
       {this.fileName,
       this.kojiiraisyoFilePath,
       this.sitamiiraisyoFilePath,
+      this.filePath,
       this.jyucyuId,
       this.homonSbt,
       this.kojiSt,
@@ -31,6 +33,7 @@ class PdfFile {
       fileName: json['FILE_NAME'] ?? '',
       kojiiraisyoFilePath: json['KOJIIRAISYO_FILEPATH'] ?? '',
       sitamiiraisyoFilePath: json['SITAMIIRAISYO_FILEPATH'] ?? '',
+      filePath: json['FILEPATH'] ?? '',
       jyucyuId: json['JYUCYU_ID'] ?? '',
       homonSbt: json['HOMON_SBT'] ?? '',
       kojiSt: json['KOJI_ST'] ?? '',

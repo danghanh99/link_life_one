@@ -45,11 +45,7 @@ class Page31YeuCauBieuMauPage extends StatefulWidget {
 class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   List<PdfFile> list_pdf = [];
-  List<String> listNames = [
-    '入出庫管理',
-    '部材管理',
-    '出納帳',
-  ];
+  List<String> listPdfURL = [];
 
   List<dynamic> listPhotos = [];
 
@@ -74,11 +70,27 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
   Future<void> callGetListPdf() async {
     List<PdfFile> list = await GetListPdf().getListPdf(
         koji: widget.koji, SINGLE_SUMMARIZE: widget.single_summarize);
+        List<String> listURL = [];
+        list.forEach((element) {
+          String kojiiraisyoFilePath = element.kojiiraisyoFilePath ?? '';
+          String sitamiiraisyoFilePath = element.sitamiiraisyoFilePath ?? '';
+          String filePath = element.filePath ?? '';
+          if (kojiiraisyoFilePath.isNotEmpty && kojiiraisyoFilePath.endsWith('.pdf')) {
+            listURL.add(kojiiraisyoFilePath);
+          }
+          if (sitamiiraisyoFilePath.isNotEmpty && sitamiiraisyoFilePath.endsWith('.pdf')) {
+            listURL.add(sitamiiraisyoFilePath);
+          }
+          if (filePath.isNotEmpty && filePath.endsWith('.pdf')) {
+            listURL.add(filePath);
+          }
+        });
     setState(() {
       list_pdf = list;
+      listPdfURL = listURL;
     });
 
-    if (list_pdf.length > 1) {
+    if (listPdfURL.length > 1) {
       showPopup('添付ファイルを確認して下さい。');
     }
   }
@@ -260,12 +272,9 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                     border: Border.all(),
                   ),
                   child: CarouselSlider.builder(
-                      itemCount: list_pdf.length,
+                      itemCount: listPdfURL.length,
                       itemBuilder: (ctx, index, realIndex) {
-                        PdfFile file = list_pdf.elementAt(index);
-                        String filePath = file.homonSbt == '01'
-                            ? file.sitamiiraisyoFilePath ?? ''
-                            : file.kojiiraisyoFilePath ?? '';
+                       String filePath = listPdfURL.elementAt(index);
                         return filePath.isEmpty
                             ? const Center(
                                 child: Text(
@@ -274,10 +283,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                                 ),
                               )
                             : SfPdfViewer.network(
-                                file.homonSbt == '01'
-                                    ? file.sitamiiraisyoFilePath ?? ''
-                                    : file.kojiiraisyoFilePath ?? '',
-                                // key: _pdfViewerKey,
+                                filePath,
                                 onDocumentLoaded: (details) {},
                                 onDocumentLoadFailed: (detail) {
                                   CustomToast.show(context,
@@ -298,10 +304,10 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
               height: 10,
             ),
             Visibility(
-              visible: list_pdf.isNotEmpty,
+              visible: listPdfURL.isNotEmpty,
               child: Center(
                 child: Text(
-                  "${currentPage + 1}/${list_pdf.length}",
+                  "${currentPage + 1}/${listPdfURL.length}",
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
