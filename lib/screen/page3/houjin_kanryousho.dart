@@ -17,7 +17,10 @@ class HoujinKanryousho extends StatefulWidget {
   final String TENPO_CD;
   final List<KojiHoukokuModel> kojiHoukoku;
   const HoujinKanryousho(
-      {super.key, required this.JYUCYU_ID, required this.TENPO_CD, required this.kojiHoukoku});
+      {super.key,
+      required this.JYUCYU_ID,
+      required this.TENPO_CD,
+      required this.kojiHoukoku});
 
   @override
   State<HoujinKanryousho> createState() => _HoujinKanryoushoState();
@@ -318,8 +321,8 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                     message: '正常に登録できました。',
                     backGround: Colors.green,
                   );
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+                  Navigator.of(context).popUntil(
+                      (route) => route.settings.name == 'KojiichiranPage3');
                 },
                 onFailed: () {
                   CustomToast.show(context, message: '登録できませんでした。');
