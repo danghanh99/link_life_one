@@ -43,7 +43,7 @@ class CreateMemo {
           'COMMENT': '',
           'KBNMSAI_CD': KBNMSAI_CD,
           'LOGIN_ID': user.TANT_CD,
-          'TAN_CAL_ID': TAN_CAL_ID
+          'TAN_CAL_ID': TAN_CAL_ID ?? ''
         },
       );
 
