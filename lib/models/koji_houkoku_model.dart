@@ -12,7 +12,7 @@ class KojiHoukokuModel {
   String? kensetuKeitai;
   String? befSekiPhotoFilePath;
   String? aftSekoPhotoFilePath;
-  String? otherPhotoFolderPath;
+  List<String>? otherPhotoFolderPath;
   String? tuikaJisyaCd;
   String? tuikaSyohinName;
   String? kojijiTuikaFlg;
@@ -56,7 +56,7 @@ class KojiHoukokuModel {
     kensetuKeitai = '';
     befSekiPhotoFilePath = '';
     aftSekoPhotoFilePath = '';
-    otherPhotoFolderPath = '';
+    otherPhotoFolderPath = [];
     tuikaJisyaCd = '';
     tuikaSyohinName = '';
     kojijiTuikaFlg = '';
@@ -65,31 +65,40 @@ class KojiHoukokuModel {
     tenpoCd = '';
   }
 
-  KojiHoukokuModel.fromJson(Map<String, dynamic> json) {
-    jyucyuMsaiId = json['JYUCYUMSAI_ID'];
-    jyucyuMsaiIdKikan = json['JYUCYUMSAI_ID_KIKAN'];
-    hinban = json['HINBAN'];
-    makerCd = json['MAKER_CD'];
-    ctgoryCd = json['CTGORY_CD'];
-    suryo = json['SURYO'];
-    kingak = json['KINGAK'];
-    kisetuHinban = json['KISETU_HINBAN'];
-    kisetuMaker = json['KISETU_MAKER'];
-    kisetuMakerCd = json['KISETU_MAKER_CD'];
-    kensetuKeitai = json['KENSETU_KEITAI'];
-    befSekiPhotoFilePath = json['BEF_SEKO_PHOTO_FILEPATH'];
-    aftSekoPhotoFilePath = json['AFT_SEKO_PHOTO_FILEPATH'];
-    otherPhotoFolderPath = json['OTHER_PHOTO_FOLDERPATH'];
-    tuikaJisyaCd = json['TUIKA_JISYA_CD'];
-    tuikaSyohinName = json['TUIKA_SYOHIN_NAME'];
-    kojijiTuikaFlg = json['KOJIJITUIKA_FLG'];
-    kojiSt = json['KOJI_ST'];
-    hojinFlg = json['HOJIN_FLG'];
-    tenpoCd = json['TENPO_CD'];
+  factory KojiHoukokuModel.fromJson(Map<String, dynamic> json) {
+    List<String> otherFilePath = [];
+    dynamic otherPath = json['OTHER_PHOTO_FOLDERPATH'];
+    if (otherPath.runtimeType == String) {
+      otherFilePath = [otherPath];
+    }
+    if (otherPath.runtimeType == List<String>) {
+      otherFilePath = otherPath;
+    }
+    return KojiHoukokuModel(
+    jyucyuMsaiId: json['JYUCYUMSAI_ID'],
+    jyucyuMsaiIdKikan: json['JYUCYUMSAI_ID_KIKAN'],
+    hinban: json['HINBAN'],
+    makerCd: json['MAKER_CD'],
+    ctgoryCd: json['CTGORY_CD'],
+    suryo: json['SURYO'],
+    kingak: json['KINGAK'],
+    kisetuHinban: json['KISETU_HINBAN'],
+    kisetuMaker: json['KISETU_MAKER'],
+    kisetuMakerCd: json['KISETU_MAKER_CD'],
+    kensetuKeitai: json['KENSETU_KEITAI'],
+    befSekiPhotoFilePath: json['BEF_SEKO_PHOTO_FILEPATH'],
+    aftSekoPhotoFilePath: json['AFT_SEKO_PHOTO_FILEPATH'],
+    otherPhotoFolderPath: otherFilePath,
+    tuikaJisyaCd: json['TUIKA_JISYA_CD'],
+    tuikaSyohinName: json['TUIKA_SYOHIN_NAME'],
+    kojijiTuikaFlg: json['KOJIJITUIKA_FLG'],
+    kojiSt: json['KOJI_ST'],
+    hojinFlg: json['HOJIN_FLG'],
+    tenpoCd: json['TENPO_CD']);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = {};
     data['JYUCYUMSAI_ID'] = jyucyuMsaiId;
     data['JYUCYUMSAI_ID_KIKAN'] = jyucyuMsaiIdKikan;
     data['HINBAN'] = hinban;

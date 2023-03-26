@@ -29,18 +29,22 @@ class RequestCorporateCompletion {
           continue;
         }
         Map<String, dynamic> jsonElement = element.toJson();
-        if (!isNetworkPath(jsonElement['BEF_SEKO_PHOTO_FILEPATH']) && jsonElement['BEF_SEKO_PHOTO_FILEPATH'] != '') {
-          File imageFile = File(jsonElement['BEF_SEKO_PHOTO_FILEPATH']);
-          List<int> imageBytes = imageFile.readAsBytesSync();
-          String base64Image = base64Encode(imageBytes);
-          jsonElement['BEF_SEKO_PHOTO_FILEPATH'] = base64Image;
+        String befPath = jsonElement['BEF_SEKO_PHOTO_FILEPATH'];
+        if (!isNetworkPath(befPath) && befPath != '') {
+          jsonElement['BEF_SEKO_PHOTO_FILEPATH'] = base64String(befPath);
         }
-        if (!isNetworkPath(jsonElement['AFT_SEKO_PHOTO_FILEPATH']) && jsonElement['AFT_SEKO_PHOTO_FILEPATH'] != '') {
-          File imageFile = File(jsonElement['AFT_SEKO_PHOTO_FILEPATH']);
-          List<int> imageBytes = imageFile.readAsBytesSync();
-          String base64Image = base64Encode(imageBytes);
-          jsonElement['AFT_SEKO_PHOTO_FILEPATH'] = base64Image;
+        String aftPath = jsonElement['AFT_SEKO_PHOTO_FILEPATH'];
+        if (!isNetworkPath(aftPath) && aftPath != '') {
+          jsonElement['AFT_SEKO_PHOTO_FILEPATH'] = base64String(aftPath);
         }
+        List<String> otherImages = jsonElement['OTHER_PHOTO_FOLDERPATH'];
+        for (var i = 0; i < otherImages.length; i++) {
+          String item = otherImages.elementAt(i);
+          if (!isNetworkPath(item) && item.isNotEmpty) {
+            otherImages[i] = base64String(item);
+          }
+        }
+        jsonElement['OTHER_PHOTO_FOLDERPATH'] = otherImages;
         listKojiHoukoku.add(jsonElement);
       }
 
@@ -55,6 +59,7 @@ class RequestCorporateCompletion {
         }).toList(),
         'KOJIMSAI_IMG': listKojiHoukoku
       };
+
       final Response response = await RestAPI.shared.postData(url, parameters);
 
       if (response.statusCode == 200) {
@@ -65,6 +70,13 @@ class RequestCorporateCompletion {
     } catch (e) {
       onFailed();
     }
+  }
+
+  String base64String(String filePath) {
+    File imageFile = File(filePath);
+    List<int> imageBytes = imageFile.readAsBytesSync();
+    String base64Image = base64Encode(imageBytes);
+    return base64Image;
   }
 
   bool isNetworkPath(String path) {

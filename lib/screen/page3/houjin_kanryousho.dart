@@ -44,6 +44,9 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
         JYUCYU_ID: widget.JYUCYU_ID,
         TENPO_CD: widget.TENPO_CD,
         onSuccess: () {});
+    if (result == null || result is! Map) {
+      return;
+    }
     setState(
       () {
         listKbn = result['KBN'];

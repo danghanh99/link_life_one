@@ -46,6 +46,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
   XFile? imageFile;
   XFile? befImage;
   XFile? aftImage;
+  List<XFile> otherImages = [];
 
   String? TENPO_CD = '';
   @override
@@ -108,12 +109,20 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
         });
   }
 
-  void selectImage() async {
+  void selectOthersImage(int? index) async {
     final ImagePicker picker = ImagePicker();
     try {
       List<XFile> files = await picker.pickMultiImage();
       if (files.isNotEmpty) {
-        // TODO: Chưa biết làm gì
+        if (index != null) {
+          setState(() {
+            listKojiHoukoku.elementAt(index).otherPhotoFolderPath?.addAll(files.map((e) => e.path).toList());
+          });
+        } else {
+          setState(() {
+            otherImages = files;
+          });
+        }
       }
     } catch (e) {
       print(e);
@@ -377,7 +386,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
             ),
             GestureDetector(
               onTap: () {
-                selectImage();
+                selectOthersImage(index);
               },
               child: Container(
                 alignment: Alignment.center,
