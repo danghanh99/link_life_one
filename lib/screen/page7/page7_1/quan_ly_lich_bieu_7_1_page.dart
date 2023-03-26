@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:link_life_one/api/schedule/schedule_api.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/show_holiday.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/screen/page7/eigyo_anken/page7_2_3_create_eigyo_anken/page_7_2_3.dart';
@@ -11,6 +12,7 @@ import 'package:link_life_one/shared/box_manager.dart';
 import '../../../api/sukejuuru_page_api/get_anken_cua_mot_phong_ban.dart';
 import '../../../api/sukejuuru_page_api/get_list_phong_ban.dart';
 import '../../../components/custom_header_widget.dart';
+import '../../../models/person_model.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/custom_button.dart';
 import '../component/dialog.dart';
@@ -33,7 +35,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     '出納帳',
   ];
 
-  List<dynamic> listNhanVien = [];
+  List<PersonModel> listNhanVien = [];
 
   List<dynamic> listAnkenPhongBan = [];
 
@@ -41,12 +43,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
   dynamic sukejuuruPhongBan;
 
-  dynamic sukejuuruSelectedUser;
+  PersonModel? sukejuuruSelectedUser;
 
   List<dynamic> listPhongBan = [];
-
-  String selectedNhanVienName = '';
-  String selectedNhanVienTantCD = '';
 
   String value1nguoi = 'グループ';
   // DateTime date = DateTime.parse('2022-11-11');
@@ -65,6 +64,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       if (isSuccess) {
         geAnkenCuaMotPhongBanFuture = callGetAnkenCuaMotPhongBan(
             kojiGyoSyaCd: phongBanId, date: currentDate);
+        getListPeople(phongBanId);
       }
     });
 
@@ -127,10 +127,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
         if (tmpPERSON.isEmpty) {
           setState(() {
-            listNhanVien = [];
-            sukejuuruSelectedUser = null;
-            selectedNhanVienName = '';
-            selectedNhanVienTantCD = '';
             sukejuuruAllUser = [];
           });
         } else {
@@ -138,53 +134,15 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             List<dynamic> listmtp = response["PERSON"][0];
             if (listmtp.isNotEmpty) {
               setState(() {
-                sukejuuruAllUser = response["PERSON"][0] ?? [];
+                sukejuuruAllUser = listmtp;
               });
-
-              List<dynamic> listPerson = response["PERSON"][0] ?? [];
-              List<dynamic> listPersonTemp = [];
-              listPerson.forEach((element) {
-                listPersonTemp.add({
-                  "TANT_NAME": element["TANT_NAME"],
-                  "TANT_CD": element["TANT_CD"]
-                });
-              });
-              for (var person in listPerson) {
-                if (selectedTantCode == person['TANT_CD']) {
-                  setState(() {
-                    listNhanVien = listPersonTemp;
-                    sukejuuruSelectedUser = person;
-                    selectedNhanVienName = person["TANT_NAME"];
-                    selectedNhanVienTantCD = person["TANT_CD"];
-                  });
-                }
-              }
             }
           } else {
             List<dynamic> listmtp = response["PERSON"][0];
             if (listmtp.isNotEmpty) {
               setState(() {
-                sukejuuruAllUser = response["PERSON"][0] ?? [];
+                sukejuuruAllUser = listmtp;
               });
-
-              List<dynamic> listPerson = response["PERSON"][0] ?? [];
-              List<dynamic> listPersonTemp = [];
-              listPerson.forEach((element) {
-                listPersonTemp.add({
-                  "TANT_NAME": element["TANT_NAME"],
-                  "TANT_CD": element["TANT_CD"]
-                });
-              });
-              for (var person in listPerson) {
-                if (BoxManager.user.TANT_CD == person['TANT_CD']) {
-                  setState(() {
-                    listNhanVien = listPersonTemp;
-                    sukejuuruSelectedUser = person;
-                    selectedNhanVienName = person["TANT_NAME"];
-                    selectedNhanVienTantCD = person["TANT_CD"];
-                  });
-                }
-              }
             }
           }
         }
@@ -192,8 +150,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         setState(() {
           listNhanVien = [];
           sukejuuruSelectedUser = null;
-          selectedNhanVienName = '';
-          selectedNhanVienTantCD = '';
           sukejuuruAllUser = [];
         });
       }
@@ -204,6 +160,37 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     });
 
     return result;
+  }
+
+  void getListPeople(String phongbanId) {
+    ScheduleAPI.shared.getListPerson(phongbanId, (peopleList) {
+      PersonModel? selectedPerson;
+      if (peopleList.isEmpty) {
+        setState(() {
+          listNhanVien = [];
+          sukejuuruSelectedUser = null;
+        });
+      }
+      for (var person in peopleList) {
+        if (BoxManager.user.TANT_CD == person.tantCode) {
+          selectedPerson = person;
+          break;
+        }
+      }
+      if (selectedPerson != null) {
+        setState(() {
+          listNhanVien = peopleList;
+          sukejuuruSelectedUser = selectedPerson;
+        });
+      } else {
+        setState(() {
+          listNhanVien = peopleList;
+          sukejuuruSelectedUser = peopleList.first;
+        });
+      }
+    }, () {
+      listNhanVien = [];
+    });
   }
 
   @override
@@ -412,7 +399,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         child: TextButton(
                           onPressed: () {
                             ShowHoliday().showHoliday(
-                              TANT_CD: selectedNhanVienTantCD,
+                              TANT_CD: sukejuuruSelectedUser?.tantCode ?? '',
                               onSuccess: ((body) {
                                 CustomDialog.showCustomDialog(
                                   context: context,
@@ -481,13 +468,15 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
                                   String? tantCode;
                                   if (value1nguoi == '個人') {
-                                    tantCode = sukejuuruSelectedUser['TANT_CD'];
+                                    tantCode =
+                                        sukejuuruSelectedUser?.tantCode ?? '';
                                   }
                                   callGetAnkenCuaMotPhongBan(
                                     kojiGyoSyaCd: phongBanId,
                                     date: currentDate,
                                     selectedTantCode: tantCode,
                                   );
+                                  getListPeople(phongBanId);
                                 }
                               },
                                   currentTime: currentDate,
@@ -559,7 +548,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                                                 _getMonthDaysRow(),
                                                 scrollController2)
                                             : _buildRows(
-                                                sukejuuruAllUser.length + 2,
+                                                listNhanVien.length + 2,
                                                 scrollController2),
                                       );
                               }),
@@ -597,7 +586,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
           String? tantCode;
           if (value1nguoi == '個人') {
             currentDate = DateTime(currentDate.year, currentDate.month - 1, 1);
-            tantCode = sukejuuruSelectedUser['TANT_CD'];
+            tantCode = sukejuuruSelectedUser?.tantCode ?? '';
           } else {
             currentDate = currentDate.add(const Duration(days: -7));
           }
@@ -606,6 +595,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
             date: currentDate,
             selectedTantCode: tantCode,
           );
+          getListPeople(phongBanId);
         });
       },
       child: Column(
@@ -626,7 +616,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   if (value1nguoi == '個人') {
                     currentDate =
                         DateTime(currentDate.year, currentDate.month - 1, 1);
-                    tantCode = sukejuuruSelectedUser['TANT_CD'];
+                    tantCode = sukejuuruSelectedUser?.tantCode ?? '';
                   } else {
                     currentDate = currentDate.add(const Duration(days: -7));
                   }
@@ -635,6 +625,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     date: currentDate,
                     selectedTantCode: tantCode,
                   );
+                  getListPeople(phongBanId);
                 });
               },
               child: Row(
@@ -680,13 +671,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
         String? tantCode;
         if (value1nguoi == '個人') {
-          tantCode = sukejuuruSelectedUser['TANT_CD'];
+          tantCode = sukejuuruSelectedUser?.tantCode ?? '';
         }
         callGetAnkenCuaMotPhongBan(
           kojiGyoSyaCd: phongBanId,
           date: currentDate,
           selectedTantCode: tantCode,
         );
+        getListPeople(phongBanId);
       },
       child: Column(
         children: [
@@ -712,13 +704,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
                 String? tantCode;
                 if (value1nguoi == '個人') {
-                  tantCode = sukejuuruSelectedUser['TANT_CD'];
+                  tantCode = sukejuuruSelectedUser?.tantCode ?? '';
                 }
                 callGetAnkenCuaMotPhongBan(
                   kojiGyoSyaCd: phongBanId,
                   date: currentDate,
                   selectedTantCode: tantCode,
                 );
+                getListPeople(phongBanId);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -773,6 +766,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               phongBanName = listPhongBan[index]["KOJIGYOSYA_NAME"];
               phongBanId = listPhongBan[index]["KOJIGYOSYA_CD"];
             });
+            getListPeople(phongBanId);
           },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
@@ -846,9 +840,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
         return PopupMenuItem(
           onTap: () {
             setState(() {
-              sukejuuruSelectedUser = sukejuuruAllUser[index];
-              selectedNhanVienName = item["TANT_NAME"];
-              selectedNhanVienTantCD = item["TANT_CD"];
+              sukejuuruSelectedUser = listNhanVien[index];
             });
           },
           height: 25,
@@ -865,7 +857,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       width: 14,
                     ),
                     Text(
-                      item["TANT_NAME"].toString(),
+                      item.tantName,
                       style: const TextStyle(color: Color(0xFF999999)),
                     ),
                   ],
@@ -888,7 +880,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              selectedNhanVienName,
+              sukejuuruSelectedUser?.tantName ?? '',
               style: const TextStyle(
                 color: Color(0xFF999999),
                 fontSize: 15,
@@ -1084,11 +1076,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                 if (value1nguoi != '個人') {
                   setState(() {
                     value1nguoi = '個人';
-                    sukejuuruSelectedUser = sukejuuruAllUser[row - 2];
-                    selectedNhanVienName =
-                        sukejuuruAllUser[row - 2]["TANT_NAME"];
-                    selectedNhanVienTantCD =
-                        sukejuuruAllUser[row - 2]["TANT_CD"];
+                    sukejuuruSelectedUser = listNhanVien[row - 2];
                   });
                 }
               },
@@ -1106,10 +1094,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                               value1nguoi == '個人'
                                   ? (sukejuuruSelectedUser == null
                                       ? ''
-                                      : sukejuuruSelectedUser["TANT_NAME"])
-                                  : (sukejuuruAllUser.isEmpty
+                                      : sukejuuruSelectedUser?.tantName ?? '')
+                                  : (listNhanVien.isEmpty
                                       ? ''
-                                      : sukejuuruAllUser[row - 2]["TANT_NAME"]),
+                                      : listNhanVien[row - 2]?.tantName ?? ''),
                               style: const TextStyle(
                                   color: Color(0xFF042C5C),
                                   fontSize: 20,
@@ -1195,33 +1183,39 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
 
   List<Widget> kojiItems(int row, int col) {
     List<Widget> xxx = [];
+    PersonModel nv = listNhanVien[row - 1];
+    dynamic selectedUser;
+    for (var person in sukejuuruAllUser) {
+      if (nv.tantCode == person['TANT_CD']) {
+        selectedUser = person;
+      }
+    }
+    if (selectedUser == null) {
+      return [];
+    }
     _listDay().forEach(
       (element) {
-        if (sukejuuruAllUser.isNotEmpty &&
-            sukejuuruAllUser[row - 1] != null &&
-            sukejuuruAllUser[row - 1][element] != null &&
-            sukejuuruAllUser[row - 1][element].isNotEmpty &&
+        if (selectedUser != null &&
+            selectedUser[element] != null &&
+            selectedUser[element].isNotEmpty &&
             element == _listDay()[col - 1]) {
-          sukejuuruAllUser[row - 1][element].forEach(
+          selectedUser[element].forEach(
             (e) => xxx.addAll([
               kojiItemWithType(
                 row - 1,
                 col,
                 e,
                 false,
-                sukejuuruAllUser[row - 1] == null
-                    ? null
-                    : sukejuuruAllUser[row - 1]["TANT_CD"],
+                selectedUser == null ? null : selectedUser["TANT_CD"],
                 e["TAN_EIG_ID"],
               ),
             ]),
           );
-          var user = sukejuuruAllUser[row - 1];
-          String tantKbnCode = user['TANT_KBN_CD'] ?? '';
+          String tantKbnCode = selectedUser['TANT_KBN_CD'] ?? '';
           if (tantKbnCode == '03' || tantKbnCode == '3') {
-            if ((user[element] as List).isNotEmpty) {
-              var item = user[element].first;
-              xxx.addAll(_saleItems(col, row, user, item, element));
+            if ((selectedUser[element] as List).isNotEmpty) {
+              var item = selectedUser[element].first;
+              xxx.addAll(_saleItems(col, row, selectedUser, item, element));
             }
           }
         }
@@ -1230,7 +1224,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     xxx.add(
       insert(
         dateSelected: DateTime.parse(_listDay()[col - 1]),
-        JYOKEN_CD: sukejuuruAllUser[row - 1]["TANT_CD"],
+        JYOKEN_CD: selectedUser["TANT_CD"],
         isPhongBan: false,
       ),
     );
@@ -1369,39 +1363,44 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
       style: const TextStyle(fontSize: 10),
     ));
 
-    if (sukejuuruSelectedUser != null &&
-        sukejuuruSelectedUser.isNotEmpty &&
-        sukejuuruSelectedUser[dateStr] != null &&
-        sukejuuruSelectedUser[dateStr].isNotEmpty) {
-      sukejuuruSelectedUser[dateStr].forEach(
+    dynamic selectedUser;
+    for (var person in sukejuuruAllUser) {
+      if (sukejuuruSelectedUser?.tantCode == person['TANT_CD']) {
+        selectedUser = person;
+      }
+    }
+
+    if (selectedUser != null &&
+        selectedUser[dateStr] != null &&
+        selectedUser[dateStr].isNotEmpty) {
+      selectedUser[dateStr].forEach(
         (e) => widgets.addAll([
           kojiItemWithType(
             row,
             col,
             e,
             false,
-            sukejuuruSelectedUser["TANT_CD"],
+            selectedUser["TANT_CD"],
             e["TAN_EIG_ID"],
           )
         ]),
       );
 
-      String tantKbnCode = sukejuuruSelectedUser['TANT_KBN_CD'] ?? '';
+      String tantKbnCode = sukejuuruSelectedUser?.tantKbnCode ?? '';
       if (tantKbnCode == '03' || tantKbnCode == '3') {
-        if ((sukejuuruSelectedUser[dateStr] as List).isNotEmpty) {
-          var item = sukejuuruSelectedUser[dateStr].first;
-          widgets.addAll(
-              _saleItems(col, row, sukejuuruSelectedUser, item, dateStr));
+        if ((selectedUser[dateStr] as List).isNotEmpty) {
+          var item = selectedUser[dateStr].first;
+          widgets.addAll(_saleItems(col, row, selectedUser, item, dateStr));
         }
       }
     }
 
-    if (sukejuuruSelectedUser != null) {
+    if (selectedUser != null) {
       widgets.add(
         insert(
           dateSelected:
               _getFirstDayPersonMonth().add(Duration(days: (row * 7) + col)),
-          JYOKEN_CD: sukejuuruSelectedUser["TANT_CD"],
+          JYOKEN_CD: selectedUser["TANT_CD"],
           isPhongBan: false,
         ),
       );
@@ -1656,13 +1655,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     onSuccessUpdate: () {
                       String? tantCode;
                       if (value1nguoi == '個人') {
-                        tantCode = sukejuuruSelectedUser['TANT_CD'];
+                        tantCode = sukejuuruSelectedUser?.tantCode ?? '';
                       }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
                         date: currentDate,
                         selectedTantCode: tantCode,
                       );
+                      getListPeople(phongBanId);
                     },
                   ),
                 );
@@ -1679,13 +1679,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     onUpdateAnkenSuccessfull: () {
                       String? tantCode;
                       if (value1nguoi == '個人') {
-                        tantCode = sukejuuruSelectedUser['TANT_CD'];
+                        tantCode = sukejuuruSelectedUser?.tantCode ?? '';
                       }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
                         date: currentDate,
                         selectedTantCode: tantCode,
                       );
+                      getListPeople(phongBanId);
                     },
                     initialDate: currentDate,
                     TANT_CD: tantCd ?? '',
@@ -1712,13 +1713,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     onSuccess: (() {
                       String? tantCode;
                       if (value1nguoi == '個人') {
-                        tantCode = sukejuuruSelectedUser['TANT_CD'];
+                        tantCode = sukejuuruSelectedUser?.tantCode ?? '';
                       }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
                         date: currentDate,
                         selectedTantCode: tantCode,
                       );
+                      getListPeople(phongBanId);
                     }),
                   ),
                 );
@@ -1744,13 +1746,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     onSuccessUpdate: () {
                       String? tantCode;
                       if (value1nguoi == '個人') {
-                        tantCode = sukejuuruSelectedUser['TANT_CD'];
+                        tantCode = sukejuuruSelectedUser?.tantCode ?? '';
                       }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
                         date: currentDate,
                         selectedTantCode: tantCode,
                       );
+                      getListPeople(phongBanId);
                     },
                   ),
                 );
@@ -1770,13 +1773,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     onUpdateAnkenSuccessfull: () {
                       String? tantCode;
                       if (value1nguoi == '個人') {
-                        tantCode = sukejuuruSelectedUser['TANT_CD'];
+                        tantCode = sukejuuruSelectedUser?.tantCode ?? '';
                       }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
                         date: currentDate,
                         selectedTantCode: tantCode,
                       );
+                      getListPeople(phongBanId);
                     },
                   ),
                 );
@@ -1800,13 +1804,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     onSuccess: (() {
                       String? tantCode;
                       if (value1nguoi == '個人') {
-                        tantCode = sukejuuruSelectedUser['TANT_CD'];
+                        tantCode = sukejuuruSelectedUser?.tantCode ?? '';
                       }
                       callGetAnkenCuaMotPhongBan(
                         kojiGyoSyaCd: phongBanId,
                         date: currentDate,
                         selectedTantCode: tantCode,
                       );
+                      getListPeople(phongBanId);
                     }),
                   ),
                 );
@@ -1864,8 +1869,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                             // color: getTitleColorByText(
                             //   text: e["KBNMSAI_NAME"] ?? '',
                             // ),
-                            color: Color(
-                                int.parse(e["YOBIKOMOKU1_KBN2"] ?? 0xffffffff)),
+                            color: Color(int.parse(
+                                e["YOBIKOMOKU1_KBN2"] ?? '0xffffffff')),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                 bottom: 2,
@@ -1929,13 +1934,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   onCreateAnkenSuccessfull: () {
                     String? tantCode;
                     if (value1nguoi == '個人') {
-                      tantCode = sukejuuruSelectedUser['TANT_CD'];
+                      tantCode = sukejuuruSelectedUser?.tantCode ?? '';
                     }
                     callGetAnkenCuaMotPhongBan(
                       kojiGyoSyaCd: phongBanId,
                       date: currentDate,
                       selectedTantCode: tantCode,
                     );
+                    getListPeople(phongBanId);
                   },
                 ),
               );
@@ -1960,13 +1966,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   onSuccess: () {
                     String? tantCode;
                     if (value1nguoi == '個人') {
-                      tantCode = sukejuuruSelectedUser['TANT_CD'];
+                      tantCode = sukejuuruSelectedUser?.tantCode ?? '';
                     }
                     callGetAnkenCuaMotPhongBan(
                       kojiGyoSyaCd: phongBanId,
                       date: currentDate,
                       selectedTantCode: tantCode,
                     );
+                    getListPeople(phongBanId);
                   },
                 ),
               );
