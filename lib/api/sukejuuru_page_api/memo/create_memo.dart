@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:hive_flutter/adapters.dart';
 import "package:http/http.dart" as http;
 import 'package:intl/intl.dart';
-import 'package:link_life_one/components/toast.dart';
 
 import '../../../constants/constant.dart';
 import '../../../models/user.dart';
@@ -28,9 +27,7 @@ class CreateMemo {
     try {
       final box = Hive.box<User>('userBox');
       final User user = box.values.last;
-      final response = await http.post(
-        Uri.parse("${Constant.url}Request/Schedule/requestPostMemoUpdate.php"),
-        body: {
+      Map<String, dynamic> body = {
           'JYOKEN_CD': JYOKEN_CD,
           'JYOKEN_SYBET_FLG': JYOKEN_SYBET_FLG,
           'YMD': DateFormat(('yyyy-MM-dd')).format(YMD).toString(),
@@ -43,8 +40,11 @@ class CreateMemo {
           'COMMENT': '',
           'KBNMSAI_CD': KBNMSAI_CD,
           'LOGIN_ID': user.TANT_CD,
-          'TAN_CAL_ID': TAN_CAL_ID ?? ''
-        },
+          'TANT_CAL_ID': TAN_CAL_ID ?? ''
+        };
+      final response = await http.post(
+        Uri.parse("${Constant.url}Request/Schedule/requestPostMemoUpdate.php"),
+        body: body,
       );
 
       if (response.statusCode == 200) {
