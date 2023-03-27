@@ -1652,6 +1652,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                   body: Page721(
                     HOMON_SBT: e["HOMON_SBT"],
                     JYUCYU_ID: e["JYUCYU_ID"],
+                    setsakiAddress: e['SETSAKI_ADDRESS'] ?? '',
+                    setsakiName: e['SETSAKI_NAME'] ?? '',
+                    kojiItem: e['KOJI_ITEM'] ?? '',
                     onSuccessUpdate: () {
                       String? tantCode;
                       if (value1nguoi == '個人') {
@@ -1743,6 +1746,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     JYUCYU_ID: e["JYUCYU_ID"],
                     // KBNMSAI_NAME: e["KBNMSAI_NAME"],
                     HOMON_SBT: e["HOMON_SBT"],
+                    setsakiAddress: e['SETSAKI_ADDRESS'] ?? '',
+                    setsakiName: e['SETSAKI_NAME'] ?? '',
+                    kojiItem: e['KOJI_ITEM'] ?? '',
                     onSuccessUpdate: () {
                       String? tantCode;
                       if (value1nguoi == '個人') {

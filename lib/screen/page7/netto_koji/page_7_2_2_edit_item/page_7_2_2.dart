@@ -17,6 +17,9 @@ class NettoKojiPage722 extends StatefulWidget {
   final String jinin;
   final String jikan;
   final String memo;
+  final String setsakiAddress;
+  final String setsakiName;
+  final String kojiItem;
 
   final Function() onSuccessUpdate;
   final Function() onCancel;
@@ -27,6 +30,9 @@ class NettoKojiPage722 extends StatefulWidget {
     required this.jinin,
     required this.jikan,
     required this.memo,
+    required this.setsakiAddress,
+    required this.setsakiName,
+    required this.kojiItem,
     required this.onSuccessUpdate,
     required this.onCancel,
     Key? key,
@@ -309,17 +315,16 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
         child: Column(
           children: [
             Container(
-              height: 50,
               color: const Color(0xFF6F86D6),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
+                    Flexible(
                       child: Text(
-                        KBNMSAI_NAME + (checkAppointEditPage ? '(アポ済み)' : ''),
+                        '$KBNMSAI_NAME${checkAppointEditPage ? '(アポ済み)' : ''} <<${widget.JYUCYU_ID}>>${widget.setsakiAddress}・${widget.kojiItem}・${widget.setsakiName}',
                         style: const TextStyle(
                           color: Color(0xFF042C5C),
                           fontSize: 18,

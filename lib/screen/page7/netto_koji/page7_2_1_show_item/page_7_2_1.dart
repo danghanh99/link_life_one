@@ -11,6 +11,9 @@ class Page721 extends StatefulWidget {
   final String JYUCYU_ID;
   // final String KBNMSAI_NAME;
   final String HOMON_SBT;
+  final String setsakiAddress;
+  final String setsakiName;
+  final String kojiItem;
 
   final Function onSuccessUpdate;
   const Page721({
@@ -18,6 +21,9 @@ class Page721 extends StatefulWidget {
     required this.JYUCYU_ID,
     // required this.KBNMSAI_NAME,
     required this.HOMON_SBT,
+    required this.setsakiAddress,
+    required this.setsakiName,
+    required this.kojiItem,
     required this.onSuccessUpdate,
   }) : super(key: key);
 
@@ -200,21 +206,22 @@ class _Page721State extends State<Page721> {
             jinin: JININ,
             jikan: JIKAN,
             memo: MEMO,
+            setsakiAddress: widget.setsakiAddress,
+            setsakiName: widget.setsakiName,
+            kojiItem: widget.kojiItem,
           )
         : Column(
             children: [
               Container(
-                height: 50,
                 color: const Color.fromARGB(255, 96, 186, 234),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
+                      Flexible(
                         child: Text(
-                          KBNMSAI_NAME + (appointed ? '(アポ済み)' : ''),
+                          '$KBNMSAI_NAME${appointed ? '(アポ済み)' : ''} <<${widget.JYUCYU_ID}>>${widget.setsakiAddress}・${widget.kojiItem}・${widget.setsakiName}',
                           style: const TextStyle(
                             color: Color(0xFF042C5C),
                             fontSize: 18,
