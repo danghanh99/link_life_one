@@ -93,10 +93,13 @@ class SubmitLastPage {
       required Function() onFailed}) async {
     String urlEndpoint = Constant.requestPostUploadRegisterSignImage;
     MultipartFile multipartFile = MultipartFile.fromFileSync(file.path);
+    final box = await Hive.openBox<String>('user');
+    String loginID = box.values.last;
 
     Map<String, dynamic> body = {
       'JYUCYU_ID': jyucyuId,
       'FILE_NAME': multipartFile,
+      'LOGIN_ID': loginID
     };
 
     final Response response =
