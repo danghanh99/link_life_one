@@ -1,9 +1,9 @@
 class Constant {
   // prod
   // static const String url = "https://koji-app2.starboardasiavn.com/";
-  static const String url = "http://koujiapp.kir.jp/"; // new
+  // static const String url = "http://koujiapp.kir.jp/"; // new
   // dev
-  // static const String url = "https://koji-app.starboardasiavn.com/";
+  static const String url = "https://koji-app.starboardasiavn.com/";
   static const String getListInventorySchedule = '${url}src/APIs/InventorySchedule/getListInventorySchedule.php?';
   static const String updateInventoryScheduleById = '${url}src/APIs/InventorySchedule/updateInventoryScheduleById.php';
   static const String checkSaveMaterial = '${url}src/APIs/Material/getListDefaultMaterial.php?';
@@ -19,6 +19,7 @@ class Constant {
   static const String insertMaterialTakeBackById = '${url}src/APIs/MaterialTakeBack/insertMaterialTakeBackById.php';
   static const String registrationMaterialById = '${url}src/APIs/Material/registrationMaterialById.php';
   static const String backMaterial = '${url}src/APIs/Material/backMaterial.php';
+  static const String getListPersonSchedule = '${url}Request/Schedule/requestGetListPeople.php?';
 
   static const int compressTargetWidth = 600;
 }

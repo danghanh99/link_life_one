@@ -1,23 +1,49 @@
-class KojiHoukokuModel {
+import 'package:hive_flutter/hive_flutter.dart';
+
+part 'koji_houkoku_model.g.dart';
+
+
+@HiveType(typeId: 5)
+class KojiHoukokuModel extends HiveObject {
+  @HiveField(0)
   String? jyucyuMsaiId;
+  @HiveField(1)
   String? jyucyuMsaiIdKikan;
+  @HiveField(2)
   String? hinban;
+  @HiveField(3)
   String? makerCd;
+  @HiveField(4)
   String? ctgoryCd;
+  @HiveField(5)
   String? suryo;
+  @HiveField(6)
   String? kingak;
+  @HiveField(7)
   String? kisetuHinban;
+  @HiveField(8)
   String? kisetuMaker;
+  @HiveField(9)
   String? kisetuMakerCd;
+  @HiveField(10)
   String? kensetuKeitai;
+  @HiveField(11)
   String? befSekiPhotoFilePath;
+  @HiveField(12)
   String? aftSekoPhotoFilePath;
+  @HiveField(13)
   List<String>? otherPhotoFolderPath;
+  @HiveField(14)
   String? tuikaJisyaCd;
+  @HiveField(15)
   String? tuikaSyohinName;
+  @HiveField(16)
   String? kojijiTuikaFlg;
+  @HiveField(17)
   String? kojiSt;
+  @HiveField(18)
   String? hojinFlg;
+  @HiveField(19)
   String? tenpoCd;
 
   KojiHoukokuModel(
@@ -136,7 +162,7 @@ class KojiHoukokuModel {
         kensetuKeitai == '' &&
         befSekiPhotoFilePath == '' &&
         aftSekoPhotoFilePath == '' &&
-        otherPhotoFolderPath == '' &&
+        otherPhotoFolderPath!.isEmpty &&
         tuikaJisyaCd == '' &&
         tuikaSyohinName == '' &&
         kojijiTuikaFlg == '' &&

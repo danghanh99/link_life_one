@@ -7,8 +7,10 @@ part of 'koji.dart';
 // **************************************************************************
 
 Koji _$KojiFromJson(Map<String, dynamic> json) => Koji(
-      kojiHomonJikan: json['kojiHomonJikan'] as String?,
       sitamiHomonJikan: json['sitamiHomonJikan'] as String?,
+      sitamiHomonJikanEnd: json['sitamiHomonJikanEnd'] as String?,
+      kojiHomonJikan: json['kojiHomonJikan'] as String?,
+      kojiHomonJikanEnd: json['kojiHomonJikanEnd'] as String?,
       homonSbt: json['homonSbt'] as String,
       jyucyuId: json['jyucyuId'] as String,
       shitamiJinin: json['shitamiJinin'] as int,
@@ -19,12 +21,14 @@ Koji _$KojiFromJson(Map<String, dynamic> json) => Koji(
       setsakiAddress: json['setsakiAddress'] as String,
       setsakiName: json['setsakiName'] as String,
       kojiSt: json['kojiSt'] as String,
-      hojinFlag: json['HOJIN_FLG'] as String
+      hojinFlag: json['hojinFlag'] as String,
     );
 
 Map<String, dynamic> _$KojiToJson(Koji instance) => <String, dynamic>{
       'sitamiHomonJikan': instance.sitamiHomonJikan,
+      'sitamiHomonJikanEnd': instance.sitamiHomonJikanEnd,
       'kojiHomonJikan': instance.kojiHomonJikan,
+      'kojiHomonJikanEnd': instance.kojiHomonJikanEnd,
       'homonSbt': instance.homonSbt,
       'jyucyuId': instance.jyucyuId,
       'shitamiJinin': instance.shitamiJinin,
@@ -35,5 +39,5 @@ Map<String, dynamic> _$KojiToJson(Koji instance) => <String, dynamic>{
       'setsakiAddress': instance.setsakiAddress,
       'setsakiName': instance.setsakiName,
       'kojiSt': instance.kojiSt,
-      'HOJIN_FLG': instance.hojinFlag
+      'hojinFlag': instance.hojinFlag,
     };

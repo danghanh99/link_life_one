@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -6,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/models/koji_houkoku_model.dart';
 import 'package:link_life_one/screen/page3/houjin_kanryousho.dart';
+import 'package:link_life_one/screen/page3/koji_houkoku/koji_houkoku_notifier.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/screen/page3/shoudaku_shoukisai.dart';
 import 'package:link_life_one/shared/custom_button.dart';
+import 'package:provider/provider.dart';
 
-import '../../api/koji/requestConstructionReport/get_koji_houkoku.dart';
-import '../../shared/assets.dart';
+import '../../../api/koji/requestConstructionReport/get_koji_houkoku.dart';
+import '../../../shared/assets.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
@@ -40,252 +41,144 @@ class KojiHoukoku extends StatefulWidget {
 }
 
 class _KojiHoukokuState extends State<KojiHoukoku> {
-  List<dynamic> listPullDown = [];
-  List<KojiHoukokuModel> listKojiHoukoku = [];
-  Map<int, int> listStateIndexDropdown = {};
-  XFile? imageFile;
-  XFile? befImage;
-  XFile? aftImage;
-  List<XFile> otherImages = [];
-
-  String? TENPO_CD = '';
+  final KojiHoukokuNotifier _notifier = KojiHoukokuNotifier();
   @override
   void initState() {
     super.initState();
-    callGetKojiHoukoku();
-  }
-
-  Future<dynamic> callGetKojiHoukoku() async {
-    final dynamic result = await GetKojiHoukoku().getKojiHoukoku(
-        JYUCYU_ID: widget.JYUCYU_ID,
-        SINGLE_SUMMARIZE: widget.SINGLE_SUMMARIZE,
-        KOJI_ST: widget.KOJI_ST,
-        SYUYAKU_JYUCYU_ID: widget.SYUYAKU_JYUCYU_ID,
-        onSuccess: (res) {
-          if (res['DATA'] != null) {
-            setState(() {
-              List<dynamic> kojiListJson = res['DATA'];
-              listKojiHoukoku = kojiListJson
-                  .map((e) => KojiHoukokuModel.fromJson(e))
-                  .toList();
-            });
-          }
-          if (listKojiHoukoku.isNotEmpty) {
-            KojiHoukokuModel firstItem = listKojiHoukoku.first;
-            TENPO_CD = firstItem.tenpoCd;
-          } else {
-            setState(() {
-              listKojiHoukoku = [KojiHoukokuModel.empty()];
-            });
-          }
-          if (res["TENPO_CD"] != null) {
-            setState(() {
-              TENPO_CD = res['TENPO_CD'];
-            });
-          }
-
-          List pulldownList = res['PULLDOWN'];
-
-          if (pulldownList.isNotEmpty) {
-            for (var i = 0; i < listKojiHoukoku.length; i++) {
-            KojiHoukokuModel koji = listKojiHoukoku[i];
-            for (var j = 0; j < pulldownList.length; j++) {
-              Map<String, dynamic> pulldownItem = pulldownList[j];
-              if (koji.kensetuKeitai == pulldownItem['KBNMSAI_CD']) {
-                listStateIndexDropdown[i] = j;
-              }
-            }
-            
-          }
-            setState(() {
-              listPullDown = pulldownList;
-            });
-          }
-        },
-        onFailed: () {
-          setState(() {
-            listKojiHoukoku = [KojiHoukokuModel.empty()];
-          });
-        });
-  }
-
-  void selectOthersImage(int? index) async {
-    final ImagePicker picker = ImagePicker();
-    try {
-      List<XFile> files = await picker.pickMultiImage();
-      if (files.isNotEmpty) {
-        if (index != null) {
-          setState(() {
-            listKojiHoukoku.elementAt(index).otherPhotoFolderPath?.addAll(files.map((e) => e.path).toList());
-          });
-        } else {
-          setState(() {
-            otherImages = files;
-          });
-        }
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  void selectBeforeImage(int? index) async {
-    final ImagePicker picker = ImagePicker();
-    try {
-      XFile? file = await picker.pickImage(source: ImageSource.gallery);
-      if (file != null) {
-        if (index != null) {
-          setState(() {
-            listKojiHoukoku.elementAt(index).befSekiPhotoFilePath = file.path;
-          });
-        } else {
-          setState(() {
-            befImage = file;
-          });
-        }
-      }
-    } catch (e) {}
-  }
-
-  void selectafterImage(int? index) async {
-    final ImagePicker picker = ImagePicker();
-    try {
-      XFile? file = await picker.pickImage(source: ImageSource.gallery);
-      if (file != null) {
-        if (index != null) {
-          setState(() {
-            listKojiHoukoku.elementAt(index).aftSekoPhotoFilePath = file.path;
-          });
-        } else {
-          setState(() {
-            aftImage = file;
-          });
-        }
-      }
-    } catch (e) {}
+    _notifier.getData(widget.JYUCYU_ID, widget.SINGLE_SUMMARIZE, widget.KOJI_ST,
+        widget.SYUYAKU_JYUCYU_ID);
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 40,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: SizedBox(
-                        width: 70,
-                        child: TextLineDown(
-                          style: const TextStyle(
-                              fontSize: 20,
-                              color: Color(0xFF042C5C),
-                              fontWeight: FontWeight.w500),
-                          text: '戻る',
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                        ),
+      body: ChangeNotifierProvider.value(
+          value: _notifier,
+          child: Consumer<KojiHoukokuNotifier>(builder: (ctx, notifier, _) {
+            return SingleChildScrollView(
+              child: Container(
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 40,
                       ),
-                    ),
-                    Center(
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color:
-                                    const Color.fromARGB(255, 247, 240, 240))),
-                        width: 200.sp,
-                        child: CustomButton(
-                          color: Colors.white70,
-                          onClick: () {},
-                          name: '工事報告',
-                          textStyle: TextStyle(
-                            color: Color(0xFF042C5C),
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 80.sp,
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 40.sp,
-                ),
-                widget.SINGLE_SUMMARIZE == "0" ||
-                        widget.SINGLE_SUMMARIZE == "00"
-                    ? Row(
-                        crossAxisAlignment: CrossAxisAlignment
-                            .start, // k gop: 1 doi tuong - gom nhieu item
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          leftSide(),
-                          SizedBox(width: 20.sp),
-                          rightSide(null, null),
-                        ],
-                      )
-                    : ListView.separated(
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis
-                            .vertical, // gop lai: nhieu doi tuong - 1 doi tuong  = 1 item
-                        shrinkWrap: true,
-                        itemCount: listKojiHoukoku.length,
-                        itemBuilder: (context, index) {
-                          return Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              leftSide1Item(index),
-                              SizedBox(width: 20.sp),
-                              rightSide(
-                                  listKojiHoukoku.elementAt(index), index),
-                            ],
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) =>
-                            Padding(
-                          padding: EdgeInsets.only(top: 10.sp, bottom: 10.sp),
-                          child: SizedBox(
-                            height: 5.sp,
-                            width: 100.w.sp,
-                            child: Divider(
-                              height: 2.sp,
-                              color: Colors.black,
-                              thickness: 2.sp,
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: SizedBox(
+                              width: 70,
+                              child: TextLineDown(
+                                style: const TextStyle(
+                                    fontSize: 20,
+                                    color: Color(0xFF042C5C),
+                                    fontWeight: FontWeight.w500),
+                                text: '戻る',
+                                onTap: () {
+                                  notifier.onPop(context);
+                                },
+                              ),
                             ),
                           ),
+                          Center(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color.fromARGB(
+                                          255, 247, 240, 240))),
+                              width: 200.sp,
+                              child: CustomButton(
+                                color: Colors.white70,
+                                onClick: () {},
+                                name: '工事報告',
+                                textStyle: TextStyle(
+                                  color: Color(0xFF042C5C),
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 80.sp,
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 40.sp,
+                      ),
+                      widget.SINGLE_SUMMARIZE == "0" ||
+                              widget.SINGLE_SUMMARIZE == "00"
+                          ? Row(
+                              crossAxisAlignment: CrossAxisAlignment
+                                  .start, // k gop: 1 doi tuong - gom nhieu item
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                leftSide(notifier),
+                                SizedBox(width: 20.sp),
+                                rightSide(notifier, null, null),
+                              ],
+                            )
+                          : ListView.separated(
+                              physics: const NeverScrollableScrollPhysics(),
+                              scrollDirection: Axis
+                                  .vertical, // gop lai: nhieu doi tuong - 1 doi tuong  = 1 item
+                              shrinkWrap: true,
+                              itemCount: notifier.listKojiHoukoku.length,
+                              itemBuilder: (context, index) {
+                                return Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    leftSide1Item(notifier, index),
+                                    SizedBox(width: 20.sp),
+                                    rightSide(
+                                        notifier,
+                                        notifier.listKojiHoukoku
+                                            .elementAt(index),
+                                        index),
+                                  ],
+                                );
+                              },
+                              separatorBuilder:
+                                  (BuildContext context, int index) => Padding(
+                                padding:
+                                    EdgeInsets.only(top: 10.sp, bottom: 10.sp),
+                                child: SizedBox(
+                                  height: 5.sp,
+                                  width: 100.w.sp,
+                                  child: Divider(
+                                    height: 2.sp,
+                                    color: Colors.black,
+                                    thickness: 2.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10.sp),
+                        child: Divider(
+                          color: Colors.black,
+                          thickness: 2.sp,
                         ),
                       ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.sp),
-                  child: Divider(
-                    color: Colors.black,
-                    thickness: 2.sp,
+                      SizedBox(
+                        height: 100.sp,
+                      ),
+                      sendButton(notifier),
+                    ],
                   ),
                 ),
-                SizedBox(
-                  height: 100.sp,
-                ),
-                sendButton(),
-              ],
-            ),
-          ),
-        ),
-      ),
+              ),
+            );
+          })),
     );
   }
 
@@ -294,13 +187,14 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
     return uri.scheme.startsWith('http') || uri.scheme.startsWith('ftp');
   }
 
-  Widget rightSide(KojiHoukokuModel? item, int? index) {
+  Widget rightSide(
+      KojiHoukokuNotifier notifier, KojiHoukokuModel? item, int? index) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GestureDetector(
           onTap: () {
-            selectBeforeImage(index);
+            notifier.selectBeforeImage(index);
           },
           child: Container(
             alignment: Alignment.center,
@@ -346,7 +240,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
           children: [
             GestureDetector(
               onTap: () {
-                selectafterImage(index);
+                notifier.selectafterImage(index);
               },
               child: Container(
                 alignment: Alignment.center,
@@ -386,7 +280,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
             ),
             GestureDetector(
               onTap: () {
-                selectOthersImage(index);
+                notifier.selectOthersImage(index);
               },
               child: Container(
                 alignment: Alignment.center,
@@ -407,12 +301,12 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
     );
   }
 
-  Widget leftSide() {
+  Widget leftSide(KojiHoukokuNotifier notifier) {
     return Expanded(
       child: ListView.separated(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
-        itemCount: listKojiHoukoku.length,
+        itemCount: notifier.listKojiHoukoku.length,
         itemBuilder: (context, index) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -437,12 +331,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                     ),
                     Expanded(
                       child: textUnderline(
-                        initial: listKojiHoukoku[index].makerCd,
+                        initial: notifier.listKojiHoukoku[index].makerCd,
                         enable: false,
                         onChange: (value) {
-                          setState(() {
-                            listKojiHoukoku[index].makerCd = value;
-                          });
+                          notifier.updateMakerCd(value, index);
                         },
                       ),
                     ),
@@ -462,12 +354,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                     ),
                     Expanded(
                       child: textUnderline(
-                        initial: listKojiHoukoku[index].hinban,
+                        initial: notifier.listKojiHoukoku[index].hinban,
                         enable: false,
                         onChange: (value) {
-                          setState(() {
-                            listKojiHoukoku[index].hinban = value;
-                          });
+                          notifier.updateHinban(value, index);
                         },
                       ),
                     ),
@@ -497,13 +387,9 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                     ),
                     Expanded(
                       child: textUnderline(
-                        initial: listKojiHoukoku[index].kisetuMakerCd,
+                        initial: notifier.listKojiHoukoku[index].kisetuMaker,
                         onChange: (value) {
-                          if (listKojiHoukoku[index].kisetuMakerCd != null) {
-                            setState(() {
-                              listKojiHoukoku[index].kisetuMakerCd = value;
-                            });
-                          }
+                          notifier.updateKisetuMaker(value, index);
                         },
                       ),
                     ),
@@ -523,13 +409,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                     ),
                     Expanded(
                       child: textUnderline(
-                        initial: listKojiHoukoku[index].kisetuHinban ?? '',
+                        initial:
+                            notifier.listKojiHoukoku[index].kisetuHinban ?? '',
                         onChange: (value) {
-                          if (listKojiHoukoku[index].kisetuHinban != null) {
-                            setState(() {
-                              listKojiHoukoku[index].kisetuHinban = value;
-                            });
-                          }
+                          notifier.updateKisetuHinban(value, index);
                         },
                       ),
                     ),
@@ -551,7 +434,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                     SizedBox(
                       width: 10.sp,
                     ),
-                    _dropDownButton(context, index),
+                    _dropDownButton(context, notifier, index),
                   ],
                 ),
               ),
@@ -574,7 +457,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
     );
   }
 
-  Widget leftSide1Item(int index) {
+  Widget leftSide1Item(KojiHoukokuNotifier notifier, int index) {
     return Expanded(
       // height:
       //     widget.KOJI_ST == "3" || widget.KOJI_ST == "03" ? 400.h.sp : 240.h.sp,
@@ -602,12 +485,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 ),
                 Expanded(
                   child: textUnderline(
-                    initial: listKojiHoukoku[index].makerCd,
+                    initial: notifier.listKojiHoukoku[index].makerCd,
                     enable: false,
                     onChange: (value) {
-                      setState(() {
-                        listKojiHoukoku[index].makerCd = value;
-                      });
+                      notifier.updateMakerCd(value, index);
                     },
                   ),
                 ),
@@ -627,12 +508,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 ),
                 Expanded(
                   child: textUnderline(
-                    initial: listKojiHoukoku[index].hinban,
+                    initial: notifier.listKojiHoukoku[index].hinban,
                     enable: false,
                     onChange: (value) {
-                      setState(() {
-                        listKojiHoukoku[index].hinban = value;
-                      });
+                      notifier.updateHinban(value, index);
                     },
                   ),
                 ),
@@ -667,15 +546,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                           ),
                           Expanded(
                             child: textUnderline(
-                              initial: listKojiHoukoku[index].kisetuMaker,
+                              initial:
+                                  notifier.listKojiHoukoku[index].kisetuMaker,
                               onChange: (value) {
-                                if (listKojiHoukoku[index].kisetuMaker !=
-                                    null) {
-                                  setState(() {
-                                    listKojiHoukoku[index].kisetuMaker =
-                                        value;
-                                  });
-                                }
+                                notifier.updateKisetuMaker(value, index);
                               },
                             ),
                           ),
@@ -695,15 +569,11 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                           ),
                           Expanded(
                             child: textUnderline(
-                              initial:
-                                  listKojiHoukoku[index].kisetuHinban ?? '',
+                              initial: notifier
+                                      .listKojiHoukoku[index].kisetuHinban ??
+                                  '',
                               onChange: (value) {
-                                if (listKojiHoukoku[index].kisetuHinban !=
-                                    null) {
-                                  setState(() {
-                                    listKojiHoukoku[index].kisetuHinban = value;
-                                  });
-                                }
+                                notifier.updateKisetuHinban(value, index);
                               },
                             ),
                           ),
@@ -728,7 +598,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 SizedBox(
                   width: 10.sp,
                 ),
-                _dropDownButton(context, index),
+                _dropDownButton(context, notifier, index),
               ],
             ),
           ),
@@ -737,7 +607,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
     );
   }
 
-  Widget sendButton() {
+  Widget sendButton(KojiHoukokuNotifier notifier) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -891,7 +761,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
         ),
         GestureDetector(
           onTap: () {
-            if (TENPO_CD == null) {
+            if (notifier.tenpoId == null) {
               CustomToast.show(context, message: "TenpoCDを取得出来ませんでした。");
             } else {
               if (widget.HOJIN_FLG == "0" ||
@@ -906,7 +776,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                       JYUCYU_ID: widget.JYUCYU_ID,
                       KOJI_ST: widget.KOJI_ST,
                       initialDate: widget.initialDate,
-                      kojiHoukoku: listKojiHoukoku,
+                      kojiHoukoku: notifier.listKojiHoukoku,
                     ),
                   ),
                 );
@@ -917,8 +787,8 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                   MaterialPageRoute(
                     builder: (context) => HoujinKanryousho(
                       JYUCYU_ID: widget.JYUCYU_ID,
-                      TENPO_CD: TENPO_CD!,
-                      kojiHoukoku: listKojiHoukoku,
+                      TENPO_CD: notifier.tenpoId,
+                      kojiHoukoku: notifier.listKojiHoukoku,
                     ),
                   ),
                 );
@@ -971,7 +841,8 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
     );
   }
 
-  Widget _dropDownButton(BuildContext context, int indexInsideListHoukoku) {
+  Widget _dropDownButton(BuildContext context, KojiHoukokuNotifier notifier,
+      int indexInsideListHoukoku) {
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
@@ -981,15 +852,11 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
       },
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0.sp))),
-      itemBuilder: (context) => listPullDown.map((item) {
-        int index = listPullDown.indexOf(item);
+      itemBuilder: (context) => notifier.listPullDown.map((item) {
+        int index = notifier.listPullDown.indexOf(item);
         return PopupMenuItem(
           onTap: () {
-            setState(() {
-              // currentPullDownValue = item["KBNMSAI_NAME"];
-              // currentIndexPullDown = index;
-              listStateIndexDropdown[indexInsideListHoukoku] = index;
-            });
+            notifier.updateDropdownIndex(indexInsideListHoukoku, index);
           },
           height: 25.sp,
           padding: EdgeInsets.only(right: 0, left: 10.sp),
@@ -1026,9 +893,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                listPullDown.isNotEmpty && listStateIndexDropdown.isNotEmpty
-                    ? listPullDown[
-                            listStateIndexDropdown[indexInsideListHoukoku]!]
+                notifier.listPullDown.isNotEmpty &&
+                        notifier.listStateIndexDropdown.isNotEmpty
+                    ? notifier.listPullDown[notifier
+                            .listStateIndexDropdown[indexInsideListHoukoku]!]
                         ["KBNMSAI_NAME"]
                     : '',
                 style: TextStyle(

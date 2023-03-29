@@ -15,7 +15,7 @@ import '../../components/custom_header_widget.dart';
 import '../../models/koji.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
-import 'koji_houkoku.dart';
+import 'koji_houkoku/koji_houkoku.dart';
 
 class Page31YeuCauBieuMauPage extends StatefulWidget {
   final DateTime? initialDate;
