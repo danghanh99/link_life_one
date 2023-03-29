@@ -1033,12 +1033,9 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         decoration: const InputDecoration(
           contentPadding: EdgeInsets.only(top: 5, bottom: 5),
           isDense: true,
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black),
-          ),
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          border: InputBorder.none,
         ),
         cursorColor: Colors.black,
         style: const TextStyle(color: Colors.black, fontSize: 16),
