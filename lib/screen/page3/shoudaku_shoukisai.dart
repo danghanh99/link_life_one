@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -82,10 +83,10 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
     double bottom = top + renderBox.size.height;
     int startIndex = _getItemIndexAtOffset(top);
     int endIndex = _getItemIndexAtOffset(bottom);
-    print("Visible items from $startIndex to $endIndex");
-    setState(() {
-      _firstVisibleItemIndex = startIndex;
-    });
+    dev.log("Visible items from $startIndex to $endIndex");
+    // setState(() {
+      // _firstVisibleItemIndex = startIndex;
+    // });
   }
 
   int _getItemIndexAtOffset(double offset) {
@@ -330,6 +331,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                                       Padding(
                                         padding: const EdgeInsets.all(4.0),
                                         child: TextFormField(
+                                          key: const ValueKey('remark'),
                                           controller: remarkCtrl,
                                           maxLines: 3,
                                           decoration: const InputDecoration(
@@ -1010,6 +1012,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
       }
 
       return TextFormField(
+        key: const ValueKey('grid'),
         inputFormatters: col == 0
             ? []
             : [
@@ -1025,7 +1028,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         },
         readOnly: col != 2 ? false : !canEditUnitPrice,
         controller: ctrl,
-        focusNode: focusNode,
+        focusNode: null,
         keyboardType: TextInputType.number,
         minLines: 1,
         maxLines: 100,
@@ -1259,9 +1262,9 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
 
         if (item != null) {
           Map<String, String>? data = NEW_TABLE_DATA[row];
-          setState(() {
+          // setState(() {
             nameCtrls[row]?.item1!.text = item['SYOHIN_NAME'] ?? '';
-          });
+          // });
           int quantity = 0;
           if (data != null) {
             String quantityStr = data['SURYO'] ?? '';
@@ -1340,6 +1343,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
   }
 
   void setDataNew(Map<String, String> data, int row, int col) {
+    dev.log('set data new');
     setState(() {
       NEW_TABLE_DATA[row] = data;
     });
