@@ -72,7 +72,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         //and then start searching.
         suggestedRowHeight: 30.h);
 
-    _scrollController.addListener(_scrollListener);
+    // _scrollController.addListener(_scrollListener);
   }
 
   void _scrollListener() {
@@ -259,7 +259,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                                       ? 760
                                       : MediaQuery.of(context).size.width - 33,
                                   child: ListView.builder(
-                                    key: _listKey,
+                                    // key: _listKey,
                                     padding: EdgeInsets.zero,
                                     controller: _scrollController,
                                     itemCount: max(
@@ -330,8 +330,8 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(4.0),
-                                        child: TextFormField(
-                                          key: const ValueKey('remark'),
+                                        child: TextField(
+                                          key: null,
                                           controller: remarkCtrl,
                                           maxLines: 3,
                                           decoration: const InputDecoration(
@@ -1011,8 +1011,8 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         default:
       }
 
-      return TextFormField(
-        key: const ValueKey('grid'),
+      return TextField(
+        key: null,
         inputFormatters: col == 0
             ? []
             : [

@@ -141,7 +141,7 @@ class KojiHoukokuNotifier extends ChangeNotifier {
   }
 
   void onPop(BuildContext context) {
-
+    Navigator.of(context).pop();
   }
 
   

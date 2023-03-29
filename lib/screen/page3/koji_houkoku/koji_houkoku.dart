@@ -894,10 +894,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
             children: [
               Text(
                 notifier.listPullDown.isNotEmpty &&
-                        notifier.listStateIndexDropdown.isNotEmpty
+                        notifier.listStateIndexDropdown[indexInsideListHoukoku] != null
                     ? notifier.listPullDown[notifier
                             .listStateIndexDropdown[indexInsideListHoukoku]!]
-                        ["KBNMSAI_NAME"]
+                        ["KBNMSAI_NAME"] ?? ''
                     : '',
                 style: TextStyle(
                   color: Colors.black,
