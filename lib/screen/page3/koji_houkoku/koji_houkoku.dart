@@ -45,13 +45,12 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
   @override
   void initState() {
     super.initState();
-    _notifier.getData(widget.JYUCYU_ID, widget.SINGLE_SUMMARIZE, widget.KOJI_ST,
-        widget.SYUYAKU_JYUCYU_ID);
+    _notifier.getData(context, widget.JYUCYU_ID, widget.SINGLE_SUMMARIZE,
+        widget.KOJI_ST, widget.SYUYAKU_JYUCYU_ID);
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: ChangeNotifierProvider.value(
           value: _notifier,
@@ -81,7 +80,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                                     fontWeight: FontWeight.w500),
                                 text: '戻る',
                                 onTap: () {
-                                  notifier.onPop(context);
+                                  notifier.onPop(context, widget.JYUCYU_ID);
                                 },
                               ),
                             ),
@@ -843,6 +842,8 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
 
   Widget _dropDownButton(BuildContext context, KojiHoukokuNotifier notifier,
       int indexInsideListHoukoku) {
+    KojiHoukokuModel koji =
+        notifier.listKojiHoukoku.elementAt(indexInsideListHoukoku);
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
@@ -853,10 +854,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0.sp))),
       itemBuilder: (context) => notifier.listPullDown.map((item) {
-        int index = notifier.listPullDown.indexOf(item);
         return PopupMenuItem(
           onTap: () {
-            notifier.updateDropdownIndex(indexInsideListHoukoku, index);
+            notifier.selectedPulldown(
+                item['KBNMSAI_CD'], indexInsideListHoukoku);
           },
           height: 25.sp,
           padding: EdgeInsets.only(right: 0, left: 10.sp),
@@ -893,12 +894,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                notifier.listPullDown.isNotEmpty &&
-                        notifier.listStateIndexDropdown[indexInsideListHoukoku] != null
-                    ? notifier.listPullDown[notifier
-                            .listStateIndexDropdown[indexInsideListHoukoku]!]
-                        ["KBNMSAI_NAME"] ?? ''
-                    : '',
+                notifier.getKbnmsaiName(koji.kensetuKeitai ?? ''),
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 18.sp,

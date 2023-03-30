@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:link_life_one/api/koji/requestConstructionReport/get_koji_houkoku.dart';
+import 'package:link_life_one/shared/cache_notifier.dart';
+import 'package:provider/provider.dart';
 
 import '../../../models/koji_houkoku_model.dart';
 
@@ -11,7 +14,6 @@ class KojiHoukokuNotifier extends ChangeNotifier {
   List<KojiHoukokuModel> originListKojiHoukoku = [];
   List<KojiHoukokuModel> listKojiHoukoku = [];
   List<dynamic> listPullDown = [];
-  Map<int, int> listStateIndexDropdown = {};
   XFile? imageFile;
   XFile? befImage;
   XFile? aftImage;
@@ -19,8 +21,8 @@ class KojiHoukokuNotifier extends ChangeNotifier {
 
   String tenpoId = '';
 
-  Future<void> getData(String jyucyuId, String singleSummarize, String kojiSt,
-      String syuyakuJyucyuId) async {
+  Future<void> getData(BuildContext context, String jyucyuId,
+      String singleSummarize, String kojiSt, String syuyakuJyucyuId) async {
     final dynamic result = await GetKojiHoukoku().getKojiHoukoku(
         JYUCYU_ID: jyucyuId,
         SINGLE_SUMMARIZE: singleSummarize,
@@ -29,15 +31,18 @@ class KojiHoukokuNotifier extends ChangeNotifier {
         onSuccess: (res) {
           if (res['DATA'] != null) {
             List<dynamic> kojiListJson = res['DATA'];
+            originListKojiHoukoku =
+                kojiListJson.map((e) => KojiHoukokuModel.fromJson(e)).toList();
             listKojiHoukoku =
                 kojiListJson.map((e) => KojiHoukokuModel.fromJson(e)).toList();
+            readCache(context, jyucyuId);
           }
           if (listKojiHoukoku.isNotEmpty) {
             KojiHoukokuModel firstItem = listKojiHoukoku.first;
             tenpoId = firstItem.tenpoCd ?? '';
           } else {
+            originListKojiHoukoku = [KojiHoukokuModel.empty()];
             listKojiHoukoku = [KojiHoukokuModel.empty()];
-            originListKojiHoukoku = listKojiHoukoku;
           }
           if (res["TENPO_CD"] != null) {
             tenpoId = res['TENPO_CD'];
@@ -51,7 +56,7 @@ class KojiHoukokuNotifier extends ChangeNotifier {
               for (var j = 0; j < pulldownList.length; j++) {
                 Map<String, dynamic> pulldownItem = pulldownList[j];
                 if (koji.kensetuKeitai == pulldownItem['KBNMSAI_CD']) {
-                  listStateIndexDropdown[i] = j;
+                  // listStateIndexDropdown[i] = j;
                 }
               }
             }
@@ -59,10 +64,40 @@ class KojiHoukokuNotifier extends ChangeNotifier {
           }
         },
         onFailed: () {
+          originListKojiHoukoku = [KojiHoukokuModel.empty()];
           listKojiHoukoku = [KojiHoukokuModel.empty()];
-          originListKojiHoukoku = listKojiHoukoku;
         });
     notifyListeners();
+  }
+
+  void readCache(BuildContext context, String jyucyuId) {
+    Map<String, List<KojiHoukokuModel>> cacheList =
+        context.read<CacheNotifier>().cacheKojiHoukoku;
+    if (cacheList[jyucyuId] != null && cacheList[jyucyuId]!.isNotEmpty) {
+      List<KojiHoukokuModel> listItemCache = cacheList[jyucyuId]!;
+
+      for (var item in listKojiHoukoku) {
+        int index = listItemCache.indexWhere(
+            (cacheItem) => cacheItem.jyucyuMsaiId == item.jyucyuMsaiId);
+        if (index != -1) {
+          listKojiHoukoku.replaceRange(listKojiHoukoku.indexOf(item),
+              listKojiHoukoku.indexOf(item) + 1, [listItemCache[index]]);
+        }
+      }
+    }
+  }
+
+  String getKbnmsaiName(String kbnmsaiCode) {
+    String name = '';
+    if (kbnmsaiCode.isNotEmpty) {
+      Map<String, dynamic> selectedElement = listPullDown.firstWhere(
+          (element) => element['KBNMSAI_CD'] == kbnmsaiCode,
+          orElse: () => null);
+      if (selectedElement != null) {
+        name = selectedElement['KBNMSAI_NAME'];
+      }
+    }
+    return name;
   }
 
   void selectOthersImage(int? index) async {
@@ -135,14 +170,24 @@ class KojiHoukokuNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateDropdownIndex(int kojiIndex, int selectedIndex) {
-    listStateIndexDropdown[kojiIndex] = selectedIndex;
+  void selectedPulldown(String kbnmsaiCode, int index) {
+    listKojiHoukoku[index].kensetuKeitai = kbnmsaiCode;
     notifyListeners();
   }
 
-  void onPop(BuildContext context) {
+  void onPop(BuildContext context, String jyucyuId) {
+    List<KojiHoukokuModel> cacheList = [];
+    for (var i = 0; i < originListKojiHoukoku.length; i++) {
+      KojiHoukokuModel origin = originListKojiHoukoku.elementAt(i);
+      KojiHoukokuModel item = listKojiHoukoku.elementAt(i);
+
+      if (jsonEncode(origin) != jsonEncode(item)) {
+        cacheList.add(item);
+      }
+    }
+    if (cacheList.isNotEmpty) {
+      context.read<CacheNotifier>().cacheKojiHoukokuList(jyucyuId, cacheList);
+    }
     Navigator.of(context).pop();
   }
-
-  
 }

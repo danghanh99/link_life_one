@@ -16,7 +16,7 @@ void main() async {
   Hive.initFlutter();
   Hive.registerAdapter(UserAdapter());
   runApp(ChangeNotifierProvider(
-      create: (_) => EditCache(),
+      create: (_) => CacheNotifier(),
       child: const MyApp(),
     ),);
 }

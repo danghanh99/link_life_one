@@ -9,6 +9,8 @@ import 'package:link_life_one/screen/page3/shashin_kakinin_page.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/screen/page3/shitami_houkoku_page.dart';
 import 'package:link_life_one/screen/page7/component/dialog.dart';
+import 'package:link_life_one/shared/cache_notifier.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../api/koji/getPhotoConfirm/get_shashin_kakunin.dart';
 import '../../components/custom_header_widget.dart';
@@ -209,6 +211,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                         actions: <Widget>[
                           TextButton(
                               onPressed: () {
+                                context.read<CacheNotifier>().clearCache(widget.JYUCYU_ID);
                                 Navigator.pop(context); //close Dialog
                                 Navigator.pop(context);
                               },
