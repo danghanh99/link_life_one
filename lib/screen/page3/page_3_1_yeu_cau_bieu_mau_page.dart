@@ -211,9 +211,11 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                         actions: <Widget>[
                           TextButton(
                               onPressed: () {
-                                context.read<CacheNotifier>().clearCache(widget.JYUCYU_ID);
-                                Navigator.pop(context); //close Dialog
-                                Navigator.pop(context);
+                                context
+                                    .read<CacheNotifier>()
+                                    .clearCache(widget.JYUCYU_ID);
+                                Navigator.of(context).popUntil((route) =>
+                                    route.settings.name == 'KojiichiranPage3');
                               },
                               child: const Text(
                                 'はい',

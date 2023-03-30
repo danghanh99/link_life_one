@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 import 'dart:developer' as dev;
 
@@ -7,8 +8,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/models/koji_houkoku_model.dart';
 import 'package:link_life_one/screen/page3/shoudakusho.dart';
+import 'package:link_life_one/shared/cache_notifier.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 import 'package:link_life_one/shared/number_input_formatter.dart';
+import 'package:provider/provider.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tuple/tuple.dart';
 import '../../api/shoudakusho/get_shoudakusho.dart';
@@ -85,7 +88,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
     int endIndex = _getItemIndexAtOffset(bottom);
     dev.log("Visible items from $startIndex to $endIndex");
     // setState(() {
-      // _firstVisibleItemIndex = startIndex;
+    // _firstVisibleItemIndex = startIndex;
     // });
   }
 
@@ -117,28 +120,40 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         JYUCYU_ID: widget.JYUCYU_ID,
         KOJI_ST: widget.KOJI_ST,
         onSuccess: (body) {
-          print(body);
           if (body["KOJI_DATA"] != null) {
-            setState(() {
-              KOJI_DATA = body["KOJI_DATA"][0];
-            });
+            KOJI_DATA = body["KOJI_DATA"][0];
           }
 
           if (body["TABLE_DATA"] != null) {
-            setState(() {
-              TABLE_DATA = body["TABLE_DATA"];
-            });
+            TABLE_DATA = body["TABLE_DATA"];
           }
 
           if (body["KOJI_KAKAKU"] != null) {
-            setState(() {
-              KOJI_KAKAKU = body["KOJI_KAKAKU"];
-            });
+            KOJI_KAKAKU = body["KOJI_KAKAKU"];
           }
+          loadCachedata(context);
         },
         onFailed: () {
           CustomToast.show(context, message: "承諾書を取得出来ませんでした。");
         });
+  }
+
+  void loadCachedata(BuildContext context) {
+    List<Map<String, String>> newTableData = context
+            .read<CacheNotifier>()
+            .cacheNewTableShoudakuShoukisai[widget.JYUCYU_ID] ??
+        [];
+    for (var element in newTableData) {
+      int row = TABLE_DATA.length + NEW_TABLE_DATA.length;
+      NEW_TABLE_DATA[row] = element;
+    }
+
+    dev.log('load cache: ${jsonEncode(newTableData)}');
+
+    String remark =
+        context.read<CacheNotifier>().cacheRemarks[widget.JYUCYU_ID] ?? '';
+    remarkCtrl.text = remark;
+    setState(() {});
   }
 
   @override
@@ -170,6 +185,14 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                               fontWeight: FontWeight.w500),
                           text: '戻る',
                           onTap: () {
+                            context
+                                .read<CacheNotifier>()
+                                .cacheNewTableShoudakuShoukisaiList(
+                                    widget.JYUCYU_ID,
+                                    NEW_TABLE_DATA.values.toList());
+                            context
+                                .read<CacheNotifier>()
+                                .cacheRemark(widget.JYUCYU_ID, remarkCtrl.text);
                             Navigator.pop(context);
                           },
                         ),
@@ -558,7 +581,8 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                 child: _buildHeaderItem(
                     title: KOJI_DATA["KOJI_YMD"] ?? "",
                     bgColor: Colors.white,
-                    border: Border.all(color: const Color(0xFFDB4158), width: 2)),
+                    border:
+                        Border.all(color: const Color(0xFFDB4158), width: 2)),
               ),
             ],
           ),
@@ -981,6 +1005,10 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
             ctrl = TextEditingController(text: textValue);
             focusNode = FocusNode();
             codeCtrls[row] = Tuple2(ctrl, focusNode);
+          } else {
+            ctrl.text = textValue;
+            ctrl.selection = TextSelection.fromPosition(
+                TextPosition(offset: textValue.length));
           }
           break;
         case 2:
@@ -1263,7 +1291,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         if (item != null) {
           Map<String, String>? data = NEW_TABLE_DATA[row];
           // setState(() {
-            nameCtrls[row]?.item1!.text = item['SYOHIN_NAME'] ?? '';
+          nameCtrls[row]?.item1!.text = item['SYOHIN_NAME'] ?? '';
           // });
           int quantity = 0;
           if (data != null) {
