@@ -1592,28 +1592,17 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     }
   }
 
-  String getTypeItemLichTrinh(String type) {
-    if (type == "ネット工事" ||
-        type == "ネット下見" ||
-        type == "法人工事" ||
-        type == "法人下見" ||
-        type == "日予実" ||
-        type == "工事打診" ||
-        type == "下見打診") {
-      return 'lichtrinh';
+  String getTypeItemLichTrinh(String kbnmsaiCode) {
+    switch (kbnmsaiCode) {
+      case '01':
+        return 'anken';
+      case '05':
+        return 'lichtrinh';
+      case '06':
+        return 'memo';
+      default:
+        return '';
     }
-    if (type == "営業工事" || type == "営業下見") {
-      return 'anken';
-    }
-    if (type == "メモ" ||
-        type == "追加STOP" ||
-        type == "追加希望" ||
-        type == "休み" ||
-        type == "月次" ||
-        type == "重要") {
-      return 'memo';
-    }
-    return 'none';
   }
 
   Widget kojiItemWithType(int row, int col, e, bool isPhongBanData,
@@ -1633,7 +1622,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     return GestureDetector(
       onTap: () {
         if (isPhongBanData) {
-          String type = getTypeItemLichTrinh(e["KBNMSAI_NAME"]);
+          String type = getTypeItemLichTrinh(e["KBNMSAI_CD"]);
 
           switch (type) {
             case ("lichtrinh"):
@@ -1731,10 +1720,10 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               break;
 
             default:
-              {}
+              break;
           }
         } else {
-          String type = getTypeItemLichTrinh(e["KBNMSAI_NAME"] ?? '');
+          String type = getTypeItemLichTrinh(e["KBNMSAI_CD"] ?? '');
 
           switch (type) {
             case ("lichtrinh"):
@@ -1825,9 +1814,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               break;
 
             default:
-              {
-                CustomToast.show(context, message: "KBNMSAI_NAMETを取得出来ませんでした。");
-              }
+              break;
           }
         }
       },
