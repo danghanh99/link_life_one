@@ -14,9 +14,9 @@ import '../../../api/KojiPageApi/get_list_koji_api.dart';
 import '../../../api/KojiPageApi/request_post_count.dart';
 import '../../../api/koji/tirasu/get_tirasi.dart';
 import '../../../api/koji/tirasu/post_tirasi_update_api.dart';
+import '../../../main.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/validator.dart';
-import '../shashin_teishuutsu_gamen_page_2.dart';
 import 'components/title_widget.dart';
 
 class KojiichiranPage3BaoCaoHoanThanhCongTrinh extends StatefulWidget {
@@ -32,7 +32,7 @@ class KojiichiranPage3BaoCaoHoanThanhCongTrinh extends StatefulWidget {
 }
 
 class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
-    extends State<KojiichiranPage3BaoCaoHoanThanhCongTrinh> {
+    extends State<KojiichiranPage3BaoCaoHoanThanhCongTrinh> with RouteAware {
   final GlobalKey<FormState> _formKey = GlobalKey();
   bool isLoading = false;
   List<Koji> listKoji = [];
@@ -54,6 +54,29 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
     date = widget.initialDate ?? DateTime.now();
     super.initState();
     getListKojiApi = callGetListKojiApi(inputDate: date);
+    callGetTirasi(inputDate: date);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPush() {
+    // Called when the current route has been pushed.
+  }
+
+  @override
+  void didPopNext() {
+    callGetListKojiApi(inputDate: date);
     callGetTirasi(inputDate: date);
   }
 
@@ -244,7 +267,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                           ],
                         );
                       }
-            
+
                       if (listKoji.isEmpty) {
                         return const Center(
                             child: Text(
@@ -255,7 +278,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                           ),
                         ));
                       }
-            
+
                       return ListView.separated(
                         shrinkWrap: true,
                         physics: const ClampingScrollPhysics(),
@@ -317,7 +340,8 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                                                 ),
                                                 Container(
                                                   width: 90,
-                                                  decoration: const BoxDecoration(
+                                                  decoration:
+                                                      const BoxDecoration(
                                                     border: Border(
                                                       left: BorderSide(
                                                         //                   <--- left side
@@ -398,15 +422,15 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                                                                               ),
                                                                       settings:
                                                                           const RouteSettings(
-                                                                              name:
-                                                                                  'Page31YeuCauBieuMauPage')),
+                                                                              name: 'Page31YeuCauBieuMauPage')),
                                                                 );
                                                               });
                                                     },
                                                     child: const Text(
                                                       'はい',
                                                       style: TextStyle(
-                                                        color: Color(0xFF007AFF),
+                                                        color:
+                                                            Color(0xFF007AFF),
                                                         fontSize: 16,
                                                         fontWeight:
                                                             FontWeight.w600,
