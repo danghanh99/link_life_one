@@ -38,7 +38,8 @@ class ShoudakuShoukisai extends StatefulWidget {
   State<ShoudakuShoukisai> createState() => _ShoudakuShoukisaiState();
 }
 
-class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
+class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
+    with AutomaticKeepAliveClientMixin {
   GlobalKey _listKey = GlobalKey();
   dynamic KOJI_DATA = {};
   List<dynamic> TABLE_DATA = [];
@@ -58,6 +59,9 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
     initScroll();
     callGetKojiHoukoku();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void dispose() {
@@ -264,46 +268,9 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                               SizedBox(
                                   height: 30.h,
                                   child: Row(children: _buildTitle(5))),
-                              NotificationListener<ScrollNotification>(
-                                onNotification: (scrollNotification) {
-                                  if (scrollNotification
-                                      is ScrollEndNotification) {
-                                    if (_firstVisibleItemIndex >= 0) {
-                                      // _scrollController.scrollToIndex(
-                                      //     _firstVisibleItemIndex);
-                                    }
-                                  }
-                                  return true;
-                                },
-                                child: SizedBox(
-                                  height: 370.h,
-                                  width: MediaQuery.of(context).orientation ==
-                                          Orientation.portrait
-                                      ? 760
-                                      : MediaQuery.of(context).size.width - 33,
-                                  child: ListView.builder(
-                                    // key: _listKey,
-                                    padding: EdgeInsets.zero,
-                                    controller: _scrollController,
-                                    itemCount: max(
-                                        TABLE_DATA.length +
-                                            NEW_TABLE_DATA.length +
-                                            5,
-                                        20),
-                                    itemBuilder: (context, index) {
-                                      return AutoScrollTag(
-                                        key: ValueKey(index),
-                                        index: index,
-                                        controller: _scrollController,
-                                        child: IntrinsicHeight(
-                                          child: Row(
-                                            children: _buildCells2(5, index),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
+                              SizedBox(
+                                height: 370.h,
+                                child: _buildListView(),
                               ),
                             ],
                           ),
@@ -357,6 +324,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
                                           key: null,
                                           controller: remarkCtrl,
                                           maxLines: 3,
+                                          keyboardType: TextInputType.text,
                                           decoration: const InputDecoration(
                                             contentPadding: EdgeInsets.only(
                                                 top: 5, bottom: 5),
@@ -432,6 +400,24 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildListView() {
+    dev.log('_buildListView');
+    return ListView.builder(
+      key: _listKey,
+      padding: EdgeInsets.zero,
+      controller: _scrollController,
+      itemCount: max(TABLE_DATA.length + NEW_TABLE_DATA.length + 5, 20),
+      itemBuilder: (context, index) {
+        return IntrinsicHeight(
+          child: Row(
+            key: ValueKey(index),
+            children: _buildCells2(5, index),
+          ),
+        );
+      },
     );
   }
 
@@ -982,7 +968,6 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
           break;
       }
     }
-
     if (col == 0 || col == 1 || col == 2 || col == 3) {
       TextEditingController? ctrl;
       FocusNode? focusNode;
@@ -1040,7 +1025,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
       }
 
       return TextField(
-        key: null,
+        key: ValueKey('$row$col'),
         inputFormatters: col == 0
             ? []
             : [
@@ -1056,8 +1041,8 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
         },
         readOnly: col != 2 ? false : !canEditUnitPrice,
         controller: ctrl,
-        focusNode: null,
-        keyboardType: TextInputType.number,
+        focusNode: focusNode,
+        keyboardType: col == 0 ? TextInputType.text : TextInputType.number,
         minLines: 1,
         maxLines: 100,
         textAlign: textAlign(col),
@@ -1313,11 +1298,20 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
           };
           setDataNew(newData, row, col);
         } else {
-          setState(() {
-            nameCtrls[row]?.item1!.text = '';
-            quantityCtrls[row]?.item1!.text = '';
-            NEW_TABLE_DATA.remove(row);
-          });
+          nameCtrls[row]?.item1!.text = '';
+          quantityCtrls[row]?.item1!.text = '';
+          unitPriceCtrls[row]?.item1!.text = '';
+          
+          Map<String, String> newData = {
+            'TUIKA_SYOHIN_NAME': '',
+            'TUIKA_JISYA_CD': value,
+            'SURYO': '',
+            'HANBAI_TANKA': '',
+            'KINGAK': '',
+            'CHANGE_FLG': '0'
+          };
+
+          setDataNew(newData, row, col);
         }
         break;
       case 3:
@@ -1371,9 +1365,31 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai> {
   }
 
   void setDataNew(Map<String, String> data, int row, int col) {
-    dev.log('set data new');
     setState(() {
       NEW_TABLE_DATA[row] = data;
     });
+
+    FocusNode? focusNode;
+
+    switch (col) {
+      case 0:
+        focusNode = nameCtrls[row]?.item2;
+        break;
+      case 1:
+        focusNode = codeCtrls[row]?.item2;
+        break;
+      case 2:
+        focusNode = unitPriceCtrls[row]?.item2;
+        break;
+      case 3:
+        focusNode = quantityCtrls[row]?.item2;
+        break;
+      default:
+        break;
+    }
+
+    if (focusNode != null) {
+      focusNode.requestFocus();
+    }
   }
 }

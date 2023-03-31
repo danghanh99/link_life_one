@@ -4,9 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/shared/cache_notifier.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 import 'package:link_life_one/shared/extension.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:signature/signature.dart';
 
 import '../../api/shoudakusho/submit_last_page.dart';
@@ -1030,7 +1032,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
             // }
             showDialog(
               context: context,
-              builder: (context) {
+              builder: (ctx) {
                 return SizedBox(
                   width: double.infinity,
                   child: CupertinoAlertDialog(
@@ -1071,16 +1073,17 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                               kojiHoukoku: widget.kojiHoukoku,
                               onSuccess: () {
                                 widget.onSaveSuccess();
-                                CustomToast.show(context,
+                                CustomToast.show(ctx,
                                     message: "登録出来ました。",
                                     backGround: Colors.green);
-                                Navigator.of(context).popUntil((route) =>
+                                context.read<CacheNotifier>().clearCache(widget.jyucyuId);
+                                Navigator.of(ctx).popUntil((route) =>
                                     route.settings.name == 'KojiichiranPage3');
                               },
                               onFailed: (msg) {
-                                Navigator.pop(context);
+                                Navigator.pop(ctx);
                                 CustomToast.show(
-                                  context,
+                                  ctx,
                                   message: "登録できませんでした。",
                                 );
                                 setState(() {
@@ -1099,7 +1102,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                           )),
                       TextButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.pop(ctx);
                         },
                         child: const Text(
                           'いいえ',
