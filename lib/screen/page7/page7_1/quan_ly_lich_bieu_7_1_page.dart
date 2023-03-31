@@ -1622,7 +1622,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     return GestureDetector(
       onTap: () {
         if (isPhongBanData) {
-          String type = getTypeItemLichTrinh(e["KBNMSAI_CD"]);
+          String type = getTypeItemLichTrinh(e["KBN_CD"]);
 
           switch (type) {
             case ("lichtrinh"):
@@ -1723,7 +1723,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
               break;
           }
         } else {
-          String type = getTypeItemLichTrinh(e["KBNMSAI_CD"] ?? '');
+          String type = getTypeItemLichTrinh(e["KBN_CD"] ?? '');
 
           switch (type) {
             case ("lichtrinh"):
