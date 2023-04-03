@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/sukejuuru_page_api/memo/delete_memo.dart';
+import 'package:link_life_one/components/custom_dialog.dart';
 import 'package:link_life_one/shared/date_formatter.dart';
 
 import '../../../api/sukejuuru_page_api/memo/create_memo.dart';
@@ -11,7 +12,7 @@ import '../../../shared/assets.dart';
 class Page724Update extends StatefulWidget {
   final DateTime initialDate;
   final String TAN_CAL_ID;
-  final String KBNMSAI_NAME;
+  final String kbnmsaiCode;
   final bool checkedValue;
   final String NAIYO;
   final String START_TIME;
@@ -22,7 +23,7 @@ class Page724Update extends StatefulWidget {
   const Page724Update({
     required this.initialDate,
     required this.TAN_CAL_ID,
-    required this.KBNMSAI_NAME,
+    required this.kbnmsaiCode,
     required this.checkedValue,
     required this.NAIYO,
     required this.END_TIME,
@@ -168,8 +169,8 @@ class _Page724UpdateState extends State<Page724Update> {
         });
     setState(() {
       pullDownMemo = result == null ? [] : result['pullDown'];
-      pullDownSelected = pullDownMemo.firstWhere(
-          (element) => element['KBNMSAI_NAME'] == widget.KBNMSAI_NAME);
+      pullDownSelected = pullDownMemo
+          .firstWhere((element) => element['KBNMSAI_CD'] == widget.kbnmsaiCode);
     });
   }
 
@@ -191,6 +192,16 @@ class _Page724UpdateState extends State<Page724Update> {
     } else {
       return true;
     }
+  }
+
+  bool verifyEdit() {
+    String startTime = DateFormatter.formatDateTimeToTime(widget.START_TIME);
+    String endTime = DateFormatter.formatDateTimeToTime(widget.END_TIME);
+    return checkedValue != widget.checkedValue ||
+        pullDownSelected['KBNMSAI_CD'] != widget.kbnmsaiCode ||
+        dateinput.text != widget.NAIYO ||
+        startTime != kara ||
+        endTime != made;
   }
 
   @override
@@ -510,7 +521,13 @@ class _Page724UpdateState extends State<Page724Update> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    if (verifyEdit()) {
+                      MyDialog.showDiscardDialog(context, onOk: () {
+                        Navigator.pop(context);
+                      }, onCancel: () {});
+                    } else {
+                      Navigator.pop(context);
+                    }
                   },
                   child: const Text(
                     'キャンセル',

@@ -5,6 +5,7 @@ import 'package:link_life_one/shared/date_formatter.dart';
 
 import '../../../../api/sukejuuru_page_api/netto_koji/show_anken/get_lich_trinh_item_edit_page.dart';
 import '../../../../api/sukejuuru_page_api/netto_koji/update_anken/update_lich_trinh.dart';
+import '../../../../components/custom_dialog.dart';
 import '../../../../components/custom_text_field.dart';
 import '../../../../components/toast.dart';
 import '../../../../shared/assets.dart';
@@ -155,6 +156,13 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
   late String jinNumberEditPage;
   late String jikanNumberEditPage;
   late String commentEditPage;
+
+  late bool originCheckAppointEditPage;
+  late DateTime originDatetimeEditPage;
+  late String originJikanKaraEditPage;
+  late String originJikanMadeEditPage;
+  late bool originCheckAllDayEditPage;
+
   int selectedPullDownIndex = 0;
 
   late String KBNMSAI_NAME;
@@ -230,13 +238,24 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                     if (jikanKaraEditPage.isEmpty) {
                       jikanKaraEditPage = '00:00';
                     }
+
+                    originJikanKaraEditPage =
+                        DateFormatter.formatDateTimeToTime(HOMONJIKAN);
+                    if (originJikanKaraEditPage.isEmpty) {
+                      originJikanKaraEditPage = '00:00';
+                    }
                   }
                   if (data["DATA"][0]["HOMONJIKAN_END"] != null) {
                     HOMONJIKAN_END = data["DATA"][0]["HOMONJIKAN_END"];
                     jikanMadeEditPage =
                         DateFormatter.formatDateTimeToTime(HOMONJIKAN_END);
+                    originJikanMadeEditPage =
+                        DateFormatter.formatDateTimeToTime(HOMONJIKAN_END);
                     if (jikanMadeEditPage.isEmpty) {
                       jikanMadeEditPage = '00:00';
+                    }
+                    if (originJikanMadeEditPage.isEmpty) {
+                      originJikanMadeEditPage = '00:00';
                     }
                     ;
                   }
@@ -278,7 +297,10 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                       (widget.HOMON_SBT == '01' ? SITAMIAPO_KBN : KOJIAPO_KBN);
                   checkAppointEditPage =
                       apoKbn == "01" || apoKbn == "1" ? false : true;
+                  originCheckAppointEditPage =
+                      apoKbn == "01" || apoKbn == "1" ? false : true;
                   checkAllDayEditPage = ALL_DAY_FLG == "1" ? true : false;
+                  originCheckAllDayEditPage = ALL_DAY_FLG == "1" ? true : false;
                   // jinNumberEditPage = JININ;
                   // jikanNumberEditPage = JIKAN;
                   // commentEditPage = COMMENT;
@@ -287,6 +309,8 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                       : data["DATA"][0]["KOJI_YMD"] ?? '';
 
                   datetimeEditPage = DateFormat("yyyy-MM-dd").parse(kojiYmd);
+                  originDatetimeEditPage =
+                      DateFormat("yyyy-MM-dd").parse(kojiYmd);
                 });
               }
             });
@@ -302,6 +326,17 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
     DateTime fromDate = DateTime.parse("2023-01-01 $jikanKaraEditPage:00");
     DateTime toDate = DateTime.parse("2023-01-01 $jikanMadeEditPage:00");
     return !checkAllDayEditPage && fromDate.compareTo(toDate) >= 0;
+  }
+
+  bool verifyEdit() {
+    return KBNMSAI_NAME != widget.KBNMSAI_NAME ||
+        jinNumberEditPage != widget.jinin ||
+        jikanNumberEditPage != widget.jikan ||
+        commentEditPage != widget.memo ||
+        checkAppointEditPage != originCheckAppointEditPage ||
+        jikanKaraEditPage != originJikanKaraEditPage ||
+        jikanMadeEditPage != originJikanMadeEditPage ||
+        checkAllDayEditPage != originCheckAllDayEditPage;
   }
 
   @override
@@ -788,7 +823,15 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: widget.onCancel,
+                    onPressed: () {
+                      if (verifyEdit()) {
+                        MyDialog.showDiscardDialog(context, onOk: () {
+                          widget.onCancel();
+                        }, onCancel: () {});
+                      } else {
+                        widget.onCancel();
+                      }
+                    },
                     child: const Text(
                       'キャンセル',
                       style: TextStyle(

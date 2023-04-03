@@ -6,6 +6,7 @@ import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/shared/byte_limit_formatter.dart';
 
 import '../../../../api/sukejuuru_page_api/eigyo_anken/show_eigyo_anken/get_anken_detail.dart';
+import '../../../../components/custom_dialog.dart';
 import '../../../../components/custom_text_field.dart';
 import '../../../../shared/assets.dart';
 import '../../../../shared/validator.dart';
@@ -62,6 +63,18 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
   late String sankasha1CreateAnkenPage = '';
   late String sankasha2CreateAnkenPage = '';
   late String sankasha3CreateAnkenPage = '';
+
+  String originJikanKaraCreateAnkenPage = '';
+  String originJikanMadeCreateAnkenPage = '';
+  bool originCheckAllDayCreateAnkenPage = false;
+  String originJinNumberCreateAnkenPage = '0';
+  String originJikanNumberCreateAnkenPage = '0';
+  String originOkyakuSamaCreateAnkenPage = '';
+  String originSankasha1CreateAnkenPage = '';
+  String originSankasha2CreateAnkenPage = '';
+  String originSankasha3CreateAnkenPage = '';
+
+
   int selectedPullDownIndex = 0;
 
   String TAG_KBN = '';
@@ -198,20 +211,25 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
               DateFormat("yyyy-MM-dd").parse(response["EIGYO_ANKEN"][0]["YMD"]);
           datetimeCreateAnkenPage =
               DateFormat("yyyy-MM-dd").parse(response["EIGYO_ANKEN"][0]["YMD"]);
-          jikanKaraCreateAnkenPage = response["EIGYO_ANKEN"][0]["START_TIME"]
+          jikanKaraCreateAnkenPage = "${response["EIGYO_ANKEN"][0]["START_TIME"]
                   .toString()
-                  .split(":")[0] +
-              ":" +
-              response["EIGYO_ANKEN"][0]["START_TIME"].toString().split(":")[1];
-          jikanMadeCreateAnkenPage = response["EIGYO_ANKEN"][0]["END_TIME"]
+                  .split(":")[0]}:${response["EIGYO_ANKEN"][0]["START_TIME"].toString().split(":")[1]}";
+          originJikanKaraCreateAnkenPage = "${response["EIGYO_ANKEN"][0]["START_TIME"]
                   .toString()
-                  .split(":")[0] +
-              ":" +
-              response["EIGYO_ANKEN"][0]["END_TIME"].toString().split(":")[1];
+                  .split(":")[0]}:${response["EIGYO_ANKEN"][0]["START_TIME"].toString().split(":")[1]}";
+          jikanMadeCreateAnkenPage = "${response["EIGYO_ANKEN"][0]["END_TIME"]
+                  .toString()
+                  .split(":")[0]}:${response["EIGYO_ANKEN"][0]["END_TIME"].toString().split(":")[1]}";
+          originJikanMadeCreateAnkenPage = "${response["EIGYO_ANKEN"][0]["END_TIME"]
+                  .toString()
+                  .split(":")[0]}:${response["EIGYO_ANKEN"][0]["END_TIME"].toString().split(":")[1]}";
           jinNumberCreateAnkenPage = response["EIGYO_ANKEN"][0]["JININ"];
+          originJinNumberCreateAnkenPage = response["EIGYO_ANKEN"][0]["JININ"];
+
           textEditingControllerNin.text =
               int.parse(response["EIGYO_ANKEN"][0]["JININ"]).toString();
           jikanNumberCreateAnkenPage = response["EIGYO_ANKEN"][0]["JIKAN"];
+          originJikanNumberCreateAnkenPage = response["EIGYO_ANKEN"][0]["JIKAN"];
 
 ////////////////////////////////////////////////////////////
           ///
@@ -224,11 +242,18 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
 ////////////////////////////////////////////////////
           okyakuSamaCreateAnkenPage =
               response["EIGYO_ANKEN"][0]["GUEST_NAME"] ?? '';
+          originOkyakuSamaCreateAnkenPage = response["EIGYO_ANKEN"][0]["GUEST_NAME"] ?? '';
           sankasha1CreateAnkenPage =
+              response["EIGYO_ANKEN"][0]["ATTEND_NAME1"] ?? '';
+          originSankasha1CreateAnkenPage =
               response["EIGYO_ANKEN"][0]["ATTEND_NAME1"] ?? '';
           sankasha2CreateAnkenPage =
               response["EIGYO_ANKEN"][0]["ATTEND_NAME2"] ?? '';
+          originSankasha2CreateAnkenPage =
+              response["EIGYO_ANKEN"][0]["ATTEND_NAME2"] ?? '';
           sankasha3CreateAnkenPage =
+              response["EIGYO_ANKEN"][0]["ATTEND_NAME3"] ?? '';
+          originSankasha3CreateAnkenPage =
               response["EIGYO_ANKEN"][0]["ATTEND_NAME3"] ?? '';
           textEditingControllerKhachHang.text =
               response["EIGYO_ANKEN"][0]["GUEST_NAME"] ?? '';
@@ -241,6 +266,7 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
 
           checkAllDayCreateAnkenPage =
               response["EIGYO_ANKEN"][0]["ALL_DAY_FLG"] == "1" ? true : false;
+          originCheckAllDayCreateAnkenPage = response["EIGYO_ANKEN"][0]["ALL_DAY_FLG"] == "1" ? true : false;
         });
       },
       TAN_EIG_ID: widget.TAN_EIG_ID,
@@ -254,6 +280,19 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
         DateTime.parse("2023-01-01 $jikanKaraCreateAnkenPage:00");
     DateTime toDate = DateTime.parse("2023-01-01 $jikanMadeCreateAnkenPage:00");
     return !checkAllDayCreateAnkenPage && fromDate.compareTo(toDate) >= 0;
+  }
+
+  bool verifyEdit() {
+    return currentPullDownValue != widget.KBNMSAI_NAME ||
+        jikanKaraCreateAnkenPage != originJikanKaraCreateAnkenPage ||
+        jikanMadeCreateAnkenPage != originJikanMadeCreateAnkenPage ||
+        checkAllDayCreateAnkenPage != originCheckAllDayCreateAnkenPage ||
+        jinNumberCreateAnkenPage != originJinNumberCreateAnkenPage ||
+        jikanNumberCreateAnkenPage != originJikanNumberCreateAnkenPage ||
+        okyakuSamaCreateAnkenPage != originOkyakuSamaCreateAnkenPage ||
+        sankasha1CreateAnkenPage != originSankasha1CreateAnkenPage ||
+        sankasha2CreateAnkenPage != originSankasha2CreateAnkenPage||
+        sankasha3CreateAnkenPage != originSankasha3CreateAnkenPage;
   }
 
   @override
@@ -792,7 +831,13 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      if (verifyEdit()) {
+                        MyDialog.showDiscardDialog(context, onOk: () {
+                          Navigator.pop(context);
+                        }, onCancel: () {});
+                      } else {
+                        Navigator.pop(context);
+                      }
                     },
                     child: const Text(
                       'キャンセル',
