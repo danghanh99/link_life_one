@@ -840,7 +840,9 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
       style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
       initialValue: initial,
       minLines: 1,
-      maxLines: 1,
+      maxLines: 4,
+      textInputAction: TextInputAction.newline,
+      keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.only(top: 5.sp, bottom: 5.sp),
         isDense: true,

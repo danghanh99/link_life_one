@@ -323,8 +323,9 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
                                         child: TextField(
                                           key: null,
                                           controller: remarkCtrl,
-                                          maxLines: 3,
-                                          keyboardType: TextInputType.text,
+                                          maxLines: 4,
+                                          keyboardType: TextInputType.multiline,
+                                          textInputAction: TextInputAction.newline,
                                           decoration: const InputDecoration(
                                             contentPadding: EdgeInsets.only(
                                                 top: 5, bottom: 5),
@@ -1049,7 +1050,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
         readOnly: col != 2 ? false : !canEditUnitPrice,
         controller: ctrl,
         focusNode: focusNode,
-        keyboardType: col == 0 ? TextInputType.text : TextInputType.number,
+        keyboardType: col == 0 ? TextInputType.multiline : TextInputType.number,
         minLines: 1,
         maxLines: 100,
         textAlign: textAlign(col),
