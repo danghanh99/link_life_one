@@ -1592,9 +1592,11 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     }
   }
 
-  String getTypeItemLichTrinh(String kbnmsaiCode) {
-    switch (kbnmsaiCode) {
+  String getTypeItemLichTrinh(String kbnCode) {
+    switch (kbnCode) {
       case '01':
+      case '10':
+      case '16':
         return 'anken';
       case '05':
         return 'lichtrinh';
