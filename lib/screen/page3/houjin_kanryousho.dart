@@ -7,6 +7,7 @@ import 'package:link_life_one/api/KojiPageApi/hou_jin_kan_ryo_sho_api.dart';
 import 'package:link_life_one/api/KojiPageApi/request_corporate_completion.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/shared/assets.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -52,7 +53,9 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
         listKbn = result['KBN'];
         for (var element in listKbn) {
           element.forEach((key, value) {
-            listKbnName.add(value);
+            if (value != null && value != '') {
+              listKbnName.add(value);
+            }
           });
         }
         listImage = result['FILE'] ?? [];
@@ -171,33 +174,26 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                           itemBuilder:
                               (BuildContext context, int itemIndex, int idx) {
                             return SizedBox(
-                              width: 700.w,
-                              height: 500.h,
-                              child: listImage[itemIndex].runtimeType == XFile
-                                  ? Image.file(
-                                      File(listImage[idx]!.path),
-                                      width: size.width - 50,
-                                      height: size.height * 2 / 5,
-                                      fit: size.width > size.height
-                                          ? null
-                                          : BoxFit.fill,
-                                    )
-                                  : CachedNetworkImage(
-                                      imageUrl: listImage[idx]['FILEPATH'],
-                                      placeholder: (context, url) =>
-                                          const Center(
-                                        child: SizedBox(
-                                          width: 100,
-                                          height: 1,
-                                          child: CircularProgressIndicator(
-                                            color: Colors.yellow,
-                                          ),
-                                        ),
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                    ),
-                            );
+                                width: 700.w,
+                                height: 500.h,
+                                child: listImage[itemIndex].runtimeType == XFile
+                                    ? Image.file(
+                                        File(listImage[idx]!.path),
+                                        width: size.width - 50,
+                                        height: size.height * 2 / 5,
+                                        fit: size.width > size.height
+                                            ? null
+                                            : BoxFit.fill,
+                                      )
+                                    : FadeInImage(
+                                        placeholder: Assets.blankImage,
+                                        image: NetworkImage(
+                                            listImage[idx]['FILEPATH']),
+                                        imageErrorBuilder:
+                                            (context, error, stackTrace) {
+                                          return const Icon(Icons.error);
+                                        },
+                                      ));
                           },
                         ),
                       ),

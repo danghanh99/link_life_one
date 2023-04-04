@@ -15,6 +15,7 @@ import '../../api/shoudakusho/submit_last_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../models/koji_houkoku_model.dart';
+import '../../shared/assets.dart';
 
 class ShoudakuSho extends StatefulWidget {
   final DateTime? initialDate;
@@ -714,8 +715,14 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                 visible: widget.kojiData['CO_CD'] != null &&
                                     widget.kojiData['CO_CD'] != '',
                                 child: widget.kojiData['CO_CD'] != null
-                                    ? Image.network(
-                                        widget.kojiData['CO_CD'],
+                                    ? FadeInImage(
+                                        placeholder: Assets.blankImage,
+                                        image: NetworkImage(
+                                            widget.kojiData['CO_CD']),
+                                        imageErrorBuilder:
+                                            (context, error, stackTrace) {
+                                          return const Icon(Icons.error);
+                                        },
                                       )
                                     : const SizedBox.shrink()),
                           )
@@ -1076,7 +1083,9 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                 CustomToast.show(ctx,
                                     message: "登録出来ました。",
                                     backGround: Colors.green);
-                                context.read<CacheNotifier>().clearCache(widget.jyucyuId);
+                                context
+                                    .read<CacheNotifier>()
+                                    .clearCache(widget.jyucyuId);
                                 Navigator.of(ctx).popUntil((route) =>
                                     route.settings.name == 'KojiichiranPage3');
                               },

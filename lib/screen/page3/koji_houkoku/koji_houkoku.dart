@@ -218,7 +218,15 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                               item?.befSekiPhotoFilePath == ''
                           ? const SizedBox.shrink()
                           : isNetworkPath(item?.befSekiPhotoFilePath ?? '')
-                              ? Image.network(item?.befSekiPhotoFilePath ?? '')
+                              ? FadeInImage(
+                                  placeholder: Assets.blankImage,
+                                  image: NetworkImage(
+                                      item?.befSekiPhotoFilePath ?? ''),
+                                  imageErrorBuilder:
+                                      (context, error, stackTrace) {
+                                    return const Icon(Icons.error);
+                                  },
+                                )
                               : Image.file(
                                   File(item?.befSekiPhotoFilePath ?? ''))),
                   // Flexible(
@@ -265,8 +273,15 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                                   item?.aftSekoPhotoFilePath == ''
                               ? const SizedBox.shrink()
                               : isNetworkPath(item?.aftSekoPhotoFilePath ?? '')
-                                  ? Image.network(
-                                      item?.aftSekoPhotoFilePath ?? '')
+                                  ? FadeInImage(
+                                      placeholder: Assets.blankImage,
+                                      image: NetworkImage(
+                                          item?.aftSekoPhotoFilePath ?? ''),
+                                      imageErrorBuilder:
+                                          (context, error, stackTrace) {
+                                        return const Icon(Icons.error);
+                                      },
+                                    )
                                   : Image.file(
                                       File(item?.aftSekoPhotoFilePath ?? ''))),
                     ],

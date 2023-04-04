@@ -1,3 +1,6 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
 class Assets {
   static const String LOGO_LINK = './assets/images/link_logo.png';
   static const String COMMENT_ICON = './assets/images/comment_icon.png';
@@ -12,4 +15,6 @@ class Assets {
   static const String icDown = './assets/images/down.png';
 
   static const String icDropdown = './assets/images/ic_dropdown.png';
+
+  static ImageProvider blankImage = MemoryImage(Uint8List(0));
 }

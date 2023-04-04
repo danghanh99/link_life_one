@@ -377,8 +377,15 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
                                         visible: KOJI_DATA['CO_CD'] != null &&
                                             KOJI_DATA['CO_CD'] != '',
                                         child: KOJI_DATA['CO_CD'] != null
-                                            ? Image.network(
-                                                KOJI_DATA['CO_CD'],
+                                            ? FadeInImage(
+                                                placeholder: Assets.blankImage,
+                                                image: NetworkImage(
+                                                    KOJI_DATA['CO_CD']),
+                                                imageErrorBuilder: (context,
+                                                    error, stackTrace) {
+                                                  return const SizedBox
+                                                      .shrink();
+                                                },
                                               )
                                             : const SizedBox.shrink()),
                                   )
@@ -1301,7 +1308,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
           nameCtrls[row]?.item1!.text = '';
           quantityCtrls[row]?.item1!.text = '';
           unitPriceCtrls[row]?.item1!.text = '';
-          
+
           Map<String, String> newData = {
             'TUIKA_SYOHIN_NAME': '',
             'TUIKA_JISYA_CD': value,
