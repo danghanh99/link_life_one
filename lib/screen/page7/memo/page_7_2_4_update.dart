@@ -20,6 +20,7 @@ class Page724Update extends StatefulWidget {
   final String JYOKEN_CD;
   final isPhongBan;
   final Function() onSuccess;
+  final Function() onBack;
   const Page724Update({
     required this.initialDate,
     required this.TAN_CAL_ID,
@@ -31,6 +32,7 @@ class Page724Update extends StatefulWidget {
     required this.JYOKEN_CD,
     required this.isPhongBan,
     required this.onSuccess,
+    required this.onBack,
     Key? key,
   }) : super(key: key);
 
@@ -523,9 +525,11 @@ class _Page724UpdateState extends State<Page724Update> {
                   onPressed: () {
                     if (verifyEdit()) {
                       MyDialog.showDiscardDialog(context, onOk: () {
+                        widget.onBack();
                         Navigator.pop(context);
                       }, onCancel: () {});
                     } else {
+                      widget.onBack();
                       Navigator.pop(context);
                     }
                   },

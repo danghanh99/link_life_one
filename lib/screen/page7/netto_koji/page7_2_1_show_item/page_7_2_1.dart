@@ -16,6 +16,7 @@ class Page721 extends StatefulWidget {
   final String kojiItem;
 
   final Function onSuccessUpdate;
+  final Function() onBack;
   const Page721({
     Key? key,
     required this.JYUCYU_ID,
@@ -25,6 +26,7 @@ class Page721 extends StatefulWidget {
     required this.setsakiName,
     required this.kojiItem,
     required this.onSuccessUpdate,
+    required this.onBack
   }) : super(key: key);
 
   @override
@@ -752,6 +754,7 @@ class _Page721State extends State<Page721> {
                     //     builder: (context) => const Page722(),
                     //   ),
                     // );
+                    widget.onBack();
                     Navigator.pop(context);
                   },
                   child: const Text(

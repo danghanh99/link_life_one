@@ -18,6 +18,7 @@ class Page723EditShowAnken extends StatefulWidget {
   final String TAN_EIG_ID;
   final Function onUpdateAnkenSuccessfull;
   final String KBNMSAI_NAME;
+  final Function() onBack;
   const Page723EditShowAnken({
     required this.initialDate,
     required this.TANT_CD,
@@ -25,6 +26,7 @@ class Page723EditShowAnken extends StatefulWidget {
     required this.onUpdateAnkenSuccessfull,
     required this.TAN_EIG_ID,
     required this.KBNMSAI_NAME,
+    required this.onBack,
     Key? key,
   }) : super(key: key);
 
@@ -833,9 +835,11 @@ class _Page723EditShowAnkenState extends State<Page723EditShowAnken> {
                     onPressed: () {
                       if (verifyEdit()) {
                         MyDialog.showDiscardDialog(context, onOk: () {
+                          widget.onBack();
                           Navigator.pop(context);
                         }, onCancel: () {});
                       } else {
+                        widget.onBack();
                         Navigator.pop(context);
                       }
                     },

@@ -28,7 +28,8 @@ class QuanLyLichBieu71Page extends StatefulWidget {
   State<QuanLyLichBieu71Page> createState() => _QuanLyLichBieu71PageState();
 }
 
-class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
+class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page>
+    with RouteAware {
   List<String> listNames = [
     '入出庫管理',
     '部材管理',
@@ -74,6 +75,19 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
     });
 
     super.initState();
+  }
+
+  void getData() {
+    String? tantCode;
+    if (value1nguoi == '個人') {
+      tantCode = sukejuuruSelectedUser?.tantCode ?? '';
+    }
+    callGetAnkenCuaMotPhongBan(
+      kojiGyoSyaCd: phongBanId,
+      date: currentDate,
+      selectedTantCode: tantCode,
+    );
+    getListPeople(phongBanId);
   }
 
   Future<List<dynamic>> callGetListPhongBan(Function(bool) onSuccess) async {
@@ -1658,6 +1672,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       );
                       getListPeople(phongBanId);
                     },
+                    onBack: () {
+                      getData();
+                    },
                   ),
                 );
               }
@@ -1685,6 +1702,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                     initialDate: currentDate,
                     TANT_CD: tantCd ?? '',
                     isPhongBan: isPhongBanData,
+                    onBack: () {
+                      getData();
+                    },
                   ),
                 );
               }
@@ -1716,6 +1736,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       );
                       getListPeople(phongBanId);
                     }),
+                    onBack: () {
+                      getData();
+                    },
                   ),
                 );
               }
@@ -1752,6 +1775,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       );
                       getListPeople(phongBanId);
                     },
+                    onBack: () {
+                      getData();
+                    },
                   ),
                 );
               }
@@ -1778,6 +1804,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                         selectedTantCode: tantCode,
                       );
                       getListPeople(phongBanId);
+                    },
+                    onBack: () {
+                      getData();
                     },
                   ),
                 );
@@ -1810,6 +1839,9 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page> {
                       );
                       getListPeople(phongBanId);
                     }),
+                    onBack: () {
+                      getData();
+                    },
                   ),
                 );
               }
