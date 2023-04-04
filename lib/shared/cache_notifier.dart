@@ -8,6 +8,8 @@ class CacheNotifier extends ChangeNotifier {
   Map<String, List<Map<String, String>>> cacheNewTableShoudakuShoukisai = {};
   Map<String, String> cacheRemarks = {};
 
+  Map<String, List<bool>> cacheSelectedCheckBoxs = {}; // 7 check box in ShoudakuSho screen
+
   void cacheKojiHoukokuList(String jyucyuId, List<KojiHoukokuModel> list) {
     cacheKojiHoukoku[jyucyuId] = list;
     notifyListeners();
@@ -23,11 +25,17 @@ class CacheNotifier extends ChangeNotifier {
     cacheRemarks[jyucyuId] = remark;
     notifyListeners();
   }
+  
+  void cacheListCheckBox(String jyucyuId, List<bool> values) {
+    cacheSelectedCheckBoxs[jyucyuId] = values;
+    notifyListeners();
+  }
 
   void clearCache(String jyucyuId) {
     cacheKojiHoukoku[jyucyuId] = [];
     cacheNewTableShoudakuShoukisai[jyucyuId] = [];
     cacheRemarks[jyucyuId] = '';
+    cacheSelectedCheckBoxs[jyucyuId] = [];
     notifyListeners();
   }
 }

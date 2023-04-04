@@ -16,5 +16,5 @@ class Assets {
 
   static const String icDropdown = './assets/images/ic_dropdown.png';
 
-  static ImageProvider blankImage = MemoryImage(Uint8List(0));
+  static ImageProvider blankImage = MemoryImage(Uint8List.fromList([]));
 }

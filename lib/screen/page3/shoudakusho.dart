@@ -52,13 +52,13 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
   );
 
   File? file;
-  late bool checkedValue1;
-  late bool checkedValue2;
-  late bool checkedValue3;
-  late bool checkedValue4;
-  late bool checkedValue5;
-  late bool checkedValue6;
-  late bool checkedValue7;
+  bool checkedValue1 = false;
+  bool checkedValue2 = false;
+  bool checkedValue3 = false;
+  bool checkedValue4 = false;
+  bool checkedValue5 = false;
+  bool checkedValue6 = false;
+  bool checkedValue7 = false;
 
   bool registeredSignature = false;
   bool checkBoxError = false;
@@ -68,13 +68,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
 
   @override
   void initState() {
-    checkedValue1 = false;
-    checkedValue2 = false;
-    checkedValue3 = false;
-    checkedValue4 = false;
-    checkedValue5 = false;
-    checkedValue6 = false;
-    checkedValue7 = false;
+    loadCachedata(context);
     file = null;
     _controller.addListener(() => debugPrint('Value changed'));
     _controller.onDrawStart = onDrawStart;
@@ -87,6 +81,21 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
     _controller.dispose();
 
     super.dispose();
+  }
+
+  void loadCachedata(BuildContext context) {
+    List<bool> selectedCheckbox =
+        context.read<CacheNotifier>().cacheSelectedCheckBoxs[widget.jyucyuId] ??
+            [];
+    if (selectedCheckbox.isNotEmpty && selectedCheckbox.length == 7) {
+      checkedValue1 = selectedCheckbox.first;
+      checkedValue2 = selectedCheckbox[1];
+      checkedValue3 = selectedCheckbox[2];
+      checkedValue4 = selectedCheckbox[3];
+      checkedValue5 = selectedCheckbox[4];
+      checkedValue6 = selectedCheckbox[5];
+      checkedValue7 = selectedCheckbox[6];
+    }
   }
 
   void onDrawStart() {
@@ -183,6 +192,17 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                               fontWeight: FontWeight.w500),
                           text: '戻る',
                           onTap: () {
+                            context
+                                .read<CacheNotifier>()
+                                .cacheListCheckBox(widget.jyucyuId, [
+                              checkedValue1,
+                              checkedValue2,
+                              checkedValue3,
+                              checkedValue4,
+                              checkedValue5,
+                              checkedValue6,
+                              checkedValue7
+                            ]);
                             Navigator.pop(context);
                           },
                         ),
