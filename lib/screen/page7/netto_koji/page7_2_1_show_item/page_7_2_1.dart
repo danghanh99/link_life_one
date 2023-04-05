@@ -114,17 +114,15 @@ class _Page721State extends State<Page721> {
             this.schedule = schedule;
             bool isShitami = widget.HOMON_SBT == '01';
             setState(() {
-              String YMD_api = schedule.ymd!;
-              if (YMD_api.isEmpty) {
-                if (isShitami) {
-                  YMD_api = schedule.sitamiYmd!;
+              String ymd = '';
+              if (isShitami) {
+                  ymd = schedule.sitamiYmd!;
                 } else {
-                  YMD_api = schedule.kojiYmd!;
+                  ymd = schedule.kojiYmd!;
                 }
-              }
-              time = YMD_api.isEmpty
+              time = ymd.isEmpty
                   ? null
-                  : DateFormat("yyyy-MM-dd").parse(YMD_api);
+                  : DateFormat("yyyy-MM-dd").parse(ymd);
               JININ = schedule.jinin ?? '';
               JIKAN = isShitami
                   ? schedule.sitamiKansanPoint ?? ''
