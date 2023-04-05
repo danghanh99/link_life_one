@@ -57,7 +57,7 @@ class RequestCorporateCompletion {
           String base64Image = base64Encode(imageBytes);
           return base64Image;
         }).toList(),
-        'KOJIMSAI_IMG': listKojiHoukoku
+        'KOJI_HOUKOKU': listKojiHoukoku
       };
 
       final Response response = await RestAPI.shared.postData(url, parameters);

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -16,5 +18,6 @@ class Assets {
 
   static const String icDropdown = './assets/images/ic_dropdown.png';
 
-  static ImageProvider blankImage = MemoryImage(Uint8List.fromList([]));
+  static ImageProvider blankImage = MemoryImage(const Base64Codec()
+      .decode("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"));
 }
