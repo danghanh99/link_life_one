@@ -1880,7 +1880,14 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page>
                         "${e['SITAMIHOMONJIKAN']} - ${e['SITAMIHOMONJIKAN_END']}",
                         style: const TextStyle(fontSize: 10),
                       )
-                    : (e['START_TIME'] != null && e['END_TIME'] != null)
+                    :  e['KOJIHOMONJIKAN'] != '' &&
+                        e['KOJIHOMONJIKAN_END'] != '' &&
+                        e['KOJIHOMONJIKAN'] != null &&
+                        e['KOJIHOMONJIKAN_END'] != null
+                    ? Text(
+                        "${e['KOJIHOMONJIKAN']} - ${e['KOJIHOMONJIKAN_END']}",
+                        style: const TextStyle(fontSize: 10),
+                      ) : (e['START_TIME'] != null && e['END_TIME'] != null)
                         ? Text(
                             "${e['START_TIME']} - ${e['END_TIME']}",
                             style: const TextStyle(fontSize: 10),

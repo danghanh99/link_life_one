@@ -55,7 +55,7 @@ class RequestCorporateCompletion {
           File imageFile = File(e);
           List<int> imageBytes = imageFile.readAsBytesSync();
           String base64Image = base64Encode(imageBytes);
-          return {'IMG_BASE64': base64Image};
+          return base64Image;
         }).toList(),
         'KOJIMSAI_IMG': listKojiHoukoku
       };
