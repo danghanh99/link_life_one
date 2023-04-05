@@ -168,7 +168,6 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
   late String KBNMSAI_NAME;
 
   bool validKaraMade = true;
-  bool showCommentError = false;
 
   String TAG_KBN = '';
   String HOMONJIKAN = '00:00';
@@ -359,7 +358,7 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                   children: [
                     Flexible(
                       child: Text(
-                        '$KBNMSAI_NAME${checkAppointEditPage ? '(アポ済み)' : ''} <<${widget.JYUCYU_ID}>>${widget.setsakiAddress}・${widget.kojiItem}・${widget.setsakiName}',
+                        '$KBNMSAI_NAME${checkAppointEditPage ? '(アポ済み)' : ''} <<${widget.JYUCYU_ID.length == 10 ? widget.JYUCYU_ID : widget.JYUCYU_ID.substring(0, 10)}>>${widget.setsakiAddress}・${widget.kojiItem}・${widget.setsakiName}',
                         style: const TextStyle(
                           color: Color(0xFF042C5C),
                           fontSize: 18,
@@ -712,11 +711,10 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                     hint: '',
                     initValue: commentEditPage,
                     type: TextInputType.emailAddress,
-                    errorText: showCommentError ? '必須項目です' : '',
+                    errorText: '',
                     onChanged: (text) {
                       setState(() {
                         commentEditPage = text;
-                        showCommentError = false;
                       });
                     },
                     maxLines: 5,
@@ -763,12 +761,6 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                         setState(() {
                           validKaraMade = true;
                         });
-                      }
-                      if (commentEditPage.isEmpty) {
-                        setState(() {
-                          showCommentError = true;
-                        });
-                        return;
                       }
                       if (_formKey.currentState?.validate() == true &&
                           validKaraMade) {

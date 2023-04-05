@@ -223,7 +223,7 @@ class _Page721State extends State<Page721> {
                     children: [
                       Flexible(
                         child: Text(
-                          '$KBNMSAI_NAME${appointed ? '(アポ済み)' : ''} <<${widget.JYUCYU_ID}>>${widget.setsakiAddress}・${widget.kojiItem}・${widget.setsakiName}',
+                          '$KBNMSAI_NAME${appointed ? '(アポ済み)' : ''} <<${widget.JYUCYU_ID.length == 10 ? widget.JYUCYU_ID : widget.JYUCYU_ID.substring(0, 10)}>>${widget.setsakiAddress}・${widget.kojiItem}・${widget.setsakiName}',
                           style: const TextStyle(
                             color: Color(0xFF042C5C),
                             fontSize: 18,
