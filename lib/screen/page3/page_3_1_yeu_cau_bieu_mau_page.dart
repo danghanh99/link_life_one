@@ -76,17 +76,18 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
     list.forEach((element) {
       String kojiiraisyoFilePath = element.kojiiraisyoFilePath ?? '';
       String sitamiiraisyoFilePath = element.sitamiiraisyoFilePath ?? '';
-      String filePath = element.filePath ?? '';
-      if (kojiiraisyoFilePath.isNotEmpty &&
-          kojiiraisyoFilePath.endsWith('.pdf')) {
+      List<FileItem> files = element.files ?? [];
+      if (kojiiraisyoFilePath.isNotEmpty && isPDF(kojiiraisyoFilePath)) {
         listURL.add(kojiiraisyoFilePath);
       }
-      if (sitamiiraisyoFilePath.isNotEmpty &&
-          sitamiiraisyoFilePath.endsWith('.pdf')) {
+      if (sitamiiraisyoFilePath.isNotEmpty && isPDF(sitamiiraisyoFilePath)) {
         listURL.add(sitamiiraisyoFilePath);
       }
-      if (filePath.isNotEmpty && filePath.endsWith('.pdf')) {
-        listURL.add(filePath);
+      for (var file in files) {
+        String filePath = file.path ?? '';
+        if (filePath.isNotEmpty && isPDF(filePath)) {
+          listURL.add(filePath);
+        }
       }
     });
     setState(() {
@@ -97,6 +98,10 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
     if (listPdfURL.length > 1) {
       showPopup('添付ファイルを確認して下さい。');
     }
+  }
+
+  bool isPDF(String path) {
+    return path.toLowerCase().endsWith('.pdf'.toLowerCase());
   }
 
   Future<void> callGetShashinKakunin() async {
