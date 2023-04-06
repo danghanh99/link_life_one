@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/api/KojiPageApi/get_list_pdf.dart';
@@ -9,6 +8,7 @@ import 'package:link_life_one/screen/page3/shashin_kakinin_page.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/screen/page3/shitami_houkoku_page.dart';
 import 'package:link_life_one/screen/page7/component/dialog.dart';
+import 'package:link_life_one/screen/page7/component/pdf_viewer.dart';
 import 'package:link_life_one/shared/cache_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -173,7 +173,6 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFFFFFFF),
@@ -285,36 +284,14 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                     decoration: BoxDecoration(
                       border: Border.all(),
                     ),
-                    child: CarouselSlider.builder(
-                        itemCount: listPdfURL.length,
-                        itemBuilder: (ctx, index, realIndex) {
-                          String filePath = listPdfURL.elementAt(index);
-                          return filePath.isEmpty
-                              ? const Center(
-                                  child: Text(
-                                    'PDFを取得出来ませんでした。',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                )
-                              : SfPdfViewer.network(
-                                  filePath,
-                                  onDocumentLoaded: (details) {},
-                                  onDocumentLoadFailed: (detail) {
-                                    CustomToast.show(context,
-                                        message: "PDFを取得出来ませんでした。");
-                                    // message: detail.description);
-                                  },
-                                );
-                        },
-                        options: CarouselOptions(
-                          viewportFraction: 1,
-                          aspectRatio:
-                              constraints.maxWidth / constraints.maxHeight,
-                          enableInfiniteScroll: false,
-                          onPageChanged: (index, reason) {
-                            onChangePage(index);
-                          },
-                        )));
+                    child: PdfViewer(
+                      filePaths: listPdfURL,
+                      ratio: constraints.maxWidth / constraints.maxHeight,
+                      showPage: false,
+                      onPageChange: (index) {
+                        onChangePage(index);
+                      },
+                    ));
               }),
             ),
             const SizedBox(
