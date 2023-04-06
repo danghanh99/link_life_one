@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/models/schedules.dart';
 import 'package:link_life_one/screen/page7/netto_koji/page_7_2_2_edit_item/page_7_2_2.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../../../api/sukejuuru_page_api/netto_koji/show_anken/get_lich_trinh_item.dart';
-import '../../../../components/toast.dart';
 import '../../component/dialog.dart';
+import '../../component/pdf_viewer.dart';
 
 class Page721 extends StatefulWidget {
   final String JYUCYU_ID;
@@ -17,17 +16,17 @@ class Page721 extends StatefulWidget {
 
   final Function onSuccessUpdate;
   final Function() onBack;
-  const Page721({
-    Key? key,
-    required this.JYUCYU_ID,
-    // required this.KBNMSAI_NAME,
-    required this.HOMON_SBT,
-    required this.setsakiAddress,
-    required this.setsakiName,
-    required this.kojiItem,
-    required this.onSuccessUpdate,
-    required this.onBack
-  }) : super(key: key);
+  const Page721(
+      {Key? key,
+      required this.JYUCYU_ID,
+      // required this.KBNMSAI_NAME,
+      required this.HOMON_SBT,
+      required this.setsakiAddress,
+      required this.setsakiName,
+      required this.kojiItem,
+      required this.onSuccessUpdate,
+      required this.onBack})
+      : super(key: key);
 
   @override
   State<Page721> createState() => _Page721State();
@@ -72,8 +71,8 @@ class _Page721State extends State<Page721> {
   String ADD_YMD = '';
   String UPD_TANTNM = '';
   String UPD_YMD = '';
-  String fileName = '';
-  String filePath = '';
+  List<String> listFileName = [];
+  List<String> listFilePath = [];
   String MEMO = '';
   String HOMON_SBT = '';
   String KBNMSAI_NAME = '';
@@ -116,13 +115,11 @@ class _Page721State extends State<Page721> {
             setState(() {
               String ymd = '';
               if (isShitami) {
-                  ymd = schedule.sitamiYmd!;
-                } else {
-                  ymd = schedule.kojiYmd!;
-                }
-              time = ymd.isEmpty
-                  ? null
-                  : DateFormat("yyyy-MM-dd").parse(ymd);
+                ymd = schedule.sitamiYmd!;
+              } else {
+                ymd = schedule.kojiYmd!;
+              }
+              time = ymd.isEmpty ? null : DateFormat("yyyy-MM-dd").parse(ymd);
               JININ = schedule.jinin ?? '';
               JIKAN = isShitami
                   ? schedule.sitamiKansanPoint ?? ''
@@ -146,17 +143,32 @@ class _Page721State extends State<Page721> {
               ADD_YMD = schedule.addYmd ?? '';
               UPD_TANTNM = schedule.updTantnm ?? '';
               UPD_YMD = schedule.updYmd ?? '';
-              fileName = isShitami
-                  ? schedule.sitamiiraisyoFilepath?.split('/').last ?? ''
-                  : schedule.kojiiraisyoFilepath?.split('/').last ?? '';
-              filePath = isShitami
+
+              String filePath = isShitami
                   ? schedule.sitamiiraisyoFilepath ?? ''
                   : schedule.kojiiraisyoFilepath ?? '';
+              String fileName = filePath.split('/').last;
+
+              if (fileName.toLowerCase().endsWith('.pdf')) {
+                listFileName.add(fileName);
+                listFilePath.add(filePath);
+              }
+
+              List<ScheduleFileItem> files = schedule.fileList ?? [];
+              for (var element in files) {
+                String path = element.filePath ?? '';
+                String name = path.split('/').last;
+                if (name.toLowerCase().endsWith('.pdf')) {
+                  listFileName.add(name);
+                  listFilePath.add(path);
+                }
+              }
+
               MEMO = schedule.memo ?? '';
               HOMON_SBT = schedule.homonSbt ?? '';
               KBNMSAI_NAME = schedule.kbnmsaiName ?? '';
               COMMENT = schedule.comment ?? '';
-              FILEPATH = schedule.filepath ?? [];
+              FILEPATH = schedule.fileList ?? [];
               String apoKbn = isShitami
                   ? schedule.sitamiapoKbn ?? ''
                   : schedule.kojiapoKbn ?? '';
@@ -435,7 +447,7 @@ class _Page721State extends State<Page721> {
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  Text(
+                                  const Text(
                                     '人',
                                     style: TextStyle(
                                       color: Color(0xFF042C5C),
@@ -660,25 +672,20 @@ class _Page721State extends State<Page721> {
                                             ],
                                           ),
                                           SizedBox(
-                                            width: size.width * 4 / 5,
-                                            height: size.height * 4 / 5,
-                                            child: SfPdfViewer.network(
-                                              filePath,
-                                              key: GlobalKey(),
-                                              onDocumentLoaded: (details) {},
-                                              onDocumentLoadFailed: (detail) {
-                                                CustomToast.show(context,
-                                                    message: "PDFを取得出来ませんでした。");
-                                                // message: detail.description);
-                                              },
-                                            ),
-                                          )
+                                              width: size.width * 4 / 5,
+                                              height: size.height * 4 / 5,
+                                              child: PdfViewer(
+                                                  filePaths: listFilePath,
+                                                  ratio:
+                                                      size.width / size.height))
                                         ],
                                       ),
                                     ));
                               },
                               child: Text(
-                                fileName,
+                                listFileName
+                                    .where((s) => s.isNotEmpty)
+                                    .join(', '),
                                 style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 14,

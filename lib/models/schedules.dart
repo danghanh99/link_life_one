@@ -68,7 +68,7 @@ class ScheduleItem {
   String? yobikomoku3;
   String? yobikomoku4;
   String? yobikomoku5;
-  List<String>? filepath;
+  List<ScheduleFileItem>? fileList;
 
   ScheduleItem({
     this.jyucyuId,
@@ -140,7 +140,7 @@ class ScheduleItem {
     this.yobikomoku3,
     this.yobikomoku4,
     this.yobikomoku5,
-    this.filepath,
+    this.fileList,
   });
 
   factory ScheduleItem.fromJson(Map<String, dynamic> json) {
@@ -214,7 +214,25 @@ class ScheduleItem {
       yobikomoku3: json['YOBIKOMOKU3'] ?? '',
       yobikomoku4: json['YOBIKOMOKU4'] ?? '',
       yobikomoku5: json['YOBIKOMOKU5'] ?? '',
-      filepath: List.from(json['FILEPATH']).map((e) => e.toString()).toList(),
+      fileList: List.from(json['FILEPATH'])
+          .map((e) => ScheduleFileItem.fromJson(e))
+          .toList(),
     );
   }
+}
+
+class ScheduleFileItem {
+  String? filePathId;
+  String? id;
+  String? filePath;
+  String? fileKbnCd;
+
+  ScheduleFileItem({this.filePathId, this.id, this.filePath, this.fileKbnCd});
+
+  factory ScheduleFileItem.fromJson(Map<String, dynamic> json) =>
+      ScheduleFileItem(
+          id: json['ID'] ?? '',
+          filePathId: json['FILEPATH_ID'] ?? '',
+          filePath: json['FILEPATH'] ?? '',
+          fileKbnCd: json['FILE_KBN_CD'] ?? '');
 }
