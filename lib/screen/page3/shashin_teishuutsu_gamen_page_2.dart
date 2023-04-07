@@ -11,6 +11,9 @@ import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+
+import '../../shared/cache_notifier.dart';
 
 class ShashinTeishuutsuGamenPage2 extends StatefulWidget {
   final DateTime? initialDate;
@@ -69,8 +72,18 @@ class _ShashinTeishuutsuGamenPage2State
         } catch (e) {
           selectedImages = [];
         }
+        loadCache();
       },
     );
+  }
+
+  void loadCache() {
+    List<XFile>? cacheImages =
+        context.read<CacheNotifier>().cacheShashinTeishuutsuGamenImages[
+            widget.JYUCYU_ID + widget.index.toString()];
+    if (cacheImages != null && cacheImages.isNotEmpty) {
+      selectedImages.addAll(cacheImages);
+    }
   }
 
   @override
@@ -100,6 +113,14 @@ class _ShashinTeishuutsuGamenPage2State
                           fontWeight: FontWeight.w500),
                       text: '戻る',
                       onTap: () {
+                        context
+                            .read<CacheNotifier>()
+                            .cacheListShashinTeishuutsuImages(
+                                widget.JYUCYU_ID + widget.index.toString(),
+                                List<XFile>.from(selectedImages
+                                    .where((element) =>
+                                        element.runtimeType == XFile)
+                                    .toList()));
                         Navigator.pop(context);
                       },
                     ),
@@ -140,7 +161,6 @@ class _ShashinTeishuutsuGamenPage2State
                     runSpacing: 5.0,
                     children: [
                       ...selectedImages.map((e) {
-                        log(e.toString());
                         return SizedBox(
                           width: (imageContainerHeight / 4) - 5,
                           height: (imageContainerHeight / 4) - 5,
@@ -277,12 +297,7 @@ class _ShashinTeishuutsuGamenPage2State
                                     message: "写真をアップロード出来ました。",
                                     backGround: Colors.green,
                                   );
-                                  // if (widget.index == 1 || widget.index == 4) {
-                                  //   Navigator.pop(context);
-                                  // } else {
-                                  //   Navigator.pop(context);
-                                  //   Navigator.pop(context);
-                                  // }
+                                  context.read<CacheNotifier>().clearShitami();
 
                                   Navigator.of(context).popUntil((route) =>
                                       route.settings.name ==

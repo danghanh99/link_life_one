@@ -4,6 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:link_life_one/api/KojiPageApi/get_riyuu.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page_2.dart';
+import 'package:link_life_one/shared/cache_notifier.dart';
+import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 import '../../components/custom_text_field.dart';
 import '../../components/text_line_down.dart';
@@ -48,8 +51,19 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
         date = riyuu[0]['MTMORI_YMD'] != null
             ? DateFormat('yyyy-MM-dd').parse(riyuu[0]['MTMORI_YMD'])
             : DateTime.now();
+        loadCache();
       },
     );
+  }
+
+  void loadCache() {
+    Tuple2<String, DateTime>? data = context
+        .read<CacheNotifier>()
+        .cacheRiyuu[widget.JYUCYU_ID + widget.index.toString()];
+    if (data != null) {
+      controller.text = data.item1;
+      date = data.item2;
+    }
   }
 
   @override
@@ -77,6 +91,11 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
                             fontWeight: FontWeight.w500),
                         text: '戻る',
                         onTap: () {
+                          context
+                            .read<CacheNotifier>()
+                            .cacheRiyuuData(
+                                widget.JYUCYU_ID + widget.index.toString(),
+                                Tuple2(controller.text, date));
                           Navigator.pop(context);
                         },
                       ),
