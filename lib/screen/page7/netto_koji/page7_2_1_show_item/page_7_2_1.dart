@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/models/schedules.dart';
 import 'package:link_life_one/screen/page7/netto_koji/page_7_2_2_edit_item/page_7_2_2.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../../../api/sukejuuru_page_api/netto_koji/show_anken/get_lich_trinh_item.dart';
+import '../../../../shared/assets.dart';
 import '../../component/dialog.dart';
 import '../../component/pdf_viewer.dart';
 
@@ -149,7 +152,7 @@ class _Page721State extends State<Page721> {
                   : schedule.kojiiraisyoFilepath ?? '';
               String fileName = filePath.split('/').last;
 
-              if (fileName.toLowerCase().endsWith('.pdf')) {
+              if (isFile(filePath)) {
                 listFileName.add(fileName);
                 listFilePath.add(filePath);
               }
@@ -158,7 +161,7 @@ class _Page721State extends State<Page721> {
               for (var element in files) {
                 String path = element.filePath ?? '';
                 String name = path.split('/').last;
-                if (name.toLowerCase().endsWith('.pdf')) {
+                if (isFile(path)) {
                   listFileName.add(name);
                   listFilePath.add(path);
                 }
@@ -196,6 +199,12 @@ class _Page721State extends State<Page721> {
     setState(() {
       showUpdatePage = isUpdate;
     });
+  }
+
+  bool isFile(String filePath) {
+    return filePath.toLowerCase().endsWith('.pdf') ||
+        filePath.endsWith('.png') ||
+        filePath.endsWith('.jpg');
   }
 
   @override
@@ -631,68 +640,27 @@ class _Page721State extends State<Page721> {
                             width: 10,
                           ),
                           Flexible(
-                            child: GestureDetector(
-                              onTap: () {
-                                Size size = MediaQuery.of(context).size;
-                                CustomDialog.showCustomDialog(
-                                    context: context,
-                                    title: '',
-                                    body: Container(
-                                      // width: size.width * 2 / 3,
-                                      // height: size.height * 2 / 3,
-                                      decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.black)),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const Text(''),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Container(
-                                                  width: 40,
-                                                  height: 30,
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.red,
-                                                      border: Border.all(
-                                                          color: Colors.red)),
-                                                  child: const Icon(
-                                                    Icons.close,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                              width: size.width * 4 / 5,
-                                              height: size.height * 4 / 5,
-                                              child: PdfViewer(
-                                                  filePaths: listFilePath,
-                                                  ratio:
-                                                      size.width / size.height))
-                                        ],
-                                      ),
-                                    ));
-                              },
-                              child: Text(
-                                listFileName
-                                    .where((s) => s.isNotEmpty)
-                                    .join(', '),
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w300,
-                                    overflow: TextOverflow.ellipsis),
-                              ),
-                            ),
+                            child: ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: listFileName.length,
+                                itemBuilder: (ctx, index) {
+                                  String fileName =
+                                      listFileName.elementAt(index);
+                                  return GestureDetector(
+                                    onTap: () {
+                                      viewerFile(listFilePath.elementAt(index));
+                                    },
+                                    child: Text(
+                                      fileName,
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w300,
+                                          overflow: TextOverflow.ellipsis),
+                                    ),
+                                  );
+                                }),
                           ),
                         ],
                       ),
@@ -778,5 +746,71 @@ class _Page721State extends State<Page721> {
               ),
             ],
           );
+  }
+
+  void viewerFile(String path) {
+    Size size = MediaQuery.of(context).size;
+    CustomDialog.showCustomDialog(
+        context: context,
+        title: '',
+        body: Container(
+          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(''),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          border: Border.all(color: Colors.red)),
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                  width: size.width * 4 / 5,
+                  height: size.height * 4 / 5,
+                  child: loadFile(path))
+            ],
+          ),
+        ));
+  }
+
+  Widget loadFile(String path) {
+    String fileName = path.split('/').last.toLowerCase();
+
+    if (fileName.endsWith('.pdf')) {
+      return SfPdfViewer.network(
+        path,
+        onDocumentLoaded: (details) {},
+        onDocumentLoadFailed: (detail) {
+          CustomToast.show(context, message: "PDFを取得出来ませんでした。");
+          // message: detail.description);
+        },
+      );
+    } else if (fileName.endsWith('.png') || fileName.endsWith('.jpg')) {
+      return FadeInImage(
+        placeholder: Assets.blankImage,
+        image: NetworkImage(path),
+        imageErrorBuilder: (context, error, stackTrace) {
+          return const Icon(Icons.error);
+        },
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 }
