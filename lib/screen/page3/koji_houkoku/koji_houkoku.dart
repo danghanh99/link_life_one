@@ -535,71 +535,66 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
           SizedBox(
             height: 10.sp,
           ),
-          widget.KOJI_ST == "3" || widget.KOJI_ST == "03"
-              ? Column(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '【既設品情報】',
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+              ),
+              SizedBox(
+                height: 10.sp,
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 10.sp),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '【既設品情報】',
+                      'メーカー: ',
                       style: TextStyle(
                           fontSize: 20.sp, fontWeight: FontWeight.w700),
                     ),
-                    SizedBox(
-                      height: 10.sp,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 10.sp),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'メーカー: ',
-                            style: TextStyle(
-                                fontSize: 20.sp, fontWeight: FontWeight.w700),
-                          ),
-                          Expanded(
-                            child: textUnderline(
-                              initial:
-                                  notifier.listKojiHoukoku[index].kisetuMaker,
-                              onChange: (value) {
-                                notifier.updateKisetuMaker(value, index);
-                              },
-                            ),
-                          ),
-                        ],
+                    Expanded(
+                      child: textUnderline(
+                        initial: notifier.listKojiHoukoku[index].kisetuMaker,
+                        onChange: (value) {
+                          notifier.updateKisetuMaker(value, index);
+                        },
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 10.sp),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '品番: ',
-                            style: TextStyle(
-                                fontSize: 20.sp, fontWeight: FontWeight.w700),
-                          ),
-                          Expanded(
-                            child: textUnderline(
-                              initial: notifier
-                                      .listKojiHoukoku[index].kisetuHinban ??
-                                  '',
-                              onChange: (value) {
-                                notifier.updateKisetuHinban(value, index);
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10.sp,
                     ),
                   ],
-                )
-              : Container(),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 10.sp),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '品番: ',
+                      style: TextStyle(
+                          fontSize: 20.sp, fontWeight: FontWeight.w700),
+                    ),
+                    Expanded(
+                      child: textUnderline(
+                        initial:
+                            notifier.listKojiHoukoku[index].kisetuHinban ?? '',
+                        onChange: (value) {
+                          notifier.updateKisetuHinban(value, index);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10.sp,
+              ),
+            ],
+          ),
           Padding(
             padding: EdgeInsets.only(left: 10.sp),
             child: Row(
