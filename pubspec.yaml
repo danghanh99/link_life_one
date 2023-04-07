@@ -41,6 +41,7 @@ dependencies:
   scroll_to_index: ^3.0.1
   flutter_native_image: ^0.0.6+1
   provider: ^6.0.5
+  flutter_cached_pdfview: ^0.4.1
 
 dev_dependencies:
   flutter_test:

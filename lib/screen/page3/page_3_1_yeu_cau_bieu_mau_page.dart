@@ -1,4 +1,10 @@
+import 'dart:developer';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/api/KojiPageApi/get_list_pdf.dart';
 import 'package:link_life_one/components/toast.dart';
@@ -274,25 +280,38 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
               height: 5,
             ),
             Expanded(
-              child: LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraints) {
-                return Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                    ),
-                    child: PdfViewer(
-                      filePaths: listPdfURL,
-                      ratio: constraints.maxWidth / constraints.maxHeight,
-                      showPage: false,
-                      onPageChange: (index) {
-                        onChangePage(index);
-                      },
-                    ));
-              }),
+              child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                  ),
+                  child: 
+                  PageView(
+                    scrollDirection: Axis.horizontal,
+                    onPageChanged:(index) {
+                      onChangePage(index);
+                    },
+                    children: [
+                      ...listPdfURL.map((e) {
+                        log('$e');
+                        return const PDF(
+                          swipeHorizontal: false,
+                          enableSwipe: true,
+                          autoSpacing: true,
+                          pageFling: false,
+                          fitEachPage: false,
+                        ).cachedFromUrl(
+                          'https://www.africau.edu/images/default/sample.pdf',
+                          key: ValueKey(e),
+                          errorWidget: (error) =>
+                              const Center(child: Icon(Icons.error_outline_outlined)),
+                        );
+                      }).toList()
+                    ],
+                  )),
             ),
             const SizedBox(
               height: 10,
