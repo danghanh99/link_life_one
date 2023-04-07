@@ -288,15 +288,13 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                   decoration: BoxDecoration(
                     border: Border.all(),
                   ),
-                  child: 
-                  PageView(
+                  child: PageView(
                     scrollDirection: Axis.horizontal,
-                    onPageChanged:(index) {
+                    onPageChanged: (index) {
                       onChangePage(index);
                     },
                     children: [
                       ...listPdfURL.map((e) {
-                        log('$e');
                         return const PDF(
                           swipeHorizontal: false,
                           enableSwipe: true,
@@ -304,10 +302,10 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                           pageFling: false,
                           fitEachPage: false,
                         ).cachedFromUrl(
-                          'https://www.africau.edu/images/default/sample.pdf',
+                          e,
                           key: ValueKey(e),
-                          errorWidget: (error) =>
-                              const Center(child: Icon(Icons.error_outline_outlined)),
+                          errorWidget: (error) => const Center(
+                              child: Icon(Icons.error_outline_outlined)),
                         );
                       }).toList()
                     ],
