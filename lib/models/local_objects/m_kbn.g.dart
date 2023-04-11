@@ -31,10 +31,10 @@ class MKBNAdapter extends TypeAdapter<MKBN> {
       delFlg: fields[11] as int,
       addPGID: fields[12] as String,
       addTantCd: fields[13] as String,
-      addYMD: fields[14] as DateTime,
+      addYMD: fields[14] as String,
       updPGID: fields[15] as String,
       updTantCd: fields[16] as String,
-      updYMD: fields[17] as DateTime,
+      updYMD: fields[17] as String,
     );
   }
 
@@ -90,3 +90,74 @@ class MKBNAdapter extends TypeAdapter<MKBN> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+MKBN _$MKBNFromJson(Map<String, dynamic> json) {
+  $checkKeys(
+    json,
+    requiredKeys: const [
+      'KBN_CD',
+      'KBN_NAME',
+      'KBN_BIKO',
+      'KBNMSAI_CD',
+      'KBNMSAI_NAME',
+      'KBNMSAI_BIKO',
+      'YOBIKOMOKU1',
+      'YOBIKOMOKU2',
+      'YOBIKOMOKU3',
+      'YOBIKOMOKU4',
+      'YOBIKOMOKU5',
+      'DEL_FLG',
+      'ADD_PGID',
+      'ADD_TANTCD',
+      'ADD_YMD',
+      'UPD_PGID',
+      'UPD_TANTCD',
+      'UPD_YMD'
+    ],
+  );
+  return MKBN(
+    kbnCd: json['KBN_CD'] as String,
+    kbnName: json['KBN_NAME'] as String,
+    kbnBiko: json['KBN_BIKO'] as String,
+    kbnmsaiCd: json['KBNMSAI_CD'] as String,
+    kbnmsaiName: json['KBNMSAI_NAME'] as String,
+    kbnmsaiBiko: json['KBNMSAI_BIKO'] as String,
+    yobikomoku1: json['YOBIKOMOKU1'] as String,
+    yobikomoku2: json['YOBIKOMOKU2'] as String,
+    yobikomoku3: json['YOBIKOMOKU3'] as String,
+    yobikomoku4: json['YOBIKOMOKU4'] as String,
+    yobikomoku5: json['YOBIKOMOKU5'] as String,
+    delFlg: json['DEL_FLG'] as int,
+    addPGID: json['ADD_PGID'] as String,
+    addTantCd: json['ADD_TANTCD'] as String,
+    addYMD: json['ADD_YMD'] as String,
+    updPGID: json['UPD_PGID'] as String,
+    updTantCd: json['UPD_TANTCD'] as String,
+    updYMD: json['UPD_YMD'] as String,
+  );
+}
+
+Map<String, dynamic> _$MKBNToJson(MKBN instance) => <String, dynamic>{
+      'KBN_CD': instance.kbnCd,
+      'KBN_NAME': instance.kbnName,
+      'KBN_BIKO': instance.kbnBiko,
+      'KBNMSAI_CD': instance.kbnmsaiCd,
+      'KBNMSAI_NAME': instance.kbnmsaiName,
+      'KBNMSAI_BIKO': instance.kbnmsaiBiko,
+      'YOBIKOMOKU1': instance.yobikomoku1,
+      'YOBIKOMOKU2': instance.yobikomoku2,
+      'YOBIKOMOKU3': instance.yobikomoku3,
+      'YOBIKOMOKU4': instance.yobikomoku4,
+      'YOBIKOMOKU5': instance.yobikomoku5,
+      'DEL_FLG': instance.delFlg,
+      'ADD_PGID': instance.addPGID,
+      'ADD_TANTCD': instance.addTantCd,
+      'ADD_YMD': instance.addYMD,
+      'UPD_PGID': instance.updPGID,
+      'UPD_TANTCD': instance.updTantCd,
+      'UPD_YMD': instance.updYMD,
+    };

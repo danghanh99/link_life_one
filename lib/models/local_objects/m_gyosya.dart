@@ -1,7 +1,9 @@
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 part 'm_gyosya.g.dart';
 
 @HiveType(typeId: 6)
+@JsonSerializable()
 class MGyosya extends HiveObject{
 
   MGyosya({
@@ -19,26 +21,37 @@ class MGyosya extends HiveObject{
   });
 
   @HiveField(0)
+  @JsonKey(name: 'KOJIGYOSYA_CD', required: true)
   String kojiGyosyaCd;
   @HiveField(1)
+  @JsonKey(name: 'GYOSYA_KBN_CD', required: true)
   String gyosyaKBNCd;
   @HiveField(2)
+  @JsonKey(name: 'KOJIGYOSYA_NAME', required: true)
   String kojiGyosyaName;
   @HiveField(3)
+  @JsonKey(name: 'JISYA_LIKE_FLG', required: true)
   int jisyaLikeFlg;
   @HiveField(4)
+  @JsonKey(name: 'DEL_FLG', required: true)
   int delFlg;
   @HiveField(5)
+  @JsonKey(name: 'ADD_PGID', required: true)
   String addPGID;
   @HiveField(6)
+  @JsonKey(name: 'ADD_TANTCD', required: true)
   String addTantCd;
   @HiveField(7)
-  DateTime addYMD;
+  @JsonKey(name: 'ADD_YMD', required: true)
+  String addYMD;
   @HiveField(8)
+  @JsonKey(name: 'UPD_PGID', required: true)
   String updPGID;
   @HiveField(9)
+  @JsonKey(name: 'UPD_TANTCD', required: true)
   String updTantCd;
   @HiveField(10)
-  DateTime updYMD;
+  @JsonKey(name: 'UPD_YMD', required: true)
+  String updYMD;
 
 }

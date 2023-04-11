@@ -1,7 +1,9 @@
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 part 'm_tant.g.dart';
 
 @HiveType(typeId: 8)
+@JsonSerializable()
 class MTant extends HiveObject{
 
   MTant({
@@ -29,46 +31,67 @@ class MTant extends HiveObject{
   });
 
   @HiveField(0)
+  @JsonKey(name: 'TANT_CD', required: true)
   String tantCd;
   @HiveField(1)
+  @JsonKey(name: 'TANT_NAME', required: true)
   String tantName;
   @HiveField(2)
+  @JsonKey(name: 'TANT_KNAME', required: true)
   String tantKName;
   @HiveField(3)
+  @JsonKey(name: 'BUZAI_HACOK_FLG', required: true)
   int buzaiHacokFlg;
   @HiveField(4)
+  @JsonKey(name: 'SYOZOKUBUSYO_CD', required: true)
   String syozokubusyoCd;
   @HiveField(5)
+  @JsonKey(name: 'PASSWORD', required: true)
   String password;
   @HiveField(6)
-  DateTime passwordUpdYMD;
+  @JsonKey(name: 'PASSWORD_UPD_YMD', required: true)
+  String passwordUpdYMD;
   @HiveField(7)
+  @JsonKey(name: 'MENUPTN_CD', required: true)
   String menuPtncd;
   @HiveField(8)
+  @JsonKey(name: 'TANT_KBN_CD', required: true)
   String tantKbnCd;
   @HiveField(9)
+  @JsonKey(name: 'SYOZOKU_CD', required: true)
   String syozokuCd;
   @HiveField(10)
+  @JsonKey(name: 'KENGEN_CD', required: true)
   String kengenCd;
   @HiveField(11)
+  @JsonKey(name: 'DAYLY_SALES', required: true)
   int daylySales;
   @HiveField(12)
+  @JsonKey(name: 'MONTHLY_SALES', required: true)
   int monthlySales;
   @HiveField(13)
+  @JsonKey(name: 'KAISYU_RUIKEI', required: true)
   int kaisyuRuikei;
   @HiveField(14)
+  @JsonKey(name: 'DEL_FLG', required: true)
   int delFlg;
   @HiveField(15)
+  @JsonKey(name: 'ADD_PGID', required: true)
   String addPGID;
   @HiveField(16)
+  @JsonKey(name: 'ADD_TANTCD', required: true)
   String addTantCd;
   @HiveField(17)
-  DateTime addYMD;
+  @JsonKey(name: 'ADD_YMD', required: true)
+  String addYMD;
   @HiveField(18)
+  @JsonKey(name: 'UPD_PGID', required: true)
   String updPGID;
   @HiveField(19)
+  @JsonKey(name: 'UPD_TANTCD', required: true)
   String updTantCd;
   @HiveField(20)
-  DateTime updYMD;
+  @JsonKey(name: 'UPD_YMD', required: true)
+  String updYMD;
 
 }

@@ -1,7 +1,9 @@
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 part 'm_syohin.g.dart';
 
 @HiveType(typeId: 7)
+@JsonSerializable()
 class MSyohin extends HiveObject{
 
   MSyohin({
@@ -22,32 +24,46 @@ class MSyohin extends HiveObject{
   });
 
   @HiveField(0)
+  @JsonKey(name: 'JISYA_CD', required: true)
   String jisyaCd;
   @HiveField(1)
+  @JsonKey(name: 'SYOHIN_NAME', required: true)
   String syohinName;
   @HiveField(2)
+  @JsonKey(name: 'HINBAN', required: true)
   String hinban;
   @HiveField(3)
+  @JsonKey(name: 'SYOHIN_SYBET_CD', required: true)
   String syohinSybetCd;
   @HiveField(4)
+  @JsonKey(name: 'MAKER_CD', required: true)
   String makerCd;
   @HiveField(5)
+  @JsonKey(name: 'CTGORY_CD', required: true)
   String ctgoryCd;
   @HiveField(6)
+  @JsonKey(name: 'HANBAI_TANKA', required: true)
   String hanbaiTanka;
   @HiveField(7)
+  @JsonKey(name: 'CHANGE_FLG', required: true)
   int changeFlg;
   @HiveField(8)
+  @JsonKey(name: 'ADD_PGID', required: true)
   String addPGID;
   @HiveField(9)
+  @JsonKey(name: 'ADD_TANTCD', required: true)
   String addTantCd;
   @HiveField(10)
-  DateTime addYMD;
+  @JsonKey(name: 'ADD_YMD', required: true)
+  String addYMD;
   @HiveField(11)
+  @JsonKey(name: 'UPD_PGID', required: true)
   String updPGID;
   @HiveField(12)
+  @JsonKey(name: 'UPD_TANTCD', required: true)
   String updTantCd;
   @HiveField(13)
-  DateTime updYMD;
+  @JsonKey(name: 'UPD_YMD', required: true)
+  String updYMD;
 
 }

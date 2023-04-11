@@ -80,6 +80,10 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
     callGetTirasi(inputDate: date);
   }
 
+  Future<void> downloadData() async {
+    await Hive.openBox("offKoji");
+  }
+
   Future<List<Koji>> callGetListKojiApi({DateTime? inputDate}) async {
     if (mounted) {
       setState(() {

@@ -23,7 +23,7 @@ class MTantAdapter extends TypeAdapter<MTant> {
       buzaiHacokFlg: fields[3] as int,
       syozokubusyoCd: fields[4] as String,
       password: fields[5] as String,
-      passwordUpdYMD: fields[6] as DateTime,
+      passwordUpdYMD: fields[6] as String,
       menuPtncd: fields[7] as String,
       tantKbnCd: fields[8] as String,
       syozokuCd: fields[9] as String,
@@ -34,10 +34,10 @@ class MTantAdapter extends TypeAdapter<MTant> {
       delFlg: fields[14] as int,
       addPGID: fields[15] as String,
       addTantCd: fields[16] as String,
-      addYMD: fields[17] as DateTime,
+      addYMD: fields[17] as String,
       updPGID: fields[18] as String,
       updTantCd: fields[19] as String,
-      updYMD: fields[20] as DateTime,
+      updYMD: fields[20] as String,
     );
   }
 
@@ -99,3 +99,83 @@ class MTantAdapter extends TypeAdapter<MTant> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+MTant _$MTantFromJson(Map<String, dynamic> json) {
+  $checkKeys(
+    json,
+    requiredKeys: const [
+      'TANT_CD',
+      'TANT_NAME',
+      'TANT_KNAME',
+      'BUZAI_HACOK_FLG',
+      'SYOZOKUBUSYO_CD',
+      'PASSWORD',
+      'PASSWORD_UPD_YMD',
+      'MENUPTN_CD',
+      'TANT_KBN_CD',
+      'SYOZOKU_CD',
+      'KENGEN_CD',
+      'DAYLY_SALES',
+      'MONTHLY_SALES',
+      'KAISYU_RUIKEI',
+      'DEL_FLG',
+      'ADD_PGID',
+      'ADD_TANTCD',
+      'ADD_YMD',
+      'UPD_PGID',
+      'UPD_TANTCD',
+      'UPD_YMD'
+    ],
+  );
+  return MTant(
+    tantCd: json['TANT_CD'] as String,
+    tantName: json['TANT_NAME'] as String,
+    tantKName: json['TANT_KNAME'] as String,
+    buzaiHacokFlg: json['BUZAI_HACOK_FLG'] as int,
+    syozokubusyoCd: json['SYOZOKUBUSYO_CD'] as String,
+    password: json['PASSWORD'] as String,
+    passwordUpdYMD: json['PASSWORD_UPD_YMD'] as String,
+    menuPtncd: json['MENUPTN_CD'] as String,
+    tantKbnCd: json['TANT_KBN_CD'] as String,
+    syozokuCd: json['SYOZOKU_CD'] as String,
+    kengenCd: json['KENGEN_CD'] as String,
+    daylySales: json['DAYLY_SALES'] as int,
+    monthlySales: json['MONTHLY_SALES'] as int,
+    kaisyuRuikei: json['KAISYU_RUIKEI'] as int,
+    delFlg: json['DEL_FLG'] as int,
+    addPGID: json['ADD_PGID'] as String,
+    addTantCd: json['ADD_TANTCD'] as String,
+    addYMD: json['ADD_YMD'] as String,
+    updPGID: json['UPD_PGID'] as String,
+    updTantCd: json['UPD_TANTCD'] as String,
+    updYMD: json['UPD_YMD'] as String,
+  );
+}
+
+Map<String, dynamic> _$MTantToJson(MTant instance) => <String, dynamic>{
+      'TANT_CD': instance.tantCd,
+      'TANT_NAME': instance.tantName,
+      'TANT_KNAME': instance.tantKName,
+      'BUZAI_HACOK_FLG': instance.buzaiHacokFlg,
+      'SYOZOKUBUSYO_CD': instance.syozokubusyoCd,
+      'PASSWORD': instance.password,
+      'PASSWORD_UPD_YMD': instance.passwordUpdYMD,
+      'MENUPTN_CD': instance.menuPtncd,
+      'TANT_KBN_CD': instance.tantKbnCd,
+      'SYOZOKU_CD': instance.syozokuCd,
+      'KENGEN_CD': instance.kengenCd,
+      'DAYLY_SALES': instance.daylySales,
+      'MONTHLY_SALES': instance.monthlySales,
+      'KAISYU_RUIKEI': instance.kaisyuRuikei,
+      'DEL_FLG': instance.delFlg,
+      'ADD_PGID': instance.addPGID,
+      'ADD_TANTCD': instance.addTantCd,
+      'ADD_YMD': instance.addYMD,
+      'UPD_PGID': instance.updPGID,
+      'UPD_TANTCD': instance.updTantCd,
+      'UPD_YMD': instance.updYMD,
+    };

@@ -24,10 +24,10 @@ class TKojiFilePathAdapter extends TypeAdapter<TKojiFilePath> {
       delFlg: fields[4] as int,
       addPGID: fields[5] as String,
       addTantCd: fields[6] as String,
-      addYMD: fields[7] as DateTime,
+      addYMD: fields[7] as String,
       updPGID: fields[8] as String,
       updTantCd: fields[9] as String,
-      updYMD: fields[10] as DateTime,
+      updYMD: fields[10] as String,
     );
   }
 
@@ -69,3 +69,54 @@ class TKojiFilePathAdapter extends TypeAdapter<TKojiFilePath> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+TKojiFilePath _$TKojiFilePathFromJson(Map<String, dynamic> json) {
+  $checkKeys(
+    json,
+    requiredKeys: const [
+      'FILEPATH_ID',
+      'ID',
+      'FILEPATH',
+      'FILE_KBN_CD',
+      'DEL_FLG',
+      'ADD_PGID',
+      'ADD_TANTCD',
+      'ADD_YMD',
+      'UPD_PGID',
+      'UPD_TANTCD',
+      'UPD_YMD'
+    ],
+  );
+  return TKojiFilePath(
+    filePathId: json['FILEPATH_ID'] as String,
+    id: json['ID'] as String,
+    filePath: json['FILEPATH'] as String,
+    fileKbnCd: json['FILE_KBN_CD'] as String,
+    delFlg: json['DEL_FLG'] as int,
+    addPGID: json['ADD_PGID'] as String,
+    addTantCd: json['ADD_TANTCD'] as String,
+    addYMD: json['ADD_YMD'] as String,
+    updPGID: json['UPD_PGID'] as String,
+    updTantCd: json['UPD_TANTCD'] as String,
+    updYMD: json['UPD_YMD'] as String,
+  );
+}
+
+Map<String, dynamic> _$TKojiFilePathToJson(TKojiFilePath instance) =>
+    <String, dynamic>{
+      'FILEPATH_ID': instance.filePathId,
+      'ID': instance.id,
+      'FILEPATH': instance.filePath,
+      'FILE_KBN_CD': instance.fileKbnCd,
+      'DEL_FLG': instance.delFlg,
+      'ADD_PGID': instance.addPGID,
+      'ADD_TANTCD': instance.addTantCd,
+      'ADD_YMD': instance.addYMD,
+      'UPD_PGID': instance.updPGID,
+      'UPD_TANTCD': instance.updTantCd,
+      'UPD_YMD': instance.updYMD,
+    };

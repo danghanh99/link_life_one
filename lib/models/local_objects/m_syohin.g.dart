@@ -27,10 +27,10 @@ class MSyohinAdapter extends TypeAdapter<MSyohin> {
       changeFlg: fields[7] as int,
       addPGID: fields[8] as String,
       addTantCd: fields[9] as String,
-      addYMD: fields[10] as DateTime,
+      addYMD: fields[10] as String,
       updPGID: fields[11] as String,
       updTantCd: fields[12] as String,
-      updYMD: fields[13] as DateTime,
+      updYMD: fields[13] as String,
     );
   }
 
@@ -78,3 +78,62 @@ class MSyohinAdapter extends TypeAdapter<MSyohin> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+MSyohin _$MSyohinFromJson(Map<String, dynamic> json) {
+  $checkKeys(
+    json,
+    requiredKeys: const [
+      'JISYA_CD',
+      'SYOHIN_NAME',
+      'HINBAN',
+      'SYOHIN_SYBET_CD',
+      'MAKER_CD',
+      'CTGORY_CD',
+      'HANBAI_TANKA',
+      'CHANGE_FLG',
+      'ADD_PGID',
+      'ADD_TANTCD',
+      'ADD_YMD',
+      'UPD_PGID',
+      'UPD_TANTCD',
+      'UPD_YMD'
+    ],
+  );
+  return MSyohin(
+    jisyaCd: json['JISYA_CD'] as String,
+    syohinName: json['SYOHIN_NAME'] as String,
+    hinban: json['HINBAN'] as String,
+    syohinSybetCd: json['SYOHIN_SYBET_CD'] as String,
+    makerCd: json['MAKER_CD'] as String,
+    ctgoryCd: json['CTGORY_CD'] as String,
+    hanbaiTanka: json['HANBAI_TANKA'] as String,
+    changeFlg: json['CHANGE_FLG'] as int,
+    addPGID: json['ADD_PGID'] as String,
+    addTantCd: json['ADD_TANTCD'] as String,
+    addYMD: json['ADD_YMD'] as String,
+    updPGID: json['UPD_PGID'] as String,
+    updTantCd: json['UPD_TANTCD'] as String,
+    updYMD: json['UPD_YMD'] as String,
+  );
+}
+
+Map<String, dynamic> _$MSyohinToJson(MSyohin instance) => <String, dynamic>{
+      'JISYA_CD': instance.jisyaCd,
+      'SYOHIN_NAME': instance.syohinName,
+      'HINBAN': instance.hinban,
+      'SYOHIN_SYBET_CD': instance.syohinSybetCd,
+      'MAKER_CD': instance.makerCd,
+      'CTGORY_CD': instance.ctgoryCd,
+      'HANBAI_TANKA': instance.hanbaiTanka,
+      'CHANGE_FLG': instance.changeFlg,
+      'ADD_PGID': instance.addPGID,
+      'ADD_TANTCD': instance.addTantCd,
+      'ADD_YMD': instance.addYMD,
+      'UPD_PGID': instance.updPGID,
+      'UPD_TANTCD': instance.updTantCd,
+      'UPD_YMD': instance.updYMD,
+    };

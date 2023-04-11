@@ -28,10 +28,10 @@ class TKojiCheckAdapter extends TypeAdapter<TKojiCheck> {
       delFlg: fields[8] as int,
       addPGID: fields[9] as String,
       addTantCd: fields[10] as String,
-      addYMD: fields[11] as DateTime,
+      addYMD: fields[11] as String,
       updPGID: fields[12] as String,
       updTantCd: fields[13] as String,
-      updYMD: fields[14] as DateTime,
+      updYMD: fields[14] as String,
     );
   }
 
@@ -81,3 +81,66 @@ class TKojiCheckAdapter extends TypeAdapter<TKojiCheck> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+TKojiCheck _$TKojiCheckFromJson(Map<String, dynamic> json) {
+  $checkKeys(
+    json,
+    requiredKeys: const [
+      'JYUCYU_ID',
+      'CHECK_FLG1',
+      'CHECK_FLG2',
+      'CHECK_FLG3',
+      'CHECK_FLG4',
+      'CHECK_FLG5',
+      'CHECK_FLG6',
+      'CHECK_FLG7',
+      'DEL_FLG',
+      'ADD_PGID',
+      'ADD_TANTCD',
+      'ADD_YMD',
+      'UPD_PGID',
+      'UPD_TANTCD',
+      'UPD_YMD'
+    ],
+  );
+  return TKojiCheck(
+    jyucyuId: json['JYUCYU_ID'] as String,
+    checkFlg1: json['CHECK_FLG1'] as int,
+    checkFlg2: json['CHECK_FLG2'] as int,
+    checkFlg3: json['CHECK_FLG3'] as int,
+    checkFlg4: json['CHECK_FLG4'] as int,
+    checkFlg5: json['CHECK_FLG5'] as int,
+    checkFlg6: json['CHECK_FLG6'] as int,
+    checkFlg7: json['CHECK_FLG7'] as int,
+    delFlg: json['DEL_FLG'] as int,
+    addPGID: json['ADD_PGID'] as String,
+    addTantCd: json['ADD_TANTCD'] as String,
+    addYMD: json['ADD_YMD'] as String,
+    updPGID: json['UPD_PGID'] as String,
+    updTantCd: json['UPD_TANTCD'] as String,
+    updYMD: json['UPD_YMD'] as String,
+  );
+}
+
+Map<String, dynamic> _$TKojiCheckToJson(TKojiCheck instance) =>
+    <String, dynamic>{
+      'JYUCYU_ID': instance.jyucyuId,
+      'CHECK_FLG1': instance.checkFlg1,
+      'CHECK_FLG2': instance.checkFlg2,
+      'CHECK_FLG3': instance.checkFlg3,
+      'CHECK_FLG4': instance.checkFlg4,
+      'CHECK_FLG5': instance.checkFlg5,
+      'CHECK_FLG6': instance.checkFlg6,
+      'CHECK_FLG7': instance.checkFlg7,
+      'DEL_FLG': instance.delFlg,
+      'ADD_PGID': instance.addPGID,
+      'ADD_TANTCD': instance.addTantCd,
+      'ADD_YMD': instance.addYMD,
+      'UPD_PGID': instance.updPGID,
+      'UPD_TANTCD': instance.updTantCd,
+      'UPD_YMD': instance.updYMD,
+    };

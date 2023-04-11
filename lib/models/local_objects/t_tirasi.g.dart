@@ -18,16 +18,16 @@ class TTirasiAdapter extends TypeAdapter<TTirasi> {
     };
     return TTirasi(
       tantCd: fields[0] as String,
-      YMD: fields[1] as DateTime,
+      YMD: fields[1] as String,
       kojiTirasisu: fields[2] as int,
-      renkeiYMD: fields[3] as DateTime,
+      renkeiYMD: fields[3] as String,
       delFlg: fields[4] as int,
       addPGID: fields[5] as String,
       addTantCd: fields[6] as String,
-      addYMD: fields[7] as DateTime,
+      addYMD: fields[7] as String,
       updPGID: fields[8] as String,
       updTantCd: fields[9] as String,
-      updYMD: fields[10] as DateTime,
+      updYMD: fields[10] as String,
     );
   }
 
@@ -69,3 +69,53 @@ class TTirasiAdapter extends TypeAdapter<TTirasi> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+TTirasi _$TTirasiFromJson(Map<String, dynamic> json) {
+  $checkKeys(
+    json,
+    requiredKeys: const [
+      'TANT_CD',
+      'YMD',
+      'KOJI_TIRASISU',
+      'RENKEI_YMD',
+      'DEL_FLG',
+      'ADD_PGID',
+      'ADD_TANTCD',
+      'ADD_YMD',
+      'UPD_PGID',
+      'UPD_TANTCD',
+      'UPD_YMD'
+    ],
+  );
+  return TTirasi(
+    tantCd: json['TANT_CD'] as String,
+    YMD: json['YMD'] as String,
+    kojiTirasisu: json['KOJI_TIRASISU'] as int,
+    renkeiYMD: json['RENKEI_YMD'] as String,
+    delFlg: json['DEL_FLG'] as int,
+    addPGID: json['ADD_PGID'] as String,
+    addTantCd: json['ADD_TANTCD'] as String,
+    addYMD: json['ADD_YMD'] as String,
+    updPGID: json['UPD_PGID'] as String,
+    updTantCd: json['UPD_TANTCD'] as String,
+    updYMD: json['UPD_YMD'] as String,
+  );
+}
+
+Map<String, dynamic> _$TTirasiToJson(TTirasi instance) => <String, dynamic>{
+      'TANT_CD': instance.tantCd,
+      'YMD': instance.YMD,
+      'KOJI_TIRASISU': instance.kojiTirasisu,
+      'RENKEI_YMD': instance.renkeiYMD,
+      'DEL_FLG': instance.delFlg,
+      'ADD_PGID': instance.addPGID,
+      'ADD_TANTCD': instance.addTantCd,
+      'ADD_YMD': instance.addYMD,
+      'UPD_PGID': instance.updPGID,
+      'UPD_TANTCD': instance.updTantCd,
+      'UPD_YMD': instance.updYMD,
+    };

@@ -36,13 +36,13 @@ class TKojimsaiAdapter extends TypeAdapter<TKojimsai> {
       tuikaSyohinName: fields[16] as String,
       kojijituikaFlg: fields[17] as String,
       delFlg: fields[18] as int,
-      renkeiYMD: fields[19] as DateTime,
+      renkeiYMD: fields[19] as String,
       addPGID: fields[20] as String,
       addTantCd: fields[21] as String,
-      addYMD: fields[22] as DateTime,
+      addYMD: fields[22] as String,
       updPGID: fields[23] as String,
       updTantCd: fields[24] as String,
-      updYMD: fields[25] as DateTime,
+      updYMD: fields[25] as String,
     );
   }
 
@@ -114,3 +114,98 @@ class TKojimsaiAdapter extends TypeAdapter<TKojimsai> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+TKojimsai _$TKojimsaiFromJson(Map<String, dynamic> json) {
+  $checkKeys(
+    json,
+    requiredKeys: const [
+      'JYUCYU_ID',
+      'JYUCYUMSAI_ID',
+      'JYUCYUMSAI_ID_KIKAN',
+      'HINBAN',
+      'MAKER_CD',
+      'CTGORY_CD',
+      'SURYO',
+      'HANBAI_TANKA',
+      'KINGAK',
+      'KISETU_HINBAN',
+      'KISETU_MAKER',
+      'KENSETU_KEITAI',
+      'BEF_SEKO_PHOTO_FILEPATH',
+      'AFT_SEKO_PHOTO_FILEPATH',
+      'OTHER_PHOTO_FOLDERPATH',
+      'TUIKA_JISYA_CD',
+      'TUIKA_SYOHIN_NAME',
+      'KOJIJITUIKA_FLG',
+      'DEL_FLG',
+      'RENKEI_YMD',
+      'ADD_PGID',
+      'ADD_TANTCD',
+      'ADD_YMD',
+      'UPD_PGID',
+      'UPD_TANTCD',
+      'UPD_YMD'
+    ],
+  );
+  return TKojimsai(
+    jyucyuId: json['JYUCYU_ID'] as String,
+    jyucyumsaiId: json['JYUCYUMSAI_ID'] as String,
+    jyucyumsaiIdKikan: json['JYUCYUMSAI_ID_KIKAN'] as String,
+    hinban: json['HINBAN'] as String,
+    makerCd: json['MAKER_CD'] as String,
+    ctgotyCd: json['CTGORY_CD'] as String,
+    suryo: json['SURYO'] as int,
+    hanbaiTanka: json['HANBAI_TANKA'] as String,
+    kingak: json['KINGAK'] as String,
+    kisetuHinban: json['KISETU_HINBAN'] as String,
+    kisetuMaker: json['KISETU_MAKER'] as String,
+    kensetuKeitai: json['KENSETU_KEITAI'] as String,
+    befSekoPhotoFilePath: json['BEF_SEKO_PHOTO_FILEPATH'] as String,
+    aftSekoPhotoFilePath: json['AFT_SEKO_PHOTO_FILEPATH'] as String,
+    otherPhotoFolderPath: json['OTHER_PHOTO_FOLDERPATH'] as String,
+    tuikaJisyaCd: json['TUIKA_JISYA_CD'] as String,
+    tuikaSyohinName: json['TUIKA_SYOHIN_NAME'] as String,
+    kojijituikaFlg: json['KOJIJITUIKA_FLG'] as String,
+    delFlg: json['DEL_FLG'] as int,
+    renkeiYMD: json['RENKEI_YMD'] as String,
+    addPGID: json['ADD_PGID'] as String,
+    addTantCd: json['ADD_TANTCD'] as String,
+    addYMD: json['ADD_YMD'] as String,
+    updPGID: json['UPD_PGID'] as String,
+    updTantCd: json['UPD_TANTCD'] as String,
+    updYMD: json['UPD_YMD'] as String,
+  );
+}
+
+Map<String, dynamic> _$TKojimsaiToJson(TKojimsai instance) => <String, dynamic>{
+      'JYUCYU_ID': instance.jyucyuId,
+      'JYUCYUMSAI_ID': instance.jyucyumsaiId,
+      'JYUCYUMSAI_ID_KIKAN': instance.jyucyumsaiIdKikan,
+      'HINBAN': instance.hinban,
+      'MAKER_CD': instance.makerCd,
+      'CTGORY_CD': instance.ctgotyCd,
+      'SURYO': instance.suryo,
+      'HANBAI_TANKA': instance.hanbaiTanka,
+      'KINGAK': instance.kingak,
+      'KISETU_HINBAN': instance.kisetuHinban,
+      'KISETU_MAKER': instance.kisetuMaker,
+      'KENSETU_KEITAI': instance.kensetuKeitai,
+      'BEF_SEKO_PHOTO_FILEPATH': instance.befSekoPhotoFilePath,
+      'AFT_SEKO_PHOTO_FILEPATH': instance.aftSekoPhotoFilePath,
+      'OTHER_PHOTO_FOLDERPATH': instance.otherPhotoFolderPath,
+      'TUIKA_JISYA_CD': instance.tuikaJisyaCd,
+      'TUIKA_SYOHIN_NAME': instance.tuikaSyohinName,
+      'KOJIJITUIKA_FLG': instance.kojijituikaFlg,
+      'DEL_FLG': instance.delFlg,
+      'RENKEI_YMD': instance.renkeiYMD,
+      'ADD_PGID': instance.addPGID,
+      'ADD_TANTCD': instance.addTantCd,
+      'ADD_YMD': instance.addYMD,
+      'UPD_PGID': instance.updPGID,
+      'UPD_TANTCD': instance.updTantCd,
+      'UPD_YMD': instance.updYMD,
+    };
