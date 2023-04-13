@@ -33,37 +33,40 @@ class MSyohin extends HiveObject{
   @JsonKey(name: 'HINBAN', required: true)
   String hinban;
   @HiveField(3)
-  @JsonKey(name: 'SYOHIN_SYBET_CD', required: true)
-  String syohinSybetCd;
+  @JsonKey(name: 'SYOHIN_SYBET_CD', required: false)
+  String? syohinSybetCd;
   @HiveField(4)
-  @JsonKey(name: 'MAKER_CD', required: true)
-  String makerCd;
+  @JsonKey(name: 'MAKER_CD', required: false)
+  String? makerCd;
   @HiveField(5)
-  @JsonKey(name: 'CTGORY_CD', required: true)
-  String ctgoryCd;
+  @JsonKey(name: 'CTGORY_CD', required: false)
+  String? ctgoryCd;
   @HiveField(6)
-  @JsonKey(name: 'HANBAI_TANKA', required: true)
-  String hanbaiTanka;
+  @JsonKey(name: 'HANBAI_TANKA', required: false)
+  String? hanbaiTanka;
   @HiveField(7)
-  @JsonKey(name: 'CHANGE_FLG', required: true)
-  int changeFlg;
+  @JsonKey(name: 'CHANGE_FLG', required: false)
+  String? changeFlg;
   @HiveField(8)
-  @JsonKey(name: 'ADD_PGID', required: true)
-  String addPGID;
+  @JsonKey(name: 'ADD_PGID', required: false)
+  String? addPGID;
   @HiveField(9)
-  @JsonKey(name: 'ADD_TANTCD', required: true)
-  String addTantCd;
+  @JsonKey(name: 'ADD_TANTCD', required: false)
+  String? addTantCd;
   @HiveField(10)
   @JsonKey(name: 'ADD_YMD', required: true)
   String addYMD;
   @HiveField(11)
-  @JsonKey(name: 'UPD_PGID', required: true)
-  String updPGID;
+  @JsonKey(name: 'UPD_PGID', required: false)
+  String? updPGID;
   @HiveField(12)
   @JsonKey(name: 'UPD_TANTCD', required: true)
   String updTantCd;
   @HiveField(13)
   @JsonKey(name: 'UPD_YMD', required: true)
   String updYMD;
+
+  factory MSyohin.fromJson(Map<String, dynamic> json) => _$MSyohinFromJson(json);
+  Map<String, dynamic> toJson() => _$MSyohinToJson(this);
 
 }

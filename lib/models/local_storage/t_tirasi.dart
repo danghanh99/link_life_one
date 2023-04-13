@@ -27,31 +27,48 @@ class TTirasi extends HiveObject{
   @JsonKey(name: 'YMD', required: true)
   String YMD;
   @HiveField(2)
-  @JsonKey(name: 'KOJI_TIRASISU', required: true)
-  int kojiTirasisu;
+  @JsonKey(name: 'KOJI_TIRASISU', required: false)
+  int? kojiTirasisu;
   @HiveField(3)
-  @JsonKey(name: 'RENKEI_YMD', required: true)
-  String renkeiYMD;
+  @JsonKey(name: 'RENKEI_YMD', required: false)
+  String? renkeiYMD;
   @HiveField(4)
-  @JsonKey(name: 'DEL_FLG', required: true)
-  int delFlg;
+  @JsonKey(name: 'DEL_FLG', required: false)
+  int? delFlg;
   @HiveField(5)
-  @JsonKey(name: 'ADD_PGID', required: true)
-  String addPGID;
+  @JsonKey(name: 'ADD_PGID', required: false)
+  String? addPGID;
   @HiveField(6)
-  @JsonKey(name: 'ADD_TANTCD', required: true)
-  String addTantCd;
+  @JsonKey(name: 'ADD_TANTCD', required: false)
+  String? addTantCd;
   @HiveField(7)
-  @JsonKey(name: 'ADD_YMD', required: true)
-  String addYMD;
+  @JsonKey(name: 'ADD_YMD', required: false)
+  String? addYMD;
   @HiveField(8)
-  @JsonKey(name: 'UPD_PGID', required: true)
-  String updPGID;
+  @JsonKey(name: 'UPD_PGID', required: false)
+  String? updPGID;
   @HiveField(9)
   @JsonKey(name: 'UPD_TANTCD', required: true)
   String updTantCd;
   @HiveField(10)
   @JsonKey(name: 'UPD_YMD', required: true)
   String updYMD;
+
+  factory TTirasi.fromJson(Map<String, dynamic> json) => _$TTirasiFromJson(json);
+  Map<String, dynamic> toJson() => _$TTirasiToJson(this);
+
+  factory TTirasi.fromRequest(Map<String, dynamic> json) => TTirasi(
+    tantCd: json['TANT_CD'] as String,
+    YMD: json['YMD'] as String,
+    kojiTirasisu: json['KOJI_TIRASISU']!=null ? int.parse('${json['KOJI_TIRASISU']}') : null,
+    renkeiYMD: json['RENKEI_YMD'] as String?,
+    delFlg: json['DEL_FLG']!=null ? int.parse('${json['DEL_FLG']}') : null,
+    addPGID: json['ADD_PGID'] as String?,
+    addTantCd: json['ADD_TANTCD'] as String?,
+    addYMD: json['ADD_YMD'] as String?,
+    updPGID: json['UPD_PGID'] as String?,
+    updTantCd: json['UPD_TANTCD'] as String,
+    updYMD: json['UPD_YMD'] as String,
+  );
 
 }

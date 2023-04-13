@@ -42,76 +42,79 @@ class TKojimsai extends HiveObject{
   @JsonKey(name: 'JYUCYUMSAI_ID', required: true)
   String jyucyumsaiId;
   @HiveField(2)
-  @JsonKey(name: 'JYUCYUMSAI_ID_KIKAN', required: true)
-  String jyucyumsaiIdKikan;
+  @JsonKey(name: 'JYUCYUMSAI_ID_KIKAN', required: false)
+  String? jyucyumsaiIdKikan;
   @HiveField(3)
-  @JsonKey(name: 'HINBAN', required: true)
-  String hinban;
+  @JsonKey(name: 'HINBAN', required: false)
+  String? hinban;
   @HiveField(4)
-  @JsonKey(name: 'MAKER_CD', required: true)
-  String makerCd;
+  @JsonKey(name: 'MAKER_CD', required: false)
+  String? makerCd;
   @HiveField(5)
-  @JsonKey(name: 'CTGORY_CD', required: true)
-  String ctgotyCd;
+  @JsonKey(name: 'CTGORY_CD', required: false)
+  String? ctgotyCd;
   @HiveField(6)
-  @JsonKey(name: 'SURYO', required: true)
-  int suryo;
+  @JsonKey(name: 'SURYO', required: false)
+  String? suryo;
   @HiveField(7)
-  @JsonKey(name: 'HANBAI_TANKA', required: true)
-  String hanbaiTanka;
+  @JsonKey(name: 'HANBAI_TANKA', required: false)
+  String? hanbaiTanka;
   @HiveField(8)
-  @JsonKey(name: 'KINGAK', required: true)
-  String kingak;
+  @JsonKey(name: 'KINGAK', required: false)
+  String? kingak;
   @HiveField(9)
-  @JsonKey(name: 'KISETU_HINBAN', required: true)
-  String kisetuHinban;
+  @JsonKey(name: 'KISETU_HINBAN', required: false)
+  String? kisetuHinban;
   @HiveField(10)
-  @JsonKey(name: 'KISETU_MAKER', required: true)
-  String kisetuMaker;
+  @JsonKey(name: 'KISETU_MAKER', required: false)
+  String? kisetuMaker;
   @HiveField(11)
-  @JsonKey(name: 'KENSETU_KEITAI', required: true)
-  String kensetuKeitai;
+  @JsonKey(name: 'KENSETU_KEITAI', required: false)
+  String? kensetuKeitai;
   @HiveField(12)
-  @JsonKey(name: 'BEF_SEKO_PHOTO_FILEPATH', required: true)
-  String befSekoPhotoFilePath;
+  @JsonKey(name: 'BEF_SEKO_PHOTO_FILEPATH', required: false)
+  String? befSekoPhotoFilePath;
   @HiveField(13)
-  @JsonKey(name: 'AFT_SEKO_PHOTO_FILEPATH', required: true)
-  String aftSekoPhotoFilePath;
+  @JsonKey(name: 'AFT_SEKO_PHOTO_FILEPATH', required: false)
+  String? aftSekoPhotoFilePath;
   @HiveField(14)
-  @JsonKey(name: 'OTHER_PHOTO_FOLDERPATH', required: true)
-  String otherPhotoFolderPath;
+  @JsonKey(name: 'OTHER_PHOTO_FOLDERPATH', required: false)
+  String? otherPhotoFolderPath;
   @HiveField(15)
-  @JsonKey(name: 'TUIKA_JISYA_CD', required: true)
-  String tuikaJisyaCd;
+  @JsonKey(name: 'TUIKA_JISYA_CD', required: false)
+  String? tuikaJisyaCd;
   @HiveField(16)
-  @JsonKey(name: 'TUIKA_SYOHIN_NAME', required: true)
-  String tuikaSyohinName;
+  @JsonKey(name: 'TUIKA_SYOHIN_NAME', required: false)
+  String? tuikaSyohinName;
   @HiveField(17)
-  @JsonKey(name: 'KOJIJITUIKA_FLG', required: true)
-  String kojijituikaFlg;
+  @JsonKey(name: 'KOJIJITUIKA_FLG', required: false)
+  String? kojijituikaFlg;
   @HiveField(18)
-  @JsonKey(name: 'DEL_FLG', required: true)
-  int delFlg;
+  @JsonKey(name: 'DEL_FLG', required: false)
+  String? delFlg;
   @HiveField(19)
-  @JsonKey(name: 'RENKEI_YMD', required: true)
-  String renkeiYMD;
+  @JsonKey(name: 'RENKEI_YMD', required: false)
+  String? renkeiYMD;
   @HiveField(20)
-  @JsonKey(name: 'ADD_PGID', required: true)
-  String addPGID;
+  @JsonKey(name: 'ADD_PGID', required: false)
+  String? addPGID;
   @HiveField(21)
-  @JsonKey(name: 'ADD_TANTCD', required: true)
-  String addTantCd;
+  @JsonKey(name: 'ADD_TANTCD', required: false)
+  String? addTantCd;
   @HiveField(22)
-  @JsonKey(name: 'ADD_YMD', required: true)
-  String addYMD;
+  @JsonKey(name: 'ADD_YMD', required: false)
+  String? addYMD;
   @HiveField(23)
-  @JsonKey(name: 'UPD_PGID', required: true)
-  String updPGID;
+  @JsonKey(name: 'UPD_PGID', required: false)
+  String? updPGID;
   @HiveField(24)
   @JsonKey(name: 'UPD_TANTCD', required: true)
   String updTantCd;
   @HiveField(25)
   @JsonKey(name: 'UPD_YMD', required: true)
   String updYMD;
+
+  factory TKojimsai.fromJson(Map<String, dynamic> json) => _$TKojimsaiFromJson(json);
+  Map<String, dynamic> toJson() => _$TKojimsaiToJson(this);
 
 }

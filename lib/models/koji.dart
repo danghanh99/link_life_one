@@ -9,13 +9,13 @@ class Koji {
   final String? kojiHomonJikanEnd;
   final String homonSbt;
   final String jyucyuId;
-  final int shitamiJinin;
+  final int? shitamiJinin;
   final int? shitamiJikan;
   final int? kojiJinin;
   final int? kojiJikan;
-  final String kojiItem;
+  final String? kojiItem;
   final String setsakiAddress;
-  final String setsakiName;
+  final String? setsakiName;
   final String kojiSt;
   final String hojinFlag;
 
@@ -26,13 +26,13 @@ class Koji {
       this.kojiHomonJikanEnd,
       required this.homonSbt,
       required this.jyucyuId,
-      required this.shitamiJinin,
+      this.shitamiJinin,
       this.shitamiJikan,
       this.kojiJinin,
       this.kojiJikan,
-      required this.kojiItem,
+      this.kojiItem,
       required this.setsakiAddress,
-      required this.setsakiName,
+      this.setsakiName,
       required this.kojiSt,
       required this.hojinFlag});
 

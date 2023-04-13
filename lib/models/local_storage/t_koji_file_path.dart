@@ -24,34 +24,37 @@ class TKojiFilePath extends HiveObject{
   @JsonKey(name: 'FILEPATH_ID', required: true)
   String filePathId;
   @HiveField(1)
-  @JsonKey(name: 'ID', required: true)
-  String id;
+  @JsonKey(name: 'ID', required: false)
+  String? id;
   @HiveField(2)
-  @JsonKey(name: 'FILEPATH', required: true)
-  String filePath;
+  @JsonKey(name: 'FILEPATH', required: false)
+  String? filePath;
   @HiveField(3)
-  @JsonKey(name: 'FILE_KBN_CD', required: true)
-  String fileKbnCd;
+  @JsonKey(name: 'FILE_KBN_CD', required: false)
+  String? fileKbnCd;
   @HiveField(4)
-  @JsonKey(name: 'DEL_FLG', required: true)
-  int delFlg;
+  @JsonKey(name: 'DEL_FLG', required: false)
+  String? delFlg;
   @HiveField(5)
-  @JsonKey(name: 'ADD_PGID', required: true)
-  String addPGID;
+  @JsonKey(name: 'ADD_PGID', required: false)
+  String? addPGID;
   @HiveField(6)
-  @JsonKey(name: 'ADD_TANTCD', required: true)
-  String addTantCd;
+  @JsonKey(name: 'ADD_TANTCD', required: false)
+  String? addTantCd;
   @HiveField(7)
-  @JsonKey(name: 'ADD_YMD', required: true)
-  String addYMD;
+  @JsonKey(name: 'ADD_YMD', required: false)
+  String? addYMD;
   @HiveField(8)
-  @JsonKey(name: 'UPD_PGID', required: true)
-  String updPGID;
+  @JsonKey(name: 'UPD_PGID', required: false)
+  String? updPGID;
   @HiveField(9)
   @JsonKey(name: 'UPD_TANTCD', required: true)
   String updTantCd;
   @HiveField(10)
   @JsonKey(name: 'UPD_YMD', required: true)
   String updYMD;
+
+  factory TKojiFilePath.fromJson(Map<String, dynamic> json) => _$TKojiFilePathFromJson(json);
+  Map<String, dynamic> toJson() => _$TKojiFilePathToJson(this);
 
 }

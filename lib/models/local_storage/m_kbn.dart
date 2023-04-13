@@ -34,8 +34,8 @@ class MKBN extends HiveObject{
   @JsonKey(name: 'KBN_NAME', required: true)
   String kbnName;
   @HiveField(2)
-  @JsonKey(name: 'KBN_BIKO', required: true)
-  String kbnBiko;
+  @JsonKey(name: 'KBN_BIKO', required: false)
+  String? kbnBiko;
   @HiveField(3)
   @JsonKey(name: 'KBNMSAI_CD', required: true)
   String kbnmsaiCd;
@@ -43,43 +43,46 @@ class MKBN extends HiveObject{
   @JsonKey(name: 'KBNMSAI_NAME', required: true)
   String kbnmsaiName;
   @HiveField(5)
-  @JsonKey(name: 'KBNMSAI_BIKO', required: true)
-  String kbnmsaiBiko;
+  @JsonKey(name: 'KBNMSAI_BIKO', required: false)
+  String? kbnmsaiBiko;
   @HiveField(6)
-  @JsonKey(name: 'YOBIKOMOKU1', required: true)
-  String yobikomoku1;
+  @JsonKey(name: 'YOBIKOMOKU1', required: false)
+  String? yobikomoku1;
   @HiveField(7)
-  @JsonKey(name: 'YOBIKOMOKU2', required: true)
-  String yobikomoku2;
+  @JsonKey(name: 'YOBIKOMOKU2', required: false)
+  String? yobikomoku2;
   @HiveField(8)
-  @JsonKey(name: 'YOBIKOMOKU3', required: true)
-  String yobikomoku3;
+  @JsonKey(name: 'YOBIKOMOKU3', required: false)
+  String? yobikomoku3;
   @HiveField(9)
-  @JsonKey(name: 'YOBIKOMOKU4', required: true)
-  String yobikomoku4;
+  @JsonKey(name: 'YOBIKOMOKU4', required: false)
+  String? yobikomoku4;
   @HiveField(10)
-  @JsonKey(name: 'YOBIKOMOKU5', required: true)
-  String yobikomoku5;
+  @JsonKey(name: 'YOBIKOMOKU5', required: false)
+  String? yobikomoku5;
   @HiveField(11)
-  @JsonKey(name: 'DEL_FLG', required: true)
-  int delFlg;
+  @JsonKey(name: 'DEL_FLG', required: false)
+  String? delFlg;
   @HiveField(12)
-  @JsonKey(name: 'ADD_PGID', required: true)
-  String addPGID;
+  @JsonKey(name: 'ADD_PGID', required: false)
+  String? addPGID;
   @HiveField(13)
-  @JsonKey(name: 'ADD_TANTCD', required: true)
-  String addTantCd;
+  @JsonKey(name: 'ADD_TANTCD', required: false)
+  String? addTantCd;
   @HiveField(14)
-  @JsonKey(name: 'ADD_YMD', required: true)
-  String addYMD;
+  @JsonKey(name: 'ADD_YMD', required: false)
+  String? addYMD;
   @HiveField(15)
-  @JsonKey(name: 'UPD_PGID', required: true)
-  String updPGID;
+  @JsonKey(name: 'UPD_PGID', required: false)
+  String? updPGID;
   @HiveField(16)
   @JsonKey(name: 'UPD_TANTCD', required: true)
   String updTantCd;
   @HiveField(17)
   @JsonKey(name: 'UPD_YMD', required: true)
   String updYMD;
+
+  factory MKBN.fromJson(Map<String, dynamic> json) => _$MKBNFromJson(json);
+  Map<String, dynamic> toJson() => _$MKBNToJson(this);
 
 }

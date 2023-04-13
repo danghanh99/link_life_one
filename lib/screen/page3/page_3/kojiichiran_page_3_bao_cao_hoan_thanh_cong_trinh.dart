@@ -8,8 +8,12 @@ import 'package:link_life_one/api/KojiPageApi/show_popup.dart';
 import 'package:link_life_one/components/custom_header_widget.dart';
 import 'package:link_life_one/components/custom_text_field.dart';
 import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/local_storage_services/local_storage_base.dart';
 import 'package:link_life_one/models/koji.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
+import 'package:link_life_one/models/local_storage/t_koji.dart';
 import 'package:link_life_one/screen/page3/page_3_1_yeu_cau_bieu_mau_page.dart';
+import 'package:provider/provider.dart';
 import '../../../api/KojiPageApi/get_list_koji_api.dart';
 import '../../../api/KojiPageApi/request_post_count.dart';
 import '../../../api/koji/tirasu/get_tirasi.dart';
@@ -100,7 +104,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
           });
         }
       },
-      onFailed: () {
+      onFailed: () async{
         if (mounted) {
           setState(() {
             isLoading = false;
@@ -121,7 +125,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
             if (mtplist[0] != null) {
               if (mtplist[0]["KOJI_TIRASISU"] != null) {
                 setState(() {
-                  tiraru = mtplist[0]["KOJI_TIRASISU"];
+                  tiraru = '${mtplist[0]["KOJI_TIRASISU"]}';
                   textEditingController.text = tiraru;
                 });
               }
@@ -146,6 +150,51 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
     if (jikan == null || jikan == '' || jikan.length != 4) return '';
     jikan = "${jikan[0]}${jikan[1]}:${jikan[2]}${jikan[3]}";
     return jikan;
+  }
+
+  showLoadingPopup({required Function(BuildContext) onShow}) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        onShow(context);
+        return SizedBox(
+          width: double.infinity,
+          child: Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: SizedBox(
+              width: 400,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: CupertinoActivityIndicator(),
+                  ),
+                  const Divider(height: 0),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      'OK',
+                      style: TextStyle(
+                        color: Color(0xFF007AFF),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -534,98 +583,163 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
             //   ),
             // ),
             const SizedBox(height: 10),
-            Form(
-              key: _formKey,
-              child: Container(
-                height: 100.h,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2),
-                      child: Text(
-                        'チラシ投函数',
-                        style: TextStyle(
-                          color: const Color(0xFF042C5C),
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            width: 240.w,
-                            height: 100.h,
-                            child: CustomTextField(
-                              controller: textEditingController,
-                              maxLength: 10,
-                              hint: '',
-                              type: TextInputType.phone,
-                              validator: _validateNumber,
-                              onChanged: (text) {
-                                setState(() {
-                                  tiraru = text;
-                                });
-                                // validateNumber(text);
-                              },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Form(
+                  key: _formKey,
+                  child: Container(
+                    height: 100.h,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: Text(
+                            'チラシ投函数',
+                            style: TextStyle(
+                              color: const Color(0xFF042C5C),
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                          // !isValid
-                          //     ? Text(
-                          //         '整数のみ',
-                          //         style: TextStyle(
-                          //             color: Colors.red, fontSize: 12.sp),
-                          //       )
-                          //     : Container(),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: 70,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFA800),
-                        borderRadius: BorderRadius.circular(26),
-                      ),
-                      child: TextButton(
-                        onPressed: () async {
-                          if (_formKey.currentState?.validate() == true) {
-                            final box = await Hive.openBox<String>('user');
-                            String loginID = box.values.last;
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                width: 240.w,
+                                height: 100.h,
+                                child: CustomTextField(
+                                  controller: textEditingController,
+                                  maxLength: 10,
+                                  hint: '',
+                                  type: TextInputType.phone,
+                                  validator: _validateNumber,
+                                  onChanged: (text) {
+                                    setState(() {
+                                      tiraru = text;
+                                    });
+                                    // validateNumber(text);
+                                  },
+                                ),
+                              ),
+                              // !isValid
+                              //     ? Text(
+                              //         '整数のみ',
+                              //         style: TextStyle(
+                              //             color: Colors.red, fontSize: 12.sp),
+                              //       )
+                              //     : Container(),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: 70,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFA800),
+                            borderRadius: BorderRadius.circular(26),
+                          ),
+                          child: TextButton(
+                            onPressed: () async {
+                              if (_formKey.currentState?.validate() == true) {
+                                final box = await Hive.openBox<String>('user');
+                                String loginID = box.values.last;
 
-                            PostTirasiUpdateApi().postTirasiUpdateApi(
-                                YMD: DateFormat('yyyy-MM-dd', 'ja')
-                                    .format(date)
-                                    .toString(),
-                                LOGIN_ID: loginID,
-                                KOJI_TIRASISU: tiraru,
-                                onFailed: () {
-                                  CustomToast.show(context,
-                                      message: "エラー!!!投函数更新ができませんでした。");
-                                },
-                                onSuccess: () {
-                                  CustomToast.show(context,
-                                      message: "投函数更新ができました。",
-                                      backGround: Colors.green);
-                                });
-                          }
-                        },
-                        child: const Text(
-                          '更新',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                                PostTirasiUpdateApi().postTirasiUpdateApi(
+                                    YMD: DateFormat('yyyy-MM-dd', 'ja')
+                                        .format(date)
+                                        .toString(),
+                                    LOGIN_ID: loginID,
+                                    KOJI_TIRASISU: tiraru,
+                                    onFailed: () {
+                                      CustomToast.show(context,
+                                          message: "エラー!!!投函数更新ができませんでした。");
+                                    },
+                                    onSuccess: () {
+                                      CustomToast.show(context,
+                                          message: "投函数更新ができました。",
+                                          backGround: Colors.green);
+                                    });
+                              }
+                            },
+                            child: const Text(
+                              '更新',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 30.0,),
+                DateFormat('yyyyMMdd').format(date)==DateFormat('yyyyMMdd').format(DateTime.now())
+                  ?  Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFA800),
+                            borderRadius: BorderRadius.circular(26),
+                          ),
+                          child: TextButton(
+                            onPressed: () async {
+                              var dialogContext;
+                              showLoadingPopup(
+                                onShow: (context){
+                                  dialogContext = context;
+                                }
+                              );
+                              await context.read<LocalStorageNotifier>().downloadData();
+                              Navigator.pop(dialogContext);
+                            },
+                            child: const Text(
+                              'オフライン用ダウンロード',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
+                      const SizedBox(width: 10.0,),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFA800),
+                            borderRadius: BorderRadius.circular(26),
+                          ),
+                          child: TextButton(
+                            onPressed: () async {
+                              context.read<LocalStorageNotifier>().uploadData();
+                            },
+                            child: const Text(
+                              'オンラインアップロード',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+                  : Container()
+              ],
             ),
             const SizedBox(
               height: 20,

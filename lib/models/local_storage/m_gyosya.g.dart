@@ -19,15 +19,15 @@ class MGyosyaAdapter extends TypeAdapter<MGyosya> {
     return MGyosya(
       kojiGyosyaCd: fields[0] as String,
       gyosyaKBNCd: fields[1] as String,
-      kojiGyosyaName: fields[2] as String,
-      jisyaLikeFlg: fields[3] as int,
-      delFlg: fields[4] as int,
+      kojiGyosyaName: fields[2] as String?,
+      jisyaLikeFlg: fields[3] as String?,
+      delFlg: fields[4] as String?,
       addPGID: fields[5] as String,
-      addTantCd: fields[6] as String,
-      addYMD: fields[7] as String,
-      updPGID: fields[8] as String,
-      updTantCd: fields[9] as String,
-      updYMD: fields[10] as String,
+      addTantCd: fields[6] as String?,
+      addYMD: fields[7] as String?,
+      updPGID: fields[8] as String?,
+      updTantCd: fields[9] as String?,
+      updYMD: fields[10] as String?,
     );
   }
 
@@ -77,32 +77,20 @@ class MGyosyaAdapter extends TypeAdapter<MGyosya> {
 MGyosya _$MGyosyaFromJson(Map<String, dynamic> json) {
   $checkKeys(
     json,
-    requiredKeys: const [
-      'KOJIGYOSYA_CD',
-      'GYOSYA_KBN_CD',
-      'KOJIGYOSYA_NAME',
-      'JISYA_LIKE_FLG',
-      'DEL_FLG',
-      'ADD_PGID',
-      'ADD_TANTCD',
-      'ADD_YMD',
-      'UPD_PGID',
-      'UPD_TANTCD',
-      'UPD_YMD'
-    ],
+    requiredKeys: const ['KOJIGYOSYA_CD', 'GYOSYA_KBN_CD', 'ADD_PGID'],
   );
   return MGyosya(
     kojiGyosyaCd: json['KOJIGYOSYA_CD'] as String,
     gyosyaKBNCd: json['GYOSYA_KBN_CD'] as String,
-    kojiGyosyaName: json['KOJIGYOSYA_NAME'] as String,
-    jisyaLikeFlg: json['JISYA_LIKE_FLG'] as int,
-    delFlg: json['DEL_FLG'] as int,
+    kojiGyosyaName: json['KOJIGYOSYA_NAME'] as String?,
+    jisyaLikeFlg: json['JISYA_LIKE_FLG'] as String?,
+    delFlg: json['DEL_FLG'] as String?,
     addPGID: json['ADD_PGID'] as String,
-    addTantCd: json['ADD_TANTCD'] as String,
-    addYMD: json['ADD_YMD'] as String,
-    updPGID: json['UPD_PGID'] as String,
-    updTantCd: json['UPD_TANTCD'] as String,
-    updYMD: json['UPD_YMD'] as String,
+    addTantCd: json['ADD_TANTCD'] as String?,
+    addYMD: json['ADD_YMD'] as String?,
+    updPGID: json['UPD_PGID'] as String?,
+    updTantCd: json['UPD_TANTCD'] as String?,
+    updYMD: json['UPD_YMD'] as String?,
   );
 }
 

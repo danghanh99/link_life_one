@@ -37,11 +37,11 @@ class MTant extends HiveObject{
   @JsonKey(name: 'TANT_NAME', required: true)
   String tantName;
   @HiveField(2)
-  @JsonKey(name: 'TANT_KNAME', required: true)
-  String tantKName;
+  @JsonKey(name: 'TANT_KNAME', required: false)
+  String? tantKName;
   @HiveField(3)
-  @JsonKey(name: 'BUZAI_HACOK_FLG', required: true)
-  int buzaiHacokFlg;
+  @JsonKey(name: 'BUZAI_HACOK_FLG', required: false)
+  String? buzaiHacokFlg;
   @HiveField(4)
   @JsonKey(name: 'SYOZOKUBUSYO_CD', required: true)
   String syozokubusyoCd;
@@ -58,40 +58,43 @@ class MTant extends HiveObject{
   @JsonKey(name: 'TANT_KBN_CD', required: true)
   String tantKbnCd;
   @HiveField(9)
-  @JsonKey(name: 'SYOZOKU_CD', required: true)
-  String syozokuCd;
+  @JsonKey(name: 'SYOZOKU_CD', required: false)
+  String? syozokuCd;
   @HiveField(10)
   @JsonKey(name: 'KENGEN_CD', required: true)
   String kengenCd;
   @HiveField(11)
-  @JsonKey(name: 'DAYLY_SALES', required: true)
-  int daylySales;
+  @JsonKey(name: 'DAYLY_SALES', required: false)
+  String? daylySales;
   @HiveField(12)
-  @JsonKey(name: 'MONTHLY_SALES', required: true)
-  int monthlySales;
+  @JsonKey(name: 'MONTHLY_SALES', required: false)
+  String? monthlySales;
   @HiveField(13)
-  @JsonKey(name: 'KAISYU_RUIKEI', required: true)
-  int kaisyuRuikei;
+  @JsonKey(name: 'KAISYU_RUIKEI', required: false)
+  String? kaisyuRuikei;
   @HiveField(14)
-  @JsonKey(name: 'DEL_FLG', required: true)
-  int delFlg;
+  @JsonKey(name: 'DEL_FLG', required: false)
+  String? delFlg;
   @HiveField(15)
-  @JsonKey(name: 'ADD_PGID', required: true)
-  String addPGID;
+  @JsonKey(name: 'ADD_PGID', required: false)
+  String? addPGID;
   @HiveField(16)
-  @JsonKey(name: 'ADD_TANTCD', required: true)
-  String addTantCd;
+  @JsonKey(name: 'ADD_TANTCD', required: false)
+  String? addTantCd;
   @HiveField(17)
-  @JsonKey(name: 'ADD_YMD', required: true)
-  String addYMD;
+  @JsonKey(name: 'ADD_YMD', required: false)
+  String? addYMD;
   @HiveField(18)
-  @JsonKey(name: 'UPD_PGID', required: true)
-  String updPGID;
+  @JsonKey(name: 'UPD_PGID', required: false)
+  String? updPGID;
   @HiveField(19)
   @JsonKey(name: 'UPD_TANTCD', required: true)
   String updTantCd;
   @HiveField(20)
   @JsonKey(name: 'UPD_YMD', required: true)
   String updYMD;
+
+  factory MTant.fromJson(Map<String, dynamic> json) => _$MTantFromJson(json);
+  Map<String, dynamic> toJson() => _$MTantToJson(this);
 
 }

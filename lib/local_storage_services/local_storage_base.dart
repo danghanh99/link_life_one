@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:intl/intl.dart';
 import 'package:link_life_one/models/local_storage/m_gyosya.dart';
 import 'package:link_life_one/models/local_storage/m_kbn.dart';
 import 'package:link_life_one/models/local_storage/m_syohin.dart';
@@ -20,7 +21,10 @@ const boxKojiFilePathName = 'kojiFilePath';
 const boxKojimsaiName = 'kojimsai';
 const boxTirasiName = 'tirasi';
 
-class LocalStorageService{
+const boxDateName = 'date';
+const dateParamName = 'd';
+
+class LocalStorageBase{
 
   static init(){
     _registerAdapters();
@@ -39,8 +43,16 @@ class LocalStorageService{
     return await (await _getBox(boxName)).get(key);
   }
 
+  static Future<Iterable> getValues({required boxName}) async {
+    return (await _getBox(boxName)).values;
+  }
+
   static Future<void> delete({required boxName, required key}) async {
     return await (await _getBox(boxName)).delete(key);
+  }
+
+  static clear({required boxName}) async {
+    return await (await _getBox(boxName)).clear();
   }
 
   static _registerAdapters(){
@@ -56,6 +68,7 @@ class LocalStorageService{
   }
 
   static _openBoxs()async{
+    await Hive.openBox(boxDateName);
     await Hive.openBox(boxGyosyaName);
     await Hive.openBox(boxSyohinName);
     await Hive.openBox(boxTantName);
