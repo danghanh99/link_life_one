@@ -1,14 +1,14 @@
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:link_life_one/models/local_objects/m_gyosya.dart';
-import 'package:link_life_one/models/local_objects/m_kbn.dart';
-import 'package:link_life_one/models/local_objects/m_syohin.dart';
-import 'package:link_life_one/models/local_objects/m_tant.dart';
-import 'package:link_life_one/models/local_objects/t_koji.dart';
-import 'package:link_life_one/models/local_objects/t_koji_check.dart';
-import 'package:link_life_one/models/local_objects/t_koji_file_path.dart';
-import 'package:link_life_one/models/local_objects/t_kojimsai.dart';
-import 'package:link_life_one/models/local_objects/t_tirasi.dart';
+import 'package:link_life_one/models/local_storage/m_gyosya.dart';
+import 'package:link_life_one/models/local_storage/m_kbn.dart';
+import 'package:link_life_one/models/local_storage/m_syohin.dart';
+import 'package:link_life_one/models/local_storage/m_tant.dart';
+import 'package:link_life_one/models/local_storage/t_koji.dart';
+import 'package:link_life_one/models/local_storage/t_koji_check.dart';
+import 'package:link_life_one/models/local_storage/t_koji_file_path.dart';
+import 'package:link_life_one/models/local_storage/t_kojimsai.dart';
+import 'package:link_life_one/models/local_storage/t_tirasi.dart';
 
 const boxGyosyaName = 'gyosya';
 const boxSyohinName = 'syohin';
@@ -35,7 +35,7 @@ class LocalStorageService{
     await (await _getBox(boxName)).put(key, model);
   }
 
-  static Future<TKoji?>? get({required boxName, required key}) async {
+  static Future<dynamic>? get({required boxName, required key}) async {
     return await (await _getBox(boxName)).get(key);
   }
 
