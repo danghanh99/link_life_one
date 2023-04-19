@@ -152,6 +152,9 @@ class _Page721State extends State<Page721> {
                   : schedule.kojiiraisyoFilepath ?? '';
               String fileName = filePath.split('/').last;
 
+              listFileName.clear();
+              listFilePath.clear();
+
               if (isFile(filePath)) {
                 listFileName.add(fileName);
                 listFilePath.add(filePath);
