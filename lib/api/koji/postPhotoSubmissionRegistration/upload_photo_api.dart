@@ -2,11 +2,48 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
+import 'package:link_life_one/local_storage_services/file_controller.dart';
+import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 
 import '../../../constants/constant.dart';
 
 class UploadPhotoApi {
   UploadPhotoApi() : super();
+
+  Future<void> _notSuccess({
+    required jyucyuId,
+    required loginId,
+    required homonSbt,
+    required List<String> filePathList,
+    required Function onFailed,
+    required Function onSuccess,
+  }) async {
+
+    List<String> paths = [];
+    //STORAGE FILES
+    paths = await Future.wait(filePathList.map((fp)async{
+      return await FileController().copyFile(
+          file: File(fp),
+          onFailed: (){
+            onFailed.call();
+          }
+      );
+    }).toList());
+
+    if(await LocalStorageServices.isTodayDataDownloaded()){
+      var res = await LocalStorageServices().postPhotoSubmissionRegistration(
+          jyucyuId: jyucyuId,
+          loginId: loginId,
+          homonSbt: homonSbt,
+          filePathList: paths
+      );
+      onSuccess.call();
+      return res;
+    }
+    else{
+      onFailed.call();
+    }
+  }
 
   Future<void> uploadPhotoApi({
     required String JYUCYU_ID,
@@ -53,10 +90,24 @@ class UploadPhotoApi {
       if (response.statusCode == 200) {
         onSuccess.call();
       } else {
-        onFailed.call();
+        return _notSuccess(
+            jyucyuId: JYUCYU_ID,
+            loginId: LOGIN_ID,
+            homonSbt: HOMON_SBT,
+            filePathList: FILE_PATH_LIST,
+            onFailed: onFailed,
+            onSuccess: onSuccess
+        );
       }
     } catch (e) {
-      onFailed.call();
+      return _notSuccess(
+          jyucyuId: JYUCYU_ID,
+          loginId: LOGIN_ID,
+          homonSbt: HOMON_SBT,
+          filePathList: FILE_PATH_LIST,
+          onFailed: onFailed,
+          onSuccess: onSuccess
+      );
     }
   }
 }

@@ -1,10 +1,13 @@
 
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 
 import '../../api/koji/getPhotoConfirm/get_shashin_kakunin.dart';
@@ -26,9 +29,17 @@ class ShashinKakuninPage extends StatefulWidget {
 
 class _ShashinKakuninPageState extends State<ShashinKakuninPage> {
   // String url = "${Constant.url}";
+  late bool isTodayDataDownloaded;
   List<dynamic> listPhotos = [];
+
+  _checkDownload()async{
+    isTodayDataDownloaded = await LocalStorageServices.isTodayDataDownloaded();
+    setState((){});
+  }
+
   @override
-  void initState() {
+  void initState(){
+    _checkDownload();
     if (widget.listPhotos.isNotEmpty) {
       listPhotos = widget.listPhotos;
     } else {
@@ -58,6 +69,7 @@ class _ShashinKakuninPageState extends State<ShashinKakuninPage> {
 
   @override
   Widget build(BuildContext context) {
+
     Size size = MediaQuery.of(context).size;
     return Container(
       height: 900.h,
@@ -128,12 +140,11 @@ class _ShashinKakuninPageState extends State<ShashinKakuninPage> {
               itemCount: listPhotos.length,
               // carouselController: carouselController,
               itemBuilder: (BuildContext context, int itemIndex, int idx) {
-                String? path = listPhotos[idx]["FILEPATH"] == null
-                    ? null
-                    : listPhotos[idx]["FILEPATH"];
+                String? path = listPhotos[idx]["FILEPATH"];
+                print('path: $path');
                 return path == null
                     ? Container()
-                    : Container(
+                    : SizedBox(
                         width: 700.w,
                         height: 1000.h,
                         child: CachedNetworkImage(
@@ -147,8 +158,9 @@ class _ShashinKakuninPageState extends State<ShashinKakuninPage> {
                               ),
                             ),
                           ),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
+                          errorWidget: (context, url, error) => isTodayDataDownloaded && isTodayDataDownloaded
+                            ? Image.file(File(path))
+                            : const Icon(Icons.error),
                         ),
                       );
               },

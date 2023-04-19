@@ -1,16 +1,27 @@
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 
 class LocalStorageNotifier extends ChangeNotifier {
 
-  LocalStorageServices _localStorageServices = LocalStorageServices();
+  LocalStorageServices localStorageServices = LocalStorageServices();
+
+  StreamController progressController = StreamController.broadcast();
 
   Future<void> downloadData() async {
-    await _localStorageServices.downloadDB();
+    await localStorageServices.downloadDB(
+      onProgress: (percent){
+        progressController.add(percent);
+      }
+    );
+    await localStorageServices.checkTodayDownloaded();
   }
 
-
+  Future<bool> hasTodayData()async{
+    return await LocalStorageServices.isTodayDataDownloaded();
+  }
 
   Future<void> uploadData() async {
     print('uploading');

@@ -78,6 +78,7 @@ class LocalStorageBase{
     await Hive.openBox(boxKojiFilePathName);
     await Hive.openBox(boxKojimsaiName);
     await Hive.openBox(boxTirasiName);
+    await Hive.openBox(boxDateName);
   }
 
 }

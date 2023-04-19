@@ -8,12 +8,8 @@ import '../../constants/constant.dart';
 class ShowPopUp {
   ShowPopUp() : super();
 
-  _isToday(DateTime date){
-    return DateFormat('yyyyMMdd').format(date)==DateFormat('yyyyMMdd').format(DateTime.now());
-  }
-
   Future<int> _notSuccess({required DateTime date, required setsakiAddress, required jyucyuId, required Function(int) onSuccess}) async {
-    if(_isToday(date)){
+    if(await LocalStorageServices.isTodayDataDownloaded()){
       int count = await LocalStorageServices().checkCount(
           YMD: date,
           setsakiAddress: setsakiAddress,

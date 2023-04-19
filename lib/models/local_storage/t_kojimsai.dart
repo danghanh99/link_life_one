@@ -9,28 +9,28 @@ class TKojimsai extends HiveObject{
   TKojimsai({
     required this.jyucyuId,
     required this.jyucyumsaiId,
-    required this.jyucyumsaiIdKikan,
-    required this.hinban,
-    required this.makerCd,
-    required this.ctgotyCd,
-    required this.suryo,
-    required this.hanbaiTanka,
-    required this.kingak,
-    required this.kisetuHinban,
-    required this.kisetuMaker,
-    required this.kensetuKeitai,
-    required this.befSekoPhotoFilePath,
-    required this.aftSekoPhotoFilePath,
-    required this.otherPhotoFolderPath,
-    required this.tuikaJisyaCd,
-    required this.tuikaSyohinName,
-    required this.kojijituikaFlg,
-    required this.delFlg,
-    required this.renkeiYMD,
-    required this.addPGID,
-    required this.addTantCd,
-    required this.addYMD,
-    required this.updPGID,
+    this.jyucyumsaiIdKikan,
+    this.hinban,
+    this.makerCd,
+    this.ctgotyCd,
+    this.suryo,
+    this.hanbaiTanka,
+    this.kingak,
+    this.kisetuHinban,
+    this.kisetuMaker,
+    this.kensetuKeitai,
+    this.befSekoPhotoFilePath,
+    this.aftSekoPhotoFilePath,
+    this.otherPhotoFolderPath,
+    this.tuikaJisyaCd,
+    this.tuikaSyohinName,
+    this.kojijituikaFlg,
+    this.delFlg,
+    this.renkeiYMD,
+    this.addPGID,
+    this.addTantCd,
+    this.addYMD,
+    this.updPGID,
     required this.updTantCd,
     required this.updYMD,
   });
@@ -79,7 +79,7 @@ class TKojimsai extends HiveObject{
   String? aftSekoPhotoFilePath;
   @HiveField(14)
   @JsonKey(name: 'OTHER_PHOTO_FOLDERPATH', required: false)
-  String? otherPhotoFolderPath;
+  dynamic otherPhotoFolderPath;
   @HiveField(15)
   @JsonKey(name: 'TUIKA_JISYA_CD', required: false)
   String? tuikaJisyaCd;
@@ -116,5 +116,44 @@ class TKojimsai extends HiveObject{
 
   factory TKojimsai.fromJson(Map<String, dynamic> json) => _$TKojimsaiFromJson(json);
   Map<String, dynamic> toJson() => _$TKojimsaiToJson(this);
+
+  factory TKojimsai.fromRequest(Map<String, dynamic> json) {
+    List<String> otherFilePath = [];
+    dynamic otherPath = json['OTHER_PHOTO_FOLDERPATH'];
+    if (otherPath.runtimeType == String) {
+      otherFilePath = [otherPath];
+    }
+    if (otherPath.runtimeType == List<String>) {
+      otherFilePath = otherPath;
+    }
+    return TKojimsai(
+      jyucyuId: json['JYUCYU_ID'] as String,
+      jyucyumsaiId: json['JYUCYUMSAI_ID'] as String,
+      jyucyumsaiIdKikan: json['JYUCYUMSAI_ID_KIKAN'] as String?,
+      hinban: json['HINBAN'] as String?,
+      makerCd: json['MAKER_CD'] as String?,
+      ctgotyCd: json['CTGORY_CD'] as String?,
+      suryo: json['SURYO'] as String?,
+      hanbaiTanka: json['HANBAI_TANKA'] as String?,
+      kingak: json['KINGAK'] as String?,
+      kisetuHinban: json['KISETU_HINBAN'] as String?,
+      kisetuMaker: json['KISETU_MAKER'] as String?,
+      kensetuKeitai: json['KENSETU_KEITAI'] as String?,
+      befSekoPhotoFilePath: json['BEF_SEKO_PHOTO_FILEPATH'] as String?,
+      aftSekoPhotoFilePath: json['AFT_SEKO_PHOTO_FILEPATH'] as String?,
+      otherPhotoFolderPath: otherFilePath,
+      tuikaJisyaCd: json['TUIKA_JISYA_CD'] as String?,
+      tuikaSyohinName: json['TUIKA_SYOHIN_NAME'] as String?,
+      kojijituikaFlg: json['KOJIJITUIKA_FLG'] as String?,
+      delFlg: json['DEL_FLG'] as String?,
+      renkeiYMD: json['RENKEI_YMD'] as String?,
+      addPGID: json['ADD_PGID'] as String?,
+      addTantCd: json['ADD_TANTCD'] as String?,
+      addYMD: json['ADD_YMD'] as String?,
+      updPGID: json['UPD_PGID'] as String?,
+      updTantCd: json['UPD_TANTCD'] as String,
+      updYMD: json['UPD_YMD'] as String,
+    );
+  }
 
 }

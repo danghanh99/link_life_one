@@ -7,6 +7,7 @@ import 'package:link_life_one/api/KojiPageApi/hou_jin_kan_ryo_sho_api.dart';
 import 'package:link_life_one/api/KojiPageApi/request_corporate_completion.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 import 'package:link_life_one/shared/assets.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,9 +35,17 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
   List<dynamic> listImage = [];
   final ImagePicker _picker = ImagePicker();
 
+  bool isTodayDownloaded = false;
+
+  _checkDownload()async{
+    isTodayDownloaded = await LocalStorageServices.isTodayDataDownloaded();
+    setState((){});
+  }
+
   @override
   void initState() {
     super.initState();
+    _checkDownload();
     getHouJin();
   }
 
@@ -191,7 +200,16 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                                             listImage[idx]['FILEPATH']),
                                         imageErrorBuilder:
                                             (context, error, stackTrace) {
-                                          return const Icon(Icons.error);
+                                          return isTodayDownloaded
+                                            ? Image.file(
+                                              File(listImage[idx]['FILEPATH']),
+                                              width: size.width - 50,
+                                              height: size.height * 2 / 5,
+                                              fit: size.width > size.height
+                                                  ? null
+                                                  : BoxFit.fill,
+                                            )
+                                            : const Icon(Icons.error);
                                         },
                                       ));
                           },

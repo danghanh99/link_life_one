@@ -4,11 +4,69 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:link_life_one/local_storage_services/file_controller.dart';
+import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 
 import '../../constants/constant.dart';
 
 class CreateRiyuu {
   CreateRiyuu() : super();
+
+  Future<dynamic> _notSuccess({
+    required jyucyuId,
+    required shitamiMenu,
+    required loginId,
+    required List<String> filePaths,
+    String? mtMoriYmd,
+    String? cancelRiyu,
+    required Function() onSuccess,
+    required Function(String? errorMessage) onFailed
+  }) async {
+    if(await LocalStorageServices.isTodayDataDownloaded()){
+
+
+      List<String> paths = [];
+      for(var p in filePaths){
+        paths.add(await FileController().copyFile(file: File(p), onFailed: onFailed));
+      }
+
+      if(shitamiMenu==1){
+        await LocalStorageServices().photoSubmissionRegistrationFromSendPhoto(
+            loginId: loginId,
+            filePaths: paths,
+            jyucyuId: jyucyuId
+        );
+      }
+      else if(shitamiMenu==2){
+        await LocalStorageServices().photoSubmissionRegistrationFromReportDelayed(
+            loginId: loginId,
+            filePaths: paths,
+            jyucyuId: jyucyuId,
+            mtMoriYmd: mtMoriYmd,
+            cancelRiyu: cancelRiyu
+        );
+      }
+      else if(shitamiMenu==3){
+        await LocalStorageServices().photoSubmissionRegistrationFromCancel(
+            loginId: loginId,
+            filePaths: paths,
+            jyucyuId: jyucyuId,
+            cancelRiyu: cancelRiyu
+        );
+      }
+      else if(shitamiMenu==4){
+        await LocalStorageServices().photoSubmissionRegistrationFromReportNoQuoation(
+            loginId: loginId,
+            filePaths: paths,
+            jyucyuId: jyucyuId
+        );
+      }
+      onSuccess.call();
+    }
+    else{
+      onFailed.call('画像アップロードが失敗しました。');
+    }
+  }
 
   Future<dynamic> createRiyuu({
     required String JYUCYU_ID,
@@ -19,9 +77,12 @@ class CreateRiyuu {
     required Function() onSuccess,
     required Function(String? errorMessage) onFailed,
   }) async {
+
+    final box = await Hive.openBox<String>('user');
+    String loginID = box.values.last;
+
     try {
-      final box = await Hive.openBox<String>('user');
-      String loginID = box.values.last;
+
       var dio = Dio();
       String url = _getUrl(SHITAMI_MENU);
       FormData formData = FormData.fromMap(
@@ -46,8 +107,25 @@ class CreateRiyuu {
         final errorMessage = jsonDecode(response.data)['0'];
         onFailed.call(errorMessage);
       }
+      else{
+        await _notSuccess(
+            jyucyuId: JYUCYU_ID,
+            shitamiMenu: SHITAMI_MENU,
+            loginId: loginID,
+            filePaths: FILE_PATH_LIST,
+            onSuccess: onSuccess,
+            onFailed: onFailed
+        );
+      }
     } catch (e) {
-      onFailed.call('画像アップロードが失敗しました。');
+      await _notSuccess(
+          jyucyuId: JYUCYU_ID,
+          shitamiMenu: SHITAMI_MENU,
+          loginId: loginID,
+          filePaths: FILE_PATH_LIST,
+          onSuccess: onSuccess,
+          onFailed: onFailed
+      );
     }
   }
 

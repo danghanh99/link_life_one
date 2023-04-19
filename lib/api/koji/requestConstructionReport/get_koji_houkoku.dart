@@ -1,10 +1,34 @@
 import "package:http/http.dart" as http;
+import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 import 'dart:convert';
 
 import '../../../constants/constant.dart';
 
 class GetKojiHoukoku {
   GetKojiHoukoku() : super();
+
+  Future<dynamic> _notSuccess({
+    required String jyucyuId,
+    required String singleSummarize,
+    required String kojiSt,
+    String? syuyakuJyucyuId,
+    required Function(dynamic) onSuccess,
+    required Function onFailed
+  }) async {
+    if(await LocalStorageServices.isTodayDataDownloaded()){
+      var res = await LocalStorageServices().getConstructionReport(
+          jyucyuId: jyucyuId,
+          kojiSt: kojiSt,
+          singleSummarize: singleSummarize,
+          syuyakuJyucyuId: syuyakuJyucyuId
+      );
+      onSuccess.call(res);
+      return res;
+    }
+    else{
+      onFailed.call();
+    }
+  }
 
   Future<dynamic> getKojiHoukoku({
     required String JYUCYU_ID,
@@ -42,16 +66,37 @@ class GetKojiHoukoku {
       }
     }
 
-    final response = await http.get(
-      Uri.parse(url),
-    );
+    try{
 
-    if (response.statusCode == 200) {
-      final dynamic body = jsonDecode(response.body);
-      onSuccess.call(body);
-      return body;
-    } else {
-      onFailed.call();
+      final response = await http.get(
+        Uri.parse(url),
+      );
+
+      if (response.statusCode == 200) {
+        final dynamic body = jsonDecode(response.body);
+        onSuccess.call(body);
+        return body;
+      } else {
+        return _notSuccess(
+            jyucyuId: JYUCYU_ID,
+            singleSummarize: SINGLE_SUMMARIZE,
+            kojiSt: KOJI_ST,
+            onSuccess: onSuccess,
+            onFailed: onFailed
+        );
+      }
+
+    } catch(e){
+      return _notSuccess(
+          jyucyuId: JYUCYU_ID,
+          singleSummarize: SINGLE_SUMMARIZE,
+          kojiSt: KOJI_ST,
+          onSuccess: onSuccess,
+          onFailed: onFailed
+      );
     }
+
+
+
   }
 }

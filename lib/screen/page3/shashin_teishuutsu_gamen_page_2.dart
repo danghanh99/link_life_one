@@ -9,6 +9,7 @@ import 'package:link_life_one/api/KojiPageApi/create_riyuu.dart';
 import 'package:link_life_one/api/KojiPageApi/get_image.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -42,6 +43,8 @@ class _ShashinTeishuutsuGamenPage2State
   final carouselController = CarouselController();
   List<dynamic> selectedImages = [];
 
+  bool isTodayDownloaded = false;
+
   void selectImage() async {
     try {
       List<XFile> files = await _picker.pickMultiImage();
@@ -53,8 +56,14 @@ class _ShashinTeishuutsuGamenPage2State
     } catch (e) {}
   }
 
+  _checkDownload()async{
+    isTodayDownloaded = await LocalStorageServices.isTodayDataDownloaded();
+    setState((){});
+  }
+
   @override
   void initState() {
+    _checkDownload();
     getListImage();
     super.initState();
   }
@@ -185,7 +194,12 @@ class _ShashinTeishuutsuGamenPage2State
                                             ),
                                           ),
                                           errorWidget: (context, url, error) =>
-                                              const Icon(Icons.error),
+                                              isTodayDownloaded
+                                              ? Image.file(
+                                                File(e['FILEPATH']),
+                                                fit: BoxFit.cover,
+                                              )
+                                              : const Icon(Icons.error),
                                         )),
                               Visibility(
                                 visible: e.runtimeType == XFile,

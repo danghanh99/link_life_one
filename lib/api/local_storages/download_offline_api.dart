@@ -19,12 +19,12 @@ class DownloadOfflineAPI {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> body = jsonDecode(response.body);
-        onSuccess.call(body);
+        await onSuccess.call(body);
       } else {
-        onFailed.call();
+        await onFailed.call();
       }
     } catch(e){
-      onFailed.call();
+      await onFailed.call();
     }
 
   }

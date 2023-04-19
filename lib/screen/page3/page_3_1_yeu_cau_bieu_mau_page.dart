@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/api/KojiPageApi/get_list_pdf.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 import 'package:link_life_one/models/pdf_file.dart';
 import 'package:link_life_one/screen/page3/shashin_kakinin_page.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
@@ -59,11 +60,19 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
 
   int currentPage = 0;
 
+  bool isTodayDataDownloaded = false;
+
   // String SINGLE_SUMMARIZE = "01";
+
+  _checkDownload()async{
+    isTodayDataDownloaded = await LocalStorageServices.isTodayDataDownloaded();
+    setState((){});
+  }
 
   @override
   void initState() {
     // SINGLE_SUMMARIZE = widget.isSendAList ? "02" : "01";
+    _checkDownload();
     callGetListPdf();
     callGetShashinKakunin();
     super.initState();
@@ -122,7 +131,8 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
         },
         onFailed: () {
           CustomToast.show(context, message: "リスト写真を取得出来ませんでした。");
-        });
+        }
+    );
   }
 
   void showPopup(String content) {
@@ -175,6 +185,25 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
         );
       },
     );
+  }
+  
+  Widget _showLocalPDFOrError(e){
+    return isTodayDataDownloaded
+      ? const PDF(
+        swipeHorizontal: false,
+        enableSwipe: true,
+        autoSpacing: true,
+        pageFling: false,
+        fitEachPage: false,
+      ).fromPath(
+        list_pdf[listPdfURL.indexOf(e)].sitamiiraisyoFilePath!=null
+            ? list_pdf[listPdfURL.indexOf(e)].sitamiiraisyoFilePath!
+            : list_pdf[listPdfURL.indexOf(e)].kojiiraisyoFilePath!,
+        key: ValueKey(e),
+        // errorWidget: (error) => const Center(
+        //     child: Icon(Icons.error_outline_outlined)),
+      )
+      : const Icon(Icons.error);
   }
 
   @override
@@ -304,8 +333,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                         ).cachedFromUrl(
                           e,
                           key: ValueKey(e),
-                          errorWidget: (error) => const Center(
-                              child: Icon(Icons.error_outline_outlined)),
+                          errorWidget: (error) => _showLocalPDFOrError(e),
                         );
                       }).toList()
                     ],
@@ -385,8 +413,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            ShashinTeishuutsuGamenPage(
+                                        builder: (context) => ShashinTeishuutsuGamenPage(
                                           JYUCYU_ID: widget.JYUCYU_ID,
                                           HOMON_SBT: widget.koji.homonSbt,
                                           initialDate: widget.initialDate,

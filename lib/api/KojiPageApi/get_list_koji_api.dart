@@ -2,6 +2,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import "package:http/http.dart" as http;
 import 'package:intl/intl.dart';
 import 'package:link_life_one/local_storage_services/local_storage_base.dart';
+import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 import 'package:link_life_one/models/koji.dart';
 import 'dart:convert';
 
@@ -10,12 +11,8 @@ import '../../constants/constant.dart';
 class GetListKojiApi {
   GetListKojiApi() : super();
 
-  _isToday(DateTime date){
-    return DateFormat('yyyyMMdd').format(date)==DateFormat('yyyyMMdd').format(DateTime.now());
-  }
-
-  _notSuccess({required DateTime date, required Function onFailed, required Function(List<Koji>) onSuccess}) async {
-    if(_isToday(date)){
+  Future<List<Koji>> _notSuccess({required DateTime date, required Function onFailed, required Function(List<Koji>) onSuccess}) async {
+    if(await LocalStorageServices.isTodayDataDownloaded()){
       var tkoji = await LocalStorageBase.getValues(boxName: boxKojiName);
       List<Koji> list = tkoji.map<Koji>((t) => t.toKoji()).toList();
       onSuccess.call(_sort(list));

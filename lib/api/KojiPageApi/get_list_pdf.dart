@@ -10,17 +10,12 @@ import '../../constants/constant.dart';
 class GetListPdf {
   GetListPdf() : super();
 
-  _isToday(){
-    return true;
-    // return DateFormat('yyyyMMdd').format(date)==DateFormat('yyyyMMdd').format(DateTime.now());
-  }
-
   Future<List<PdfFile>> _notSuccess({
     required jyucyuId,
     required homonSbt
   }
   ) async {
-    if(_isToday()){
+    if(await LocalStorageServices.isTodayDataDownloaded()){
       return await LocalStorageServices().getFiles(jyucyuId: jyucyuId, homonSbt: homonSbt);
     }
     else{

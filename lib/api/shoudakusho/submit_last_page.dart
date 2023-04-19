@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:link_life_one/local_storage_services/file_controller.dart';
+import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 
 import '../../constants/constant.dart';
 import '../../models/consent.dart';
@@ -12,6 +14,48 @@ class SubmitLastPage {
   static final SubmitLastPage _instance = SubmitLastPage._internal();
   static SubmitLastPage get shared => _instance;
   SubmitLastPage._internal();
+
+  Future<void> _submitNotSuccess({
+    required String singleSummarize,
+    required String jyucyuId,
+    required String checkFlg1,
+    required String checkFlg2,
+    required String checkFlg3,
+    required String checkFlg4,
+    required String checkFlg5,
+    required String checkFlg6,
+    required String checkFlg7,
+    required String biko,
+    required List<KojiHoukokuModel> kojiHoukoku,
+    required List<TableDetailModel> tableList,
+    required loginId,
+    required Function onSuccess,
+    required Function() onFailed
+  }) async {
+    if(await LocalStorageServices.isTodayDataDownloaded()){
+
+      var res = await LocalStorageServices().localSubmitLastPage(
+          loginId: loginId,
+          singleSummarize: singleSummarize,
+          jyucyuId: jyucyuId,
+          checkFlg1: checkFlg1,
+          checkFlg2: checkFlg2,
+          checkFlg3: checkFlg3,
+          checkFlg4: checkFlg4,
+          checkFlg5: checkFlg5,
+          checkFlg6: checkFlg6,
+          checkFlg7: checkFlg7,
+          biko: biko,
+          kojiHoukoku: kojiHoukoku,
+          tableList: tableList
+      );
+      onSuccess.call();
+
+    }
+    else{
+      onFailed.call();
+    }
+  }
 
   Future<void> submitLastPage(
       {required String SINGLE_SUMMARIZE,
@@ -28,18 +72,21 @@ class SubmitLastPage {
       required List<Map<String, dynamic>> list,
       required Function onSuccess,
       required Function(String) onFailed}) async {
-    try {
-      List<TableDetailModel> tableList = [];
 
-      if (list.isNotEmpty) {
-        for (var element in list) {
-          tableList.add(TableDetailModel.fromJson(element));
-        }
+    List<TableDetailModel> tableList = [];
+
+    if (list.isNotEmpty) {
+      for (var element in list) {
+        tableList.add(TableDetailModel.fromJson(element));
       }
+    }
 
-      String url = "${Constant.url}Request/Koji/requestConsent.php";
-      final box = await Hive.openBox<String>('user');
-      String loginID = box.values.last;
+    String url = "${Constant.url}Request/Koji/requestConsent.php";
+    final box = await Hive.openBox<String>('user');
+    String loginID = box.values.last;
+
+    try {
+
       ConsentModel consentModel = ConsentModel(
           singleSummarize: SINGLE_SUMMARIZE,
           loginId: loginID,
@@ -71,10 +118,46 @@ class SubmitLastPage {
           onSuccess();
         }
       } else {
-        onFailed('');
+        _submitNotSuccess(
+            singleSummarize: SINGLE_SUMMARIZE,
+            jyucyuId: JYUCYU_ID,
+            checkFlg1: CHECK_FLG1,
+            checkFlg2: CHECK_FLG2,
+            checkFlg3: CHECK_FLG3,
+            checkFlg4: CHECK_FLG4,
+            checkFlg5: CHECK_FLG5,
+            checkFlg6: CHECK_FLG6,
+            checkFlg7: CHECK_FLG7,
+            biko: biko,
+            kojiHoukoku: kojiHoukoku,
+            tableList: tableList,
+            loginId: loginID,
+            onSuccess: onSuccess,
+            onFailed: (){
+              onFailed('');
+            }
+        );
       }
     } catch (e) {
-      onFailed('');
+      _submitNotSuccess(
+          singleSummarize: SINGLE_SUMMARIZE,
+          jyucyuId: JYUCYU_ID,
+          checkFlg1: CHECK_FLG1,
+          checkFlg2: CHECK_FLG2,
+          checkFlg3: CHECK_FLG3,
+          checkFlg4: CHECK_FLG4,
+          checkFlg5: CHECK_FLG5,
+          checkFlg6: CHECK_FLG6,
+          checkFlg7: CHECK_FLG7,
+          biko: biko,
+          kojiHoukoku: kojiHoukoku,
+          tableList: tableList,
+          loginId: loginID,
+          onSuccess: onSuccess,
+          onFailed: (){
+            onFailed('');
+          }
+      );
     }
   }
 
@@ -86,30 +169,75 @@ class SubmitLastPage {
     }
   }
 
+  Future<dynamic> _notSuccess({
+    required String jyucyuId,
+    required File file,
+    required loginId,
+    required Function() onSuccess,
+    required Function() onFailed
+  }) async {
+    if(await LocalStorageServices.isTodayDataDownloaded()){
+
+      String filePath = await FileController().copyFile(file: file, onFailed: onFailed);
+
+      var res = await LocalStorageServices().postUploadRegisterSignImage(
+          jyucyuId: jyucyuId,
+          filePath: filePath,
+          loginId: loginId
+      );
+      onSuccess.call();
+      return res;
+    }
+    else{
+      onFailed.call();
+    }
+  }
+
   Future<void> uploadSignImage(
       {required String jyucyuId,
       required File file,
       required Function() onSuccess,
       required Function() onFailed}) async {
-    String urlEndpoint = Constant.requestPostUploadRegisterSignImage;
-    MultipartFile multipartFile = MultipartFile.fromFileSync(file.path);
+
     final box = await Hive.openBox<String>('user');
     String loginID = box.values.last;
 
-    Map<String, dynamic> body = {
-      'JYUCYU_ID': jyucyuId,
-      'FILE_NAME': multipartFile,
-      'LOGIN_ID': loginID
-    };
+    try{
 
-    final Response response =
-        await RestAPI.shared.postDataWithFormData(urlEndpoint, body);
+      String urlEndpoint = Constant.requestPostUploadRegisterSignImage;
+      MultipartFile multipartFile = MultipartFile.fromFileSync(file.path);
 
-    if (response.statusCode == 200) {
-      onSuccess();
-    } else {
-      onFailed();
+      Map<String, dynamic> body = {
+        'JYUCYU_ID': jyucyuId,
+        'FILE_NAME': multipartFile,
+        'LOGIN_ID': loginID
+      };
+
+      final Response response =
+      await RestAPI.shared.postDataWithFormData(urlEndpoint, body);
+
+      if (response.statusCode == 200) {
+        onSuccess();
+      } else {
+        return _notSuccess(
+            jyucyuId: jyucyuId,
+            file: file,
+            loginId: loginID,
+            onSuccess: onSuccess,
+            onFailed: onFailed
+        );
+      }
+
     }
-    return;
+    catch(e){
+      return _notSuccess(
+          jyucyuId: jyucyuId,
+          file: file,
+          loginId: loginID,
+          onSuccess: onSuccess,
+          onFailed: onFailed
+      );
+    }
+
   }
 }

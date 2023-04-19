@@ -2,6 +2,7 @@ import 'package:hive_flutter/adapters.dart';
 import "package:http/http.dart" as http;
 import 'package:intl/intl.dart';
 import 'package:link_life_one/local_storage_services/local_storage_base.dart';
+import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 import 'package:link_life_one/models/local_storage/t_tirasi.dart';
 import 'dart:convert';
 
@@ -11,12 +12,8 @@ import '../../../models/user.dart';
 class GetTirasi {
   GetTirasi() : super();
 
-  _isToday(DateTime date){
-    return DateFormat('yyyyMMdd').format(date)==DateFormat('yyyyMMdd').format(DateTime.now());
-  }
-
   _notSuccess({required DateTime date, required Function onFailed, required Function(dynamic) onSuccess}) async {
-    if(_isToday(date)){
+    if(await LocalStorageServices.isTodayDataDownloaded()){
       var ttirasi = await LocalStorageBase.getValues(boxName: boxTirasiName);
       var list = ttirasi.map<Map>((e) => (e as TTirasi).toJson()).toList();
       onSuccess.call(list);

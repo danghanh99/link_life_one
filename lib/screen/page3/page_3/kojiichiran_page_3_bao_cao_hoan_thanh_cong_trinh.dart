@@ -152,6 +152,18 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
     return jikan;
   }
 
+  Widget _progressBar(){
+    return StreamBuilder(
+        stream: context.read<LocalStorageNotifier>().progressController.stream,
+        builder: (context, snapshot){
+          return LinearProgressIndicator(
+            value: snapshot.hasData?snapshot.data as double:0.0,
+            backgroundColor: Colors.transparent
+          );
+        }
+    );
+  }
+
   showLoadingPopup({required Function(BuildContext) onShow}) {
     showDialog(
       context: context,
@@ -171,8 +183,12 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.only(top: 32.0),
                     child: CupertinoActivityIndicator(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: _progressBar(),
                   ),
                   const Divider(height: 0),
                   TextButton(
