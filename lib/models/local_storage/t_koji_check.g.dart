@@ -32,13 +32,14 @@ class TKojiCheckAdapter extends TypeAdapter<TKojiCheck> {
       updPGID: fields[12] as String?,
       updTantCd: fields[13] as String,
       updYMD: fields[14] as String,
+      status: fields[15] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, TKojiCheck obj) {
     writer
-      ..writeByte(15)
+      ..writeByte(16)
       ..writeByte(0)
       ..write(obj.jyucyuId)
       ..writeByte(1)
@@ -68,7 +69,9 @@ class TKojiCheckAdapter extends TypeAdapter<TKojiCheck> {
       ..writeByte(13)
       ..write(obj.updTantCd)
       ..writeByte(14)
-      ..write(obj.updYMD);
+      ..write(obj.updYMD)
+      ..writeByte(15)
+      ..write(obj.status);
   }
 
   @override
@@ -107,6 +110,7 @@ TKojiCheck _$TKojiCheckFromJson(Map<String, dynamic> json) {
     updPGID: json['UPD_PGID'] as String?,
     updTantCd: json['UPD_TANTCD'] as String,
     updYMD: json['UPD_YMD'] as String,
+    status: json['status'] as int? ?? 0,
   );
 }
 
@@ -127,4 +131,5 @@ Map<String, dynamic> _$TKojiCheckToJson(TKojiCheck instance) =>
       'UPD_PGID': instance.updPGID,
       'UPD_TANTCD': instance.updTantCd,
       'UPD_YMD': instance.updYMD,
+      'status': instance.status,
     };

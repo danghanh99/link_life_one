@@ -185,6 +185,9 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
 
   Widget rightSide(
       KojiHoukokuNotifier notifier, KojiHoukokuModel? item, int? index) {
+    print('before item path: ${item?.befSekiPhotoFilePath}');
+    print('after item path: ${item?.aftSekoPhotoFilePath}');
+    print('others items: ${item?.otherPhotoFolderPath}');
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

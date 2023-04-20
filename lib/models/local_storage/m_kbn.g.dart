@@ -35,13 +35,14 @@ class MKBNAdapter extends TypeAdapter<MKBN> {
       updPGID: fields[15] as String?,
       updTantCd: fields[16] as String,
       updYMD: fields[17] as String,
+      status: fields[18] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, MKBN obj) {
     writer
-      ..writeByte(18)
+      ..writeByte(19)
       ..writeByte(0)
       ..write(obj.kbnCd)
       ..writeByte(1)
@@ -77,7 +78,9 @@ class MKBNAdapter extends TypeAdapter<MKBN> {
       ..writeByte(16)
       ..write(obj.updTantCd)
       ..writeByte(17)
-      ..write(obj.updYMD);
+      ..write(obj.updYMD)
+      ..writeByte(18)
+      ..write(obj.status);
   }
 
   @override
@@ -126,6 +129,7 @@ MKBN _$MKBNFromJson(Map<String, dynamic> json) {
     updPGID: json['UPD_PGID'] as String?,
     updTantCd: json['UPD_TANTCD'] as String,
     updYMD: json['UPD_YMD'] as String,
+    status: json['status'] as int? ?? 0,
   );
 }
 
@@ -148,4 +152,5 @@ Map<String, dynamic> _$MKBNToJson(MKBN instance) => <String, dynamic>{
       'UPD_PGID': instance.updPGID,
       'UPD_TANTCD': instance.updTantCd,
       'UPD_YMD': instance.updYMD,
+      'status': instance.status,
     };

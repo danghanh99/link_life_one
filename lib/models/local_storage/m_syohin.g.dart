@@ -31,13 +31,14 @@ class MSyohinAdapter extends TypeAdapter<MSyohin> {
       updPGID: fields[11] as String?,
       updTantCd: fields[12] as String,
       updYMD: fields[13] as String,
+      status: fields[14] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, MSyohin obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.jisyaCd)
       ..writeByte(1)
@@ -65,7 +66,9 @@ class MSyohinAdapter extends TypeAdapter<MSyohin> {
       ..writeByte(12)
       ..write(obj.updTantCd)
       ..writeByte(13)
-      ..write(obj.updYMD);
+      ..write(obj.updYMD)
+      ..writeByte(14)
+      ..write(obj.status);
   }
 
   @override
@@ -110,6 +113,7 @@ MSyohin _$MSyohinFromJson(Map<String, dynamic> json) {
     updPGID: json['UPD_PGID'] as String?,
     updTantCd: json['UPD_TANTCD'] as String,
     updYMD: json['UPD_YMD'] as String,
+    status: json['status'] as int? ?? 0,
   );
 }
 
@@ -128,4 +132,5 @@ Map<String, dynamic> _$MSyohinToJson(MSyohin instance) => <String, dynamic>{
       'UPD_PGID': instance.updPGID,
       'UPD_TANTCD': instance.updTantCd,
       'UPD_YMD': instance.updYMD,
+      'status': instance.status,
     };

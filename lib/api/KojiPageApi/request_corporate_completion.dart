@@ -25,7 +25,7 @@ class RequestCorporateCompletion {
 
       List<String> paths = [];
       for(var p in filePathList){
-        paths.add(await FileController().copyFile(file: File(p), onFailed: onFailed));
+        paths.add(await FileController().copyFile(file: File(p), isNew: true, onFailed: onFailed));
       }
 
       var res = await LocalStorageServices().localCorporateCompletion(

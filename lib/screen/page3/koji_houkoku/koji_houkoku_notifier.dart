@@ -106,6 +106,7 @@ class KojiHoukokuNotifier extends ChangeNotifier {
       List<XFile> files = await picker.pickMultiImage();
       if (files.isNotEmpty) {
         if (index != null) {
+          listKojiHoukoku[index].isAddOthers = true;
           listKojiHoukoku
               .elementAt(index)
               .otherPhotoFolderPath
@@ -126,6 +127,7 @@ class KojiHoukokuNotifier extends ChangeNotifier {
       XFile? file = await picker.pickImage(source: ImageSource.gallery);
       if (file != null) {
         if (index != null) {
+          listKojiHoukoku[index].isChangeBefore = true;
           listKojiHoukoku.elementAt(index).befSekiPhotoFilePath = file.path;
         } else {
           befImage = file;
@@ -141,6 +143,7 @@ class KojiHoukokuNotifier extends ChangeNotifier {
       XFile? file = await picker.pickImage(source: ImageSource.gallery);
       if (file != null) {
         if (index != null) {
+          listKojiHoukoku[index].isChangeAfter = true;
           listKojiHoukoku.elementAt(index).aftSekoPhotoFilePath = file.path;
         } else {
           aftImage = file;

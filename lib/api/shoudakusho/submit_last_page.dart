@@ -177,12 +177,9 @@ class SubmitLastPage {
     required Function() onFailed
   }) async {
     if(await LocalStorageServices.isTodayDataDownloaded()){
-
-      String filePath = await FileController().copyFile(file: file, onFailed: onFailed);
-
       var res = await LocalStorageServices().postUploadRegisterSignImage(
           jyucyuId: jyucyuId,
-          filePath: filePath,
+          file: file,
           loginId: loginId
       );
       onSuccess.call();

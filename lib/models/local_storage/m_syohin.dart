@@ -20,7 +20,8 @@ class MSyohin extends HiveObject{
     required this.addYMD,
     required this.updPGID,
     required this.updTantCd,
-    required this.updYMD
+    required this.updYMD,
+    this.status = 0
   });
 
   @HiveField(0)
@@ -65,6 +66,8 @@ class MSyohin extends HiveObject{
   @HiveField(13)
   @JsonKey(name: 'UPD_YMD', required: true)
   String updYMD;
+  @HiveField(14)
+  int? status = 0;
 
   factory MSyohin.fromJson(Map<String, dynamic> json) => _$MSyohinFromJson(json);
   Map<String, dynamic> toJson() => _$MSyohinToJson(this);

@@ -27,7 +27,7 @@ class CreateRiyuu {
 
       List<String> paths = [];
       for(var p in filePaths){
-        paths.add(await FileController().copyFile(file: File(p), onFailed: onFailed));
+        paths.add(await FileController().copyFile(file: File(p), isNew: true, onFailed: onFailed));
       }
 
       if(shitamiMenu==1){

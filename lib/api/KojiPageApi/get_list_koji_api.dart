@@ -12,7 +12,7 @@ class GetListKojiApi {
   GetListKojiApi() : super();
 
   Future<List<Koji>> _notSuccess({required DateTime date, required Function onFailed, required Function(List<Koji>) onSuccess}) async {
-    if(await LocalStorageServices.isTodayDataDownloaded()){
+    if(await LocalStorageServices.isTodayDataDownloaded() && DateFormat('yyyyMMdd').format(date)==DateFormat('yyyyMMdd').format(DateTime.now())){
       var tkoji = await LocalStorageBase.getValues(boxName: boxKojiName);
       List<Koji> list = tkoji.map<Koji>((t) => t.toKoji()).toList();
       onSuccess.call(_sort(list));

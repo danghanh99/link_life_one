@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:link_life_one/local_storage_services/file_controller.dart';
+import 'package:link_life_one/local_storage_services/id_name_controller.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 
 import '../../../constants/constant.dart';
@@ -24,6 +25,7 @@ class UploadPhotoApi {
     paths = await Future.wait(filePathList.map((fp)async{
       return await FileController().copyFile(
           file: File(fp),
+          isNew: true,
           onFailed: (){
             onFailed.call();
           }

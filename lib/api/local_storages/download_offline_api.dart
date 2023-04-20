@@ -14,7 +14,8 @@ class DownloadOfflineAPI {
     try{
       final response = await http.get(
         Uri.parse(
-            "${Constant.url}/Request/Koji/requestOfflineDownload.php?CURRENT_DAY=${DateFormat('yyyy-MM-DD').format(DateTime.now())}"),
+            "${Constant.url}/Request/Koji/requestOfflineDownload.php?CURRENT_DAY=2023-03-20"),
+            // "${Constant.url}/Request/Koji/requestOfflineDownload.php?CURRENT_DAY=${DateFormat('yyyy-MM-dd').format(DateTime.now())}"),/////////////////////////////////////////////////
       );
 
       if (response.statusCode == 200) {

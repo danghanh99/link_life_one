@@ -21,7 +21,8 @@ class TKojiCheck extends HiveObject{
     required this.addYMD,
     required this.updPGID,
     required this.updTantCd,
-    required this.updYMD
+    required this.updYMD,
+    this.status = 0
   });
 
   @HiveField(0)
@@ -69,6 +70,8 @@ class TKojiCheck extends HiveObject{
   @HiveField(14)
   @JsonKey(name: 'UPD_YMD', required: true)
   String updYMD;
+  @HiveField(15)
+  int? status = 0;
 
   factory TKojiCheck.fromJson(Map<String, dynamic> json) => _$TKojiCheckFromJson(json);
   Map<String, dynamic> toJson() => _$TKojiCheckToJson(this);

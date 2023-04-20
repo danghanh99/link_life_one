@@ -17,7 +17,8 @@ class TKojiFilePath extends HiveObject{
     required this.addYMD,
     required this.updPGID,
     required this.updTantCd,
-    required this.updYMD
+    required this.updYMD,
+    this.status = 0
   });
 
   @HiveField(0)
@@ -55,6 +56,8 @@ class TKojiFilePath extends HiveObject{
   String updYMD;
   @HiveField(11)
   String? localPath;
+  @HiveField(12)
+  int? status = 0;
 
   factory TKojiFilePath.fromJson(Map<String, dynamic> json) => _$TKojiFilePathFromJson(json);
   Map<String, dynamic> toJson() => _$TKojiFilePathToJson(this);

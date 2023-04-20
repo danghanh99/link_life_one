@@ -43,13 +43,17 @@ class TKojimsaiAdapter extends TypeAdapter<TKojimsai> {
       updPGID: fields[23] as String?,
       updTantCd: fields[24] as String,
       updYMD: fields[25] as String,
-    );
+      status: fields[26] as int?,
+    )
+      ..localBefSekoPhotoFilePath = fields[27] as String?
+      ..localAftSekoPhotoFilePath = fields[28] as String?
+      ..localOtherSekoPhotoFilePath = fields[29] as dynamic;
   }
 
   @override
   void write(BinaryWriter writer, TKojimsai obj) {
     writer
-      ..writeByte(26)
+      ..writeByte(30)
       ..writeByte(0)
       ..write(obj.jyucyuId)
       ..writeByte(1)
@@ -101,7 +105,15 @@ class TKojimsaiAdapter extends TypeAdapter<TKojimsai> {
       ..writeByte(24)
       ..write(obj.updTantCd)
       ..writeByte(25)
-      ..write(obj.updYMD);
+      ..write(obj.updYMD)
+      ..writeByte(26)
+      ..write(obj.status)
+      ..writeByte(27)
+      ..write(obj.localBefSekoPhotoFilePath)
+      ..writeByte(28)
+      ..write(obj.localAftSekoPhotoFilePath)
+      ..writeByte(29)
+      ..write(obj.localOtherSekoPhotoFilePath);
   }
 
   @override
@@ -151,7 +163,11 @@ TKojimsai _$TKojimsaiFromJson(Map<String, dynamic> json) {
     updPGID: json['UPD_PGID'] as String?,
     updTantCd: json['UPD_TANTCD'] as String,
     updYMD: json['UPD_YMD'] as String,
-  );
+    status: json['status'] as int? ?? 0,
+  )
+    ..localBefSekoPhotoFilePath = json['localBefSekoPhotoFilePath'] as String?
+    ..localAftSekoPhotoFilePath = json['localAftSekoPhotoFilePath'] as String?
+    ..localOtherSekoPhotoFilePath = json['localOtherSekoPhotoFilePath'];
 }
 
 Map<String, dynamic> _$TKojimsaiToJson(TKojimsai instance) => <String, dynamic>{
@@ -181,4 +197,8 @@ Map<String, dynamic> _$TKojimsaiToJson(TKojimsai instance) => <String, dynamic>{
       'UPD_PGID': instance.updPGID,
       'UPD_TANTCD': instance.updTantCd,
       'UPD_YMD': instance.updYMD,
+      'status': instance.status,
+      'localBefSekoPhotoFilePath': instance.localBefSekoPhotoFilePath,
+      'localAftSekoPhotoFilePath': instance.localAftSekoPhotoFilePath,
+      'localOtherSekoPhotoFilePath': instance.localOtherSekoPhotoFilePath,
     };

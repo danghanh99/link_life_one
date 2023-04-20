@@ -1,11 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/local_storages/download_offline_api.dart';
 import 'package:link_life_one/constants/constant.dart';
 import 'package:link_life_one/local_storage_services/file_controller.dart';
+import 'package:link_life_one/local_storage_services/id_name_controller.dart';
 import 'package:link_life_one/local_storage_services/local_storage_base.dart';
 import 'package:link_life_one/models/consent.dart';
 import 'package:link_life_one/models/koji_houkoku_model.dart';
@@ -32,7 +34,9 @@ class LocalStorageServices{
         onSuccess: (Map<String, dynamic> response)async{
 
           final dir = Directory('${(await getApplicationDocumentsDirectory()).path}${Platform.pathSeparator}Document');
-          dir.deleteSync(recursive: true);
+          if(await dir.exists()) {
+            dir.deleteSync(recursive: true);
+          }
 
           List mGyosya = response['M_GYOSYA'];
           List mSyohin = response['M_SYOHIN'];
@@ -48,7 +52,7 @@ class LocalStorageServices{
 
           progress = 1;
           onProgress(progress/progressTasks);
-
+          print('start get gyosya');
           //Gyosya Storage
           await LocalStorageBase.clear(boxName: boxGyosyaName);
           for(var r in response['M_GYOSYA']){
@@ -61,7 +65,7 @@ class LocalStorageServices{
             progress += 1;
             onProgress(progress/progressTasks);
           }
-
+          print('start get syohin');
           //Syohin Storage
           await LocalStorageBase.clear(boxName: boxSyohinName);
           for(var r in response['M_SYOHIN']){
@@ -74,7 +78,7 @@ class LocalStorageServices{
             progress += 1;
             onProgress(progress/progressTasks);
           }
-
+          print('start get tant');
           //Tant Storage
           await LocalStorageBase.clear(boxName: boxTantName);
           for(var r in response['M_TANT']){
@@ -87,7 +91,7 @@ class LocalStorageServices{
             progress += 1;
             onProgress(progress/progressTasks);
           }
-
+          print('start get kbn');
           //Kbn Storage
           await LocalStorageBase.clear(boxName: boxKbnName);
           for(var r in response['M_KBN']){
@@ -100,7 +104,7 @@ class LocalStorageServices{
             progress += 1;
             onProgress(progress/progressTasks);
           }
-
+          print('start get koji');
           //Koji Storage
           await LocalStorageBase.clear(boxName: boxKojiName);
           // List tKojiList = response['T_KOJI'];
@@ -134,11 +138,25 @@ class LocalStorageServices{
             progress += 1;
             onProgress(progress/progressTasks);
           }
-
+          print('start get kojimsai');
           //Kojimsai Storage
           await LocalStorageBase.clear(boxName: boxKojimsaiName);
           for(var r in response['T_KOJIMSAI']){
             TKojimsai tKojimsai = TKojimsai.fromRequest(r);
+            print('jyucyuId: ${tKojimsai.jyucyuId}');
+            // print('storage: ${await _storageLocalDirectory(r, 'BEF_SEKO_PHOTO_FILEPATH')}');
+            // print('storage: ${await _storageLocalDirectory(r, 'AFT_SEKO_PHOTO_FILEPATH')}');
+            // print('storage: ${await _storageLocalDirectoryList(r['OTHER_PHOTO_FOLDERPATH'])}');
+            tKojimsai.storage(
+              localBefSekoPhotoFilePath: await _storageLocalDirectory(r, 'BEF_SEKO_PHOTO_FILEPATH'),
+              localAftSekoPhotoFilePath: await _storageLocalDirectory(r, 'AFT_SEKO_PHOTO_FILEPATH'),
+              localOtherSekoPhotoFilePath: await _storageLocalDirectoryList(r['OTHER_PHOTO_FOLDERPATH'])
+            );
+            // tKojimsai.storage(
+            //   localBefSekoPhotoFilePath: null,
+            //   localAftSekoPhotoFilePath: null,
+            //   localOtherSekoPhotoFilePath: null
+            // );
             await LocalStorageBase.add(
                 boxName: boxKojimsaiName,
                 key: '${tKojimsai.jyucyuId}_${tKojimsai.jyucyumsaiId}',
@@ -147,7 +165,7 @@ class LocalStorageServices{
             progress += 1;
             onProgress(progress/progressTasks);
           }
-
+          print('start get kojicheck');
           //KojiCheck Storage
           await LocalStorageBase.clear(boxName: boxKojiCheckName);
           for(var r in response['T_KOJI_CHECK']){
@@ -160,7 +178,7 @@ class LocalStorageServices{
             progress += 1;
             onProgress(progress/progressTasks);
           }
-
+          print('start get kojifilepath');
           //KojiFilePath Storage
           await LocalStorageBase.clear(boxName: boxKojiFilePathName);
           // List tKojiFilePathList = response['T_KOJI_FILEPATH'];
@@ -188,7 +206,7 @@ class LocalStorageServices{
             progress += 1;
             onProgress(progress/progressTasks);
           }
-
+          print('start get tirasi');
           //Tirasi Storage
           await LocalStorageBase.clear(boxName: boxTirasiName);
           for(var r in response['T_TIRASI']){
@@ -203,9 +221,31 @@ class LocalStorageServices{
           }
 
         },
-        onFailed: (){
-        }
+        onFailed: (){}
     );
+  }
+
+  Future<void> uploadDB({required Function(double) onProgress}) async {
+    var mGyosya = await LocalStorageBase.getValues(boxName: boxGyosyaName);
+    var mKbn = await LocalStorageBase.getValues(boxName: boxKbnName);
+    var mSyohin = await LocalStorageBase.getValues(boxName: boxSyohinName);
+    var mTant = await LocalStorageBase.getValues(boxName: boxTantName);
+    var tKoji = await LocalStorageBase.getValues(boxName: boxKojiName);
+    var tKojiCheck = await LocalStorageBase.getValues(boxName: boxKojiCheckName);
+    var tKojiFilePath = await LocalStorageBase.getValues(boxName: boxKojiFilePathName);
+    var tKojimsai = await LocalStorageBase.getValues(boxName: boxKojimsaiName);
+    var tTirasi = await LocalStorageBase.getValues(boxName: boxTirasiName);
+
+    for(MGyosya g in mGyosya) print(g.toJson());
+    for(MKBN kbn in mKbn) print(kbn.toJson());
+    for(MSyohin s in mSyohin) print(s.toJson());
+    for(MTant t in mTant) print(t.toJson());
+    for(TKoji k in tKoji) print(k.toJson());
+    for(TKojiCheck kc in tKojiCheck) print(kc.toJson());
+    for(TKojiFilePath kf in tKojiFilePath) print(kf.toJson());
+    for(TKojimsai km in tKojimsai) print(km.toJson());
+    for(TTirasi tr in tTirasi) print(tr.toJson());
+
   }
 
   Future<int> checkCount({required YMD, required setsakiAddress, required jyucyuId}) async {
@@ -353,14 +393,14 @@ class LocalStorageServices{
                   "KISETU_HINBAN": tKm.kisetuHinban,
                   "KISETU_MAKER": tKm.kisetuMaker,
                   "KENSETU_KEITAI": tKm.kensetuKeitai,
-                  "BEF_SEKO_PHOTO_FILEPATH": tKm.befSekoPhotoFilePath,
-                  "AFT_SEKO_PHOTO_FILEPATH": tKm.aftSekoPhotoFilePath,
-                  "OTHER_PHOTO_FOLDERPATH": tKm.otherPhotoFolderPath,
+                  "BEF_SEKO_PHOTO_FILEPATH": '${(await FileController().prepareSaveDir()).path}${tKm.localBefSekoPhotoFilePath}',
+                  "AFT_SEKO_PHOTO_FILEPATH": '${(await FileController().prepareSaveDir()).path}${tKm.localAftSekoPhotoFilePath}',
+                  "OTHER_PHOTO_FOLDERPATH": tKm.localOtherSekoPhotoFilePath,
                   "TUIKA_JISYA_CD": tKm.tuikaJisyaCd,
                   "TUIKA_SYOHIN_NAME": tKm.tuikaSyohinName,
                   "KOJIJITUIKA_FLG": tKm.kojijituikaFlg,
                   "KOJI_ST": t.kojiSt,
-                  "HOJIN_FLG": t.hojinFlg,
+                  "HOJIN_FLG": '${t.hojinFlg}',
                   "TENPO_CD": t.tenpoCd
                 });
               }
@@ -388,14 +428,14 @@ class LocalStorageServices{
                   "KISETU_HINBAN": tKm.kisetuHinban,
                   "KISETU_MAKER": tKm.kisetuMaker,
                   "KENSETU_KEITAI": tKm.kensetuKeitai,
-                  "BEF_SEKO_PHOTO_FILEPATH": tKm.befSekoPhotoFilePath,
-                  "AFT_SEKO_PHOTO_FILEPATH": tKm.aftSekoPhotoFilePath,
-                  "OTHER_PHOTO_FOLDERPATH": tKm.otherPhotoFolderPath,
+                  "BEF_SEKO_PHOTO_FILEPATH": '${(await FileController().prepareSaveDir()).path}${tKm.localBefSekoPhotoFilePath}',
+                  "AFT_SEKO_PHOTO_FILEPATH": '${(await FileController().prepareSaveDir()).path}${tKm.localAftSekoPhotoFilePath}',
+                  "OTHER_PHOTO_FOLDERPATH": tKm.localOtherSekoPhotoFilePath,
                   "TUIKA_JISYA_CD": tKm.tuikaJisyaCd,
                   "TUIKA_SYOHIN_NAME": tKm.tuikaSyohinName,
                   "KOJIJITUIKA_FLG": tKm.kojijituikaFlg,
                   "KOJI_ST": t.kojiSt,
-                  "HOJIN_FLG": t.hojinFlg,
+                  "HOJIN_FLG": '${t.hojinFlg}',
                   "TENPO_CD": t.tenpoCd
                 });
               }
@@ -425,14 +465,14 @@ class LocalStorageServices{
                   "KISETU_HINBAN": tKm.kisetuHinban,
                   "KISETU_MAKER": tKm.kisetuMaker,
                   "KENSETU_KEITAI": tKm.kensetuKeitai,
-                  "BEF_SEKO_PHOTO_FILEPATH": tKm.befSekoPhotoFilePath,
-                  "AFT_SEKO_PHOTO_FILEPATH": tKm.aftSekoPhotoFilePath,
-                  "OTHER_PHOTO_FOLDERPATH": tKm.otherPhotoFolderPath,
+                  "BEF_SEKO_PHOTO_FILEPATH": '${(await FileController().prepareSaveDir()).path}${tKm.localBefSekoPhotoFilePath}',
+                  "AFT_SEKO_PHOTO_FILEPATH": '${(await FileController().prepareSaveDir()).path}${tKm.localAftSekoPhotoFilePath}',
+                  "OTHER_PHOTO_FOLDERPATH": tKm.localOtherSekoPhotoFilePath,
                   "TUIKA_JISYA_CD": tKm.tuikaJisyaCd,
                   "TUIKA_SYOHIN_NAME": tKm.tuikaSyohinName,
                   "KOJIJITUIKA_FLG": tKm.kojijituikaFlg,
                   "KOJI_ST": t.kojiSt,
-                  "HOJIN_FLG": t.hojinFlg,
+                  "HOJIN_FLG": '${t.hojinFlg}',
                   "TENPO_CD": t.tenpoCd
                 });
               }
@@ -460,14 +500,14 @@ class LocalStorageServices{
                   "KISETU_HINBAN": tKm.kisetuHinban,
                   "KISETU_MAKER": tKm.kisetuMaker,
                   "KENSETU_KEITAI": tKm.kensetuKeitai,
-                  "BEF_SEKO_PHOTO_FILEPATH": tKm.befSekoPhotoFilePath,
-                  "AFT_SEKO_PHOTO_FILEPATH": tKm.aftSekoPhotoFilePath,
-                  "OTHER_PHOTO_FOLDERPATH": tKm.otherPhotoFolderPath,
+                  "BEF_SEKO_PHOTO_FILEPATH": '${(await FileController().prepareSaveDir()).path}${tKm.localBefSekoPhotoFilePath}',
+                  "AFT_SEKO_PHOTO_FILEPATH": '${(await FileController().prepareSaveDir()).path}${tKm.localAftSekoPhotoFilePath}',
+                  "OTHER_PHOTO_FOLDERPATH": tKm.localOtherSekoPhotoFilePath,
                   "TUIKA_JISYA_CD": tKm.tuikaJisyaCd,
                   "TUIKA_SYOHIN_NAME": tKm.tuikaSyohinName,
                   "KOJIJITUIKA_FLG": tKm.kojijituikaFlg,
                   "KOJI_ST": t.kojiSt,
-                  "HOJIN_FLG": t.hojinFlg,
+                  "HOJIN_FLG": '${t.hojinFlg}',
                   "TENPO_CD": t.tenpoCd
                 });
               }
@@ -730,18 +770,11 @@ class LocalStorageServices{
   })async{
 
     var now = DateTime.now();
-    int maxId = 0;
-
-    var tKojiFilePathList = await LocalStorageBase.getValues(boxName: boxKojiFilePathName);
-    for(TKojiFilePath tfp in tKojiFilePathList) {
-      maxId = max(maxId, int.parse(tfp.filePathId));
-    }
 
     for(var p in filePathList){
-      print('p: $p');
-      maxId+=1;
+      String newId = IdNameController().getId();
       TKojiFilePath tKojiFilePath = TKojiFilePath(
-          filePathId: '$maxId',
+          filePathId: newId,
           id: jyucyuId,
           filePath: p,
           fileKbnCd: "10",
@@ -782,14 +815,14 @@ class LocalStorageServices{
 
   Future<void> postUploadRegisterSignImage({
     required jyucyuId,
-    required filePath,
+    required file,
     required loginId
   })async{
 
     var now = DateTime.now();
 
     bool isExist = false;
-    var existFilePathId;
+    String? existFilePathId;
     var tKojiFilePathList = await LocalStorageBase.getValues(boxName: boxKojiFilePathName);
     for(TKojiFilePath tfp in tKojiFilePathList) {
       if(tfp.id==jyucyuId) {
@@ -799,18 +832,12 @@ class LocalStorageServices{
     }
 
     if(!isExist){
-
-      int maxId = 0;
-
-      for(TKojiFilePath tfp in tKojiFilePathList) {
-        maxId = max(maxId, int.parse(tfp.filePathId));
-      }
-
-      maxId+=1;
+      String newFilePath = await FileController().copyFile(file: file, isNew: true, onFailed: (){});
+      String newId = IdNameController().getId();
       TKojiFilePath tKojiFilePath = TKojiFilePath(
-          filePathId: '$maxId',
+          filePathId: newId,
           id: jyucyuId,
-          filePath: filePath,
+          filePath: newFilePath,
           fileKbnCd: "08",
           delFlg: "0",
           addPGID: "KOJ1120F",
@@ -820,7 +847,7 @@ class LocalStorageServices{
           updTantCd: loginId,
           updYMD: DateFormat('yyyy-MM-dd HH:mm:ss', 'ja').format(now).toString()
       );
-      tKojiFilePath.storage(filePath);
+      tKojiFilePath.storage(newFilePath);
       await LocalStorageBase.add(
           boxName: boxKojiFilePathName,
           key: tKojiFilePath.filePathId,
@@ -829,10 +856,10 @@ class LocalStorageServices{
 
     }
     else{
-
+      String updateFilePath = await FileController().copyFile(file: file, isNew: false, onFailed: (){});
       for(TKojiFilePath tfp in tKojiFilePathList) {
         if(tfp.filePathId==existFilePathId){
-          tfp.filePath = filePath;
+          tfp.filePath = updateFilePath;
           tfp.fileKbnCd = "08";
           tfp.delFlg = "0";
           tfp.addPGID = "KOJ1120F";
@@ -841,7 +868,7 @@ class LocalStorageServices{
           tfp.updPGID = "KOJ1120F";
           tfp.updTantCd = loginId;
           tfp.updYMD = DateFormat('yyyy-MM-dd HH:mm:ss', 'ja').format(now).toString();
-          tfp.storage(filePath);
+          tfp.storage(updateFilePath);
           await LocalStorageBase.add(
               boxName: boxKojiFilePathName,
               key: tfp.filePathId,
@@ -880,17 +907,10 @@ class LocalStorageServices{
       }
     }
 
-    int maxId = 0;
-
-    var tKojiFilePathList = await LocalStorageBase.getValues(boxName: boxKojiFilePathName);
-    for(TKojiFilePath tfp in tKojiFilePathList) {
-      maxId = max(maxId, int.parse(tfp.filePathId));
-    }
-
     for(var p in filePaths){
-      maxId+=1;
+      String newId = IdNameController().getId();
       TKojiFilePath tKojiFilePath = TKojiFilePath(
-          filePathId: '$maxId',
+          filePathId: newId,
           id: jyucyuId,
           filePath: p,
           fileKbnCd: "06",
@@ -942,17 +962,10 @@ class LocalStorageServices{
       }
     }
 
-    int maxId = 0;
-
-    var tKojiFilePathList = await LocalStorageBase.getValues(boxName: boxKojiFilePathName);
-    for(TKojiFilePath tfp in tKojiFilePathList) {
-      maxId = max(maxId, int.parse(tfp.filePathId));
-    }
-
     for(var p in filePaths){
-      maxId+=1;
+      String newID = IdNameController().getId();
       TKojiFilePath tKojiFilePath = TKojiFilePath(
-          filePathId: '$maxId',
+          filePathId: newID,
           id: jyucyuId,
           filePath: p,
           fileKbnCd: "06",
@@ -1002,17 +1015,10 @@ class LocalStorageServices{
       }
     }
 
-    int maxId = 0;
-
-    var tKojiFilePathList = await LocalStorageBase.getValues(boxName: boxKojiFilePathName);
-    for(TKojiFilePath tfp in tKojiFilePathList) {
-      maxId = max(maxId, int.parse(tfp.filePathId));
-    }
-
     for(var p in filePaths){
-      maxId+=1;
+      String newId = IdNameController().getId();
       TKojiFilePath tKojiFilePath = TKojiFilePath(
-          filePathId: '$maxId',
+          filePathId: newId,
           id: jyucyuId,
           filePath: p,
           fileKbnCd: "06",
@@ -1060,17 +1066,10 @@ class LocalStorageServices{
       }
     }
 
-    int maxId = 0;
-
-    var tKojiFilePathList = await LocalStorageBase.getValues(boxName: boxKojiFilePathName);
-    for(TKojiFilePath tfp in tKojiFilePathList) {
-      maxId = max(maxId, int.parse(tfp.filePathId));
-    }
-
     for(var p in filePaths){
-      maxId+=1;
+      String newId = IdNameController().getId();
       TKojiFilePath tKojiFilePath = TKojiFilePath(
-          filePathId: '$maxId',
+          filePathId: newId,
           id: jyucyuId,
           filePath: p,
           fileKbnCd: "06",
@@ -1143,20 +1142,13 @@ class LocalStorageServices{
     }
 
     //INSERT T_KOJIMSAI
-    int maxId = 0;
-
     var tKojimsais = await LocalStorageBase.getValues(boxName: boxKojimsaiName);
-    for(TKojimsai km in tKojimsais) {
-      if(km.jyucyuId==jyucyuId){
-        maxId = max(maxId, int.parse(km.jyucyumsaiId));
-      }
-    }
 
     for(var t in tableList){
-      maxId+=1;
+      String newId = IdNameController().getId();
       TKojimsai tKojimsai = TKojimsai(
           jyucyuId: jyucyuId,
-          jyucyumsaiId: '$maxId',
+          jyucyumsaiId: newId,
           suryo: t.suryo,
           hanbaiTanka: t.hanbaitanka,
           kingak: t.kingak,
@@ -1190,6 +1182,23 @@ class LocalStorageServices{
           break;
         }
       }
+      List<String> otherPhotosPathOrBase64 = [];
+      for(var op in kh.otherPhotoFolderPath??[]){
+        if(_isNetworkPath(op)){
+          otherPhotosPathOrBase64.add(op);
+        }
+        else{
+          if(op!=null && op.isNotEmpty) {
+            String? copyPath;
+            copyPath = await FileController().copyFile(
+                file: File(op),
+                isNew: true,
+                onFailed: () {}
+            );
+            otherPhotosPathOrBase64.add(copyPath.isEmpty?op:copyPath);
+          }
+        }
+      }
       tKojimsai.jyucyumsaiIdKikan = kh.jyucyuMsaiIdKikan;
       tKojimsai.hinban = kh.hinban;
       tKojimsai.makerCd = kh.makerCd;
@@ -1199,14 +1208,23 @@ class LocalStorageServices{
       tKojimsai.kisetuHinban = kh.kisetuMaker;
       tKojimsai.kisetuMaker = kh.kisetuMaker;
       tKojimsai.kensetuKeitai = kh.kensetuKeitai;
-      tKojimsai.befSekoPhotoFilePath = kh.befSekiPhotoFilePath;
-      tKojimsai.aftSekoPhotoFilePath = kh.aftSekoPhotoFilePath;
-      tKojimsai.otherPhotoFolderPath = kh.otherPhotoFolderPath;
+      if(kh.isChangeBefore){
+        tKojimsai.befSekoPhotoFilePath = _isNetworkPath(kh.befSekiPhotoFilePath)?kh.befSekiPhotoFilePath:await FileController().copyFile(file: File(kh.befSekiPhotoFilePath!), isNew: true, onFailed: (){});
+      }
+      if(kh.isChangeAfter){
+        tKojimsai.aftSekoPhotoFilePath = _isNetworkPath(kh.aftSekoPhotoFilePath)?kh.aftSekoPhotoFilePath:await FileController().copyFile(file: File(kh.aftSekoPhotoFilePath!), isNew: true, onFailed: (){});
+      }
+      tKojimsai.otherPhotoFolderPath = otherPhotosPathOrBase64;
       tKojimsai.tuikaJisyaCd = 'KOJ-${kh.tuikaJisyaCd}';
       tKojimsai.tuikaSyohinName = kh.tuikaSyohinName;
       tKojimsai.updPGID = "KOJ1120F";
       tKojimsai.updTantCd = loginId;
       tKojimsai.updYMD = DateFormat('yyyy-MM-dd HH:mm:ss', 'ja').format(now).toString();
+      tKojimsai.storage(
+        localBefSekoPhotoFilePath: kh.isChangeBefore?tKojimsai.befSekoPhotoFilePath:null,
+        localAftSekoPhotoFilePath: kh.isChangeAfter?tKojimsai.aftSekoPhotoFilePath:null,
+        localOtherSekoPhotoFilePath: kh.isAddOthers?tKojimsai.otherPhotoFolderPath:null
+      );
       await LocalStorageBase.add(
           boxName: boxKojimsaiName,
           key: '${tKojimsai.jyucyuId}_${tKojimsai.jyucyumsaiId}',
@@ -1281,17 +1299,10 @@ class LocalStorageServices{
     var now = DateTime.now();
 
     //INSERT T_KOJI_FILEPATH
-    var maxKojiFilePathId = 0;
-
-    var tKojiFilePaths = await LocalStorageBase.getValues(boxName: boxKojiFilePathName);
-    for(TKojiFilePath kf in tKojiFilePaths) {
-      maxKojiFilePathId = max(maxKojiFilePathId, int.parse(kf.filePathId));
-    }
-
     for(var fp in filePathList){
-      maxKojiFilePathId+=1;
+      String newId = IdNameController().getId();
       TKojiFilePath tKojiFilePath = TKojiFilePath(
-          filePathId: '$maxKojiFilePathId',
+          filePathId: newId,
           id: jyucyuId,
           filePath: fp,
           fileKbnCd: "09",
@@ -1331,26 +1342,48 @@ class LocalStorageServices{
     }
 
     //INSERT KOJI HOUKOKU
-    var maxKojimsaiId = 0;
     var tKojimsais = await LocalStorageBase.getValues(boxName: boxKojimsaiName);
-    for(TKojimsai kojimsai in tKojimsais) {
-      if(kojimsai.jyucyuId==jyucyuId){
-        maxKojimsaiId = max(maxKojimsaiId, int.parse(kojimsai.jyucyumsaiId));
-      }
-    }
 
     for(var k in kojiHoukokuList){
       bool isTKojimsaiExist = false;
       for(TKojimsai km in tKojimsais){
         if(km.jyucyumsaiId==k.jyucyuMsaiId && km.jyucyuId==jyucyuId){
+          List<String> otherPhotosPathOrBase64 = [];
+          for(var op in k.otherPhotoFolderPath??[]){
+            if(_isNetworkPath(op)){
+              otherPhotosPathOrBase64.add(op);
+            }
+            else{
+              if(op!=null && op.isNotEmpty) {
+                String? copyPath;
+                copyPath = await FileController().copyFile(
+                    file: File(op),
+                    isNew: true,
+                    onFailed: () {}
+                );
+                otherPhotosPathOrBase64.add(copyPath.isEmpty?op:copyPath);
+              }
+            }
+          }
           isTKojimsaiExist = true;
           km.kensetuKeitai = k.kensetuKeitai;
-          km.befSekoPhotoFilePath = k.befSekiPhotoFilePath;
-          km.aftSekoPhotoFilePath = k.aftSekoPhotoFilePath;
-          km.otherPhotoFolderPath = k.otherPhotoFolderPath;
+          if(k.isChangeBefore){
+            km.befSekoPhotoFilePath = _isNetworkPath(k.befSekiPhotoFilePath)?k.befSekiPhotoFilePath:await FileController().copyFile(file: File(k.befSekiPhotoFilePath!), isNew: true, onFailed: (){});
+          }
+          if(k.isChangeAfter){
+            km.aftSekoPhotoFilePath = _isNetworkPath(k.aftSekoPhotoFilePath)?k.aftSekoPhotoFilePath:await FileController().copyFile(file: File(k.aftSekoPhotoFilePath!), isNew: true, onFailed: (){});
+          }
+          // km.befSekoPhotoFilePath = _isNetworkPath(k.befSekiPhotoFilePath)?k.befSekiPhotoFilePath:k.isChangeBefore?await FileController().copyFile(file: File(k.befSekiPhotoFilePath!), isNew: true, onFailed: (){}):k.befSekiPhotoFilePath;//////////////////////////////////////////////////
+          // km.aftSekoPhotoFilePath = _isNetworkPath(k.aftSekoPhotoFilePath)?k.aftSekoPhotoFilePath:k.isChangeAfter?await FileController().copyFile(file: File(k.aftSekoPhotoFilePath!), isNew: true, onFailed: (){}):k.aftSekoPhotoFilePath;
+          km.otherPhotoFolderPath = otherPhotosPathOrBase64;
           km.updPGID = "KOJ1120F";
           km.updTantCd = loginId;
           km.updYMD = DateFormat('yyyy-MM-dd HH:mm:ss', 'ja').format(now).toString();
+          km.storage(
+              localBefSekoPhotoFilePath: k.isChangeBefore?km.befSekoPhotoFilePath:null,
+              localAftSekoPhotoFilePath: k.isChangeAfter?km.aftSekoPhotoFilePath:null,
+              localOtherSekoPhotoFilePath: k.isAddOthers?km.otherPhotoFolderPath:null
+          );
           await LocalStorageBase.add(
               boxName: boxKojimsaiName,
               key: '${km.jyucyuId}_${km.jyucyumsaiId}',
@@ -1360,10 +1393,27 @@ class LocalStorageServices{
         }
       }
       if(!isTKojimsaiExist){
-        maxKojimsaiId += 1;
+        List<String> otherPhotosPathOrBase64 = [];
+        for(var op in k.otherPhotoFolderPath??[]){
+          if(_isNetworkPath(op)){
+            otherPhotosPathOrBase64.add(op);
+          }
+          else{
+            if(op!=null && op.isNotEmpty){
+              String? copyPath;
+              copyPath = await FileController().copyFile(
+                  file: File(op),
+                  isNew: true,
+                  onFailed: () {}
+              );
+              otherPhotosPathOrBase64.add(copyPath.isEmpty?op:copyPath);
+            }
+          }
+        }
+        String newId = IdNameController().getId();
         var tKojimsai = TKojimsai(
             jyucyuId: jyucyuId,
-            jyucyumsaiId: '$maxKojimsaiId',
+            jyucyumsaiId: newId,
             jyucyumsaiIdKikan: k.jyucyuMsaiIdKikan,
             hinban: k.hinban,
             makerCd: k.makerCd,
@@ -1373,9 +1423,9 @@ class LocalStorageServices{
             kisetuHinban: k.kisetuHinban,
             kisetuMaker: k.kisetuMaker,
             kensetuKeitai: k.kensetuKeitai,
-            befSekoPhotoFilePath: k.befSekiPhotoFilePath,
-            aftSekoPhotoFilePath: k.aftSekoPhotoFilePath,
-            otherPhotoFolderPath: k.otherPhotoFolderPath,
+            // befSekoPhotoFilePath: _isNetworkPath(k.befSekiPhotoFilePath)?k.befSekiPhotoFilePath:k.isChangeBefore?await FileController().copyFile(file: File(k.befSekiPhotoFilePath!), isNew: true, onFailed: (){}):k.befSekiPhotoFilePath,
+            // aftSekoPhotoFilePath: _isNetworkPath(k.aftSekoPhotoFilePath)?k.aftSekoPhotoFilePath:k.isChangeAfter?await FileController().copyFile(file: File(k.aftSekoPhotoFilePath!), isNew: true, onFailed: (){}):k.aftSekoPhotoFilePath,
+            otherPhotoFolderPath: otherPhotosPathOrBase64,
             tuikaJisyaCd: 'KOJ-${k.tuikaJisyaCd}',
             tuikaSyohinName: k.tuikaSyohinName,
             kojijituikaFlg: "1",
@@ -1386,6 +1436,17 @@ class LocalStorageServices{
             updPGID: "KOJ1120F",
             updTantCd: loginId,
             updYMD: DateFormat('yyyy-MM-dd HH:mm:ss', 'ja').format(now).toString()
+        );
+        if(k.isChangeBefore){
+          tKojimsai.befSekoPhotoFilePath = _isNetworkPath(k.befSekiPhotoFilePath)?k.befSekiPhotoFilePath:await FileController().copyFile(file: File(k.befSekiPhotoFilePath!), isNew: true, onFailed: (){});
+        }
+        if(k.isChangeAfter){
+          tKojimsai.aftSekoPhotoFilePath = _isNetworkPath(k.aftSekoPhotoFilePath)?k.aftSekoPhotoFilePath:await FileController().copyFile(file: File(k.aftSekoPhotoFilePath!), isNew: true, onFailed: (){});
+        }
+        tKojimsai.storage(
+            localBefSekoPhotoFilePath: k.isChangeBefore?tKojimsai.befSekoPhotoFilePath:null,
+            localAftSekoPhotoFilePath: k.isChangeAfter?tKojimsai.aftSekoPhotoFilePath:null,
+            localOtherSekoPhotoFilePath: k.isAddOthers?tKojimsai.otherPhotoFolderPath:null
         );
         await LocalStorageBase.add(
             boxName: boxKojimsaiName,
@@ -1407,6 +1468,33 @@ class LocalStorageServices{
         onFailed: (){}
       )
       : null;
+  }
+
+  Future<List<String>?> _storageLocalDirectoryList(dynamic urls) async {
+    if(urls==null || urls.isEmpty) return null;
+    List urlList = '$urls'.split(';');
+    List<String> storagePaths = [];
+    for(var u in urlList){
+      if(u!=null && u.isNotEmpty){
+        String? localPath = await FileController().downloadFile(
+            url: '${Constant.url}$u',
+            fileName: '$u'.contains('/') || '$u'.contains('\\')
+                ? '$u'.substring(('$u'.lastIndexOf('/')>=0 ? '$u'.lastIndexOf('/') : '$u'.lastIndexOf('\\'))+1)
+                : '$u',
+            onFailed: (){}
+        );
+        if(localPath!=null && localPath.isNotEmpty){
+          storagePaths.add(localPath);
+        }
+      }
+    }
+    return storagePaths;
+  }
+
+  bool _isNetworkPath(String? path) {
+    if(path==null || path.isEmpty) return true;
+    final uri = Uri.parse(path);
+    return uri.scheme.startsWith('http') || uri.scheme.startsWith('ftp');
   }
 
 }

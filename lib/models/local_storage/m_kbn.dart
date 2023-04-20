@@ -24,7 +24,8 @@ class MKBN extends HiveObject{
     required this.addYMD,
     required this.updPGID,
     required this.updTantCd,
-    required this.updYMD
+    required this.updYMD,
+    this.status = 0
   });
 
   @HiveField(0)
@@ -81,6 +82,8 @@ class MKBN extends HiveObject{
   @HiveField(17)
   @JsonKey(name: 'UPD_YMD', required: true)
   String updYMD;
+  @HiveField(18)
+  int? status = 0;
 
   factory MKBN.fromJson(Map<String, dynamic> json) => _$MKBNFromJson(json);
   Map<String, dynamic> toJson() => _$MKBNToJson(this);

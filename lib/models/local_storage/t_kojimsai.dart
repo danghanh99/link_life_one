@@ -33,6 +33,7 @@ class TKojimsai extends HiveObject{
     this.updPGID,
     required this.updTantCd,
     required this.updYMD,
+    this.status = 0
   });
 
   @HiveField(0)
@@ -113,6 +114,27 @@ class TKojimsai extends HiveObject{
   @HiveField(25)
   @JsonKey(name: 'UPD_YMD', required: true)
   String updYMD;
+  @HiveField(26)
+  int? status = 0;
+  @HiveField(27)
+  String? localBefSekoPhotoFilePath;
+  @HiveField(28)
+  String? localAftSekoPhotoFilePath;
+  @HiveField(29)
+  dynamic localOtherSekoPhotoFilePath;
+
+  storage({
+    String? localBefSekoPhotoFilePath,
+    String? localAftSekoPhotoFilePath,
+    List<String>? localOtherSekoPhotoFilePath
+  }){
+    this.localBefSekoPhotoFilePath = localBefSekoPhotoFilePath!=null && localBefSekoPhotoFilePath.isNotEmpty
+        ? localBefSekoPhotoFilePath : this.localBefSekoPhotoFilePath;
+    this.localAftSekoPhotoFilePath = localAftSekoPhotoFilePath!=null && localAftSekoPhotoFilePath.isNotEmpty
+        ? localAftSekoPhotoFilePath : this.localAftSekoPhotoFilePath;
+    this.localOtherSekoPhotoFilePath = localOtherSekoPhotoFilePath!=null && localOtherSekoPhotoFilePath.isNotEmpty
+        ? localOtherSekoPhotoFilePath : this.localOtherSekoPhotoFilePath;
+  }
 
   factory TKojimsai.fromJson(Map<String, dynamic> json) => _$TKojimsaiFromJson(json);
   Map<String, dynamic> toJson() => _$TKojimsaiToJson(this);
@@ -153,6 +175,7 @@ class TKojimsai extends HiveObject{
       updPGID: json['UPD_PGID'] as String?,
       updTantCd: json['UPD_TANTCD'] as String,
       updYMD: json['UPD_YMD'] as String,
+      status: 0
     );
   }
 

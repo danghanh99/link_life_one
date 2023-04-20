@@ -25,6 +25,8 @@ const boxDateName = 'date';
 const dateParamName = 'd';
 
 class LocalStorageBase{
+  
+  static int actionStatus = 1;
 
   static init(){
     _registerAdapters();
@@ -34,9 +36,22 @@ class LocalStorageBase{
   static Future<Box> _getBox(name) async {
     return await Hive.openBox(name);
   }
+  
+  static dynamic _addStatus({required boxName, required model}){
+    if(boxName == boxGyosyaName) (model as MGyosya).status=actionStatus;
+    if(boxName == boxSyohinName) (model as MSyohin).status=actionStatus;
+    if(boxName == boxTantName) (model as MTant).status=actionStatus;
+    if(boxName == boxKbnName) (model as MKBN).status=actionStatus;
+    if(boxName == boxKojiName) (model as TKoji).status=actionStatus;
+    if(boxName == boxKojiCheckName) (model as TKojiCheck).status=actionStatus;
+    if(boxName == boxKojiFilePathName) (model as TKojiFilePath).status=actionStatus;
+    if(boxName == boxKojimsaiName) (model as TKojimsai).status=actionStatus;
+    if(boxName == boxTirasiName) (model as TTirasi).status=actionStatus;
+    return model;
+  }
 
   static Future add({required boxName, required key, required model}) async {
-    await (await _getBox(boxName)).put(key, model);
+    await (await _getBox(boxName)).put(key, _addStatus(boxName: boxName, model: model));
   }
 
   static Future<dynamic>? get({required boxName, required key}) async {

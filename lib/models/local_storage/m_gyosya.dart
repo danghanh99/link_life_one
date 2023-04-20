@@ -17,7 +17,8 @@ class MGyosya extends HiveObject{
     required this.addYMD,
     required this.updPGID,
     required this.updTantCd,
-    required this.updYMD
+    required this.updYMD,
+    this.status = 0
   });
 
   @HiveField(0)
@@ -53,6 +54,8 @@ class MGyosya extends HiveObject{
   @HiveField(10)
   @JsonKey(name: 'UPD_YMD', required: false)
   String? updYMD;
+  @HiveField(11)
+  int? status = 0;
 
   factory MGyosya.fromJson(Map<String, dynamic> json) => _$MGyosyaFromJson(json);
   Map<String, dynamic> toJson() => _$MGyosyaToJson(this);

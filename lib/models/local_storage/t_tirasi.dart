@@ -17,7 +17,8 @@ class TTirasi extends HiveObject{
     required this.addYMD,
     required this.updPGID,
     required this.updTantCd,
-    required this.updYMD
+    required this.updYMD,
+    this.status = 0
   });
 
   @HiveField(0)
@@ -53,6 +54,8 @@ class TTirasi extends HiveObject{
   @HiveField(10)
   @JsonKey(name: 'UPD_YMD', required: true)
   String updYMD;
+  @HiveField(11)
+  int? status = 0;
 
   factory TTirasi.fromJson(Map<String, dynamic> json) => _$TTirasiFromJson(json);
   Map<String, dynamic> toJson() => _$TTirasiToJson(this);

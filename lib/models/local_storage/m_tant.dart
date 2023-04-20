@@ -27,7 +27,8 @@ class MTant extends HiveObject{
     required this.addYMD,
     required this.updPGID,
     required this.updTantCd,
-    required this.updYMD
+    required this.updYMD,
+    this.status = 0
   });
 
   @HiveField(0)
@@ -93,6 +94,8 @@ class MTant extends HiveObject{
   @HiveField(20)
   @JsonKey(name: 'UPD_YMD', required: true)
   String updYMD;
+  @HiveField(21)
+  int? status = 0;
 
   factory MTant.fromJson(Map<String, dynamic> json) => _$MTantFromJson(json);
   Map<String, dynamic> toJson() => _$MTantToJson(this);

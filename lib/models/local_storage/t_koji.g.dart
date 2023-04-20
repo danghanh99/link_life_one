@@ -81,6 +81,7 @@ class TKojiAdapter extends TypeAdapter<TKoji> {
       updTantCd: fields[61] as String,
       updTantNm: fields[62] as String?,
       updYMD: fields[63] as String,
+      status: fields[66] as int?,
     )
       ..localKojiiraisyoFilePath = fields[64] as String?
       ..localSitamiiraisyoFilePath = fields[65] as String?;
@@ -89,7 +90,7 @@ class TKojiAdapter extends TypeAdapter<TKoji> {
   @override
   void write(BinaryWriter writer, TKoji obj) {
     writer
-      ..writeByte(66)
+      ..writeByte(67)
       ..writeByte(0)
       ..write(obj.jyucyuId)
       ..writeByte(1)
@@ -221,7 +222,9 @@ class TKojiAdapter extends TypeAdapter<TKoji> {
       ..writeByte(64)
       ..write(obj.localKojiiraisyoFilePath)
       ..writeByte(65)
-      ..write(obj.localSitamiiraisyoFilePath);
+      ..write(obj.localSitamiiraisyoFilePath)
+      ..writeByte(66)
+      ..write(obj.status);
   }
 
   @override
@@ -309,6 +312,7 @@ TKoji _$TKojiFromJson(Map<String, dynamic> json) {
     updTantCd: json['UPD_TANTCD'] as String,
     updTantNm: json['UPD_TANTNM'] as String?,
     updYMD: json['UPD_YMD'] as String,
+    status: json['status'] as int? ?? 0,
   )
     ..localKojiiraisyoFilePath = json['localKojiiraisyoFilePath'] as String?
     ..localSitamiiraisyoFilePath =
@@ -382,4 +386,5 @@ Map<String, dynamic> _$TKojiToJson(TKoji instance) => <String, dynamic>{
       'UPD_YMD': instance.updYMD,
       'localKojiiraisyoFilePath': instance.localKojiiraisyoFilePath,
       'localSitamiiraisyoFilePath': instance.localSitamiiraisyoFilePath,
+      'status': instance.status,
     };

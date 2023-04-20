@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:link_life_one/local_storage_services/id_name_controller.dart';
 import 'package:path_provider/path_provider.dart';
 
 class FileController{
@@ -31,8 +32,8 @@ class FileController{
     String storagePath = '${Platform.pathSeparator}$fileName';
     try {
       await Dio().download(url, path);
+      print('full path: $path');
       return storagePath;
-
     } catch (e) {
       onFailed.call();
       return null;
@@ -42,9 +43,16 @@ class FileController{
 
   Future<String> copyFile({
     required File file,
+    bool? isNew,
     required Function onFailed
   })async{
     String fileName = file.path.split(Platform.pathSeparator).last;
+    if(isNew!=null && isNew){
+      fileName = IdNameController().addNewSuffixFileNamePath(fileName);
+    }
+    else if(isNew!=null && !isNew){
+      fileName = IdNameController().addEditSuffixFileNamePath(fileName);
+    }
     String path = '${(await prepareSaveDir()).path}${Platform.pathSeparator}$fileName';
     String storagePath = '${Platform.pathSeparator}$fileName';
     try {

@@ -28,13 +28,14 @@ class TKojiFilePathAdapter extends TypeAdapter<TKojiFilePath> {
       updPGID: fields[8] as String?,
       updTantCd: fields[9] as String,
       updYMD: fields[10] as String,
+      status: fields[12] as int?,
     )..localPath = fields[11] as String?;
   }
 
   @override
   void write(BinaryWriter writer, TKojiFilePath obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.filePathId)
       ..writeByte(1)
@@ -58,7 +59,9 @@ class TKojiFilePathAdapter extends TypeAdapter<TKojiFilePath> {
       ..writeByte(10)
       ..write(obj.updYMD)
       ..writeByte(11)
-      ..write(obj.localPath);
+      ..write(obj.localPath)
+      ..writeByte(12)
+      ..write(obj.status);
   }
 
   @override
@@ -93,6 +96,7 @@ TKojiFilePath _$TKojiFilePathFromJson(Map<String, dynamic> json) {
     updPGID: json['UPD_PGID'] as String?,
     updTantCd: json['UPD_TANTCD'] as String,
     updYMD: json['UPD_YMD'] as String,
+    status: json['status'] as int? ?? 0,
   )..localPath = json['localPath'] as String?;
 }
 
@@ -110,4 +114,5 @@ Map<String, dynamic> _$TKojiFilePathToJson(TKojiFilePath instance) =>
       'UPD_TANTCD': instance.updTantCd,
       'UPD_YMD': instance.updYMD,
       'localPath': instance.localPath,
+      'status': instance.status,
     };

@@ -28,13 +28,14 @@ class TTirasiAdapter extends TypeAdapter<TTirasi> {
       updPGID: fields[8] as String?,
       updTantCd: fields[9] as String,
       updYMD: fields[10] as String,
+      status: fields[11] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, TTirasi obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.tantCd)
       ..writeByte(1)
@@ -56,7 +57,9 @@ class TTirasiAdapter extends TypeAdapter<TTirasi> {
       ..writeByte(9)
       ..write(obj.updTantCd)
       ..writeByte(10)
-      ..write(obj.updYMD);
+      ..write(obj.updYMD)
+      ..writeByte(11)
+      ..write(obj.status);
   }
 
   @override
@@ -91,6 +94,7 @@ TTirasi _$TTirasiFromJson(Map<String, dynamic> json) {
     updPGID: json['UPD_PGID'] as String?,
     updTantCd: json['UPD_TANTCD'] as String,
     updYMD: json['UPD_YMD'] as String,
+    status: json['status'] as int? ?? 0,
   );
 }
 
@@ -106,4 +110,5 @@ Map<String, dynamic> _$TTirasiToJson(TTirasi instance) => <String, dynamic>{
       'UPD_PGID': instance.updPGID,
       'UPD_TANTCD': instance.updTantCd,
       'UPD_YMD': instance.updYMD,
+      'status': instance.status,
     };

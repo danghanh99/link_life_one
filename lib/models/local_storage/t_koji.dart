@@ -71,7 +71,8 @@ class TKoji extends HiveObject{
     required this.updPGID,
     required this.updTantCd,
     required this.updTantNm,
-    required this.updYMD
+    required this.updYMD,
+    this.status = 0
   });
 
   @HiveField(0)
@@ -270,6 +271,8 @@ class TKoji extends HiveObject{
   String? localKojiiraisyoFilePath;
   @HiveField(65)
   String? localSitamiiraisyoFilePath;
+  @HiveField(66)
+  int? status = 0;
 
   factory TKoji.fromJson(Map<String, dynamic> json) => _$TKojiFromJson(json);
   Map<String, dynamic> toJson() => _$TKojiToJson(this);
@@ -340,6 +343,7 @@ class TKoji extends HiveObject{
       updTantCd: json['UPD_TANTCD'] as String,
       updTantNm: json['UPD_TANTNM'] as String?,
       updYMD: json['UPD_YMD'] as String,
+      status: 0
     );
   }
 
@@ -359,7 +363,7 @@ class TKoji extends HiveObject{
         kojiHomonJikanEnd: kojiHomonJikanEnd,
         shitamiJikan: sitamiJikan,
         kojiJinin: kojiJinin,
-        kojiJikan: kojiJikan
+        kojiJikan: kojiJikan,
     );
   }
 
