@@ -27,9 +27,7 @@ class LocalStorageNotifier extends ChangeNotifier {
   }
 
   Future<void> uploadData() async {
-    print('uploading');
-    await localStorageServices.uploadDB(onProgress: (progress){});
-    print('uploaded');
+    print(await localStorageServices.uploadDB(onProgress: (progress){}));
   }
 
 }

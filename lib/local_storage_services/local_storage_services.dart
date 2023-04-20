@@ -225,7 +225,7 @@ class LocalStorageServices{
     );
   }
 
-  Future<void> uploadDB({required Function(double) onProgress}) async {
+  Future<Map<String, dynamic>> uploadDB({required Function(double) onProgress}) async {
     var mGyosya = await LocalStorageBase.getValues(boxName: boxGyosyaName);
     var mKbn = await LocalStorageBase.getValues(boxName: boxKbnName);
     var mSyohin = await LocalStorageBase.getValues(boxName: boxSyohinName);
@@ -236,15 +236,65 @@ class LocalStorageServices{
     var tKojimsai = await LocalStorageBase.getValues(boxName: boxKojimsaiName);
     var tTirasi = await LocalStorageBase.getValues(boxName: boxTirasiName);
 
-    for(MGyosya g in mGyosya) print(g.toJson());
-    for(MKBN kbn in mKbn) print(kbn.toJson());
-    for(MSyohin s in mSyohin) print(s.toJson());
-    for(MTant t in mTant) print(t.toJson());
-    for(TKoji k in tKoji) print(k.toJson());
-    for(TKojiCheck kc in tKojiCheck) print(kc.toJson());
-    for(TKojiFilePath kf in tKojiFilePath) print(kf.toJson());
-    for(TKojimsai km in tKojimsai) print(km.toJson());
-    for(TTirasi tr in tTirasi) print(tr.toJson());
+    Map<String, dynamic> body = {};
+
+    List kojiChangeData = [];
+    for(TKoji k in tKoji) {
+      if(k.status==1){
+        var chaneRecord = k.toJson();
+        if('${chaneRecord['JYUCYU_ID']}'.contains('temp_')){
+          chaneRecord['JYUCYU_ID'] = '';
+        }
+        kojiChangeData.add(chaneRecord);
+      }
+    }
+    List kojiCheckChangeData = [];
+    for(TKojiCheck kc in tKojiCheck) {
+      if(kc.status==1){
+        var chaneRecord = kc.toJson();
+        if('${chaneRecord['JYUCYU_ID']}'.contains('temp_')){
+          chaneRecord['JYUCYU_ID'] = '';
+        }
+        kojiCheckChangeData.add(chaneRecord);
+      }
+    }
+    List kojiFilePathChangeData = [];
+    for(TKojiFilePath kf in tKojiFilePath) {
+      if(kf.status==1){
+        var chaneRecord = kf.toJson();
+        if('${chaneRecord['FILEPATH_ID']}'.contains('temp_')){
+          chaneRecord['FILEPATH_ID'] = '';
+        }
+        kojiFilePathChangeData.add(chaneRecord);
+      }
+    }
+    List kojimsaiChangeData = [];
+    for(TKojimsai km in tKojimsai) {
+      if(km.status==1){
+        var chaneRecord = km.toJson();
+        if('${chaneRecord['JYUCYUMSAI_ID']}'.contains('temp_')){
+          chaneRecord['JYUCYUMSAI_ID'] = '';
+        }
+        kojimsaiChangeData.add(chaneRecord);
+      }
+    }
+    List tirasiChangeData = [];
+    for(TTirasi tr in tTirasi) {
+      if(tr.status==1){
+        var chaneRecord = tr.toJson();
+        tirasiChangeData.add(chaneRecord);
+      }
+    }
+
+    body.addAll({
+      'T_KOJI': kojiChangeData,
+      'T_KOJIMSAI': kojimsaiChangeData,
+      'T_KOJI_FILEPATH': kojiFilePathChangeData,
+      'T_KOJI_CHECK': kojiCheckChangeData,
+      'T_TIRASI': tirasiChangeData
+    });
+
+    return body;
 
   }
 
