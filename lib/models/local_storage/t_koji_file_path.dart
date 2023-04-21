@@ -58,12 +58,18 @@ class TKojiFilePath extends HiveObject{
   String? localPath;
   @HiveField(12)
   int? status = 0;
+  @HiveField(13)
+  String? originalPath;
 
   factory TKojiFilePath.fromJson(Map<String, dynamic> json) => _$TKojiFilePathFromJson(json);
   Map<String, dynamic> toJson() => _$TKojiFilePathToJson(this);
 
   void storage(localPath){
     this.localPath = localPath;
+  }
+
+  void origin(path){
+    originalPath = path;
   }
 
 }

@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/local_storages/download_offline_api.dart';
 import 'package:link_life_one/constants/constant.dart';
@@ -130,6 +128,10 @@ class LocalStorageServices{
               localKojiiraisyoFilePath: await _storageLocalDirectory(r, 'KOJIIRAISYO_FILEPATH'),
               localSitamiiraisyoFilePath: await _storageLocalDirectory(r, 'SITAMIIRAISYO_FILEPATH')
             );
+            tKoji.origin(
+              kojiiraisyoFilePath: r['KOJIIRAISYO_FILEPATH'],
+              sitamiiraisyoFilePath: r['SITAMIIRAISYO_FILEPATH']
+            );
             await LocalStorageBase.add(
                 boxName: boxKojiName,
                 key: tKoji.jyucyuId,
@@ -151,6 +153,11 @@ class LocalStorageServices{
               localBefSekoPhotoFilePath: await _storageLocalDirectory(r, 'BEF_SEKO_PHOTO_FILEPATH'),
               localAftSekoPhotoFilePath: await _storageLocalDirectory(r, 'AFT_SEKO_PHOTO_FILEPATH'),
               localOtherSekoPhotoFilePath: await _storageLocalDirectoryList(r['OTHER_PHOTO_FOLDERPATH'])
+            );
+            tKojimsai.origin(
+              befSekoPhotoFilePath: r['BEF_SEKO_PHOTO_FILEPATH'],
+              aftSekoPhotoFilePath: r['AFT_SEKO_PHOTO_FILEPATH'],
+              otherSekoPhotoFilePath: r['OTHER_PHOTO_FOLDERPATH']
             );
             // tKojimsai.storage(
             //   localBefSekoPhotoFilePath: null,
@@ -198,6 +205,7 @@ class LocalStorageServices{
           for(var r in response['T_KOJI_FILEPATH']){
             TKojiFilePath tKojiFilePath = TKojiFilePath.fromJson(r);
             tKojiFilePath.storage(await _storageLocalDirectory(r, 'FILEPATH'));
+            tKojiFilePath.origin(r['FILEPATH']);
             await LocalStorageBase.add(
                 boxName: boxKojiFilePathName,
                 key: tKojiFilePath.filePathId,
@@ -226,10 +234,10 @@ class LocalStorageServices{
   }
 
   Future<Map<String, dynamic>> uploadDB({required Function(double) onProgress}) async {
-    var mGyosya = await LocalStorageBase.getValues(boxName: boxGyosyaName);
-    var mKbn = await LocalStorageBase.getValues(boxName: boxKbnName);
-    var mSyohin = await LocalStorageBase.getValues(boxName: boxSyohinName);
-    var mTant = await LocalStorageBase.getValues(boxName: boxTantName);
+    // var mGyosya = await LocalStorageBase.getValues(boxName: boxGyosyaName);
+    // var mKbn = await LocalStorageBase.getValues(boxName: boxKbnName);
+    // var mSyohin = await LocalStorageBase.getValues(boxName: boxSyohinName);
+    // var mTant = await LocalStorageBase.getValues(boxName: boxTantName);
     var tKoji = await LocalStorageBase.getValues(boxName: boxKojiName);
     var tKojiCheck = await LocalStorageBase.getValues(boxName: boxKojiCheckName);
     var tKojiFilePath = await LocalStorageBase.getValues(boxName: boxKojiFilePathName);
@@ -242,9 +250,25 @@ class LocalStorageServices{
     for(TKoji k in tKoji) {
       if(k.status==1){
         var chaneRecord = k.toJson();
+
         if('${chaneRecord['JYUCYU_ID']}'.contains('temp_')){
           chaneRecord['JYUCYU_ID'] = '';
         }
+
+        if(IdNameController().detectStateSuffix(chaneRecord['KOJIIRAISYO_FILEPATH'])>0){
+          chaneRecord['KOJIIRAISYO_FILEPATH'] = await _base64String(chaneRecord['KOJIIRAISYO_FILEPATH']);
+        }
+        else{
+          chaneRecord['KOJIIRAISYO_FILEPATH'] = k.originalKojiiraisyoFilePath;//original value
+        }
+
+        if(IdNameController().detectStateSuffix(chaneRecord['SITAMIIRAISYO_FILEPATH'])>0){
+          chaneRecord['SITAMIIRAISYO_FILEPATH'] = await _base64String(chaneRecord['SITAMIIRAISYO_FILEPATH']);
+        }
+        else{
+          chaneRecord['SITAMIIRAISYO_FILEPATH'] = k.originalSitamiiraisyoFilePath;//original value
+        }
+
         kojiChangeData.add(chaneRecord);
       }
     }
@@ -262,12 +286,22 @@ class LocalStorageServices{
     for(TKojiFilePath kf in tKojiFilePath) {
       if(kf.status==1){
         var chaneRecord = kf.toJson();
+
         if('${chaneRecord['FILEPATH_ID']}'.contains('temp_')){
           chaneRecord['FILEPATH_ID'] = '';
         }
+
+        if(IdNameController().detectStateSuffix(chaneRecord['FILEPATH'])>0){
+          chaneRecord['FILEPATH'] = await _base64String(chaneRecord['FILEPATH']);
+        }
+        else{
+          chaneRecord['FILEPATH'] = kf.originalPath;//original value
+        }
+
         kojiFilePathChangeData.add(chaneRecord);
       }
     }
+
     List kojimsaiChangeData = [];
     for(TKojimsai km in tKojimsai) {
       if(km.status==1){
@@ -275,9 +309,46 @@ class LocalStorageServices{
         if('${chaneRecord['JYUCYUMSAI_ID']}'.contains('temp_')){
           chaneRecord['JYUCYUMSAI_ID'] = '';
         }
+
+        if(IdNameController().detectStateSuffix(chaneRecord['BEF_SEKO_PHOTO_FILEPATH'])>0){
+          chaneRecord['BEF_SEKO_PHOTO_FILEPATH'] = await _base64String(chaneRecord['BEF_SEKO_PHOTO_FILEPATH']);
+        }
+        else{
+          chaneRecord['BEF_SEKO_PHOTO_FILEPATH'] = km.originalBefSekoPhotoFilePath;//original value
+        }
+
+        if(IdNameController().detectStateSuffix(chaneRecord['AFT_SEKO_PHOTO_FILEPATH'])>0){
+          chaneRecord['AFT_SEKO_PHOTO_FILEPATH'] = await _base64String(chaneRecord['AFT_SEKO_PHOTO_FILEPATH']);
+        }
+        else{
+          chaneRecord['AFT_SEKO_PHOTO_FILEPATH'] = km.originalAftSekoPhotoFilePath;//original value
+        }
+
+        List<String> otherPhotos = [];
+        dynamic others = chaneRecord['OTHER_PHOTO_FOLDERPATH'];
+        if(others!=null){
+          if (others.runtimeType == String) {
+            otherPhotos = [others];
+          }
+          if (others.runtimeType == List<String>) {
+            otherPhotos = others;
+          }
+          String otherPaths = '';
+          for(String p in otherPhotos){
+            if(IdNameController().detectStateSuffix(p)>0){
+              otherPaths = '${otherPaths.isEmpty?'':'$otherPaths;'}${await _base64String(p)}';
+            }
+            else{
+              otherPaths = '${otherPaths.isEmpty?'':'$otherPaths;'}${km.originalOtherSekoPhotoFilePath![otherPhotos.indexOf(p)]}';//original Value
+            }
+          }
+          chaneRecord['OTHER_PHOTO_FOLDERPATH'] = [otherPaths];
+        }
+
         kojimsaiChangeData.add(chaneRecord);
       }
     }
+
     List tirasiChangeData = [];
     for(TTirasi tr in tTirasi) {
       if(tr.status==1){
@@ -331,7 +402,7 @@ class LocalStorageServices{
       if((t.jyucyuId==jyucyuId || t.syuyakuJyucyuId==jyucyuId) && t.homonSbt=="01" && t.delFlg==0){
         resultList.add(
             PdfFile(
-                kojiiraisyoFilePath: '${(await FileController().prepareSaveDir()).path}${t.localSitamiiraisyoFilePath}',
+                kojiiraisyoFilePath: t.localSitamiiraisyoFilePath!=null?'${(await FileController().prepareSaveDir()).path}${t.localSitamiiraisyoFilePath}':null,
                 jyucyuId: t.jyucyuId,
                 homonSbt: t.homonSbt,
                 kojiSt: t.kojiSt
@@ -341,7 +412,7 @@ class LocalStorageServices{
           if(tFP.id==t.jyucyuId && tFP.fileKbnCd=="04" && tFP.delFlg=="0"){
             resultList.add(
                 PdfFile(
-                    sitamiiraisyoFilePath: '${(await FileController().prepareSaveDir()).path}${tFP.localPath}',
+                    sitamiiraisyoFilePath: tFP.localPath!=null?'${(await FileController().prepareSaveDir()).path}${tFP.localPath}':null,
                     jyucyuId: t.jyucyuId,
                     homonSbt: t.homonSbt,
                     kojiSt: t.kojiSt
@@ -353,7 +424,7 @@ class LocalStorageServices{
       else if((t.jyucyuId==jyucyuId || t.syuyakuJyucyuId==jyucyuId) && t.homonSbt=="02" && t.delFlg==0){
         resultList.add(
             PdfFile(
-                kojiiraisyoFilePath: '${(await FileController().prepareSaveDir()).path}${t.localKojiiraisyoFilePath}',
+                kojiiraisyoFilePath: t.localKojiiraisyoFilePath!=null?'${(await FileController().prepareSaveDir()).path}${t.localKojiiraisyoFilePath}':null,
                 jyucyuId: t.jyucyuId,
                 homonSbt: t.homonSbt,
                 kojiSt: t.kojiSt
@@ -363,7 +434,7 @@ class LocalStorageServices{
           if(tFP.id==t.jyucyuId && tFP.fileKbnCd=="03" && tFP.delFlg=="0"){
             resultList.add(
                 PdfFile(
-                  kojiiraisyoFilePath: '${(await FileController().prepareSaveDir()).path}${tFP.localPath}',
+                  kojiiraisyoFilePath: tFP.localPath!=null?'${(await FileController().prepareSaveDir()).path}${tFP.localPath}':null,
                   jyucyuId: t.jyucyuId,
                   homonSbt: t.homonSbt,
                   kojiSt: t.kojiSt
@@ -390,7 +461,7 @@ class LocalStorageServices{
         for (TKojiFilePath tFP in tkojiFilePath) {
           if (tFP.id == t.jyucyuId && tFP.fileKbnCd == "05" && tFP.delFlg == "0") {
             resultList.add(
-              {'FILEPATH': '${(await FileController().prepareSaveDir()).path}${tFP.localPath}'}
+              {'FILEPATH': tFP.localPath!=null?'${(await FileController().prepareSaveDir()).path}${tFP.localPath}':null}
             );
           }
         }
@@ -443,8 +514,8 @@ class LocalStorageServices{
                   "KISETU_HINBAN": tKm.kisetuHinban,
                   "KISETU_MAKER": tKm.kisetuMaker,
                   "KENSETU_KEITAI": tKm.kensetuKeitai,
-                  "BEF_SEKO_PHOTO_FILEPATH": '${(await FileController().prepareSaveDir()).path}${tKm.localBefSekoPhotoFilePath}',
-                  "AFT_SEKO_PHOTO_FILEPATH": '${(await FileController().prepareSaveDir()).path}${tKm.localAftSekoPhotoFilePath}',
+                  "BEF_SEKO_PHOTO_FILEPATH": tKm.localBefSekoPhotoFilePath!=null?'${(await FileController().prepareSaveDir()).path}${tKm.localBefSekoPhotoFilePath}':null,
+                  "AFT_SEKO_PHOTO_FILEPATH": tKm.localAftSekoPhotoFilePath!=null?'${(await FileController().prepareSaveDir()).path}${tKm.localAftSekoPhotoFilePath}':null,
                   "OTHER_PHOTO_FOLDERPATH": tKm.localOtherSekoPhotoFilePath,
                   "TUIKA_JISYA_CD": tKm.tuikaJisyaCd,
                   "TUIKA_SYOHIN_NAME": tKm.tuikaSyohinName,
@@ -478,8 +549,8 @@ class LocalStorageServices{
                   "KISETU_HINBAN": tKm.kisetuHinban,
                   "KISETU_MAKER": tKm.kisetuMaker,
                   "KENSETU_KEITAI": tKm.kensetuKeitai,
-                  "BEF_SEKO_PHOTO_FILEPATH": '${(await FileController().prepareSaveDir()).path}${tKm.localBefSekoPhotoFilePath}',
-                  "AFT_SEKO_PHOTO_FILEPATH": '${(await FileController().prepareSaveDir()).path}${tKm.localAftSekoPhotoFilePath}',
+                  "BEF_SEKO_PHOTO_FILEPATH": tKm.localBefSekoPhotoFilePath!=null?'${(await FileController().prepareSaveDir()).path}${tKm.localBefSekoPhotoFilePath}':null,
+                  "AFT_SEKO_PHOTO_FILEPATH": tKm.localAftSekoPhotoFilePath!=null?'${(await FileController().prepareSaveDir()).path}${tKm.localAftSekoPhotoFilePath}':null,
                   "OTHER_PHOTO_FOLDERPATH": tKm.localOtherSekoPhotoFilePath,
                   "TUIKA_JISYA_CD": tKm.tuikaJisyaCd,
                   "TUIKA_SYOHIN_NAME": tKm.tuikaSyohinName,
@@ -515,8 +586,8 @@ class LocalStorageServices{
                   "KISETU_HINBAN": tKm.kisetuHinban,
                   "KISETU_MAKER": tKm.kisetuMaker,
                   "KENSETU_KEITAI": tKm.kensetuKeitai,
-                  "BEF_SEKO_PHOTO_FILEPATH": '${(await FileController().prepareSaveDir()).path}${tKm.localBefSekoPhotoFilePath}',
-                  "AFT_SEKO_PHOTO_FILEPATH": '${(await FileController().prepareSaveDir()).path}${tKm.localAftSekoPhotoFilePath}',
+                  "BEF_SEKO_PHOTO_FILEPATH": tKm.localBefSekoPhotoFilePath!=null?'${(await FileController().prepareSaveDir()).path}${tKm.localBefSekoPhotoFilePath}':null,
+                  "AFT_SEKO_PHOTO_FILEPATH": tKm.localAftSekoPhotoFilePath!=null?'${(await FileController().prepareSaveDir()).path}${tKm.localAftSekoPhotoFilePath}':null,
                   "OTHER_PHOTO_FOLDERPATH": tKm.localOtherSekoPhotoFilePath,
                   "TUIKA_JISYA_CD": tKm.tuikaJisyaCd,
                   "TUIKA_SYOHIN_NAME": tKm.tuikaSyohinName,
@@ -550,8 +621,8 @@ class LocalStorageServices{
                   "KISETU_HINBAN": tKm.kisetuHinban,
                   "KISETU_MAKER": tKm.kisetuMaker,
                   "KENSETU_KEITAI": tKm.kensetuKeitai,
-                  "BEF_SEKO_PHOTO_FILEPATH": '${(await FileController().prepareSaveDir()).path}${tKm.localBefSekoPhotoFilePath}',
-                  "AFT_SEKO_PHOTO_FILEPATH": '${(await FileController().prepareSaveDir()).path}${tKm.localAftSekoPhotoFilePath}',
+                  "BEF_SEKO_PHOTO_FILEPATH": tKm.localBefSekoPhotoFilePath!=null?'${(await FileController().prepareSaveDir()).path}${tKm.localBefSekoPhotoFilePath}':null,
+                  "AFT_SEKO_PHOTO_FILEPATH": tKm.localAftSekoPhotoFilePath!=null?'${(await FileController().prepareSaveDir()).path}${tKm.localAftSekoPhotoFilePath}':null,
                   "OTHER_PHOTO_FOLDERPATH": tKm.localOtherSekoPhotoFilePath,
                   "TUIKA_JISYA_CD": tKm.tuikaJisyaCd,
                   "TUIKA_SYOHIN_NAME": tKm.tuikaSyohinName,
@@ -659,7 +730,7 @@ class LocalStorageServices{
         for (TKojiFilePath tFP in tkojiFilePath) {
           if (tFP.id == t.jyucyuId && tFP.fileKbnCd == "10" && tFP.delFlg == "0") {
             resultList.add(
-                {'FILEPATH': '${(await FileController().prepareSaveDir()).path}${tFP.localPath}'}
+                {'FILEPATH': tFP.localPath!=null?'${(await FileController().prepareSaveDir()).path}${tFP.localPath}':null}
             );
           }
         }
@@ -716,7 +787,7 @@ class LocalStorageServices{
     for(TKojiFilePath tFP in tKojiFilePath) {
       if (tFP.id==jyucyuId && tFP.fileKbnCd=="09" && tFP.delFlg=="0") {
         fileList.add({
-          "FILEPATH": '${(await FileController().prepareSaveDir()).path}${tFP.localPath}',
+          "FILEPATH": tFP.localPath!=null?'${(await FileController().prepareSaveDir()).path}${tFP.localPath}':null,
           "FILEPATH_ID": tFP.filePathId,
           "FILE_KBN_CD": tFP.fileKbnCd
         });
@@ -1539,6 +1610,14 @@ class LocalStorageServices{
       }
     }
     return storagePaths;
+  }
+
+  Future<String> _base64String(String path)async{
+    String filePath = '${(await FileController().prepareSaveDir()).path}$path';
+    File imageFile = File(filePath);
+    List<int> imageBytes = imageFile.readAsBytesSync();
+    String base64Image = base64Encode(imageBytes);
+    return base64Image;
   }
 
   bool _isNetworkPath(String? path) {

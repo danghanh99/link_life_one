@@ -47,13 +47,16 @@ class TKojimsaiAdapter extends TypeAdapter<TKojimsai> {
     )
       ..localBefSekoPhotoFilePath = fields[27] as String?
       ..localAftSekoPhotoFilePath = fields[28] as String?
-      ..localOtherSekoPhotoFilePath = fields[29] as dynamic;
+      ..localOtherSekoPhotoFilePath = fields[29] as dynamic
+      ..originalBefSekoPhotoFilePath = fields[30] as String?
+      ..originalAftSekoPhotoFilePath = fields[31] as String?
+      ..originalOtherSekoPhotoFilePath = (fields[32] as List?)?.cast<dynamic>();
   }
 
   @override
   void write(BinaryWriter writer, TKojimsai obj) {
     writer
-      ..writeByte(30)
+      ..writeByte(33)
       ..writeByte(0)
       ..write(obj.jyucyuId)
       ..writeByte(1)
@@ -113,7 +116,13 @@ class TKojimsaiAdapter extends TypeAdapter<TKojimsai> {
       ..writeByte(28)
       ..write(obj.localAftSekoPhotoFilePath)
       ..writeByte(29)
-      ..write(obj.localOtherSekoPhotoFilePath);
+      ..write(obj.localOtherSekoPhotoFilePath)
+      ..writeByte(30)
+      ..write(obj.originalBefSekoPhotoFilePath)
+      ..writeByte(31)
+      ..write(obj.originalAftSekoPhotoFilePath)
+      ..writeByte(32)
+      ..write(obj.originalOtherSekoPhotoFilePath);
   }
 
   @override
@@ -167,7 +176,13 @@ TKojimsai _$TKojimsaiFromJson(Map<String, dynamic> json) {
   )
     ..localBefSekoPhotoFilePath = json['localBefSekoPhotoFilePath'] as String?
     ..localAftSekoPhotoFilePath = json['localAftSekoPhotoFilePath'] as String?
-    ..localOtherSekoPhotoFilePath = json['localOtherSekoPhotoFilePath'];
+    ..localOtherSekoPhotoFilePath = json['localOtherSekoPhotoFilePath']
+    ..originalBefSekoPhotoFilePath =
+        json['originalBefSekoPhotoFilePath'] as String?
+    ..originalAftSekoPhotoFilePath =
+        json['originalAftSekoPhotoFilePath'] as String?
+    ..originalOtherSekoPhotoFilePath =
+        json['originalOtherSekoPhotoFilePath'] as List<dynamic>?;
 }
 
 Map<String, dynamic> _$TKojimsaiToJson(TKojimsai instance) => <String, dynamic>{
@@ -201,4 +216,7 @@ Map<String, dynamic> _$TKojimsaiToJson(TKojimsai instance) => <String, dynamic>{
       'localBefSekoPhotoFilePath': instance.localBefSekoPhotoFilePath,
       'localAftSekoPhotoFilePath': instance.localAftSekoPhotoFilePath,
       'localOtherSekoPhotoFilePath': instance.localOtherSekoPhotoFilePath,
+      'originalBefSekoPhotoFilePath': instance.originalBefSekoPhotoFilePath,
+      'originalAftSekoPhotoFilePath': instance.originalAftSekoPhotoFilePath,
+      'originalOtherSekoPhotoFilePath': instance.originalOtherSekoPhotoFilePath,
     };

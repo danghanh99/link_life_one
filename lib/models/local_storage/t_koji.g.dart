@@ -84,13 +84,15 @@ class TKojiAdapter extends TypeAdapter<TKoji> {
       status: fields[66] as int?,
     )
       ..localKojiiraisyoFilePath = fields[64] as String?
-      ..localSitamiiraisyoFilePath = fields[65] as String?;
+      ..localSitamiiraisyoFilePath = fields[65] as String?
+      ..originalKojiiraisyoFilePath = fields[67] as String?
+      ..originalSitamiiraisyoFilePath = fields[68] as String?;
   }
 
   @override
   void write(BinaryWriter writer, TKoji obj) {
     writer
-      ..writeByte(67)
+      ..writeByte(69)
       ..writeByte(0)
       ..write(obj.jyucyuId)
       ..writeByte(1)
@@ -224,7 +226,11 @@ class TKojiAdapter extends TypeAdapter<TKoji> {
       ..writeByte(65)
       ..write(obj.localSitamiiraisyoFilePath)
       ..writeByte(66)
-      ..write(obj.status);
+      ..write(obj.status)
+      ..writeByte(67)
+      ..write(obj.originalKojiiraisyoFilePath)
+      ..writeByte(68)
+      ..write(obj.originalSitamiiraisyoFilePath);
   }
 
   @override
@@ -315,8 +321,11 @@ TKoji _$TKojiFromJson(Map<String, dynamic> json) {
     status: json['status'] as int? ?? 0,
   )
     ..localKojiiraisyoFilePath = json['localKojiiraisyoFilePath'] as String?
-    ..localSitamiiraisyoFilePath =
-        json['localSitamiiraisyoFilePath'] as String?;
+    ..localSitamiiraisyoFilePath = json['localSitamiiraisyoFilePath'] as String?
+    ..originalKojiiraisyoFilePath =
+        json['originalKojiiraisyoFilePath'] as String?
+    ..originalSitamiiraisyoFilePath =
+        json['originalSitamiiraisyoFilePath'] as String?;
 }
 
 Map<String, dynamic> _$TKojiToJson(TKoji instance) => <String, dynamic>{
@@ -387,4 +396,6 @@ Map<String, dynamic> _$TKojiToJson(TKoji instance) => <String, dynamic>{
       'localKojiiraisyoFilePath': instance.localKojiiraisyoFilePath,
       'localSitamiiraisyoFilePath': instance.localSitamiiraisyoFilePath,
       'status': instance.status,
+      'originalKojiiraisyoFilePath': instance.originalKojiiraisyoFilePath,
+      'originalSitamiiraisyoFilePath': instance.originalSitamiiraisyoFilePath,
     };

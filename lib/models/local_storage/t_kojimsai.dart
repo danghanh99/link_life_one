@@ -122,6 +122,12 @@ class TKojimsai extends HiveObject{
   String? localAftSekoPhotoFilePath;
   @HiveField(29)
   dynamic localOtherSekoPhotoFilePath;
+  @HiveField(30)
+  String? originalBefSekoPhotoFilePath;
+  @HiveField(31)
+  String? originalAftSekoPhotoFilePath;
+  @HiveField(32)
+  List? originalOtherSekoPhotoFilePath;
 
   storage({
     String? localBefSekoPhotoFilePath,
@@ -134,6 +140,20 @@ class TKojimsai extends HiveObject{
         ? localAftSekoPhotoFilePath : this.localAftSekoPhotoFilePath;
     this.localOtherSekoPhotoFilePath = localOtherSekoPhotoFilePath!=null && localOtherSekoPhotoFilePath.isNotEmpty
         ? localOtherSekoPhotoFilePath : this.localOtherSekoPhotoFilePath;
+  }
+
+  origin({
+    befSekoPhotoFilePath,
+    aftSekoPhotoFilePath,
+    otherSekoPhotoFilePath
+  }){
+    originalBefSekoPhotoFilePath = befSekoPhotoFilePath;
+    originalAftSekoPhotoFilePath = aftSekoPhotoFilePath;
+    originalOtherSekoPhotoFilePath = otherSekoPhotoFilePath==null
+        ? null
+        : (otherSekoPhotoFilePath.runtimeType==String
+          ? '$otherSekoPhotoFilePath'.split(';')
+          : otherSekoPhotoFilePath);
   }
 
   factory TKojimsai.fromJson(Map<String, dynamic> json) => _$TKojimsaiFromJson(json);
