@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/local_storages/download_offline_api.dart';
 import 'package:link_life_one/constants/constant.dart';
@@ -1577,6 +1578,47 @@ class LocalStorageServices{
       }
     }
 
+  }
+
+  Future<Response> localLogin({required id, required pass})async{
+    var mTants = await LocalStorageBase.getValues(boxName: boxTantName);
+    for(MTant t in mTants){
+      if(t.tantCd==id){
+        if(t.password==pass){
+          return Response(
+              jsonEncode(t.toJson()),
+              200,
+              headers: {
+                HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
+              }
+          );
+        }
+        else{
+          return Response(
+            jsonEncode({
+              "msg": [
+                "パスワードが正しくありません"
+              ]
+            }),
+            1000,
+            headers: {
+              HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
+            }
+          );
+        }
+      }
+    }
+    return Response(
+        jsonEncode({
+          "msg": [
+            "担当者コードが存在しません。正しいコードを入力してください。"
+          ]
+        }),
+        1001,
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
+        }
+    );
   }
 
   Future<String?> _storageLocalDirectory(r, filedName) async {

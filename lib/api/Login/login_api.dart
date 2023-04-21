@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:hive_flutter/adapters.dart';
 import "package:http/http.dart" as http;
+import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 
 import '../../constants/constant.dart';
 import '../../models/user.dart';
@@ -13,10 +15,20 @@ class LoginApi {
       required String password,
       required Function onSuccess,
       required Function(String) onFailed}) async {
-    String url = "${Constant.url}Request/Login/requestLogin.php";
-    final response = await http.post(Uri.parse(url),
-        // body: {'LOGIN_ID': '00000', 'PASSWORD': '123456'});
-        body: {'LOGIN_ID': id, 'PASSWORD': password});
+
+    late http.Response response;
+
+    if(LocalStorageNotifier.isOfflineMode){
+      print('from local');
+      response = await LocalStorageServices().localLogin(id: id, pass: password);
+    }
+    else{
+      String url = "${Constant.url}Request/Login/requestLogin.php";
+      response = await http.post(
+          Uri.parse(url),
+          body: {'LOGIN_ID': id, 'PASSWORD': password}
+      );
+    }
 
     if (response.body == "{\"error_message\":Unauthorized}[]") {
       onFailed.call("担当者コードまたはパスワードが正しくありません");

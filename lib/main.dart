@@ -19,8 +19,6 @@ void main() async {
 
   LocalStorageBase.init();
 
-  await LocalStorageNotifier.isOffineMode();
-
   runApp(
     MultiProvider(
       providers: [
@@ -41,6 +39,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LocalStorageNotifier.isOffineMode();
     return ScreenUtilInit(
       designSize: const Size(810, 1080),
       builder: (context, _) => MaterialApp(

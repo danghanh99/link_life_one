@@ -33,6 +33,7 @@ class LocalStorageNotifier extends ChangeNotifier {
 
   static Future<bool> isOffineMode()async{
     isOfflineMode = (await LocalStorageBase.get(boxName: boxOfflineName, key: offlineParamName))??false;
+    print('mode: $isOfflineMode');
     return isOfflineMode;
   }
 
