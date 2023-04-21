@@ -38,8 +38,10 @@ class LocalStorageNotifier extends ChangeNotifier {
   }
 
   Future<void> uploadData() async {
+    var body = await localStorageServices.uploadDB(onProgress: (progress){});
+    print('body: $body}');
     await UploadChangedDataAPI().uploadDB(
-        body: await localStorageServices.uploadDB(onProgress: (progress){}),
+        body: body,
         onSuccess: (){},
         onFailed: (){}
     );

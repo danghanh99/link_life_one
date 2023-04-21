@@ -28,17 +28,20 @@ class CreateRiyuu {
 
       List<String> paths = [];
       for(var p in filePaths){
+        print('p: $p');
         paths.add(await FileController().copyFile(file: File(p), isNew: true, onFailed: onFailed));
       }
-
-      if(shitamiMenu==1){
+      print('paths: $paths');
+      print('index: $shitamiMenu');
+      if(shitamiMenu=="1" || shitamiMenu=="01"){
+        print('index 1: $paths');
         await LocalStorageServices().photoSubmissionRegistrationFromSendPhoto(
             loginId: loginId,
             filePaths: paths,
             jyucyuId: jyucyuId
         );
       }
-      else if(shitamiMenu==2){
+      else if(shitamiMenu=="2" || shitamiMenu=="02"){
         await LocalStorageServices().photoSubmissionRegistrationFromReportDelayed(
             loginId: loginId,
             filePaths: paths,
@@ -47,7 +50,7 @@ class CreateRiyuu {
             cancelRiyu: cancelRiyu
         );
       }
-      else if(shitamiMenu==3){
+      else if(shitamiMenu=="3" || shitamiMenu=="03"){
         await LocalStorageServices().photoSubmissionRegistrationFromCancel(
             loginId: loginId,
             filePaths: paths,
@@ -55,7 +58,7 @@ class CreateRiyuu {
             cancelRiyu: cancelRiyu
         );
       }
-      else if(shitamiMenu==4){
+      else if(shitamiMenu=="4" || shitamiMenu=="04"){
         await LocalStorageServices().photoSubmissionRegistrationFromReportNoQuoation(
             loginId: loginId,
             filePaths: paths,
@@ -78,7 +81,7 @@ class CreateRiyuu {
     required Function() onSuccess,
     required Function(String? errorMessage) onFailed,
   }) async {
-
+    print('list: $FILE_PATH_LIST');
     final box = await Hive.openBox<String>('user');
     String loginID = box.values.last;
 

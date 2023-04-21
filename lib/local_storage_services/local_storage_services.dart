@@ -721,6 +721,10 @@ class LocalStorageServices{
     required kojiSt
   })async{
 
+    if(kojiSt=="01" || kojiSt=="1" || kojiSt=="02" || kojiSt=="2"){
+      throw Exception("工事報告が未報告の場合は、写真提出が不可となります。");
+    }
+
     List resultList = [];
 
     var tkoji = await LocalStorageBase.getValues(boxName: boxKojiName);
@@ -1028,8 +1032,9 @@ class LocalStorageServices{
         );
       }
     }
-
+    print('filePaths: $filePaths');
     for(var p in filePaths){
+      print('fp: $p');
       String newId = IdNameController().getId();
       TKojiFilePath tKojiFilePath = TKojiFilePath(
           filePathId: newId,
