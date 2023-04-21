@@ -171,6 +171,7 @@ class _ShashinTeishuutsuGamenPage2State
                     runSpacing: 5.0,
                     children: [
                       ...selectedImages.map((e) {
+                        print('e: $e');
                         return SizedBox(
                           width: (imageContainerHeight / 4) - 5,
                           height: (imageContainerHeight / 4) - 5,
@@ -182,7 +183,7 @@ class _ShashinTeishuutsuGamenPage2State
                                           File(e.path),
                                           fit: BoxFit.cover,
                                         )
-                                      : CachedNetworkImage(
+                                      : e['FILEPATH']!=null ? CachedNetworkImage(
                                           imageUrl: e['FILEPATH'],
                                           placeholder: (context, url) =>
                                               const Center(
@@ -201,7 +202,7 @@ class _ShashinTeishuutsuGamenPage2State
                                                 fit: BoxFit.cover,
                                               )
                                               : const Icon(Icons.error),
-                                        )),
+                                        ): const Icon(Icons.error)),
                               Visibility(
                                 visible: e.runtimeType == XFile,
                                 child: Positioned(

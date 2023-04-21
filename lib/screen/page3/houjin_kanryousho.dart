@@ -68,7 +68,10 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
             }
           });
         }
-        listImage = result['FILE'] ?? [];
+        for(var f in result['FILE']){
+          if(f!=null) listImage.add(f);
+        }
+        // listImage = (result['FILE'] ?? []);
       },
     );
   }
@@ -195,7 +198,7 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                                             ? null
                                             : BoxFit.fill,
                                       )
-                                    : FadeInImage(
+                                    : listImage[idx]['FILEPATH']!=null ? FadeInImage(
                                         placeholder: Assets.blankImage,
                                         image: NetworkImage(
                                             listImage[idx]['FILEPATH']),
@@ -212,7 +215,7 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                                             )
                                             : const Icon(Icons.error);
                                         },
-                                      ));
+                                      ) : const Icon(Icons.error));
                           },
                         ),
                       ),
