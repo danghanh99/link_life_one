@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:link_life_one/api/local_storages/upload_changed_data_api.dart';
 import 'package:link_life_one/local_storage_services/local_storage_base.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 
@@ -36,9 +37,14 @@ class LocalStorageNotifier extends ChangeNotifier {
   }
 
   Future<void> uploadData() async {
-    print(await localStorageServices.uploadDB(onProgress: (progress){}));
+    await UploadChangedDataAPI().uploadDB(
+        body: await localStorageServices.uploadDB(onProgress: (progress){}),
+        onSuccess: (){},
+        onFailed: (){}
+    );
     isOfflineMode = false;
     await LocalStorageBase.add(boxName: boxOfflineName, key: offlineParamName, model: false);
+    print('Done upload');
   }
 
 }

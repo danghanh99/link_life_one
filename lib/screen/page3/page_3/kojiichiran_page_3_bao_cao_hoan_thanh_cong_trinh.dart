@@ -169,6 +169,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
       context: context,
       barrierDismissible: false,
       builder: (context) {
+        print('show popup');
         onShow(context);
         return SizedBox(
           width: double.infinity,
@@ -738,7 +739,14 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                           ),
                           child: TextButton(
                             onPressed: () async {
-                              context.read<LocalStorageNotifier>().uploadData();
+                              var dialogContext;
+                              showLoadingPopup(
+                                  onShow: (context)async{
+                                    dialogContext = context;
+                                    await context.read<LocalStorageNotifier>().uploadData();
+                                    Navigator.pop(dialogContext);
+                                  }
+                              );
                             },
                             child: const Text(
                               'オンラインアップロード',
