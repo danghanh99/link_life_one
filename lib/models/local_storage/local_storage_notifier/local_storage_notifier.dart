@@ -7,6 +7,8 @@ import 'package:link_life_one/local_storage_services/local_storage_services.dart
 
 class LocalStorageNotifier extends ChangeNotifier {
 
+  static bool isOfflineMode = false;
+
   LocalStorageServices localStorageServices = LocalStorageServices();
 
   StreamController progressController = StreamController.broadcast();
@@ -20,14 +22,23 @@ class LocalStorageNotifier extends ChangeNotifier {
     );
     await localStorageServices.checkTodayDownloaded();
     LocalStorageBase.actionStatus = 1;
+    isOfflineMode = true;
+    await LocalStorageBase.add(boxName: boxOfflineName, key: offlineParamName, model: true);
   }
 
-  Future<bool> hasTodayData()async{
+  static Future<bool> hasTodayData()async{
     return await LocalStorageServices.isTodayDataDownloaded();
+  }
+
+  static Future<bool> isOffineMode()async{
+    isOfflineMode = (await LocalStorageBase.get(boxName: boxOfflineName, key: offlineParamName))??false;
+    return isOfflineMode;
   }
 
   Future<void> uploadData() async {
     print(await localStorageServices.uploadDB(onProgress: (progress){}));
+    isOfflineMode = false;
+    await LocalStorageBase.add(boxName: boxOfflineName, key: offlineParamName, model: false);
   }
 
 }

@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 
 import '../../api/koji/getPhotoConfirm/get_shashin_kakunin.dart';
@@ -29,17 +30,17 @@ class ShashinKakuninPage extends StatefulWidget {
 
 class _ShashinKakuninPageState extends State<ShashinKakuninPage> {
   // String url = "${Constant.url}";
-  late bool isTodayDataDownloaded;
+  // late bool isTodayDataDownloaded;
   List<dynamic> listPhotos = [];
 
-  _checkDownload()async{
-    isTodayDataDownloaded = await LocalStorageServices.isTodayDataDownloaded();
-    setState((){});
-  }
+  // _checkDownload()async{
+  //   isTodayDataDownloaded = await LocalStorageServices.isTodayDataDownloaded();
+  //   setState((){});
+  // }
 
   @override
   void initState(){
-    _checkDownload();
+    // _checkDownload();
     if (widget.listPhotos.isNotEmpty) {
       listPhotos = widget.listPhotos;
     } else {
@@ -158,7 +159,7 @@ class _ShashinKakuninPageState extends State<ShashinKakuninPage> {
                               ),
                             ),
                           ),
-                          errorWidget: (context, url, error) => isTodayDataDownloaded && isTodayDataDownloaded
+                          errorWidget: (context, url, error) => LocalStorageNotifier.isOfflineMode
                             ? Image.file(File(path))
                             : const Icon(Icons.error),
                         ),

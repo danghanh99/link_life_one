@@ -1,5 +1,6 @@
 import "package:http/http.dart" as http;
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 import 'dart:convert';
 
 import '../../../constants/constant.dart';
@@ -38,6 +39,17 @@ class GetKojiHoukoku {
     required Function(dynamic) onSuccess,
     required Function onFailed,
   }) async {
+
+    if(LocalStorageNotifier.isOfflineMode){
+      return _notSuccess(
+          jyucyuId: JYUCYU_ID,
+          singleSummarize: SINGLE_SUMMARIZE,
+          kojiSt: KOJI_ST,
+          onSuccess: onSuccess,
+          onFailed: onFailed
+      );
+    }
+
     String url = '';
 
     if (KOJI_ST == "01" || KOJI_ST == "02") {
@@ -77,23 +89,11 @@ class GetKojiHoukoku {
         onSuccess.call(body);
         return body;
       } else {
-        return _notSuccess(
-            jyucyuId: JYUCYU_ID,
-            singleSummarize: SINGLE_SUMMARIZE,
-            kojiSt: KOJI_ST,
-            onSuccess: onSuccess,
-            onFailed: onFailed
-        );
+        onFailed.call();
       }
 
     } catch(e){
-      return _notSuccess(
-          jyucyuId: JYUCYU_ID,
-          singleSummarize: SINGLE_SUMMARIZE,
-          kojiSt: KOJI_ST,
-          onSuccess: onSuccess,
-          onFailed: onFailed
-      );
+      onFailed.call();
     }
 
 

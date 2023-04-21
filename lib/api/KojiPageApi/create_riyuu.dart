@@ -6,6 +6,7 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:link_life_one/local_storage_services/file_controller.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 
 import '../../constants/constant.dart';
 
@@ -81,6 +82,18 @@ class CreateRiyuu {
     final box = await Hive.openBox<String>('user');
     String loginID = box.values.last;
 
+    if(LocalStorageNotifier.isOfflineMode){
+      await _notSuccess(
+          jyucyuId: JYUCYU_ID,
+          shitamiMenu: SHITAMI_MENU,
+          loginId: loginID,
+          filePaths: FILE_PATH_LIST,
+          onSuccess: onSuccess,
+          onFailed: onFailed
+      );
+      return;
+    }
+
     try {
 
       var dio = Dio();
@@ -107,25 +120,8 @@ class CreateRiyuu {
         final errorMessage = jsonDecode(response.data)['0'];
         onFailed.call(errorMessage);
       }
-      else{
-        await _notSuccess(
-            jyucyuId: JYUCYU_ID,
-            shitamiMenu: SHITAMI_MENU,
-            loginId: loginID,
-            filePaths: FILE_PATH_LIST,
-            onSuccess: onSuccess,
-            onFailed: onFailed
-        );
-      }
     } catch (e) {
-      await _notSuccess(
-          jyucyuId: JYUCYU_ID,
-          shitamiMenu: SHITAMI_MENU,
-          loginId: loginID,
-          filePaths: FILE_PATH_LIST,
-          onSuccess: onSuccess,
-          onFailed: onFailed
-      );
+      onFailed.call('$e');
     }
   }
 

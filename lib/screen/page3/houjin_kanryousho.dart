@@ -8,6 +8,7 @@ import 'package:link_life_one/api/KojiPageApi/request_corporate_completion.dart'
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 import 'package:link_life_one/shared/assets.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,17 +36,17 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
   List<dynamic> listImage = [];
   final ImagePicker _picker = ImagePicker();
 
-  bool isTodayDownloaded = false;
+  // bool isTodayDownloaded = false;
 
-  _checkDownload()async{
-    isTodayDownloaded = await LocalStorageServices.isTodayDataDownloaded();
-    setState((){});
-  }
+  // _checkDownload()async{
+  //   isTodayDownloaded = await LocalStorageServices.isTodayDataDownloaded();
+  //   setState((){});
+  // }
 
   @override
   void initState() {
     super.initState();
-    _checkDownload();
+    // _checkDownload();
     getHouJin();
   }
 
@@ -200,7 +201,7 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                                             listImage[idx]['FILEPATH']),
                                         imageErrorBuilder:
                                             (context, error, stackTrace) {
-                                          return isTodayDownloaded
+                                          return LocalStorageNotifier.isOfflineMode
                                             ? Image.file(
                                               File(listImage[idx]['FILEPATH']),
                                               width: size.width - 50,

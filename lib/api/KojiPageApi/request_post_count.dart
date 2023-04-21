@@ -3,6 +3,7 @@ import "package:http/http.dart" as http;
 import 'package:intl/intl.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 import 'package:link_life_one/models/koji.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 
 import '../../constants/constant.dart';
 
@@ -38,6 +39,16 @@ class RequestPostCount {
     final box = await Hive.openBox<String>('user');
     String loginID = box.values.last;
 
+    if(LocalStorageNotifier.isOfflineMode){
+      return _notSuccess(
+          ymd: DateFormat(('yyyy-MM-dd')).format(date),
+          loginId: loginID,
+          setsakiAddress: koji.setsakiAddress,
+          jyucyuId: koji.jyucyuId,
+          onSuccess: onSuccess
+      );
+    }
+
     try{
       final response = await http.post(
           Uri.parse(
@@ -53,23 +64,11 @@ class RequestPostCount {
       if (response.statusCode == 200) {
         onSuccess.call();
       } else {
-        return _notSuccess(
-            ymd: DateFormat(('yyyy-MM-dd')).format(date),
-            loginId: loginID,
-            setsakiAddress: koji.setsakiAddress,
-            jyucyuId: koji.jyucyuId,
-            onSuccess: onSuccess
-        );
+        throw Exception('Failed');
       }
     }
     catch(e){
-      return _notSuccess(
-          ymd: DateFormat(('yyyy-MM-dd')).format(date),
-          loginId: loginID,
-          setsakiAddress: koji.setsakiAddress,
-          jyucyuId: koji.jyucyuId,
-          onSuccess: onSuccess
-      );
+      throw Exception('Failed');
     }
 
   }

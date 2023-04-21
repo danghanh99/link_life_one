@@ -24,6 +24,9 @@ const boxTirasiName = 'tirasi';
 const boxDateName = 'date';
 const dateParamName = 'd';
 
+const boxOfflineName = 'isOffline';
+const offlineParamName = 'offline';
+
 class LocalStorageBase{
   
   static int actionStatus = 1;

@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:link_life_one/local_storage_services/file_controller.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 
 import '../../constants/constant.dart';
 import '../../models/consent.dart';
@@ -85,6 +86,29 @@ class SubmitLastPage {
     final box = await Hive.openBox<String>('user');
     String loginID = box.values.last;
 
+    if(LocalStorageNotifier.isOfflineMode){
+      await _submitNotSuccess(
+          singleSummarize: SINGLE_SUMMARIZE,
+          jyucyuId: JYUCYU_ID,
+          checkFlg1: CHECK_FLG1,
+          checkFlg2: CHECK_FLG2,
+          checkFlg3: CHECK_FLG3,
+          checkFlg4: CHECK_FLG4,
+          checkFlg5: CHECK_FLG5,
+          checkFlg6: CHECK_FLG6,
+          checkFlg7: CHECK_FLG7,
+          biko: biko,
+          kojiHoukoku: kojiHoukoku,
+          tableList: tableList,
+          loginId: loginID,
+          onSuccess: onSuccess,
+          onFailed: (){
+            onFailed('');
+          }
+      );
+      return;
+    }
+
     try {
 
       ConsentModel consentModel = ConsentModel(
@@ -117,47 +141,9 @@ class SubmitLastPage {
         } else {
           onSuccess();
         }
-      } else {
-        _submitNotSuccess(
-            singleSummarize: SINGLE_SUMMARIZE,
-            jyucyuId: JYUCYU_ID,
-            checkFlg1: CHECK_FLG1,
-            checkFlg2: CHECK_FLG2,
-            checkFlg3: CHECK_FLG3,
-            checkFlg4: CHECK_FLG4,
-            checkFlg5: CHECK_FLG5,
-            checkFlg6: CHECK_FLG6,
-            checkFlg7: CHECK_FLG7,
-            biko: biko,
-            kojiHoukoku: kojiHoukoku,
-            tableList: tableList,
-            loginId: loginID,
-            onSuccess: onSuccess,
-            onFailed: (){
-              onFailed('');
-            }
-        );
       }
     } catch (e) {
-      _submitNotSuccess(
-          singleSummarize: SINGLE_SUMMARIZE,
-          jyucyuId: JYUCYU_ID,
-          checkFlg1: CHECK_FLG1,
-          checkFlg2: CHECK_FLG2,
-          checkFlg3: CHECK_FLG3,
-          checkFlg4: CHECK_FLG4,
-          checkFlg5: CHECK_FLG5,
-          checkFlg6: CHECK_FLG6,
-          checkFlg7: CHECK_FLG7,
-          biko: biko,
-          kojiHoukoku: kojiHoukoku,
-          tableList: tableList,
-          loginId: loginID,
-          onSuccess: onSuccess,
-          onFailed: (){
-            onFailed('');
-          }
-      );
+      onFailed.call('$e');
     }
   }
 
@@ -199,6 +185,16 @@ class SubmitLastPage {
     final box = await Hive.openBox<String>('user');
     String loginID = box.values.last;
 
+    if(LocalStorageNotifier.isOfflineMode){
+      return _notSuccess(
+          jyucyuId: jyucyuId,
+          file: file,
+          loginId: loginID,
+          onSuccess: onSuccess,
+          onFailed: onFailed
+      );
+    }
+
     try{
 
       String urlEndpoint = Constant.requestPostUploadRegisterSignImage;
@@ -216,24 +212,12 @@ class SubmitLastPage {
       if (response.statusCode == 200) {
         onSuccess();
       } else {
-        return _notSuccess(
-            jyucyuId: jyucyuId,
-            file: file,
-            loginId: loginID,
-            onSuccess: onSuccess,
-            onFailed: onFailed
-        );
+        onFailed.call();
       }
 
     }
     catch(e){
-      return _notSuccess(
-          jyucyuId: jyucyuId,
-          file: file,
-          loginId: loginID,
-          onSuccess: onSuccess,
-          onFailed: onFailed
-      );
+      onFailed.call();
     }
 
   }

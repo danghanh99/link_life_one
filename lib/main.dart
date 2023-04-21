@@ -19,6 +19,8 @@ void main() async {
 
   LocalStorageBase.init();
 
+  await LocalStorageNotifier.isOffineMode();
+
   runApp(
     MultiProvider(
       providers: [

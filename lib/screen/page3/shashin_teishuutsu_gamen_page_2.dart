@@ -10,6 +10,7 @@ import 'package:link_life_one/api/KojiPageApi/get_image.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +44,7 @@ class _ShashinTeishuutsuGamenPage2State
   final carouselController = CarouselController();
   List<dynamic> selectedImages = [];
 
-  bool isTodayDownloaded = false;
+  // bool isTodayDownloaded = false;
 
   void selectImage() async {
     try {
@@ -56,14 +57,14 @@ class _ShashinTeishuutsuGamenPage2State
     } catch (e) {}
   }
 
-  _checkDownload()async{
-    isTodayDownloaded = await LocalStorageServices.isTodayDataDownloaded();
-    setState((){});
-  }
+  // _checkDownload()async{
+  //   isTodayDownloaded = await LocalStorageServices.isTodayDataDownloaded();
+  //   setState((){});
+  // }
 
   @override
   void initState() {
-    _checkDownload();
+    // _checkDownload();
     getListImage();
     super.initState();
   }
@@ -194,7 +195,7 @@ class _ShashinTeishuutsuGamenPage2State
                                             ),
                                           ),
                                           errorWidget: (context, url, error) =>
-                                              isTodayDownloaded
+                                              LocalStorageNotifier.isOfflineMode
                                               ? Image.file(
                                                 File(e['FILEPATH']),
                                                 fit: BoxFit.cover,

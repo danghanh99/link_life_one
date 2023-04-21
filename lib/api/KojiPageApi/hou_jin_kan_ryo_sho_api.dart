@@ -1,5 +1,6 @@
 import "package:http/http.dart" as http;
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 import 'dart:convert';
 
 import '../../constants/constant.dart';
@@ -26,6 +27,15 @@ class HouJinKanRyoShoApi {
       {required String JYUCYU_ID,
       required String TENPO_CD,
       required Function() onSuccess}) async {
+
+    if(LocalStorageNotifier.isOfflineMode){
+      return _notSuccess(
+          jyucyuId: JYUCYU_ID,
+          tenpoCd: TENPO_CD,
+          onSuccess: onSuccess
+      );
+    }
+
     try{
       final response = await http.get(
         Uri.parse(
@@ -39,18 +49,10 @@ class HouJinKanRyoShoApi {
       } else if (response.statusCode == 400) {
         return {'KBN': [], 'FILE': []};
       } else {
-        return _notSuccess(
-            jyucyuId: JYUCYU_ID,
-            tenpoCd: TENPO_CD,
-            onSuccess: onSuccess
-        );
+        throw Exception('Failed to get list');
       }
     } catch(e){
-      return _notSuccess(
-          jyucyuId: JYUCYU_ID,
-          tenpoCd: TENPO_CD,
-          onSuccess: onSuccess
-      );
+      throw Exception('Failed to get list');
     }
   }
 }

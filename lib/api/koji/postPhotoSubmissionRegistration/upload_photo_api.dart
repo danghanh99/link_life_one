@@ -5,6 +5,7 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:link_life_one/local_storage_services/file_controller.dart';
 import 'package:link_life_one/local_storage_services/id_name_controller.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 
 import '../../../constants/constant.dart';
 
@@ -55,6 +56,18 @@ class UploadPhotoApi {
     required Function onFailed,
     required Function onSuccess,
   }) async {
+
+    if(LocalStorageNotifier.isOfflineMode){
+      return _notSuccess(
+          jyucyuId: JYUCYU_ID,
+          loginId: LOGIN_ID,
+          homonSbt: HOMON_SBT,
+          filePathList: FILE_PATH_LIST,
+          onFailed: onFailed,
+          onSuccess: onSuccess
+      );
+    }
+
     try {
       var dio = Dio();
       List<MultipartFile> files = [];
@@ -92,24 +105,10 @@ class UploadPhotoApi {
       if (response.statusCode == 200) {
         onSuccess.call();
       } else {
-        return _notSuccess(
-            jyucyuId: JYUCYU_ID,
-            loginId: LOGIN_ID,
-            homonSbt: HOMON_SBT,
-            filePathList: FILE_PATH_LIST,
-            onFailed: onFailed,
-            onSuccess: onSuccess
-        );
+        onFailed.call();
       }
     } catch (e) {
-      return _notSuccess(
-          jyucyuId: JYUCYU_ID,
-          loginId: LOGIN_ID,
-          homonSbt: HOMON_SBT,
-          filePathList: FILE_PATH_LIST,
-          onFailed: onFailed,
-          onSuccess: onSuccess
-      );
+      onFailed.call();
     }
   }
 }

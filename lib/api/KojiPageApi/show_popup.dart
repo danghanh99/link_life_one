@@ -1,6 +1,8 @@
+
 import "package:http/http.dart" as http;
 import 'package:intl/intl.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 import 'dart:convert';
 
 import '../../constants/constant.dart';
@@ -29,6 +31,16 @@ class ShowPopUp {
       required String JYUCYU_ID,
       required Function(int count) onSuccess}) async {
 
+    if(LocalStorageNotifier.isOfflineMode){
+      print('offline mode');
+      return _notSuccess(
+          date: YMD,
+          setsakiAddress: SETSAKI_ADDRESS,
+          jyucyuId: JYUCYU_ID,
+          onSuccess: onSuccess
+      );
+    }
+
     try{
       final response = await http.get(
         Uri.parse(
@@ -40,20 +52,22 @@ class ShowPopUp {
         onSuccess.call(count);
         return count;
       } else {
-        return _notSuccess(
-            date: YMD,
-            setsakiAddress: SETSAKI_ADDRESS,
-            jyucyuId: JYUCYU_ID,
-            onSuccess: onSuccess
-        );
+        throw Exception('Failed to get count');
+        // return _notSuccess(
+        //     date: YMD,
+        //     setsakiAddress: SETSAKI_ADDRESS,
+        //     jyucyuId: JYUCYU_ID,
+        //     onSuccess: onSuccess
+        // );
       }
     } catch(e) {
-      return _notSuccess(
-          date: YMD,
-          setsakiAddress: SETSAKI_ADDRESS,
-          jyucyuId: JYUCYU_ID,
-          onSuccess: onSuccess
-      );
+      throw Exception('Failed to get count');
+      // return _notSuccess(
+      //     date: YMD,
+      //     setsakiAddress: SETSAKI_ADDRESS,
+      //     jyucyuId: JYUCYU_ID,
+      //     onSuccess: onSuccess
+      // );
     }
 
   }

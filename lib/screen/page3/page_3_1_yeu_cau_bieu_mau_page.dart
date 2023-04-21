@@ -10,6 +10,7 @@ import 'package:link_life_one/api/KojiPageApi/get_list_pdf.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 import 'package:link_life_one/models/pdf_file.dart';
 import 'package:link_life_one/screen/page3/shashin_kakinin_page.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
@@ -60,19 +61,19 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
 
   int currentPage = 0;
 
-  bool isTodayDataDownloaded = false;
+  // bool isTodayDataDownloaded = false;
 
   // String SINGLE_SUMMARIZE = "01";
 
-  _checkDownload()async{
-    isTodayDataDownloaded = await LocalStorageServices.isTodayDataDownloaded();
-    setState((){});
-  }
+  // _checkDownload()async{
+  //   isTodayDataDownloaded = await LocalStorageServices.isTodayDataDownloaded();
+  //   setState((){});
+  // }
 
   @override
   void initState() {
     // SINGLE_SUMMARIZE = widget.isSendAList ? "02" : "01";
-    _checkDownload();
+    // _checkDownload();
     callGetListPdf();
     callGetShashinKakunin();
     super.initState();
@@ -188,7 +189,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
   }
   
   Widget _showLocalPDFOrError(e){
-    return isTodayDataDownloaded
+    return LocalStorageNotifier.isOfflineMode
       ? const PDF(
         swipeHorizontal: false,
         enableSwipe: true,

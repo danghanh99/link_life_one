@@ -1,5 +1,6 @@
 import "package:http/http.dart" as http;
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 import 'dart:convert';
 
 import '../../constants/constant.dart';
@@ -31,6 +32,14 @@ class GetImage {
       required String SHITAMI_MENU,
       required Function() onSuccess}) async {
 
+    if(LocalStorageNotifier.isOfflineMode){
+      return _notSuccess(
+          jyucyuId: JYUCYU_ID,
+          kojiSt: KOJI_ST,
+          onSuccess: onSuccess
+      );
+    }
+
     try{
       final response = await http.get(
         Uri.parse(
@@ -43,18 +52,10 @@ class GetImage {
         onSuccess.call();
         return result;
       } else {
-        return _notSuccess(
-            jyucyuId: JYUCYU_ID,
-            kojiSt: KOJI_ST,
-            onSuccess: onSuccess
-        );
+        throw Exception('Failed to get list koji');
       }
     } catch(e){
-      return _notSuccess(
-          jyucyuId: JYUCYU_ID,
-          kojiSt: KOJI_ST,
-          onSuccess: onSuccess
-      );
+      throw Exception('Failed to get list koji');
     }
 
   }

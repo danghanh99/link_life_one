@@ -1,5 +1,6 @@
 import "package:http/http.dart" as http;
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 import 'dart:convert';
 
 import '../../../constants/constant.dart';
@@ -31,6 +32,14 @@ class GetShashinKakunin {
     required Function onFailed,
   }) async {
 
+    if(LocalStorageNotifier.isOfflineMode){
+      return _notSuccess(
+          jyucyuId: JYUCYU_ID,
+          onSuccess: onSuccess,
+          onFailed: onFailed
+      );
+    }
+
     try{
 
       final response = await http.get(
@@ -43,19 +52,13 @@ class GetShashinKakunin {
         onSuccess.call(body);
         return body;
       } else {
-        return _notSuccess(
-            jyucyuId: JYUCYU_ID,
-            onSuccess: onSuccess,
-            onFailed: onFailed
-        );
+        onFailed.call();
+        throw Exception('Failed to GetShashinKakunin');
       }
 
     } catch(e){
-      return _notSuccess(
-          jyucyuId: JYUCYU_ID,
-          onSuccess: onSuccess,
-          onFailed: onFailed
-      );
+      onFailed.call();
+      throw Exception('Failed to GetShashinKakunin');
     }
 
   }

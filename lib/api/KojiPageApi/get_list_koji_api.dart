@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:link_life_one/local_storage_services/local_storage_base.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 import 'package:link_life_one/models/koji.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 import 'dart:convert';
 
 import '../../constants/constant.dart';
@@ -53,6 +54,14 @@ class GetListKojiApi {
     final box = Hive.box<String>('user');
     final id = box.values.last;
 
+    if(LocalStorageNotifier.isOfflineMode){
+      return _notSuccess(
+          date: date2,
+          onFailed: onFailed,
+          onSuccess: onSuccess
+      );
+    }
+
     try{
       final response = await http.get(
         Uri.parse(
@@ -85,18 +94,12 @@ class GetListKojiApi {
         return list;
       }
       else {
-        return _notSuccess(
-            date: date2,
-            onFailed: onFailed,
-            onSuccess: onSuccess
-        );
+        onFailed.call();
+        throw Exception('Failed to get list koji');
       }
     } catch(e){
-      return _notSuccess(
-          date: date2,
-          onFailed: onFailed,
-          onSuccess: onSuccess
-      );
+      onFailed.call();
+      throw Exception('Failed to get list koji');
     }
   }
 }

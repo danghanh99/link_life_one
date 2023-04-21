@@ -2,6 +2,7 @@ import "package:http/http.dart" as http;
 import 'package:intl/intl.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 import 'package:link_life_one/models/koji.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 import 'package:link_life_one/models/pdf_file.dart';
 import 'dart:convert';
 
@@ -19,12 +20,20 @@ class GetListPdf {
       return await LocalStorageServices().getFiles(jyucyuId: jyucyuId, homonSbt: homonSbt);
     }
     else{
-      throw Exception('Failed to get list koji');
+      throw Exception('Failed to get list pdf');
     }
   }
 
   Future<List<PdfFile>> getListPdf(
       {required Koji koji, required String SINGLE_SUMMARIZE}) async {
+
+    if(LocalStorageNotifier.isOfflineMode){
+      return _notSuccess(
+          jyucyuId: koji.jyucyuId,
+          homonSbt: koji.homonSbt
+      );
+    }
+
     try{
       final response = await http.get(
         Uri.parse(
@@ -37,16 +46,10 @@ class GetListPdf {
       } else if (response.statusCode == 400) {
         return [];
       } else {
-        return _notSuccess(
-          jyucyuId: koji.jyucyuId,
-          homonSbt: koji.homonSbt
-        );
+        throw Exception('Failed to get list pdf');
       }
     } catch(e){
-      return _notSuccess(
-          jyucyuId: koji.jyucyuId,
-          homonSbt: koji.homonSbt
-      );
+      throw Exception('Failed to get list pdf');
     }
   }
 }

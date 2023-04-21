@@ -3,6 +3,7 @@ import 'package:hive_flutter/adapters.dart';
 import "package:http/http.dart" as http;
 import 'package:dio/dio.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 
 import '../../../constants/constant.dart';
 
@@ -37,6 +38,17 @@ class PostTirasiUpdateApi {
     required Function onFailed,
     required Function onSuccess,
   }) async {
+
+    if(LocalStorageNotifier.isOfflineMode){
+      return _notSuccess(
+          ymd: YMD,
+          loginId: LOGIN_ID,
+          kojiTirasisu: KOJI_TIRASISU,
+          onFailed: onFailed,
+          onSuccess: onSuccess
+      );
+    }
+
     try {
       var dio = Dio();
       String url = "${Constant.url}Request/Koji/requestPostTirasiUpdate.php";
@@ -56,22 +68,10 @@ class PostTirasiUpdateApi {
       if (response.statusCode == 200) {
         onSuccess.call();
       } else {
-        return _notSuccess(
-            ymd: YMD,
-            loginId: LOGIN_ID,
-            kojiTirasisu: KOJI_TIRASISU,
-            onFailed: onFailed,
-            onSuccess: onSuccess
-        );
+        onFailed.call();
       }
     } catch (e) {
-      return _notSuccess(
-          ymd: YMD,
-          loginId: LOGIN_ID,
-          kojiTirasisu: KOJI_TIRASISU,
-          onFailed: onFailed,
-          onSuccess: onSuccess
-      );
+      onFailed.call();
     }
   }
 }

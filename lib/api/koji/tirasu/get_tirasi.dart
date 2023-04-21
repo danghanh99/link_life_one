@@ -3,6 +3,7 @@ import "package:http/http.dart" as http;
 import 'package:intl/intl.dart';
 import 'package:link_life_one/local_storage_services/local_storage_base.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 import 'package:link_life_one/models/local_storage/t_tirasi.dart';
 import 'dart:convert';
 
@@ -31,6 +32,14 @@ class GetTirasi {
     final userBox = await Hive.openBox<User>('userBox');
     String LOGIN_ID = userBox.values.last.TANT_CD;
 
+    if(LocalStorageNotifier.isOfflineMode){
+      return _notSuccess(
+          date: YMD,
+          onFailed: onFailed,
+          onSuccess: onSuccess
+      );
+    }
+
     try{
       final response = await http.get(
         Uri.parse(
@@ -42,18 +51,10 @@ class GetTirasi {
         onSuccess.call(body);
       }
       else {
-        return _notSuccess(
-            date: YMD,
-            onFailed: onFailed,
-            onSuccess: onSuccess
-        );
+        onFailed.call();
       }
     } catch(e){
-      return _notSuccess(
-          date: YMD,
-          onFailed: onFailed,
-          onSuccess: onSuccess
-      );
+      onFailed.call();
     }
 
 

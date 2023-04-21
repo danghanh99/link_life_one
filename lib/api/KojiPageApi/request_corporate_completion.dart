@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:link_life_one/local_storage_services/file_controller.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 
 import '../../constants/constant.dart';
 import '../../models/koji_houkoku_model.dart';
@@ -51,6 +52,18 @@ class RequestCorporateCompletion {
 
     final box = await Hive.openBox<String>('user');
     String loginID = box.values.last;
+
+    if(LocalStorageNotifier.isOfflineMode){
+      await _submitNotSuccess(
+          jyucyuId: JYUCYU_ID,
+          kojiHoukokuList: kojiHoukokuList,
+          filePathList: filePathList,
+          loginId: loginID,
+          onSuccess: onSuccess,
+          onFailed: onFailed
+      );
+      return;
+    }
 
     try {
       String url = '${Constant.url}Request/Koji/requestCorporateCompletion.php';
@@ -99,24 +112,10 @@ class RequestCorporateCompletion {
       } else if (response.statusCode == 400) {
         onFailed.call();
       } else{
-        _submitNotSuccess(
-            jyucyuId: JYUCYU_ID,
-            kojiHoukokuList: kojiHoukokuList,
-            filePathList: filePathList,
-            loginId: loginID,
-            onSuccess: onSuccess,
-            onFailed: onFailed
-        );
+        onFailed.call();
       }
     } catch (e) {
-      _submitNotSuccess(
-          jyucyuId: JYUCYU_ID,
-          kojiHoukokuList: kojiHoukokuList,
-          filePathList: filePathList,
-          loginId: loginID,
-          onSuccess: onSuccess,
-          onFailed: onFailed
-      );
+      onFailed.call();
     }
   }
 
