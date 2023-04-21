@@ -740,11 +740,13 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                           child: TextButton(
                             onPressed: () async {
                               var dialogContext;
+                              var screenContext = context;
                               showLoadingPopup(
                                   onShow: (context)async{
                                     dialogContext = context;
                                     await context.read<LocalStorageNotifier>().uploadData();
                                     Navigator.pop(dialogContext);
+                                    CustomToast.show(screenContext, message: "Uploaded", backGround: Colors.green);
                                   }
                               );
                             },
