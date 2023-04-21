@@ -53,7 +53,7 @@ class RequestCorporateCompletion {
     final box = await Hive.openBox<String>('user');
     String loginID = box.values.last;
 
-    if(LocalStorageNotifier.isOfflineMode){
+    if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
       await _submitNotSuccess(
           jyucyuId: JYUCYU_ID,
           kojiHoukokuList: kojiHoukokuList,

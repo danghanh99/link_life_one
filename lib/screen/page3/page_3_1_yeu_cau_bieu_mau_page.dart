@@ -189,7 +189,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
   }
   
   Widget _showLocalPDFOrError(e){
-    return LocalStorageNotifier.isOfflineMode
+    return LocalStorageNotifier.isOfflineMode  && LocalStorageNotifier.isChoosenToday
       ? const PDF(
         swipeHorizontal: false,
         enableSwipe: true,

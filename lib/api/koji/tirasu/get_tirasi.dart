@@ -32,7 +32,7 @@ class GetTirasi {
     final userBox = await Hive.openBox<User>('userBox');
     String LOGIN_ID = userBox.values.last.TANT_CD;
 
-    if(LocalStorageNotifier.isOfflineMode){
+    if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
       return _notSuccess(
           date: YMD,
           onFailed: onFailed,

@@ -159,7 +159,7 @@ class _ShashinKakuninPageState extends State<ShashinKakuninPage> {
                               ),
                             ),
                           ),
-                          errorWidget: (context, url, error) => LocalStorageNotifier.isOfflineMode
+                          errorWidget: (context, url, error) => LocalStorageNotifier.isOfflineMode  && LocalStorageNotifier.isChoosenToday
                             ? Image.file(File(path))
                             : const Icon(Icons.error),
                         ),

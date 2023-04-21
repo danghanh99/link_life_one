@@ -57,7 +57,7 @@ class UploadPhotoApi {
     required Function onSuccess,
   }) async {
 
-    if(LocalStorageNotifier.isOfflineMode){
+    if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
       return _notSuccess(
           jyucyuId: JYUCYU_ID,
           loginId: LOGIN_ID,

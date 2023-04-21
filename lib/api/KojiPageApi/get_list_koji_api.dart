@@ -54,7 +54,7 @@ class GetListKojiApi {
     final box = Hive.box<String>('user');
     final id = box.values.last;
 
-    if(LocalStorageNotifier.isOfflineMode){
+    if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
       return _notSuccess(
           date: date2,
           onFailed: onFailed,

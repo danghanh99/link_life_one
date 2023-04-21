@@ -86,7 +86,7 @@ class SubmitLastPage {
     final box = await Hive.openBox<String>('user');
     String loginID = box.values.last;
 
-    if(LocalStorageNotifier.isOfflineMode){
+    if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
       await _submitNotSuccess(
           singleSummarize: SINGLE_SUMMARIZE,
           jyucyuId: JYUCYU_ID,
@@ -185,7 +185,7 @@ class SubmitLastPage {
     final box = await Hive.openBox<String>('user');
     String loginID = box.values.last;
 
-    if(LocalStorageNotifier.isOfflineMode){
+    if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
       return _notSuccess(
           jyucyuId: jyucyuId,
           file: file,

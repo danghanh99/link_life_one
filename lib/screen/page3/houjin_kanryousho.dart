@@ -204,7 +204,7 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                                             listImage[idx]['FILEPATH']),
                                         imageErrorBuilder:
                                             (context, error, stackTrace) {
-                                          return LocalStorageNotifier.isOfflineMode
+                                          return LocalStorageNotifier.isOfflineMode  && LocalStorageNotifier.isChoosenToday
                                             ? Image.file(
                                               File(listImage[idx]['FILEPATH']),
                                               width: size.width - 50,

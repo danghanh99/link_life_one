@@ -40,7 +40,7 @@ class GetKojiHoukoku {
     required Function onFailed,
   }) async {
 
-    if(LocalStorageNotifier.isOfflineMode){
+    if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
       return _notSuccess(
           jyucyuId: JYUCYU_ID,
           singleSummarize: SINGLE_SUMMARIZE,

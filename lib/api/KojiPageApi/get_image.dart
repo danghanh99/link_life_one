@@ -32,7 +32,7 @@ class GetImage {
       required String SHITAMI_MENU,
       required Function() onSuccess}) async {
 
-    if(LocalStorageNotifier.isOfflineMode){
+    if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
       return _notSuccess(
           jyucyuId: JYUCYU_ID,
           kojiSt: KOJI_ST,

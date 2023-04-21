@@ -85,7 +85,7 @@ class CreateRiyuu {
     final box = await Hive.openBox<String>('user');
     String loginID = box.values.last;
 
-    if(LocalStorageNotifier.isOfflineMode){
+    if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
       await _notSuccess(
           jyucyuId: JYUCYU_ID,
           shitamiMenu: SHITAMI_MENU,

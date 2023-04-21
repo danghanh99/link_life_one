@@ -2,12 +2,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:link_life_one/api/local_storages/upload_changed_data_api.dart';
 import 'package:link_life_one/local_storage_services/local_storage_base.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 
 class LocalStorageNotifier extends ChangeNotifier {
 
+  static bool isChoosenToday = true;
   static bool isOfflineMode = false;
 
   LocalStorageServices localStorageServices = LocalStorageServices();
@@ -29,6 +31,12 @@ class LocalStorageNotifier extends ChangeNotifier {
 
   static Future<bool> hasTodayData()async{
     return await LocalStorageServices.isTodayDataDownloaded();
+  }
+
+  static changeDate(DateTime date){
+    print(date);
+    isChoosenToday = DateFormat('yyyyMMdd').format(date)==DateFormat('yyyyMMdd').format(DateTime.now());
+    print('c date: $isChoosenToday');
   }
 
   static Future<bool> isOffineMode()async{

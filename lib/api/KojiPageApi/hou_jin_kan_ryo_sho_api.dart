@@ -28,7 +28,7 @@ class HouJinKanRyoShoApi {
       required String TENPO_CD,
       required Function() onSuccess}) async {
 
-    if(LocalStorageNotifier.isOfflineMode){
+    if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
       return _notSuccess(
           jyucyuId: JYUCYU_ID,
           tenpoCd: TENPO_CD,

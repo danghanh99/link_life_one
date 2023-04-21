@@ -196,7 +196,7 @@ class _ShashinTeishuutsuGamenPage2State
                                             ),
                                           ),
                                           errorWidget: (context, url, error) =>
-                                              LocalStorageNotifier.isOfflineMode
+                                              LocalStorageNotifier.isOfflineMode  && LocalStorageNotifier.isChoosenToday
                                               ? Image.file(
                                                 File(e['FILEPATH']),
                                                 fit: BoxFit.cover,
