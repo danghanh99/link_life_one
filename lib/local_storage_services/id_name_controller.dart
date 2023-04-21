@@ -26,7 +26,8 @@ class IdNameController{
     return _removeFileNameSuffixPath(path, editSuffix);
   }
 
-  int detectStateSuffix(String path){
+  int detectStateSuffix(String? path){
+    if(path==null) return 0;
     if(path.contains(newSuffix) && _detectSuffixFromFileNameSuffixPath(path, newSuffix)){
       return 1;
     }
