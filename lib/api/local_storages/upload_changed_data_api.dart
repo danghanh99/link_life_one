@@ -17,14 +17,17 @@ class UploadChangedDataAPI {
           Uri.parse(
             "${Constant.url}/Request/Koji/requestOfflineSync.php",
           ),
-          body: body);
-
+          body: json.encode(body));
+      // print('res: $response');
       if (response.statusCode == 200) {
+        print('res success: $response');
         await onSuccess.call();
       } else {
+        print('res failed: $response');
         await onFailed.call();
       }
     } catch(e){
+      print('catch: $e');
       await onFailed.call();
     }
 

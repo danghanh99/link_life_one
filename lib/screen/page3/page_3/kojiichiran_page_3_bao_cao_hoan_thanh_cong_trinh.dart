@@ -750,9 +750,16 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                               showLoadingPopup(
                                   onShow: (context)async{
                                     dialogContext = context;
-                                    await context.read<LocalStorageNotifier>().uploadData();
-                                    Navigator.pop(dialogContext);
-                                    CustomToast.show(screenContext, message: "Uploaded", backGround: Colors.green);
+                                    await context.read<LocalStorageNotifier>().uploadData(
+                                      onSuccess: (){
+                                        Navigator.pop(dialogContext);
+                                        CustomToast.show(screenContext, message: "工事データアップロードが完了しました。", backGround: Colors.green);
+                                      },
+                                      onFailed: (){
+                                        Navigator.pop(dialogContext);
+                                        CustomToast.show(screenContext, message: "工事データアップロードが完了できませんでした。", backGround: Colors.red);
+                                      }
+                                    );
                                     setState(() {
                                       LocalStorageNotifier.changeDate(date);
                                       callGetListKojiApi(inputDate: date);

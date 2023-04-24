@@ -45,13 +45,13 @@ class LocalStorageNotifier extends ChangeNotifier {
     return isOfflineMode;
   }
 
-  Future<void> uploadData() async {
+  Future<void> uploadData({required Function onSuccess, required Function onFailed}) async {
     var body = await localStorageServices.uploadDB(onProgress: (progress){});
-    print('body: $body}');
+    print('body: $body');
     await UploadChangedDataAPI().uploadDB(
         body: body,
-        onSuccess: (){},
-        onFailed: (){}
+        onSuccess: onSuccess,
+        onFailed: onFailed
     );
     isOfflineMode = false;
     await LocalStorageBase.add(boxName: boxOfflineName, key: offlineParamName, model: false);
