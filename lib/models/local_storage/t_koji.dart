@@ -422,19 +422,50 @@ class TKoji extends HiveObject{
     return Koji(
         homonSbt: homonSbt!,
         jyucyuId: jyucyuId,
-        shitamiJinin: sitamiJinin,
         kojiItem: kojiItem,
         setsakiAddress: setsakiAddress!,
         setsakiName: setsakiName,
         kojiSt: kojiSt!,
         hojinFlag: '${hojinFlg}',
-        sitamiHomonJikan: sitamiHomonJikan,
-        sitamiHomonJikanEnd: sitamiHomonJikanEnd,
         kojiHomonJikan: kojiHomonJikan,
         kojiHomonJikanEnd: kojiHomonJikanEnd,
-        shitamiJikan: sitamiJikan,
         kojiJinin: kojiJinin,
         kojiJikan: kojiJikan,
+    );
+  }
+  // Koji toKoji(){
+  //   return Koji(
+  //       homonSbt: homonSbt!,
+  //       jyucyuId: jyucyuId,
+  //       shitamiJinin: sitamiJinin,
+  //       kojiItem: kojiItem,
+  //       setsakiAddress: setsakiAddress!,
+  //       setsakiName: setsakiName,
+  //       kojiSt: kojiSt!,
+  //       hojinFlag: '${hojinFlg}',
+  //       sitamiHomonJikan: sitamiHomonJikan,
+  //       sitamiHomonJikanEnd: sitamiHomonJikanEnd,
+  //       kojiHomonJikan: kojiHomonJikan,
+  //       kojiHomonJikanEnd: kojiHomonJikanEnd,
+  //       shitamiJikan: sitamiJikan,
+  //       kojiJinin: kojiJinin,
+  //       kojiJikan: kojiJikan,
+  //   );
+  // }
+
+  Koji toSitami(){
+    return Koji(
+      homonSbt: homonSbt!,
+      jyucyuId: jyucyuId,
+      shitamiJinin: sitamiJinin,
+      kojiItem: kojiItem,
+      setsakiAddress: setsakiAddress!,
+      setsakiName: setsakiName,
+      kojiSt: kojiSt!,
+      hojinFlag: '${hojinFlg}',
+      sitamiHomonJikan: sitamiHomonJikan,
+      sitamiHomonJikanEnd: sitamiHomonJikanEnd,
+      shitamiJikan: sitamiJikan,
     );
   }
 

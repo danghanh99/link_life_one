@@ -23,8 +23,11 @@ class GetListKojiApi {
       //     .map<Koji>((e) => e.toKoji()).toList();
       List<Koji> list = [];
       for(TKoji t in tkoji){
-        if((t.homonTantCd1==loginId || t.homonTantCd2==loginId || t.homonTantCd3==loginId || t.homonTantCd4==loginId)){
+        if((t.homonTantCd1==loginId || t.homonTantCd2==loginId || t.homonTantCd3==loginId) && (t.homonSbt=="02" || t.homonSbt=="2")){
           list.add(t.toKoji());
+        }
+        else if(t.homonTantCd4==loginId && (t.homonSbt=="01" || t.homonSbt=="1")){
+          list.add(t.toSitami());
         }
       }
       onSuccess.call(_sort(list));
