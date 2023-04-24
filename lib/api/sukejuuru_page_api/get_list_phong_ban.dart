@@ -29,7 +29,6 @@ class GetListPhongBan {
     } else {
       onFailed.call();
       return [];
-
       // throw Exception('Failed to get list phong ban');
     }
   }

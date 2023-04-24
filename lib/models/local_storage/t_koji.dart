@@ -279,7 +279,7 @@ class TKoji extends HiveObject{
   String? originalSitamiiraisyoFilePath;
 
   factory TKoji.fromJson(Map<String, dynamic> json) => _$TKojiFromJson(json);
-  Map<String, dynamic> toJson() => _$TKojiToJson(this);
+  // Map<String, dynamic> toJson() => _$TKojiToJson(this);
 
   factory TKoji.fromRequest(Map<String, dynamic> json) {
     return TKoji(
@@ -350,6 +350,73 @@ class TKoji extends HiveObject{
       status: 0
     );
   }
+
+  Map<String, dynamic> toBodyJson() => <String, dynamic>{
+    'JYUCYU_ID': jyucyuId,
+    'SITAMI_YMD': sitamiYMD,
+    'KOJI_YMD': kojiYMD,
+    'HOMON_TANT_CD1': homonTantCd1,
+    'HOMON_TANT_NAME1': homonTantName1,
+    'HOMON_TANT_CD2': homonTantCd2,
+    'HOMON_TANT_NAME2': homonTantName2,
+    'HOMON_TANT_CD3': homonTantCd3,
+    'HOMON_TANT_NAME3': homonTantName3,
+    'HOMON_TANT_CD4': homonTantCd4,
+    'HOMON_TANT_NAME4': homonTantName4,
+    'SETSAKI_NAME': setsakiName,
+    'SETSAKI_ADDRESS': setsakiAddress,
+    'KOJI_JININ': kojiJinin,
+    'SITAMI_JININ': sitamiJinin,
+    'HOMON_SBT': homonSbt,
+    'KOJI_ST': kojiSt,
+    'KOJI_ITEM': kojiItem,
+    'SITAMI_KANSAN_POINT': sitamiKansanPoint,
+    'KOJI_KANSAN_POINT': kojiKansanPoint,
+    'SITAMI_JIKAN': sitamiJikan,
+    'KOJI_JIKAN': kojiJikan,
+    'KOJI_KEKKA': kojiKekka,
+    'TENPO_CD': tenpoCd,
+    'HOJIN_FLG': hojinFlg,
+    'MALL_CD': mallCd,
+    'KOJIGYOSYA_CD': kojigyosyaCd,
+    'TAG_KBN': tagKbn,
+    'SITAMIHOMONJIKAN': sitamiHomonJikan,
+    'SITAMIHOMONJIKAN_END': sitamiHomonJikanEnd,
+    'KOJIHOMONJIKAN': kojiHomonJikan,
+    'KOJIHOMONJIKAN_END': kojiHomonJikanEnd,
+    'KOJIIRAISYO_FILEPATH': kojiiraisyoFilePath,
+    'SITAMIIRAISYO_FILEPATH': sitamiiraisyoFilePath,
+    'CANCEL_RIYU': cancelRiyu,
+    'SITAMIAPO_KBN': sitamiapoKbn,
+    'KOJIAPO_KBN': kojiapoKbn,
+    'MTMORI_YMD': mtmoriYMD,
+    'MEMO': memo,
+    'COMMENT': comment,
+    'READ_FLG': readFlg,
+    'ATOBARAI': atobarai,
+    'BIKO': biko,
+    'SYUYAKU_JYUCYU_ID': syuyakuJyucyuId,
+    'REPORT_FLG': reportFlg,
+    'SITAMI_REPORT': sitamiReport,
+    'ALL_DAY_FLG': allDayFlg,
+    'CO_CD': coCd,
+    'CO_NAME': coName,
+    'CO_POSTNO': coPostno,
+    'CO_ADDRESS': coAddress,
+    'SIT_ITAKUHI': sitItakuhi,
+    'KOJI_ITAKUHI': kojiItakuhi,
+    'SKJ_RENKEI_YMD': skjRenkeiYMD,
+    'KOJI_RENKEI_YMD': kojiRenkeiYMD,
+    'DEL_FLG': delFlg,
+    'ADD_PGID': addPGID,
+    'ADD_TANTCD': addTantCd,
+    'ADD_TANTNM': addTantNm,
+    'ADD_YMD': addYMD,
+    'UPD_PGID': updPGID,
+    'UPD_TANTCD': updTantCd,
+    'UPD_TANTNM': updTantNm,
+    'UPD_YMD': updYMD
+  };
 
   Koji toKoji(){
     return Koji(

@@ -60,6 +60,20 @@ class TTirasi extends HiveObject{
   factory TTirasi.fromJson(Map<String, dynamic> json) => _$TTirasiFromJson(json);
   Map<String, dynamic> toJson() => _$TTirasiToJson(this);
 
+  Map<String, dynamic> toBodyJson() => <String, dynamic>{
+    'TANT_CD': tantCd,
+    'YMD': YMD,
+    'KOJI_TIRASISU': kojiTirasisu,
+    'RENKEI_YMD': renkeiYMD,
+    'DEL_FLG': delFlg,
+    'ADD_PGID': addPGID,
+    'ADD_TANTCD': addTantCd,
+    'ADD_YMD': addYMD,
+    'UPD_PGID': updPGID,
+    'UPD_TANTCD': updTantCd,
+    'UPD_YMD': updYMD
+  };
+
   factory TTirasi.fromRequest(Map<String, dynamic> json) => TTirasi(
     tantCd: json['TANT_CD'] as String,
     YMD: json['YMD'] as String,

@@ -250,7 +250,7 @@ class LocalStorageServices{
     List kojiChangeData = [];
     for(TKoji k in tKoji) {
       if(k.status==1){
-        var chaneRecord = k.toJson();
+        var chaneRecord = k.toBodyJson();
 
         if('${chaneRecord['JYUCYU_ID']}'.contains('temp_')){
           chaneRecord['JYUCYU_ID'] = '';
@@ -276,7 +276,7 @@ class LocalStorageServices{
     List kojiCheckChangeData = [];
     for(TKojiCheck kc in tKojiCheck) {
       if(kc.status==1){
-        var chaneRecord = kc.toJson();
+        var chaneRecord = kc.toBodyJson();
         if('${chaneRecord['JYUCYU_ID']}'.contains('temp_')){
           chaneRecord['JYUCYU_ID'] = '';
         }
@@ -286,7 +286,7 @@ class LocalStorageServices{
     List kojiFilePathChangeData = [];
     for(TKojiFilePath kf in tKojiFilePath) {
       if(kf.status==1){
-        var chaneRecord = kf.toJson();
+        var chaneRecord = kf.toBodyJson();
 
         if('${chaneRecord['FILEPATH_ID']}'.contains('temp_')){
           chaneRecord['FILEPATH_ID'] = '';
@@ -306,7 +306,7 @@ class LocalStorageServices{
     List kojimsaiChangeData = [];
     for(TKojimsai km in tKojimsai) {
       if(km.status==1){
-        var chaneRecord = km.toJson();
+        var chaneRecord = km.toBodyJson();
         if('${chaneRecord['JYUCYUMSAI_ID']}'.contains('temp_')){
           chaneRecord['JYUCYUMSAI_ID'] = '';
         }
@@ -353,7 +353,7 @@ class LocalStorageServices{
     List tirasiChangeData = [];
     for(TTirasi tr in tTirasi) {
       if(tr.status==1){
-        var chaneRecord = tr.toJson();
+        var chaneRecord = tr.toBodyJson();
         tirasiChangeData.add(chaneRecord);
       }
     }
@@ -1332,7 +1332,7 @@ class LocalStorageServices{
       tKojimsai.ctgotyCd = kh.ctgoryCd;
       tKojimsai.suryo = kh.suryo;
       tKojimsai.kingak = kh.kingak;
-      tKojimsai.kisetuHinban = kh.kisetuMaker;
+      tKojimsai.kisetuHinban = kh.kisetuHinban;
       tKojimsai.kisetuMaker = kh.kisetuMaker;
       tKojimsai.kensetuKeitai = kh.kensetuKeitai;
       if(kh.isChangeBefore){

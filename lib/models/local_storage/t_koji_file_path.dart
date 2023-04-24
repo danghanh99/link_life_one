@@ -62,7 +62,21 @@ class TKojiFilePath extends HiveObject{
   String? originalPath;
 
   factory TKojiFilePath.fromJson(Map<String, dynamic> json) => _$TKojiFilePathFromJson(json);
-  Map<String, dynamic> toJson() => _$TKojiFilePathToJson(this);
+  // Map<String, dynamic> toJson() => _$TKojiFilePathToJson(this);
+
+  Map<String, dynamic> toBodyJson() => <String, dynamic>{
+    'FILEPATH_ID': filePathId,
+    'ID': id,
+    'FILEPATH': filePath,
+    'FILE_KBN_CD': fileKbnCd,
+    'DEL_FLG': delFlg,
+    'ADD_PGID': addPGID,
+    'ADD_TANTCD': addTantCd,
+    'ADD_YMD': addYMD,
+    'UPD_PGID': updPGID,
+    'UPD_TANTCD': updTantCd,
+    'UPD_YMD': updYMD
+  };
 
   void storage(localPath){
     this.localPath = localPath;

@@ -74,6 +74,23 @@ class TKojiCheck extends HiveObject{
   int? status = 0;
 
   factory TKojiCheck.fromJson(Map<String, dynamic> json) => _$TKojiCheckFromJson(json);
-  Map<String, dynamic> toJson() => _$TKojiCheckToJson(this);
+  // Map<String, dynamic> toJson() => _$TKojiCheckToJson(this);
+  Map<String, dynamic> toBodyJson() => <String, dynamic>{
+    'JYUCYU_ID': jyucyuId,
+    'CHECK_FLG1': checkFlg1,
+    'CHECK_FLG2': checkFlg2,
+    'CHECK_FLG3': checkFlg3,
+    'CHECK_FLG4': checkFlg4,
+    'CHECK_FLG5': checkFlg5,
+    'CHECK_FLG6': checkFlg6,
+    'CHECK_FLG7': checkFlg7,
+    'DEL_FLG': delFlg,
+    'ADD_PGID': addPGID,
+    'ADD_TANTCD': addTantCd,
+    'ADD_YMD': addYMD,
+    'UPD_PGID': updPGID,
+    'UPD_TANTCD': updTantCd,
+    'UPD_YMD': updYMD
+  };
 
 }

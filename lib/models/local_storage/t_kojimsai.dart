@@ -157,7 +157,36 @@ class TKojimsai extends HiveObject{
   }
 
   factory TKojimsai.fromJson(Map<String, dynamic> json) => _$TKojimsaiFromJson(json);
-  Map<String, dynamic> toJson() => _$TKojimsaiToJson(this);
+  // Map<String, dynamic> toJson() => _$TKojimsaiToJson(this);
+
+  Map<String, dynamic> toBodyJson() => <String, dynamic>{
+    'JYUCYU_ID': jyucyuId,
+    'JYUCYUMSAI_ID': jyucyumsaiId,
+    'JYUCYUMSAI_ID_KIKAN': jyucyumsaiIdKikan,
+    'HINBAN': hinban,
+    'MAKER_CD': makerCd,
+    'CTGORY_CD': ctgotyCd,
+    'SURYO': suryo,
+    'HANBAI_TANKA': hanbaiTanka,
+    'KINGAK': kingak,
+    'KISETU_HINBAN': kisetuHinban,
+    'KISETU_MAKER': kisetuMaker,
+    'KENSETU_KEITAI': kensetuKeitai,
+    'BEF_SEKO_PHOTO_FILEPATH': befSekoPhotoFilePath,
+    'AFT_SEKO_PHOTO_FILEPATH': aftSekoPhotoFilePath,
+    'OTHER_PHOTO_FOLDERPATH': otherPhotoFolderPath,
+    'TUIKA_JISYA_CD': tuikaJisyaCd,
+    'TUIKA_SYOHIN_NAME': tuikaSyohinName,
+    'KOJIJITUIKA_FLG': kojijituikaFlg,
+    'DEL_FLG': delFlg,
+    'RENKEI_YMD': renkeiYMD,
+    'ADD_PGID': addPGID,
+    'ADD_TANTCD': addTantCd,
+    'ADD_YMD': addYMD,
+    'UPD_PGID': updPGID,
+    'UPD_TANTCD': updTantCd,
+    'UPD_YMD': updYMD
+  };
 
   factory TKojimsai.fromRequest(Map<String, dynamic> json) {
     List<String> otherFilePath = [];
