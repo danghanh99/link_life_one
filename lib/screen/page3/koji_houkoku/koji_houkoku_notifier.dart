@@ -49,6 +49,7 @@ class KojiHoukokuNotifier extends ChangeNotifier {
           }
 
           List pulldownList = res['PULLDOWN'];
+          print('res pulldown: ${res['PULLDOWN']}');
 
           if (pulldownList.isNotEmpty) {
             for (var i = 0; i < listKojiHoukoku.length; i++) {
@@ -90,7 +91,7 @@ class KojiHoukokuNotifier extends ChangeNotifier {
   String getKbnmsaiName(String kbnmsaiCode) {
     String name = '';
     if (kbnmsaiCode.isNotEmpty) {
-      Map<String, dynamic> selectedElement = listPullDown.firstWhere(
+      Map<String, dynamic>? selectedElement = listPullDown.firstWhere(
           (element) => element['KBNMSAI_CD'] == kbnmsaiCode,
           orElse: () => null);
       if (selectedElement != null) {
