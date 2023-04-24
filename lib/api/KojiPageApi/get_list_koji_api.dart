@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:hive_flutter/hive_flutter.dart';
 import "package:http/http.dart" as http;
 import 'package:intl/intl.dart';
@@ -5,6 +7,7 @@ import 'package:link_life_one/local_storage_services/local_storage_base.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 import 'package:link_life_one/models/koji.dart';
 import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
+import 'package:link_life_one/models/local_storage/t_koji.dart';
 import 'dart:convert';
 
 import '../../constants/constant.dart';
@@ -12,10 +15,18 @@ import '../../constants/constant.dart';
 class GetListKojiApi {
   GetListKojiApi() : super();
 
-  Future<List<Koji>> _notSuccess({required DateTime date, required Function onFailed, required Function(List<Koji>) onSuccess}) async {
+  Future<List<Koji>> _notSuccess({required DateTime date, required loginId, required Function onFailed, required Function(List<Koji>) onSuccess}) async {
     if(await LocalStorageServices.isTodayDataDownloaded() && DateFormat('yyyyMMdd').format(date)==DateFormat('yyyyMMdd').format(DateTime.now())){
       var tkoji = await LocalStorageBase.getValues(boxName: boxKojiName);
-      List<Koji> list = tkoji.map<Koji>((t) => t.toKoji()).toList();
+      // List<Koji> list = tkoji.map<Koji>((t) => t.toKoji()).toList();
+      // List<Koji> list = (tkoji.where((element) => element.homonTantCd1==loginId || element.homonTantCd2==loginId || element.homonTantCd3==loginId).toList())
+      //     .map<Koji>((e) => e.toKoji()).toList();
+      List<Koji> list = [];
+      for(TKoji t in tkoji){
+        if((t.homonTantCd1==loginId || t.homonTantCd2==loginId || t.homonTantCd3==loginId || t.homonTantCd4==loginId)){
+          list.add(t.toKoji());
+        }
+      }
       onSuccess.call(_sort(list));
       return list;
     }
@@ -57,6 +68,7 @@ class GetListKojiApi {
     if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
       return _notSuccess(
           date: date2,
+          loginId: id,
           onFailed: onFailed,
           onSuccess: onSuccess
       );
