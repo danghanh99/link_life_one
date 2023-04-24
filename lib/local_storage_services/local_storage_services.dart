@@ -97,7 +97,7 @@ class LocalStorageServices{
             MKBN mKbn = MKBN.fromJson(r);
             await LocalStorageBase.add(
                 boxName: boxKbnName,
-                key: mKbn.kbnCd,
+                key: '${mKbn.kbnCd}_${mKbn.kbnmsaiCd}',
                 model: mKbn
             );
             progress += 1;
