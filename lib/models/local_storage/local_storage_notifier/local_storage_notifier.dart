@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -47,14 +48,16 @@ class LocalStorageNotifier extends ChangeNotifier {
 
   Future<void> uploadData({required Function onSuccess, required Function onFailed}) async {
     var body = await localStorageServices.uploadDB(onProgress: (progress){});
-    print('body: $body');
+    print('body: ${json.encode(body)}');
     await UploadChangedDataAPI().uploadDB(
         body: body,
-        onSuccess: onSuccess,
+        onSuccess: ()async{
+          isOfflineMode = false;
+          await LocalStorageBase.add(boxName: boxOfflineName, key: offlineParamName, model: false);
+          onSuccess.call();
+        },
         onFailed: onFailed
     );
-    isOfflineMode = false;
-    await LocalStorageBase.add(boxName: boxOfflineName, key: offlineParamName, model: false);
     print('Done upload');
   }
 
