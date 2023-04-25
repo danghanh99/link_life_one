@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/result/default.dart';
 import 'package:link_life_one/api/result/get_pulldown_list_month.dart';
@@ -162,6 +163,7 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
       }
       String text = '';
       var y = NumberFormat("###,###");
+      bool isToday = DateFormat('yyyyMMdd').format(listThanhTich[row - 2].ngayThang)==DateFormat('yyyyMMdd').format(DateTime.now());
       switch (col) {
         case (0):
           text = DateFormatter.yearMonthDay2(listThanhTich[row - 2].ngayThang);
@@ -194,23 +196,30 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
       return Container(
         decoration: BoxDecoration(
           border: Border.all(width: 0.5),
-          color: Colors.white,
+          color: isToday
+            ? Colors.black12
+            : Colors.white,
         ),
         alignment: Alignment.center,
         width: colwidth[col],
         height: 50,
         child: Text(
           text,
-          style: const TextStyle(color: Colors.black),
+          style: isToday
+            ? const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold
+            )
+            : const TextStyle(color: Colors.black),
         ),
       );
     });
   }
 
-  List<Widget> _buildRows(int count) {
+  List<Widget> _buildRows(int count, int start) {
     return List.generate(count, (index) {
       return Row(
-        children: _buildCells2(7, index),
+        children: _buildCells2(7, start+index),
       );
     });
   }
@@ -230,15 +239,20 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
   Future<void> getPullDownListPeople() async {
     await GetPullDownListPeople().getPullDownListPeople(
         onSuccess: (list) async {
+          final box = Hive.box<String>('user');
+          final loginId = box.values.last;
+          List<People>? people = list.where((element) => element.tantoCd==loginId).toList();
       await GetPullDownListMonth().getPullDownListMonth(
-        TANT_CD: list.first.tantoCd,
+        TANT_CD: people.isNotEmpty ? people[0].tantoCd : list.first.tantoCd,
         onSuccess: (listMonthResponse) async {
           setState(
             () {
               listPeople = list;
-              peopleSelected = listPeople.first;
+              peopleSelected = people.isNotEmpty ? people[0] : listPeople.first;
               listMonth = listMonthResponse;
-              monthSelected = listMonth.first;
+              var thisMonth = DateFormat('yyyy/MM').format(DateTime.now());
+              List<Month> months = listMonth.where((element) => element.formatedDate==thisMonth).toList();
+              monthSelected = months.isNotEmpty ? months[0] : listMonth.first;
             },
           );
           if (monthSelected != null) {
@@ -379,20 +393,38 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
             const SizedBox(
               height: 10,
             ),
-            Flexible(
+            // Flexible(
+            //   child: SingleChildScrollView(
+            //     scrollDirection: Axis.horizontal,
+            //     child: Row(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: <Widget>[
+            //         Flexible(
+            //           child: SingleChildScrollView(
+            //             scrollDirection: Axis.vertical,
+            //             child: Column(
+            //               crossAxisAlignment: CrossAxisAlignment.start,
+            //               children: _buildRows(listThanhTich.length, 2),
+            //             ),
+            //           ),
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            Expanded(
               child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Row(
+                scrollDirection: Axis.horizontal,
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Flexible(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: _buildRows(listThanhTich.length + 2),
-                        ),
-                      ),
+                  children: _buildRows(listThanhTich.isNotEmpty ? 2 : 0, 0)+[
+                    Expanded(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Column(
+                            children: _buildRows(listThanhTich.length, 2),
+                          ),
+                        )
                     )
                   ],
                 ),
