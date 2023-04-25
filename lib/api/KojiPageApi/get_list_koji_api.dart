@@ -23,10 +23,18 @@ class GetListKojiApi {
       //     .map<Koji>((e) => e.toKoji()).toList();
       List<Koji> list = [];
       for(TKoji t in tkoji){
-        if((t.homonTantCd1==loginId || t.homonTantCd2==loginId || t.homonTantCd3==loginId) && (t.homonSbt=="02" || t.homonSbt=="2")){
+        if((t.homonTantCd1==loginId || t.homonTantCd2==loginId || t.homonTantCd3==loginId)
+            && t.syuyakuJyucyuId == null
+            && t.delFlg == 0
+            && (t.homonSbt=="02" || t.homonSbt=="2")
+            && t.kojiYMD==DateFormat('yyyy-MM-dd').format(date)){
           list.add(t.toKoji());
         }
-        else if(t.homonTantCd4==loginId && (t.homonSbt=="01" || t.homonSbt=="1")){
+        else if(t.homonTantCd4==loginId
+            && t.syuyakuJyucyuId == null
+            && t.delFlg == 0
+            && (t.homonSbt=="01" || t.homonSbt=="1")
+            && t.sitamiYMD==DateFormat('yyyy-MM-dd').format(date)){
           list.add(t.toSitami());
         }
       }
