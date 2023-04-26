@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:link_life_one/api/inventory/inventory_api.dart';
 import 'package:link_life_one/models/default_inventory.dart';
+import 'package:link_life_one/models/material_model.dart';
 import 'package:link_life_one/models/member_category.dart';
 
 import '../../components/custom_dialog.dart';
@@ -32,6 +33,7 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
   List<MemberCategory> members = [];
   int currentDropdownIndex = -1;
   List<DefaultInventory> inventories = [];
+  // List<int> selectAmounts = [];
   final TextEditingController _jisyaCodeController = TextEditingController();
   final TextEditingController _makerNameController = TextEditingController();
   final TextEditingController _syohinNameController = TextEditingController();
@@ -80,6 +82,7 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
         onSuccess: (inventories) {
           setState(() {
             this.inventories = inventories;
+            // selectAmounts = List.generate(inventories.length, (index) => 0);
           });
           CustomToast.show(context,
               message: 'データリストを取得できました。', backGround: Colors.green);
@@ -260,6 +263,7 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
                         DefaultInventory inventory =
                             inventories.elementAt(currentRadioRow - 1);
                         Navigator.pop(context, inventory);
+                        // Navigator.pop(context, MaterialModel.fromDefaultInventoryWithSuryo(inventory, selectAmounts[currentRadioRow-1]));
                       } else {
                         CustomToast.show(context, message: "一つを選択してください。");
                       }
@@ -457,6 +461,11 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
         children: [
           const Text(''),
           const Spacer(),
+          // Expanded(
+          //   child: Center(
+          //     child: Text('${(row-1)>=selectAmounts.length ? '' : selectAmounts[row-1]}'),
+          //   ),
+          // ),
           Container(
             decoration: const BoxDecoration(
               border: Border(
@@ -470,6 +479,16 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
           Padding(
             padding: const EdgeInsets.only(right: 7, left: 7),
             child: _moreButton(context),
+            // child: _moreButton(
+            //   context,
+            //   int.parse(valueFrom(5, row)),
+            //   (number){
+            //     print('number: $number');
+            //     setState(() {
+            //       selectAmounts[row-1] = number;
+            //     });
+            //   }
+            // ),
           ),
         ],
       );
@@ -510,6 +529,48 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
         return '';
     }
   }
+
+  // Widget _moreButton(BuildContext context, int jussu, Function(int) onChange) {
+  //
+  //   List<PopupMenuEntry<int>> widgets = [];
+  //
+  //   for (var i = 0; i <= jussu; i++) {
+  //     widgets.add(
+  //         PopupMenuItem(
+  //           height: 25,
+  //           padding: const EdgeInsets.only(right: 0, left: 10),
+  //           value: i,
+  //           child: Row(
+  //             mainAxisAlignment: MainAxisAlignment.start,
+  //             children: [
+  //               const SizedBox(
+  //                 width: 14,
+  //               ),
+  //               Text('$i'),
+  //             ],
+  //           ),
+  //         )
+  //     );
+  //     if (i < jussu) {
+  //       widgets.add(const PopupMenuDivider());
+  //     }
+  //   }
+  //
+  //   return PopupMenuButton<int>(
+  //     color: Colors.white,
+  //     padding: EdgeInsets.zero,
+  //     onSelected: (number) {
+  //       onChange(number);
+  //     },
+  //     shape: const RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.all(Radius.circular(12.0))),
+  //     itemBuilder: (context) => widgets,
+  //     offset: const Offset(-25, -10),
+  //     child: Image.asset(
+  //       Assets.icDropdown,
+  //     ),
+  //   );
+  // }
 
   Widget _moreButton(BuildContext context) {
     return PopupMenuButton<int>(

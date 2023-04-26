@@ -9,6 +9,8 @@ import 'package:link_life_one/api/KojiPageApi/create_riyuu.dart';
 import 'package:link_life_one/api/KojiPageApi/get_image.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -53,8 +55,16 @@ class _ShashinTeishuutsuGamenPage2State
     } catch (e) {}
   }
 
+  bool isOnline = true;
+
+  _checkOnline()async{
+    isOnline = await LocalStorageNotifier.isOnline();
+    setState((){});
+  }
+
   @override
   void initState() {
+    _checkOnline();
     getListImage();
     super.initState();
   }
@@ -161,6 +171,7 @@ class _ShashinTeishuutsuGamenPage2State
                     runSpacing: 5.0,
                     children: [
                       ...selectedImages.map((e) {
+                        print('e: $e');
                         return SizedBox(
                           width: (imageContainerHeight / 4) - 5,
                           height: (imageContainerHeight / 4) - 5,
@@ -172,7 +183,7 @@ class _ShashinTeishuutsuGamenPage2State
                                           File(e.path),
                                           fit: BoxFit.cover,
                                         )
-                                      : CachedNetworkImage(
+                                      : e['FILEPATH']!=null ? CachedNetworkImage(
                                           imageUrl: e['FILEPATH'],
                                           placeholder: (context, url) =>
                                               const Center(
@@ -185,8 +196,13 @@ class _ShashinTeishuutsuGamenPage2State
                                             ),
                                           ),
                                           errorWidget: (context, url, error) =>
-                                              const Icon(Icons.error),
-                                        )),
+                                          !isOnline  && LocalStorageNotifier.isTodayDownload()
+                                              ? Image.file(
+                                                File(e['FILEPATH']),
+                                                fit: BoxFit.cover,
+                                              )
+                                              : const Icon(Icons.error),
+                                        ): const Icon(Icons.error)),
                               Visibility(
                                 visible: e.runtimeType == XFile,
                                 child: Positioned(

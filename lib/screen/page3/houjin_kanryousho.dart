@@ -7,6 +7,8 @@ import 'package:link_life_one/api/KojiPageApi/hou_jin_kan_ryo_sho_api.dart';
 import 'package:link_life_one/api/KojiPageApi/request_corporate_completion.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/local_storage_services/local_storage_services.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 import 'package:link_life_one/shared/assets.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,9 +36,17 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
   List<dynamic> listImage = [];
   final ImagePicker _picker = ImagePicker();
 
+  bool isOnline = true;
+
+  _checkOnline()async{
+    isOnline = await LocalStorageNotifier.isOnline();
+    setState((){});
+  }
+
   @override
   void initState() {
     super.initState();
+    _checkOnline();
     getHouJin();
   }
 
@@ -58,7 +68,10 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
             }
           });
         }
-        listImage = result['FILE'] ?? [];
+        for(var f in result['FILE']){
+          if(f!=null) listImage.add(f);
+        }
+        // listImage = (result['FILE'] ?? []);
       },
     );
   }
@@ -185,15 +198,24 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                                             ? null
                                             : BoxFit.fill,
                                       )
-                                    : FadeInImage(
+                                    : listImage[idx]['FILEPATH']!=null ? FadeInImage(
                                         placeholder: Assets.blankImage,
                                         image: NetworkImage(
                                             listImage[idx]['FILEPATH']),
                                         imageErrorBuilder:
                                             (context, error, stackTrace) {
-                                          return const Icon(Icons.error);
+                                          return !isOnline  && LocalStorageNotifier.isTodayDownload()
+                                            ? Image.file(
+                                              File(listImage[idx]['FILEPATH']),
+                                              width: size.width - 50,
+                                              height: size.height * 2 / 5,
+                                              fit: size.width > size.height
+                                                  ? null
+                                                  : BoxFit.fill,
+                                            )
+                                            : const Icon(Icons.error);
                                         },
-                                      ));
+                                      ) : const Icon(Icons.error));
                           },
                         ),
                       ),

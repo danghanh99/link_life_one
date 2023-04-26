@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/base/rest_api.dart';
@@ -148,14 +150,14 @@ class MaterialAPI {
 
   Future<void> insertMaterialTakeBackById({
     required String syukkoId,
-    required int suryo,
+    required int? suryo,
     required Function(dynamic) onSuccess,
     required Function onFailed,
   }) async {
     String urlEndpoint = Constant.insertMaterialTakeBackById;
 
     final Response response = await RestAPI.shared.postDataWithFormData(
-        urlEndpoint, {'SYUKKO_ID': syukkoId, 'SURYO': suryo});
+        urlEndpoint, {'SYUKKO_ID': syukkoId, 'SURYO': suryo??''});
 
     if (response.statusCode == 200) {
       onSuccess(response);
@@ -178,12 +180,13 @@ class MaterialAPI {
         await RestAPI.shared.postDataWithFormData(urlEndpoint, itemJson);
 
     if (response.statusCode == 200) {
-      List<dynamic> data = response.data;
-      String message = '';
-      if (data.isNotEmpty) {
-        message = data.first['message'];
-      }
-      onSuccess(message);
+      // print('res data: ${response.data}');
+      // List<dynamic> data = json.decode(response.data);
+      // String message = '';
+      // if (data.isNotEmpty) {
+      //   message = data.first['message'];
+      // }
+      onSuccess('');
     } else {
       onFailed();
     }

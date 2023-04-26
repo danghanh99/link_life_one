@@ -46,6 +46,10 @@ class KojiHoukokuModel extends HiveObject {
   @HiveField(19)
   String? tenpoCd;
 
+  bool isChangeBefore = false;
+  bool isChangeAfter = false;
+  bool isAddOthers = false;
+
   KojiHoukokuModel(
       {this.jyucyuMsaiId,
       this.jyucyuMsaiIdKikan,

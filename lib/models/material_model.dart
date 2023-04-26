@@ -59,6 +59,15 @@ class MaterialModel {
     suryo: ''
   );
 
+  factory MaterialModel.fromDefaultInventoryWithSuryo(DefaultInventory inventory, int suryo) => MaterialModel(
+      ctgoryName: inventory.categoryName,
+      makerName: inventory.makerName,
+      jisyaCode: inventory.jisyaCode,
+      syoshinName: inventory.syoshinName,
+      jissu: inventory.jissu,
+      suryo: '$suryo'
+  );
+
   Map<String, dynamic> toJson() => {
     'SYUKKO_ID': syukkoId ?? '',
     'CTGORY_CD': ctgoryCode ?? '',

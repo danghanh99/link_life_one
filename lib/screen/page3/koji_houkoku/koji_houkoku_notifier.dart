@@ -49,6 +49,7 @@ class KojiHoukokuNotifier extends ChangeNotifier {
           }
 
           List pulldownList = res['PULLDOWN'];
+          print('res pulldown: ${res['PULLDOWN']}');
 
           if (pulldownList.isNotEmpty) {
             for (var i = 0; i < listKojiHoukoku.length; i++) {
@@ -90,7 +91,7 @@ class KojiHoukokuNotifier extends ChangeNotifier {
   String getKbnmsaiName(String kbnmsaiCode) {
     String name = '';
     if (kbnmsaiCode.isNotEmpty) {
-      Map<String, dynamic> selectedElement = listPullDown.firstWhere(
+      Map<String, dynamic>? selectedElement = listPullDown.firstWhere(
           (element) => element['KBNMSAI_CD'] == kbnmsaiCode,
           orElse: () => null);
       if (selectedElement != null) {
@@ -106,6 +107,7 @@ class KojiHoukokuNotifier extends ChangeNotifier {
       List<XFile> files = await picker.pickMultiImage();
       if (files.isNotEmpty) {
         if (index != null) {
+          listKojiHoukoku[index].isAddOthers = true;
           listKojiHoukoku
               .elementAt(index)
               .otherPhotoFolderPath
@@ -126,6 +128,7 @@ class KojiHoukokuNotifier extends ChangeNotifier {
       XFile? file = await picker.pickImage(source: ImageSource.gallery);
       if (file != null) {
         if (index != null) {
+          listKojiHoukoku[index].isChangeBefore = true;
           listKojiHoukoku.elementAt(index).befSekiPhotoFilePath = file.path;
         } else {
           befImage = file;
@@ -141,6 +144,7 @@ class KojiHoukokuNotifier extends ChangeNotifier {
       XFile? file = await picker.pickImage(source: ImageSource.gallery);
       if (file != null) {
         if (index != null) {
+          listKojiHoukoku[index].isChangeAfter = true;
           listKojiHoukoku.elementAt(index).aftSekoPhotoFilePath = file.path;
         } else {
           aftImage = file;

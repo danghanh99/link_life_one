@@ -112,11 +112,9 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                       SizedBox(
                         height: 40.sp,
                       ),
-                      widget.SINGLE_SUMMARIZE == "0" ||
-                              widget.SINGLE_SUMMARIZE == "00"
+                      widget.SINGLE_SUMMARIZE == "0" || widget.SINGLE_SUMMARIZE == "00"
                           ? Row(
-                              crossAxisAlignment: CrossAxisAlignment
-                                  .start, // k gop: 1 doi tuong - gom nhieu item
+                              crossAxisAlignment: CrossAxisAlignment.start, // k gop: 1 doi tuong - gom nhieu item
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 leftSide(notifier),
@@ -126,8 +124,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                             )
                           : ListView.separated(
                               physics: const NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis
-                                  .vertical, // gop lai: nhieu doi tuong - 1 doi tuong  = 1 item
+                              scrollDirection: Axis.vertical, // gop lai: nhieu doi tuong - 1 doi tuong  = 1 item
                               shrinkWrap: true,
                               itemCount: notifier.listKojiHoukoku.length,
                               itemBuilder: (context, index) {
@@ -188,6 +185,9 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
 
   Widget rightSide(
       KojiHoukokuNotifier notifier, KojiHoukokuModel? item, int? index) {
+    print('before item path: ${item?.befSekiPhotoFilePath}');
+    print('after item path: ${item?.aftSekoPhotoFilePath}');
+    print('others items: ${item?.otherPhotoFolderPath}');
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
