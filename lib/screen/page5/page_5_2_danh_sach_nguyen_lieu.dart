@@ -665,28 +665,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
               ),
               child: TextButton(
                 onPressed: () {
-                  if (currentRadioRow > 0 &&
-                      currentRadioRow <= materials.length) {
-                    MaterialModel material =
-                        materials.elementAt(currentRadioRow - 1);
-
-                    int quantity = 0;
-
-                    String text = material.suryo ?? '0';
-                    if (text.isEmpty) {
-                      quantity = 0;
-                    } else {
-                      quantity = int.parse(text);
-                    }
-
-                    if (quantity == 0) {
-                      showAlertEmptyQuantity();
-                    } else {
-                      registerMaterialItem(material);
-                    }
-                  } else {
-                    CustomToast.show(context, message: "一つを選択してください。");
-                  }
+                  _saveData(false);
                 },
                 child: const Text(
                   '持ち出し登録',
@@ -706,6 +685,31 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
         ),
       ),
     );
+  }
+
+  _saveData(isBack){
+    if (currentRadioRow > 0 &&
+        currentRadioRow <= materials.length) {
+      MaterialModel material =
+      materials.elementAt(currentRadioRow - 1);
+
+      int quantity = 0;
+
+      String text = material.suryo ?? '0';
+      if (text.isEmpty) {
+        quantity = 0;
+      } else {
+        quantity = int.parse(text);
+      }
+
+      if (quantity == 0) {
+        if(!isBack) showAlertEmptyQuantity();
+      } else {
+        registerMaterialItem(material);
+      }
+    } else {
+      if(!isBack) CustomToast.show(context, message: "一つを選択してください。");
+    }
   }
 
   // Widget _dropDownButton(BuildContext context, String value) {
@@ -784,14 +788,72 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
 
   Widget header() {
     return CustomHeaderWidget(onBack: () async {
-      MaterialAPI.shared.onBackMaterial(
-          items: materials,
-          onSuccess: () {
-            Navigator.pop(context);
-          },
-          onFailed: () {
-            Navigator.pop(context);
-          });
+      showDialog(
+        context: context,
+        builder: (context) {
+          return SizedBox(
+            width: double.infinity,
+            child: CupertinoAlertDialog(
+              title: const Text(
+                "",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              content: const Padding(
+                padding: EdgeInsets.only(top: 15),
+                child: Text(
+                  "変更されたデータを保存しますか。",
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 24, 23, 23),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      _saveData(true);
+                      MaterialAPI.shared.onBackMaterial(
+                          items: materials,
+                          onSuccess: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                          onFailed: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          });
+                    },
+                    child: const Text(
+                      'はい',
+                      style: TextStyle(
+                        color: Color(0xFFEB5757),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    )),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'いいえ',
+                    style: TextStyle(
+                      color: Color(0xFF007AFF),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        },
+      );
     });
   }
 
