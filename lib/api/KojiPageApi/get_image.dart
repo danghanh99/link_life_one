@@ -32,7 +32,9 @@ class GetImage {
       required String SHITAMI_MENU,
       required Function() onSuccess}) async {
 
-    if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
+    bool isOnline = await LocalStorageNotifier.isOnline();
+
+    if(!isOnline && LocalStorageNotifier.isTodayDownload()){
       return _notSuccess(
           jyucyuId: JYUCYU_ID,
           kojiSt: KOJI_ST,

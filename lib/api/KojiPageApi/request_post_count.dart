@@ -39,7 +39,9 @@ class RequestPostCount {
     final box = await Hive.openBox<String>('user');
     String loginID = box.values.last;
 
-    if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
+    bool isOnline = await LocalStorageNotifier.isOnline();
+
+    if(!isOnline && LocalStorageNotifier.isTodayDownload()){
       return _notSuccess(
           ymd: DateFormat(('yyyy-MM-dd')).format(date),
           loginId: loginID,

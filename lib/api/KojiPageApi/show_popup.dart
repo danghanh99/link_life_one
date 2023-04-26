@@ -31,7 +31,9 @@ class ShowPopUp {
       required String JYUCYU_ID,
       required Function(int count) onSuccess}) async {
 
-    if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
+    bool isOnline = await LocalStorageNotifier.isOnline();
+
+    if(!isOnline && LocalStorageNotifier.isTodayDownload()){
       print('offline mode');
       return _notSuccess(
           date: YMD,

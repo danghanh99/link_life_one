@@ -76,7 +76,10 @@ class GetListKojiApi {
     final box = Hive.box<String>('user');
     final id = box.values.last;
 
-    if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
+    bool isOnline = await LocalStorageNotifier.isOnline();
+    print('isOnline: $isOnline');
+    if(!isOnline && LocalStorageNotifier.isTodayDownload()){
+      print('get offline');
       return _notSuccess(
           date: date2,
           loginId: id,

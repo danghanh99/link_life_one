@@ -61,19 +61,19 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
 
   int currentPage = 0;
 
-  // bool isTodayDataDownloaded = false;
-
   // String SINGLE_SUMMARIZE = "01";
 
-  // _checkDownload()async{
-  //   isTodayDataDownloaded = await LocalStorageServices.isTodayDataDownloaded();
-  //   setState((){});
-  // }
+  bool isOnline = true;
+
+  _checkOnline()async{
+    isOnline = await LocalStorageNotifier.isOnline();
+    setState((){});
+  }
 
   @override
   void initState() {
     // SINGLE_SUMMARIZE = widget.isSendAList ? "02" : "01";
-    // _checkDownload();
+    _checkOnline();
     callGetListPdf();
     callGetShashinKakunin();
     super.initState();
@@ -189,7 +189,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
   }
   
   Widget _showLocalPDFOrError(e){
-    return LocalStorageNotifier.isOfflineMode  && LocalStorageNotifier.isChoosenToday
+    return !isOnline  && LocalStorageNotifier.isTodayDownload()
       ? const PDF(
         swipeHorizontal: false,
         enableSwipe: true,

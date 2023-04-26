@@ -39,7 +39,9 @@ class PostTirasiUpdateApi {
     required Function onSuccess,
   }) async {
 
-    if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
+    bool isOnline = await LocalStorageNotifier.isOnline();
+
+    if(!isOnline && LocalStorageNotifier.isTodayDownload()){
       return _notSuccess(
           ymd: YMD,
           loginId: LOGIN_ID,

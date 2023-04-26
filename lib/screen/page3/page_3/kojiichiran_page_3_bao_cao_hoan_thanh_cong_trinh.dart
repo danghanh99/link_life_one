@@ -56,7 +56,6 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
   @override
   void initState() {
     date = widget.initialDate ?? DateTime.now();
-    LocalStorageNotifier.changeDate(date);
     super.initState();
     getListKojiApi = callGetListKojiApi(inputDate: date);
     callGetTirasi(inputDate: date);
@@ -720,7 +719,6 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                               await context.read<LocalStorageNotifier>().downloadData();
                               Navigator.pop(dialogContext);
                               setState(() {
-                                LocalStorageNotifier.changeDate(date);
                                 callGetListKojiApi(inputDate: date);
                                 callGetTirasi(inputDate: date);
                               });
@@ -761,7 +759,6 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                                       }
                                     );
                                     setState(() {
-                                      LocalStorageNotifier.changeDate(date);
                                       callGetListKojiApi(inputDate: date);
                                       callGetTirasi(inputDate: date);
                                     });
@@ -799,7 +796,6 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
       onTap: () {
         setState(() {
           date = date.add(Duration(days: -index));
-          LocalStorageNotifier.changeDate(date);
           callGetListKojiApi(inputDate: date);
           callGetTirasi(inputDate: date);
         });
@@ -897,7 +893,6 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
       onTap: () {
         setState(() {
           date = date.add(Duration(days: index));
-          LocalStorageNotifier.changeDate(date);
           callGetListKojiApi(inputDate: date);
           callGetTirasi(inputDate: date);
         });

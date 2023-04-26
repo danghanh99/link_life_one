@@ -30,17 +30,18 @@ class ShashinKakuninPage extends StatefulWidget {
 
 class _ShashinKakuninPageState extends State<ShashinKakuninPage> {
   // String url = "${Constant.url}";
-  // late bool isTodayDataDownloaded;
   List<dynamic> listPhotos = [];
 
-  // _checkDownload()async{
-  //   isTodayDataDownloaded = await LocalStorageServices.isTodayDataDownloaded();
-  //   setState((){});
-  // }
+  bool isOnline = true;
+
+  _checkOnline()async{
+    isOnline = await LocalStorageNotifier.isOnline();
+    setState((){});
+  }
 
   @override
   void initState(){
-    // _checkDownload();
+    _checkOnline();
     if (widget.listPhotos.isNotEmpty) {
       listPhotos = widget.listPhotos;
     } else {
@@ -159,7 +160,7 @@ class _ShashinKakuninPageState extends State<ShashinKakuninPage> {
                               ),
                             ),
                           ),
-                          errorWidget: (context, url, error) => LocalStorageNotifier.isOfflineMode  && LocalStorageNotifier.isChoosenToday
+                          errorWidget: (context, url, error) => !isOnline  && LocalStorageNotifier.isTodayDownload()
                             ? Image.file(File(path))
                             : const Icon(Icons.error),
                         ),

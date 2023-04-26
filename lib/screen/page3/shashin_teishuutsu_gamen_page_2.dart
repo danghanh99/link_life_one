@@ -44,8 +44,6 @@ class _ShashinTeishuutsuGamenPage2State
   final carouselController = CarouselController();
   List<dynamic> selectedImages = [];
 
-  // bool isTodayDownloaded = false;
-
   void selectImage() async {
     try {
       List<XFile> files = await _picker.pickMultiImage();
@@ -57,14 +55,16 @@ class _ShashinTeishuutsuGamenPage2State
     } catch (e) {}
   }
 
-  // _checkDownload()async{
-  //   isTodayDownloaded = await LocalStorageServices.isTodayDataDownloaded();
-  //   setState((){});
-  // }
+  bool isOnline = true;
+
+  _checkOnline()async{
+    isOnline = await LocalStorageNotifier.isOnline();
+    setState((){});
+  }
 
   @override
   void initState() {
-    // _checkDownload();
+    _checkOnline();
     getListImage();
     super.initState();
   }
@@ -196,7 +196,7 @@ class _ShashinTeishuutsuGamenPage2State
                                             ),
                                           ),
                                           errorWidget: (context, url, error) =>
-                                              LocalStorageNotifier.isOfflineMode  && LocalStorageNotifier.isChoosenToday
+                                          !isOnline  && LocalStorageNotifier.isTodayDownload()
                                               ? Image.file(
                                                 File(e['FILEPATH']),
                                                 fit: BoxFit.cover,

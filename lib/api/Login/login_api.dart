@@ -18,7 +18,9 @@ class LoginApi {
 
     late http.Response response;
 
-    if(LocalStorageNotifier.isOfflineMode){
+    bool isOnline = await LocalStorageNotifier.isOnline();
+
+    if(!isOnline && LocalStorageNotifier.isTodayDownload()){
       print('from local');
       response = await LocalStorageServices().localLogin(id: id, pass: password);
     }

@@ -24,7 +24,9 @@ class GetRiyuu {
 
   Future<dynamic> getRiyuu({required String JYUCYU_ID, required Function() onSuccess}) async {
 
-    if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
+    bool isOnline = await LocalStorageNotifier.isOnline();
+
+    if(!isOnline && LocalStorageNotifier.isTodayDownload()){
       return _notSuccess(jyucyuId: JYUCYU_ID, onSuccess: onSuccess);
     }
 

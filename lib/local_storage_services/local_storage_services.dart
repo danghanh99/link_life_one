@@ -374,7 +374,7 @@ class LocalStorageServices{
     int count = 0;
     var tkoji = await LocalStorageBase.getValues(boxName: boxKojiName);
     for(TKoji t in tkoji){
-      if(t.kojiYMD==YMD && t.setsakiAddress==setsakiAddress && t.jyucyuId!=jyucyuId && t.delFlg==0) count++;
+      if(t.kojiYMD==DateFormat('yyyy-MM-dd').format(YMD) && t.setsakiAddress==setsakiAddress && t.jyucyuId!=jyucyuId && t.delFlg==0) count++;
     }
     return count;
   }

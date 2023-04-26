@@ -36,17 +36,17 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
   List<dynamic> listImage = [];
   final ImagePicker _picker = ImagePicker();
 
-  // bool isTodayDownloaded = false;
+  bool isOnline = true;
 
-  // _checkDownload()async{
-  //   isTodayDownloaded = await LocalStorageServices.isTodayDataDownloaded();
-  //   setState((){});
-  // }
+  _checkOnline()async{
+    isOnline = await LocalStorageNotifier.isOnline();
+    setState((){});
+  }
 
   @override
   void initState() {
     super.initState();
-    // _checkDownload();
+    _checkOnline();
     getHouJin();
   }
 
@@ -204,7 +204,7 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                                             listImage[idx]['FILEPATH']),
                                         imageErrorBuilder:
                                             (context, error, stackTrace) {
-                                          return LocalStorageNotifier.isOfflineMode  && LocalStorageNotifier.isChoosenToday
+                                          return !isOnline  && LocalStorageNotifier.isTodayDownload()
                                             ? Image.file(
                                               File(listImage[idx]['FILEPATH']),
                                               width: size.width - 50,

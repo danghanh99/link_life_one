@@ -27,7 +27,9 @@ class GetListPdf {
   Future<List<PdfFile>> getListPdf(
       {required Koji koji, required String SINGLE_SUMMARIZE}) async {
 
-    if(LocalStorageNotifier.isOfflineMode && LocalStorageNotifier.isChoosenToday){
+    bool isOnline = await LocalStorageNotifier.isOnline();
+
+    if(!isOnline && LocalStorageNotifier.isTodayDownload()){
       return _notSuccess(
           jyucyuId: koji.jyucyuId,
           homonSbt: koji.homonSbt
