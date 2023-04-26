@@ -150,14 +150,14 @@ class MaterialAPI {
 
   Future<void> insertMaterialTakeBackById({
     required String syukkoId,
-    required int suryo,
+    required int? suryo,
     required Function(dynamic) onSuccess,
     required Function onFailed,
   }) async {
     String urlEndpoint = Constant.insertMaterialTakeBackById;
 
     final Response response = await RestAPI.shared.postDataWithFormData(
-        urlEndpoint, {'SYUKKO_ID': syukkoId, 'SURYO': suryo});
+        urlEndpoint, {'SYUKKO_ID': syukkoId, 'SURYO': suryo??''});
 
     if (response.statusCode == 200) {
       onSuccess(response);
