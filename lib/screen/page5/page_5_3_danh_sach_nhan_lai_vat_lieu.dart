@@ -100,10 +100,10 @@ class _Page53DanhSachNhanLaiVatLieuState
                   }
                   MaterialTakeBackModel material =
                       materials.elementAt(currentRadioRow - 1);
-
+                  print('suryo: ${textControllers[material.jisyaCode]!.text}');
                   MaterialAPI.shared.insertMaterialTakeBackById(
                       syukkoId: material.syukkoId ?? '',
-                      suryo: int.tryParse(material.suryo ?? '0') ?? 0,
+                      suryo: int.tryParse(textControllers[material.jisyaCode]!.text),//int.tryParse(material.suryo ?? '0') ?? 0,
                       onSuccess: (result) {
                         CustomToast.show(context,
                             message: '画面で選択した項目を登録できました。',
