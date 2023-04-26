@@ -155,26 +155,26 @@ class _Page53DanhSachNhanLaiVatLieuState
     );
   }
 
-  List<Widget> _buildCells(int count) {
-    return List.generate(
-      count,
-      (index) => Container(
-        decoration: BoxDecoration(
-          border: Border.all(),
-          color: Colors.black,
-        ),
-        alignment: Alignment.center,
-        width: 50,
-        height: 50,
-        // color: Colors.white,
-        margin: const EdgeInsets.all(1.0),
-        child: Text(
-          "col ${index + 1}",
-          style: const TextStyle(color: Colors.white),
-        ),
-      ),
-    );
-  }
+  // List<Widget> _buildCells(int count) {
+  //   return List.generate(
+  //     count,
+  //     (index) => Container(
+  //       decoration: BoxDecoration(
+  //         border: Border.all(),
+  //         color: Colors.black,
+  //       ),
+  //       alignment: Alignment.center,
+  //       width: 50,
+  //       height: 50,
+  //       // color: Colors.white,
+  //       margin: const EdgeInsets.all(1.0),
+  //       child: Text(
+  //         "col ${index + 1}",
+  //         style: const TextStyle(color: Colors.white),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   List<Widget> _buildCells2(int count, int row) {
     List<String> colNames = [
@@ -183,7 +183,7 @@ class _Page53DanhSachNhanLaiVatLieuState
       'メーカー',
       '自社コード',
       '商品名',
-      '持出 数量',
+      '持ち出し数量',
       '持ち戻り数量'
     ];
 
@@ -225,7 +225,8 @@ class _Page53DanhSachNhanLaiVatLieuState
           border: Border.all(width: 0.5),
           color: Colors.white,
         ),
-        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        alignment: col==1 || col==2 || col==3 || col==4 ? Alignment.centerLeft : Alignment.center,
         width: colwidth[col],
         height: 50,
         child: contentTable(col, row),
@@ -233,62 +234,62 @@ class _Page53DanhSachNhanLaiVatLieuState
     });
   }
 
-  Widget _moreButton(BuildContext context) {
-    return PopupMenuButton<int>(
-      color: Colors.white,
-      padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {
-          // Navigator.of(context).push(MaterialPageRoute(
-          //     builder: (context) => EditThemePage(
-          //           index: index,
-          //           meditationThemeDTO: meditationThemeDTO,
-          //         )));
-        }
-        if (number == 2) {}
-      },
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "Dropdown item",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "Dropdown item",
-              ),
-            ],
-          ),
-        ),
-      ],
-      offset: const Offset(-25, -10),
-      child: Image.asset(
-        Assets.icDropdown,
-      ),
-    );
-  }
+  // Widget _moreButton(BuildContext context) {
+  //   return PopupMenuButton<int>(
+  //     color: Colors.white,
+  //     padding: EdgeInsets.zero,
+  //     onSelected: (number) {
+  //       if (number == 1) {
+  //         // Navigator.of(context).push(MaterialPageRoute(
+  //         //     builder: (context) => EditThemePage(
+  //         //           index: index,
+  //         //           meditationThemeDTO: meditationThemeDTO,
+  //         //         )));
+  //       }
+  //       if (number == 2) {}
+  //     },
+  //     shape: const RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.all(Radius.circular(12.0))),
+  //     itemBuilder: (context) => [
+  //       PopupMenuItem(
+  //         height: 25,
+  //         padding: const EdgeInsets.only(right: 0, left: 10),
+  //         value: 1,
+  //         child: Row(
+  //           children: const [
+  //             SizedBox(
+  //               width: 14,
+  //             ),
+  //             Text(
+  //               "Dropdown item",
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //       const PopupMenuDivider(),
+  //       PopupMenuItem(
+  //         height: 25,
+  //         padding: const EdgeInsets.only(right: 0, left: 10),
+  //         value: 2,
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.start,
+  //           children: const [
+  //             SizedBox(
+  //               width: 14,
+  //             ),
+  //             Text(
+  //               "Dropdown item",
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ],
+  //     offset: const Offset(-25, -10),
+  //     child: Image.asset(
+  //       Assets.icDropdown,
+  //     ),
+  //   );
+  // }
 
   Widget contentTable(int col, int row) {
     if (col == 6) {
@@ -296,7 +297,8 @@ class _Page53DanhSachNhanLaiVatLieuState
       TextEditingController? textController =
           textControllers[material.jisyaCode];
       if (textController == null) {
-        textController = TextEditingController(text: material.suryo ?? '');
+        // textController = TextEditingController(text: material.suryo ?? '');
+        textController = TextEditingController();
         textControllers[material.jisyaCode ?? ''] = textController;
       }
       OutlineInputBorder borderOutline = const OutlineInputBorder(
@@ -310,14 +312,14 @@ class _Page53DanhSachNhanLaiVatLieuState
           child: TextField(
             controller: textController,
             decoration: InputDecoration(
-                hintText: '0',
+                // hintText: '0',
                 contentPadding: EdgeInsets.zero,
                 enabledBorder: borderOutline,
                 focusedBorder: borderOutline,
                 disabledBorder: borderOutline),
             textAlign: TextAlign.center,
             onChanged: (text) {
-              materials.elementAt(row - 1).suryo = text;
+              // materials.elementAt(row - 1).suryo = text;
             },
             keyboardType: TextInputType.number,
             inputFormatters: [
@@ -361,6 +363,8 @@ class _Page53DanhSachNhanLaiVatLieuState
         return material.jisyaCode ?? '';
       case 4:
         return material.syohinName ?? '';
+      case 5:
+        return material.suryo ?? '';
       default:
         return '';
     }
