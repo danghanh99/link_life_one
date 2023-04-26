@@ -86,8 +86,24 @@ class InventoryAPI {
 
     if (response.statusCode == 200) {
       List<dynamic> data = response.data;
-      List<DefaultInventory> inventories =
-          data.map((e) => DefaultInventory.fromJson(e)).toList();
+
+      List<DefaultInventory> inventories = [];
+      for(var e in data){
+        DefaultInventory inventory = DefaultInventory.fromJson(e);
+        bool isJisyaExist = false;
+        for(DefaultInventory prevInventory in inventories){
+          if(prevInventory.jisyaCode==inventory.jisyaCode){
+            isJisyaExist = true;
+            prevInventory.jissu = '${int.parse(prevInventory.jissu??'0') + int.parse(inventory.jissu??'0')}';
+          }
+        }
+        if(!isJisyaExist) {
+          inventories.add(inventory);
+        }
+      }
+
+      // List<DefaultInventory> inventories =
+      //     data.map((e) => DefaultInventory.fromJson(e)).toList();
       onSuccess(inventories);
     } else {
       onFailed();

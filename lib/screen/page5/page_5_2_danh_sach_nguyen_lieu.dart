@@ -35,26 +35,26 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
   Barcode? result;
   bool isShowScandQR = false;
 
-  List<Widget> _buildCells(int count) {
-    return List.generate(
-      count,
-      (index) => Container(
-        decoration: BoxDecoration(
-          border: Border.all(),
-          color: Colors.black,
-        ),
-        alignment: Alignment.center,
-        width: 50,
-        height: 50,
-        // color: Colors.white,
-        margin: const EdgeInsets.all(1.0),
-        child: Text(
-          "col ${index + 1}",
-          style: const TextStyle(color: Colors.white),
-        ),
-      ),
-    );
-  }
+  // List<Widget> _buildCells(int count) {
+  //   return List.generate(
+  //     count,
+  //     (index) => Container(
+  //       decoration: BoxDecoration(
+  //         border: Border.all(),
+  //         color: Colors.black,
+  //       ),
+  //       alignment: Alignment.center,
+  //       width: 50,
+  //       height: 50,
+  //       // color: Colors.white,
+  //       margin: const EdgeInsets.all(1.0),
+  //       child: Text(
+  //         "col ${index + 1}",
+  //         style: const TextStyle(color: Colors.white),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   List<Widget> _buildCells2(int count, int row) {
     List<String> colNames = [
@@ -115,7 +115,8 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
           border: Border.all(width: 0.5),
           color: Colors.white,
         ),
-        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        alignment: col==1 || col==2 || col==3 || col==4 ? Alignment.centerLeft : Alignment.center,
         width: colwidth[col],
         height: 50,
         child: contentTable(col, row),
@@ -123,48 +124,125 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     });
   }
 
+  Widget _moreButton(BuildContext context, int jussu, Function(int) onChange) {
+
+    List<PopupMenuEntry<int>> widgets = [];
+
+    for (var i = 0; i <= jussu; i++) {
+      widgets.add(
+          PopupMenuItem(
+            height: 25,
+            padding: const EdgeInsets.only(right: 0, left: 10),
+            value: i,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  width: 14,
+                ),
+                Text('$i'),
+              ],
+            ),
+          )
+      );
+      if (i < jussu) {
+        widgets.add(const PopupMenuDivider());
+      }
+    }
+
+    return PopupMenuButton<int>(
+      color: Colors.white,
+      padding: EdgeInsets.zero,
+      onSelected: (number) {
+        onChange(number);
+      },
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0))),
+      itemBuilder: (context) => widgets,
+      offset: const Offset(-25, -10),
+      child: Image.asset(
+        Assets.icDropdown,
+      ),
+    );
+  }
+
   Widget contentTable(int col, int row) {
     if (col == 6) {
-      MaterialModel material = materials.elementAt(row - 1);
-      TextEditingController? textController =
-          textControllers[material.jisyaCode];
-      if (textController == null) {
-        textController = TextEditingController(text: material.suryo ?? '');
-        textControllers[material.syukkoId ?? material.jisyaCode ?? ''] =
-            textController;
-      }
-      OutlineInputBorder borderOutline = const OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(0)),
-        borderSide: BorderSide(color: AppColors.BORDER, width: 1),
-      );
-      return Container(
-        height: 80,
-        alignment: Alignment.center,
-        child: Center(
-          child: TextField(
-            controller: textController,
-            decoration: InputDecoration(
-                hintText: '0',
-                contentPadding: EdgeInsets.zero,
-                enabledBorder: borderOutline,
-                focusedBorder: borderOutline,
-                disabledBorder: borderOutline),
-            textAlign: TextAlign.center,
-            onChanged: (text) {
-              materials.elementAt(row - 1).suryo = text;
-            },
-            keyboardType: TextInputType.number,
-            inputFormatters: [
-              // for below version 2 use this
-              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-              // for version 2 and greater youcan also use this
-              FilteringTextInputFormatter.digitsOnly,
-            ],
-            maxLines: 1,
+      return Row(
+        children: [
+          Expanded(
+            child: Center(
+              child: Text('${materials[row-1].suryo}'),
+            ),
           ),
-        ),
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                left: BorderSide(
+                  color: Colors.black,
+                  width: 0.7,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 7, left: 7),
+            child: _moreButton(
+              context,
+              int.parse(valueFrom(5, row)),
+              (number){
+                print('number: $number');
+                setState(() {
+                  materials[row-1].suryo = '$number';
+                });
+              }
+            ),
+          ),
+        ],
       );
     }
+    // if (col == 6) {
+    //   MaterialModel material = materials.elementAt(row - 1);
+    //   TextEditingController? textController =
+    //       textControllers[material.jisyaCode];
+    //   if (textController == null) {
+    //     textController = TextEditingController(text: material.suryo ?? '');
+    //     textControllers[material.syukkoId ?? material.jisyaCode ?? ''] =
+    //         textController;
+    //   }
+    //   // textController.text = material.suryo ?? '0';
+    //   OutlineInputBorder borderOutline = const OutlineInputBorder(
+    //     borderRadius: BorderRadius.all(Radius.circular(0)),
+    //     borderSide: BorderSide(color: AppColors.BORDER, width: 1),
+    //   );
+    //   return Container(
+    //     height: 80,
+    //     alignment: Alignment.center,
+    //     child: Center(
+    //       child: TextField(
+    //         controller: textController,
+    //         decoration: InputDecoration(
+    //             hintText: '0',
+    //             contentPadding: EdgeInsets.zero,
+    //             enabledBorder: borderOutline,
+    //             focusedBorder: borderOutline,
+    //             disabledBorder: borderOutline),
+    //         textAlign: TextAlign.center,
+    //         onChanged: (text) {
+    //           materials.elementAt(row - 1).suryo = text;
+    //         },
+    //         keyboardType: TextInputType.number,
+    //         inputFormatters: [
+    //           // for below version 2 use this
+    //           FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+    //           // for version 2 and greater youcan also use this
+    //           FilteringTextInputFormatter.digitsOnly,
+    //         ],
+    //         maxLines: 1,
+    //       ),
+    //     ),
+    //   );
+    // }
     return col == 0
         ? RadioListTile(
             value: row,
@@ -440,8 +518,13 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                             onQRViewCreated: (controller) {
                               this.controller = controller;
                               controller.scannedDataStream.listen((scanData) {
-                                String zaikoId = scanData.code ?? '';
-                                getDataQRById(zaikoId);
+                                print('scanData: $scanData}');
+                                print('scanDataCode: ${scanData.code}');
+                                print('scanDataFormat: ${scanData.format}');
+                                print('scanDataRawByte: ${scanData.rawBytes}');
+                                print('scanDataString: ${scanData.toString()}');
+                                // print((scanData.code!).split(';')[1]);
+                                getDataQRById(scanData.code!);
                                 setState(() {
                                   result = scanData;
                                   isShowScandQR = false;
@@ -493,23 +576,30 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                   ),
                   child: TextButton(
                     onPressed: () async {
+                      // MaterialModel? material = await Navigator.push(
                       DefaultInventory? inventory = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const Page521DanhSachTonKho(),
                         ),
                       );
+                      // if (material == null) {
                       if (inventory == null) {
                         return;
                       }
                       bool existed = false;
                       for (var element in materials) {
+                        // if (element.jisyaCode == material.jisyaCode) {
                         if (element.jisyaCode == inventory.jisyaCode) {
+                          // setState(() {
+                          //   element.suryo = '${int.parse(element.suryo??'0')+int.parse(material.suryo??'0')}';
+                          // });
                           existed = true;
                         }
                       }
                       if (!existed) {
                         setState(() {
+                          // materials.add(material);
                           materials.add(
                               MaterialModel.fromDefaultInventory(inventory));
                         });
@@ -618,79 +708,79 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     );
   }
 
-  Widget _dropDownButton(BuildContext context, String value) {
-    return PopupMenuButton<int>(
-      color: Colors.white,
-      padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {}
-        if (number == 2) {}
-      },
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "投函数を選択",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "投函数を選択",
-              ),
-            ],
-          ),
-        ),
-      ],
-      offset: const Offset(-35, -90),
-      child: Container(
-        width: 130,
-        height: 30,
-        decoration: BoxDecoration(
-          color: const Color(0xFFF5F6F8),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              value,
-              style: const TextStyle(
-                color: Color(0xFF999999),
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            Image.asset(
-              Assets.icDown,
-              width: 13,
-              height: 13,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _dropDownButton(BuildContext context, String value) {
+  //   return PopupMenuButton<int>(
+  //     color: Colors.white,
+  //     padding: EdgeInsets.zero,
+  //     onSelected: (number) {
+  //       if (number == 1) {}
+  //       if (number == 2) {}
+  //     },
+  //     shape: const RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.all(Radius.circular(12.0))),
+  //     itemBuilder: (context) => [
+  //       PopupMenuItem(
+  //         height: 25,
+  //         padding: const EdgeInsets.only(right: 0, left: 10),
+  //         value: 1,
+  //         child: Row(
+  //           children: const [
+  //             SizedBox(
+  //               width: 14,
+  //             ),
+  //             Text(
+  //               "投函数を選択",
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //       const PopupMenuDivider(),
+  //       PopupMenuItem(
+  //         height: 25,
+  //         padding: const EdgeInsets.only(right: 0, left: 10),
+  //         value: 2,
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.start,
+  //           children: const [
+  //             SizedBox(
+  //               width: 14,
+  //             ),
+  //             Text(
+  //               "投函数を選択",
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ],
+  //     offset: const Offset(-35, -90),
+  //     child: Container(
+  //       width: 130,
+  //       height: 30,
+  //       decoration: BoxDecoration(
+  //         color: const Color(0xFFF5F6F8),
+  //         borderRadius: BorderRadius.circular(8),
+  //       ),
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //         children: [
+  //           Text(
+  //             value,
+  //             style: const TextStyle(
+  //               color: Color(0xFF999999),
+  //               fontSize: 14,
+  //               fontWeight: FontWeight.w400,
+  //             ),
+  //           ),
+  //           Image.asset(
+  //             Assets.icDown,
+  //             width: 13,
+  //             height: 13,
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget header() {
     return CustomHeaderWidget(onBack: () async {
@@ -725,60 +815,60 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     );
   }
 
-  Widget _moreButton(BuildContext context) {
-    return PopupMenuButton<int>(
-      color: Colors.white,
-      padding: EdgeInsets.zero,
-      onSelected: (number) {
-        if (number == 1) {
-          // Navigator.of(context).push(MaterialPageRoute(
-          //     builder: (context) => EditThemePage(
-          //           index: index,
-          //           meditationThemeDTO: meditationThemeDTO,
-          //         )));
-        }
-        if (number == 2) {}
-      },
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "Dropdown item",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "Dropdown item",
-              ),
-            ],
-          ),
-        ),
-      ],
-      offset: const Offset(-25, -10),
-      child: Image.asset(
-        Assets.icDropdown,
-      ),
-    );
-  }
+  // Widget _moreButton(BuildContext context) {
+  //   return PopupMenuButton<int>(
+  //     color: Colors.white,
+  //     padding: EdgeInsets.zero,
+  //     onSelected: (number) {
+  //       if (number == 1) {
+  //         // Navigator.of(context).push(MaterialPageRoute(
+  //         //     builder: (context) => EditThemePage(
+  //         //           index: index,
+  //         //           meditationThemeDTO: meditationThemeDTO,
+  //         //         )));
+  //       }
+  //       if (number == 2) {}
+  //     },
+  //     shape: const RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.all(Radius.circular(12.0))),
+  //     itemBuilder: (context) => [
+  //       PopupMenuItem(
+  //         height: 25,
+  //         padding: const EdgeInsets.only(right: 0, left: 10),
+  //         value: 1,
+  //         child: Row(
+  //           children: const [
+  //             SizedBox(
+  //               width: 14,
+  //             ),
+  //             Text(
+  //               "Dropdown item",
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //       const PopupMenuDivider(),
+  //       PopupMenuItem(
+  //         height: 25,
+  //         padding: const EdgeInsets.only(right: 0, left: 10),
+  //         value: 2,
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.start,
+  //           children: const [
+  //             SizedBox(
+  //               width: 14,
+  //             ),
+  //             Text(
+  //               "Dropdown item",
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ],
+  //     offset: const Offset(-25, -10),
+  //     child: Image.asset(
+  //       Assets.icDropdown,
+  //     ),
+  //   );
+  // }
 }

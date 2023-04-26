@@ -14,7 +14,7 @@ class DownloadOfflineAPI {
     try{
       final response = await http.get(
         Uri.parse(
-            // "${Constant.url}/Request/Koji/requestOfflineDownload.php?CURRENT_DAY=2023-03-20"),
+            // "${Constant.url}/Request/Koji/requestOfflineDownload.php?CURRENT_DAY=2022-11-09"),
             "${Constant.url}/Request/Koji/requestOfflineDownload.php?CURRENT_DAY=${DateFormat('yyyy-MM-dd').format(DateTime.now())}"),/////////////////////////////////////////////////
       );
 
