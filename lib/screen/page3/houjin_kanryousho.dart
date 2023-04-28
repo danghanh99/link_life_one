@@ -263,38 +263,38 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        GestureDetector(
-          onTap: () async {
-            final XFile? image =
-                await _picker.pickImage(source: ImageSource.camera);
-            if (image != null) {
-              setState(
-                () {
-                  List<dynamic> tmp = listImage;
-                  tmp.add(image);
-                  listImage = tmp;
-                },
-              );
-              carouselController.jumpToPage(listImage.length - 1);
-            }
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1.5),
-            ),
-            height: 50,
-            width: 200,
-            child: const Center(
-              child: Text(
-                'カメラ起動',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(
-          width: 20,
-        ),
+        // GestureDetector(
+        //   onTap: () async {
+        //     final XFile? image =
+        //         await _picker.pickImage(source: ImageSource.camera);
+        //     if (image != null) {
+        //       setState(
+        //         () {
+        //           List<dynamic> tmp = listImage;
+        //           tmp.add(image);
+        //           listImage = tmp;
+        //         },
+        //       );
+        //       carouselController.jumpToPage(listImage.length - 1);
+        //     }
+        //   },
+        //   child: Container(
+        //     decoration: BoxDecoration(
+        //       border: Border.all(color: Colors.black, width: 1.5),
+        //     ),
+        //     height: 50,
+        //     width: 200,
+        //     child: const Center(
+        //       child: Text(
+        //         'カメラ起動',
+        //         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(
+        //   width: 20,
+        // ),
         GestureDetector(
           onTap: () async {
             final List<XFile> images = await _picker.pickMultiImage();

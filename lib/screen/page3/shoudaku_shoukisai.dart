@@ -413,7 +413,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
                 Visibility(
                   visible: hasAnyEmpty,
                   child: const Text(
-                    'Empty field',
+                    '入力必須です。',
                     maxLines: 2,
                     style: TextStyle(
                         color: Colors.red,
@@ -1412,9 +1412,14 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
   }
 
   void setDataNew(Map<String, String> data, int row, int col) {
-    setState(() {
+    if(col!=0) {
+      setState(() {
+        NEW_TABLE_DATA[row] = data;
+      });
+    }
+    else{
       NEW_TABLE_DATA[row] = data;
-    });
+    }
 
     FocusNode? focusNode;
 

@@ -9,6 +9,7 @@ class Constant {
   static const String checkSaveMaterial = '${url}src/APIs/Material/getListDefaultMaterial.php?';
   static const String getListDefaultFromEditMaterial = '${url}src/APIs/Material/getListDefaultFromEditMaterial.php?';
   static const String deleteListMaterial = '${url}src/APIs/Material/deleteListMaterial.php';
+  static const String deleteExistSave = '${url}/src/APIs/Material/deleteExistSave.php';
   static const String getListMemberCategory = '${url}src/APIs/InventoryList/getListMemberCategory.php';
   static const String getListDefaultInventory = '${url}src/APIs/InventoryList/getListDefaultInventory.php?';
   static const String getListInventoryByCheckList = '${url}src/APIs/InventoryList/getListInventoryByCheckList.php?';

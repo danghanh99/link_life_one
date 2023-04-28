@@ -133,7 +133,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 10.0, left: 10.0),
                                     child: Text(
-                                      'Empty field',
+                                      '入力必須です。',
                                       style: TextStyle(
                                           color: Colors.red,
                                           fontSize: 20.sp,
@@ -172,7 +172,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                                       child: Padding(
                                         padding: const EdgeInsets.only(top: 10.0, left: 10.0),
                                         child: Text(
-                                          'Empty field',
+                                          '入力必須です。',
                                           style: TextStyle(
                                               color: Colors.red,
                                               fontSize: 20.sp,
@@ -333,22 +333,37 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
           ],
         ),
         SizedBox(height: 10.sp,),
-        GestureDetector(
-          onTap: (){
-            notifier.selectOthersImage(index);
-          },
-          child: Container(
-            alignment: Alignment.center,
-            width: 370.sp,
-            height: 50.sp,
-            decoration:
-            BoxDecoration(border: Border.all(color: Colors.black)),
-            child: Text(
-              'その他写真を添付 ${notifier.listKojiHoukoku[index!].otherPhotoFolderPath!.isEmpty ? ' (未)' : ' (済)'}',
-              style:
-              TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: 70.sp,
+              child: Center(
+                child: Text(
+                  notifier.listKojiHoukoku[index!].otherPhotoFolderPath!.isEmpty ? '未' : '済',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                ),
+              ),
             ),
-          ),
+            GestureDetector(
+              onTap: (){
+                notifier.selectOthersImage(context, index);
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: 300.sp,
+                height: 50.sp,
+                decoration:
+                BoxDecoration(border: Border.all(color: Colors.black)),
+                child: Text(
+                  'その他写真を添付',
+                  style:
+                  TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
