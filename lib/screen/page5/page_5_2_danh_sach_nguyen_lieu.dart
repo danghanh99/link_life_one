@@ -323,7 +323,8 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                   TextButton(
                     onPressed: () {
                       Navigator.pop(dialogContext); //close Dialog
-                      deleteMaterial();
+                      // deleteMaterial();
+                      deleteExistSave();
                     },
                     child: const Text(
                       '破棄して新規リスト作成',
@@ -356,6 +357,15 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
           message: '保存したリストを削除できました。', backGround: Colors.green);
     }, onFailed: () {
       CustomToast.show(context, message: '保存したリストを削除できません。');
+    });
+  }
+
+  void deleteExistSave() {
+    MaterialAPI.shared.deleteExistSave(onSuccess: (message) {
+      // CustomToast.show(context,
+      //     message: '保存したリストを削除できました。', backGround: Colors.green);
+    }, onFailed: () {
+      // CustomToast.show(context, message: '保存したリストを削除できません。');
     });
   }
 
