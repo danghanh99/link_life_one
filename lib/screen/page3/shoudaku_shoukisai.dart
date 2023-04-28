@@ -53,6 +53,10 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
 
   late AutoScrollController _scrollController;
   int _firstVisibleItemIndex = 0;
+
+  bool hasAnyEmpty = false;
+  bool? checkSign;
+
   @override
   void initState() {
     super.initState();
@@ -135,6 +139,9 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
           if (body["KOJI_KAKAKU"] != null) {
             KOJI_KAKAKU = body["KOJI_KAKAKU"];
           }
+          if (body["CHECK_SIGN"] != null) {
+            checkSign = body["CHECK_SIGN"];
+          }
           loadCachedata(context);
         },
         onFailed: () {
@@ -171,6 +178,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
             padding: const EdgeInsets.all(16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
                   height: 40,
@@ -401,6 +409,19 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
                 ),
                 const SizedBox(
                   height: 10,
+                ),
+                Visibility(
+                  visible: hasAnyEmpty,
+                  child: const Text(
+                    'Empty field',
+                    maxLines: 2,
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  )
                 ),
                 sendButton(),
               ],
@@ -1114,25 +1135,43 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
         Container(),
         GestureDetector(
           onTap: () {
+            hasAnyEmpty = false;
+            NEW_TABLE_DATA.forEach((key, value) {
+              if(
+                value['TUIKA_SYOHIN_NAME']==null || value['TUIKA_SYOHIN_NAME']!.isEmpty
+                || value['SURYO']==null || value['SURYO']!.isEmpty
+                || value['HANBAI_TANKA']==null || value['HANBAI_TANKA']!.isEmpty
+                || value['KINGAK']==null || value['KINGAK']!.isEmpty
+              ){
+                setState(() {
+                  hasAnyEmpty = true;
+                });
+                return;
+              }
+            });
+
             // go to top
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ShoudakuSho(
-                  kojiData: KOJI_DATA,
-                  tableData: TABLE_DATA,
-                  newTableData: NEW_TABLE_DATA.values.toList(),
-                  jyucyuId: widget.JYUCYU_ID,
-                  singleSummarize: widget.SINGLE_SUMMARIZE,
-                  biko: remarkCtrl.text,
-                  initialDate: widget.initialDate,
-                  onSaveSuccess: () {
-                    callGetKojiHoukoku();
-                  },
-                  kojiHoukoku: widget.kojiHoukoku,
+            if(!hasAnyEmpty){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ShoudakuSho(
+                    kojiData: KOJI_DATA,
+                    tableData: TABLE_DATA,
+                    newTableData: NEW_TABLE_DATA.values.toList(),
+                    jyucyuId: widget.JYUCYU_ID,
+                    singleSummarize: widget.SINGLE_SUMMARIZE,
+                    biko: remarkCtrl.text,
+                    initialDate: widget.initialDate,
+                    checkSign: checkSign ?? false,
+                    onSaveSuccess: () {
+                      callGetKojiHoukoku();
+                    },
+                    kojiHoukoku: widget.kojiHoukoku,
+                  ),
                 ),
-              ),
-            );
+              );
+            }
 
             // go to bottom
             // Navigator.push(

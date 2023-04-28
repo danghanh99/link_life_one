@@ -37,7 +37,7 @@ class InventoryAPI {
   }
 
   Future<void> updateInventorySchedule(
-    int id, {
+    String id, {
     required Function(dynamic) onSuccess,
     required Function onFailed,
   }) async {

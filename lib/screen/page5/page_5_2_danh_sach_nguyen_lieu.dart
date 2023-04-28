@@ -311,7 +311,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                   TextButton(
                       onPressed: () {
                         Navigator.pop(dialogContext);
-                        deleteMaterial();
+                        getEditMaterial(showPopUp);
                       },
                       child: const Text(
                         '続きから編集する',
@@ -323,10 +323,10 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                   TextButton(
                     onPressed: () {
                       Navigator.pop(dialogContext); //close Dialog
-                      getEditMaterial(showPopUp);
+                      deleteMaterial();
                     },
                     child: const Text(
-                      '破壊して新規リスト作成',
+                      '破棄して新規リスト作成',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -816,7 +816,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
               actions: <Widget>[
                 TextButton(
                     onPressed: () {
-                      _saveData(true);
+                      // _saveData(true);
                       MaterialAPI.shared.onBackMaterial(
                           items: materials,
                           onSuccess: () {

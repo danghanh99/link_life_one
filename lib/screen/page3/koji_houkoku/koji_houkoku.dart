@@ -42,6 +42,9 @@ class KojiHoukoku extends StatefulWidget {
 
 class _KojiHoukokuState extends State<KojiHoukoku> {
   final KojiHoukokuNotifier _notifier = KojiHoukokuNotifier();
+
+  List<int> invalidIndexs = [];
+
   @override
   void initState() {
     super.initState();
@@ -113,33 +116,71 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                         height: 40.sp,
                       ),
                       widget.SINGLE_SUMMARIZE == "0" || widget.SINGLE_SUMMARIZE == "00"
-                          ? Row(
-                              crossAxisAlignment: CrossAxisAlignment.start, // k gop: 1 doi tuong - gom nhieu item
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                leftSide(notifier),
-                                SizedBox(width: 20.sp),
-                                rightSide(notifier, null, null),
-                              ],
-                            )
+                          ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start, // k gop: 1 doi tuong - gom nhieu item
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    leftSide(notifier),
+                                    SizedBox(width: 20.sp),
+                                    rightSide(notifier, null, null),
+                                  ],
+                                ),
+                              Visibility(
+                                  visible: invalidIndexs.isNotEmpty,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                                    child: Text(
+                                      'Empty field',
+                                      style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 20.sp,
+                                          fontWeight: FontWeight.w700
+                                      ),
+                                    ),
+                                  )
+                              )
+                            ],
+                          )
                           : ListView.separated(
                               physics: const NeverScrollableScrollPhysics(),
                               scrollDirection: Axis.vertical, // gop lai: nhieu doi tuong - 1 doi tuong  = 1 item
                               shrinkWrap: true,
                               itemCount: notifier.listKojiHoukoku.length,
                               itemBuilder: (context, index) {
-                                return Row(
+                                return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    leftSide1Item(notifier, index),
-                                    SizedBox(width: 20.sp),
-                                    rightSide(
-                                        notifier,
-                                        notifier.listKojiHoukoku
-                                            .elementAt(index),
-                                        index),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        leftSide1Item(notifier, index),
+                                        SizedBox(width: 20.sp),
+                                        rightSide(
+                                            notifier,
+                                            notifier.listKojiHoukoku
+                                                .elementAt(index),
+                                            index),
+                                      ],
+                                    ),
+                                    Visibility(
+                                      visible: invalidIndexs.contains(index),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                                        child: Text(
+                                          'Empty field',
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 20.sp,
+                                              fontWeight: FontWeight.w700
+                                          ),
+                                        ),
+                                      )
+                                    )
                                   ],
                                 );
                               },
@@ -166,7 +207,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                         ),
                       ),
                       SizedBox(
-                        height: 100.sp,
+                        height: 50.sp,
                       ),
                       sendButton(notifier),
                     ],
@@ -188,71 +229,71 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
     print('before item path: ${item?.befSekiPhotoFilePath}');
     print('after item path: ${item?.aftSekoPhotoFilePath}');
     print('others items: ${item?.otherPhotoFolderPath}');
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
       children: [
-        GestureDetector(
-          onTap: () {
-            notifier.selectBeforeImage(index);
-          },
-          child: Container(
-            alignment: Alignment.center,
-            width: 180.sp,
-            height: 140.sp,
-            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-            child: Padding(
-              padding: EdgeInsets.all(8.0.sp),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    '施工前写真',
-                    style:
-                        TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
-                  ),
-                  SizedBox(
-                    height: 20.sp,
-                  ),
-                  Expanded(
-                      child: item?.befSekiPhotoFilePath == null ||
-                              item?.befSekiPhotoFilePath == ''
-                          ? const SizedBox.shrink()
-                          : isNetworkPath(item?.befSekiPhotoFilePath ?? '')
-                              ? FadeInImage(
-                                  placeholder: Assets.blankImage,
-                                  image: NetworkImage(
-                                      item?.befSekiPhotoFilePath ?? ''),
-                                  imageErrorBuilder:
-                                      (context, error, stackTrace) {
-                                    return const Icon(Icons.error);
-                                  },
-                                )
-                              : Image.file(
-                                  File(item?.befSekiPhotoFilePath ?? ''))),
-                  // Flexible(
-                  //   child: Text(
-                  //     item['BEF_SEKO_PHOTO_FILEPATH'] ?? '',
-                  //     style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
-                  //   ),
-                  // ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 10.sp,
-        ),
-        Column(
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             GestureDetector(
               onTap: () {
-                notifier.selectafterImage(index);
+                notifier.selectBeforeImage(context, index);
               },
               child: Container(
                 alignment: Alignment.center,
                 width: 180.sp,
-                height: 140.sp,
+                height: 200.sp,
+                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+                child: Padding(
+                  padding: EdgeInsets.all(8.0.sp),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        '施工前写真',
+                        style:
+                            TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                      ),
+                      SizedBox(
+                        height: 20.sp,
+                      ),
+                      Expanded(
+                          child: item?.befSekiPhotoFilePath == null ||
+                                  item?.befSekiPhotoFilePath == ''
+                              ? const SizedBox.shrink()
+                              : isNetworkPath(item?.befSekiPhotoFilePath ?? '')
+                                  ? FadeInImage(
+                                      placeholder: Assets.blankImage,
+                                      image: NetworkImage(
+                                          item?.befSekiPhotoFilePath ?? ''),
+                                      imageErrorBuilder:
+                                          (context, error, stackTrace) {
+                                        return const Icon(Icons.error);
+                                      },
+                                    )
+                                  : Image.file(
+                                      File(item?.befSekiPhotoFilePath ?? ''))),
+                      // Flexible(
+                      //   child: Text(
+                      //     item['BEF_SEKO_PHOTO_FILEPATH'] ?? '',
+                      //     style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                      //   ),
+                      // ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 10.sp,
+            ),
+            GestureDetector(
+              onTap: () {
+                notifier.selectafterImage(context, index);
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: 180.sp,
+                height: 200.sp,
                 decoration:
                     BoxDecoration(border: Border.all(color: Colors.black)),
                 child: Padding(
@@ -289,27 +330,25 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 10.sp,
-            ),
-            GestureDetector(
-              onTap: () {
-                notifier.selectOthersImage(index);
-              },
-              child: Container(
-                alignment: Alignment.center,
-                width: 180.sp,
-                height: 50.sp,
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.black)),
-                child: Text(
-                  'その他写真を添付',
-                  style:
-                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
-                ),
-              ),
-            ),
           ],
+        ),
+        SizedBox(height: 10.sp,),
+        GestureDetector(
+          onTap: (){
+            notifier.selectOthersImage(index);
+          },
+          child: Container(
+            alignment: Alignment.center,
+            width: 370.sp,
+            height: 50.sp,
+            decoration:
+            BoxDecoration(border: Border.all(color: Colors.black)),
+            child: Text(
+              'その他写真を添付 ${notifier.listKojiHoukoku[index!].otherPhotoFolderPath!.isEmpty ? ' (未)' : ' (済)'}',
+              style:
+              TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+            ),
+          ),
         ),
       ],
     );
@@ -346,7 +385,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                     Expanded(
                       child: textUnderline(
                         initial: notifier.listKojiHoukoku[index].makerCd,
-                        enable: false,
+                        enable: notifier.listKojiHoukoku[index].hinban==null || notifier.listKojiHoukoku[index].hinban!.isEmpty ? true : false,
                         onChange: (value) {
                           notifier.updateMakerCd(value, index);
                         },
@@ -500,7 +539,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 Expanded(
                   child: textUnderline(
                     initial: notifier.listKojiHoukoku[index].makerCd,
-                    enable: false,
+                    enable: notifier.listKojiHoukoku[index].hinban==null || notifier.listKojiHoukoku[index].hinban!.isEmpty ? true : false,
                     onChange: (value) {
                       notifier.updateMakerCd(value, index);
                     },
@@ -755,21 +794,42 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
             // );
           },
           child: Container(
+            width: 130.w,
+            height: 37,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1.5.sp),
+              color: const Color(0xFFFA6366),
+              borderRadius: BorderRadius.circular(26),
             ),
-            height: 50.sp,
-            width: 150.sp,
-            child: Center(
+            child: const Center(
               child: Text(
                 '設置不可',
-                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w300),
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
         ),
         GestureDetector(
           onTap: () {
+            invalidIndexs.clear();
+            for(var k in notifier.listKojiHoukoku){
+              if(
+                k.kisetuMaker==null || k.kisetuMaker!.isEmpty
+                || k.kisetuHinban==null || k.kisetuHinban!.isEmpty
+                || k.kensetuKeitai==null
+              ){
+                invalidIndexs.add(notifier.listKojiHoukoku.indexOf(k));
+              }
+            }
+            if(invalidIndexs.isNotEmpty){
+              setState(() {});
+              return;
+            }
+
             if (notifier.tenpoId == null) {
               CustomToast.show(context, message: "TenpoCDを取得出来ませんでした。");
             } else {
@@ -805,15 +865,20 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
             }
           },
           child: Container(
+            width: 180.w,
+            height: 37,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1.5.sp),
+              color: const Color(0xFFFFA800),
+              borderRadius: BorderRadius.circular(26),
             ),
-            height: 50.sp,
-            width: 150.sp,
-            child: Center(
+            child: const Center(
               child: Text(
                 '次へ',
-                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w300),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
@@ -827,28 +892,31 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
     bool enable = true,
     String? initial,
   }) {
-    return TextFormField(
-      onChanged: (value) {
-        onChange.call(value);
-      },
-      enabled: enable,
-      style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
-      initialValue: initial,
-      minLines: 1,
-      maxLines: 4,
-      textInputAction: TextInputAction.newline,
-      keyboardType: TextInputType.multiline,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.only(top: 5.sp, bottom: 5.sp),
-        isDense: true,
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.black),
+    return Container(
+      color: enable ? Colors.orange : Colors.white,
+      child: TextFormField(
+        onChanged: (value) {
+          onChange.call(value);
+        },
+        enabled: enable,
+        style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+        initialValue: initial,
+        minLines: 1,
+        maxLines: 4,
+        textInputAction: TextInputAction.newline,
+        keyboardType: TextInputType.multiline,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.only(top: 5.sp, bottom: 5.sp),
+          isDense: true,
+          enabledBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black),
+          ),
+          focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black),
+          ),
         ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.black),
-        ),
+        cursorColor: Colors.black,
       ),
-      cursorColor: Colors.black,
     );
   }
 
@@ -899,7 +967,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
       child: Container(
         width: 130.sp,
         height: 30.sp,
-        decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black),
+          color: Colors.orange
+        ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.sp),
           child: Row(

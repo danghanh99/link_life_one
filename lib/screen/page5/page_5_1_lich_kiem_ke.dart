@@ -50,7 +50,7 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
     });
   }
 
-  Future<void> updateSchedule(int id) async {
+  Future<void> updateSchedule(String id) async {
     InventoryAPI.shared.updateInventorySchedule(id, onSuccess: (dynamic) {
       CustomToast.show(context,
           message: 'リストで選択した項目のデータを更新できました。', backGround: Colors.green);
@@ -59,7 +59,7 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
     });
   }
 
-  void showAlertConfirm(int nyukoId) {
+  void showAlertConfirm(String nyukoId) {
     MyDialog.showCustomDialog(context, '', '入庫処理を実行します。よろしいですか？', 'はい', 'いいえ',
         () {
       updateSchedule(nyukoId);
@@ -122,7 +122,8 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
                       currentRadioRow <= schedules.length) {
                     InventorySchedule schedule =
                         schedules.elementAt(currentRadioRow - 1);
-                    showAlertConfirm(int.parse(schedule.nyukoId ?? ''));
+                    print('schedule.nyukoId: ${schedule.nyukoId}');
+                    showAlertConfirm(schedule.nyukoId??'');
                   } else {
                     CustomToast.show(context, message: "一つを選択してください。");
                   }

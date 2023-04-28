@@ -680,7 +680,7 @@ class _NettoKojiPage722State extends State<NettoKojiPage722> {
                           const Padding(
                             padding: EdgeInsets.only(top: 5),
                             child: Text(
-                              '時間',
+                              '分',
                               style: TextStyle(
                                 color: Color(0xFF042C5C),
                                 fontSize: 13,

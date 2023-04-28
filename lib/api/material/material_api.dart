@@ -27,6 +27,8 @@ class MaterialAPI {
 
     final Response response = await RestAPI.shared.getData(urlEndpoint);
 
+    print('response: ${response.data}');
+
     if (response.statusCode == 200) {
       List<dynamic> data = response.data;
       bool showPopup = false;
@@ -93,7 +95,7 @@ class MaterialAPI {
     required Function onFailed,
   }) async {
     String urlEndpoint = Constant.deleteMaterialById;
-
+    print('SYUKKO_ID: $syukkoId');
     final Response response = await RestAPI.shared
         .postDataWithFormData(urlEndpoint, {'SYUKKO_ID': syukkoId});
 

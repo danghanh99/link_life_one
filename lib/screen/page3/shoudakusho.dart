@@ -27,6 +27,7 @@ class ShoudakuSho extends StatefulWidget {
   final String biko;
   final Function() onSaveSuccess;
   final List<KojiHoukokuModel> kojiHoukoku;
+  final bool checkSign;
   const ShoudakuSho(
       {super.key,
       this.initialDate,
@@ -37,7 +38,8 @@ class ShoudakuSho extends StatefulWidget {
       required this.jyucyuId,
       required this.biko,
       required this.onSaveSuccess,
-      required this.kojiHoukoku});
+      required this.kojiHoukoku,
+      required this.checkSign});
 
   @override
   State<ShoudakuSho> createState() => _ShoudakuShoState();
@@ -140,12 +142,12 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
   // }
 
   bool validateCheckbox() {
-    return (checkedValue1 ||
-        checkedValue2 ||
-        checkedValue3 ||
-        checkedValue4 ||
-        checkedValue5 ||
-        checkedValue6 ||
+    return (checkedValue1 &&
+        checkedValue2 &&
+        checkedValue3 &&
+        checkedValue4 &&
+        checkedValue5 &&
+        checkedValue6 &&
         checkedValue7);
   }
 
@@ -1267,12 +1269,19 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
             width: 200,
             child: const Center(
               child: Text(
-                'サインを登録',
+                'サインを確定',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
               ),
             ),
           ),
         ),
+        const SizedBox(
+          width: 30,
+        ),
+        Text(
+          widget.checkSign ? 'サイン登録済み' : 'サイン未登録',
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+        )
       ],
     );
   }

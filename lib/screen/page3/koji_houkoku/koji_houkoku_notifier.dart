@@ -122,36 +122,102 @@ class KojiHoukokuNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void selectBeforeImage(int? index) async {
+  void selectBeforeImage(context, int? index) async {
     final ImagePicker picker = ImagePicker();
-    try {
-      XFile? file = await picker.pickImage(source: ImageSource.gallery);
-      if (file != null) {
-        if (index != null) {
-          listKojiHoukoku[index].isChangeBefore = true;
-          listKojiHoukoku.elementAt(index).befSekiPhotoFilePath = file.path;
-        } else {
-          befImage = file;
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context){
+          return CupertinoActionSheet(
+            actions: <CupertinoActionSheetAction>[
+              CupertinoActionSheetAction(
+                child: const Text('Choose a picture'),
+                onPressed: () async {
+                  try {
+                    XFile? file = await picker.pickImage(source: ImageSource.gallery);
+                    if (file != null) {
+                      if (index != null) {
+                        listKojiHoukoku[index].isChangeBefore = true;
+                        listKojiHoukoku.elementAt(index).befSekiPhotoFilePath = file.path;
+                      } else {
+                        befImage = file;
+                      }
+                    }
+                  } catch (e) {}
+                  notifyListeners();
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: const Text('Take a photo'),
+                onPressed: () async {
+                  try {
+                    XFile? file = await picker.pickImage(source: ImageSource.camera);
+                    if (file != null) {
+                      if (index != null) {
+                        listKojiHoukoku[index].isChangeBefore = true;
+                        listKojiHoukoku.elementAt(index).befSekiPhotoFilePath = file.path;
+                      } else {
+                        befImage = file;
+                      }
+                    }
+                  } catch (e) {}
+                  notifyListeners();
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
         }
-      }
-    } catch (e) {}
-    notifyListeners();
+    );
   }
 
-  void selectafterImage(int? index) async {
+  void selectafterImage(context, int? index) async {
     final ImagePicker picker = ImagePicker();
-    try {
-      XFile? file = await picker.pickImage(source: ImageSource.gallery);
-      if (file != null) {
-        if (index != null) {
-          listKojiHoukoku[index].isChangeAfter = true;
-          listKojiHoukoku.elementAt(index).aftSekoPhotoFilePath = file.path;
-        } else {
-          aftImage = file;
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context){
+          return CupertinoActionSheet(
+            actions: <CupertinoActionSheetAction>[
+              CupertinoActionSheetAction(
+                child: const Text('Choose a picture'),
+                onPressed: () async {
+                  try {
+                    XFile? file = await picker.pickImage(source: ImageSource.gallery);
+                    if (file != null) {
+                      if (index != null) {
+                        listKojiHoukoku[index].isChangeAfter = true;
+                        listKojiHoukoku.elementAt(index).aftSekoPhotoFilePath = file.path;
+                      } else {
+                        aftImage = file;
+                      }
+                    }
+                  } catch (e) {}
+                  notifyListeners();
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: const Text('Take a photo'),
+                onPressed: () async {
+                  try {
+                    XFile? file = await picker.pickImage(source: ImageSource.camera);
+                    if (file != null) {
+                      if (index != null) {
+                        listKojiHoukoku[index].isChangeAfter = true;
+                        listKojiHoukoku.elementAt(index).aftSekoPhotoFilePath = file.path;
+                      } else {
+                        aftImage = file;
+                      }
+                    }
+                  } catch (e) {}
+                  notifyListeners();
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
         }
-      }
-    } catch (e) {}
-    notifyListeners();
+    );
   }
 
   void updateMakerCd(String value, int index) {

@@ -1639,7 +1639,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page>
       onTap: () {
         if (isPhongBanData) {
           String type = getTypeItemLichTrinh(e["KBN_CD"]);
-
+          print('type: $type');
           switch (type) {
             case ("lichtrinh"):
               {
@@ -1749,7 +1749,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page>
           }
         } else {
           String type = getTypeItemLichTrinh(e["KBN_CD"] ?? '');
-
+          print('type KBN: $type');
           switch (type) {
             case ("lichtrinh"):
               {
@@ -1923,7 +1923,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page>
                         jyucyuId.isNotEmpty
                             ? TextSpan(
                                 text:
-                                    '\n<<${jyucyuId.length == 10 ? jyucyuId : jyucyuId.substring(0, 10)}>>・$jinin 人 $kansanPoint 時間\n')
+                                    '\n<<${jyucyuId.length == 10 ? jyucyuId : jyucyuId.substring(0, 10)}>>・$jinin 人 $kansanPoint 分\n')
                             : const TextSpan(),
                         TextSpan(
                           text: setsakiAddress,

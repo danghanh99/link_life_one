@@ -60,6 +60,9 @@ class TKojiFilePath extends HiveObject{
   int? status = 0;
   @HiveField(13)
   String? originalPath;
+  @HiveField(14)
+  @JsonKey(name: 'RENKEIZUMI_FLG', required: false)
+  String? renkeiZumiFlg;
 
   factory TKojiFilePath.fromJson(Map<String, dynamic> json) => _$TKojiFilePathFromJson(json);
   // Map<String, dynamic> toJson() => _$TKojiFilePathToJson(this);
@@ -75,7 +78,8 @@ class TKojiFilePath extends HiveObject{
     'ADD_YMD': addYMD,
     'UPD_PGID': updPGID,
     'UPD_TANTCD': updTantCd,
-    'UPD_YMD': updYMD
+    'UPD_YMD': updYMD,
+    'RENKEIZUMI_FLG': renkeiZumiFlg
   };
 
   void storage(localPath){

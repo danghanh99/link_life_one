@@ -657,6 +657,7 @@ class LocalStorageServices{
     var mGyosya = await LocalStorageBase.getValues(boxName: boxGyosyaName);
     var tkojimsai = await LocalStorageBase.getValues(boxName: boxKojimsaiName);
     var msyohin = await LocalStorageBase.getValues(boxName: boxSyohinName);
+    var tKojiFilePath = await LocalStorageBase.getValues(boxName: boxKojiFilePathName);
 
     List<dynamic> kojiData = [];
     for(TKoji k in tkoji){
@@ -707,10 +708,18 @@ class LocalStorageServices{
       kojiKakaku.add(s.toJson());
     }
 
+    bool signCheck = false;
+    for(TKojiFilePath kf in tKojiFilePath){
+      if(kf.id == jyucyuId && (kf.fileKbnCd == "08" || kf.fileKbnCd=="8")){
+        signCheck = true;
+      }
+    }
+
     resultList.addAll({
       'KOJI_DATA': kojiData,
       'TABLE_DATA': tableData,
-      'KOJI_KAKAKU': kojiKakaku
+      'KOJI_KAKAKU': kojiKakaku,
+      'CHECK_SIGN': signCheck
     });
 
     return resultList;

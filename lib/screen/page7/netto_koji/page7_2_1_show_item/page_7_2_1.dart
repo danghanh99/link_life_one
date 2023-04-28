@@ -489,7 +489,7 @@ class _Page721State extends State<Page721> {
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  Text('時間')
+                                  Text('分')
                                 ],
                               ),
                             ],

@@ -40,10 +40,14 @@ class RestAPI {
   Future<Response> postDataWithFormData(
       String endpoint, Map<String, dynamic> data) async {
     try {
+      print('data: $data');
       FormData formData = FormData.fromMap(data);
+      print('formData: $formData');
+      print('formData: ${formData.toString()}');
       Response response = await dio.post(endpoint,
           data: formData,
           options: Options(headers: {'Content-Type': 'multipart/form-data'}));
+      print('res: ${response.data}');
       return response;
     } catch (error, stacktrace) {
       log('Exception occured: $error stackTrace: $stacktrace');

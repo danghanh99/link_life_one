@@ -31,13 +31,14 @@ class TKojiFilePathAdapter extends TypeAdapter<TKojiFilePath> {
       status: fields[12] as int?,
     )
       ..localPath = fields[11] as String?
-      ..originalPath = fields[13] as String?;
+      ..originalPath = fields[13] as String?
+      ..renkeiZumiFlg = fields[14] as String?;
   }
 
   @override
   void write(BinaryWriter writer, TKojiFilePath obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.filePathId)
       ..writeByte(1)
@@ -65,7 +66,9 @@ class TKojiFilePathAdapter extends TypeAdapter<TKojiFilePath> {
       ..writeByte(12)
       ..write(obj.status)
       ..writeByte(13)
-      ..write(obj.originalPath);
+      ..write(obj.originalPath)
+      ..writeByte(14)
+      ..write(obj.renkeiZumiFlg);
   }
 
   @override
@@ -103,7 +106,8 @@ TKojiFilePath _$TKojiFilePathFromJson(Map<String, dynamic> json) {
     status: json['status'] as int? ?? 0,
   )
     ..localPath = json['localPath'] as String?
-    ..originalPath = json['originalPath'] as String?;
+    ..originalPath = json['originalPath'] as String?
+    ..renkeiZumiFlg = json['RENKEIZUMI_FLG'] as String?;
 }
 
 Map<String, dynamic> _$TKojiFilePathToJson(TKojiFilePath instance) =>
@@ -122,4 +126,5 @@ Map<String, dynamic> _$TKojiFilePathToJson(TKojiFilePath instance) =>
       'localPath': instance.localPath,
       'status': instance.status,
       'originalPath': instance.originalPath,
+      'RENKEIZUMI_FLG': instance.renkeiZumiFlg,
     };
