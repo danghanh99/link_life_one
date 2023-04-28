@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:link_life_one/api/KojiPageApi/create_riyuu.dart';
@@ -45,14 +46,47 @@ class _ShashinTeishuutsuGamenPage2State
   List<dynamic> selectedImages = [];
 
   void selectImage() async {
-    try {
-      List<XFile> files = await _picker.pickMultiImage();
-      if (files.isNotEmpty) {
-        setState(() {
-          selectedImages.addAll(files);
-        });
-      }
-    } catch (e) {}
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context){
+          return CupertinoActionSheet(
+            actions: <CupertinoActionSheetAction>[
+              CupertinoActionSheetAction(
+                child: const Text('ライブラリから画像選択'),
+                onPressed: () async {
+                  try {
+                    List<XFile> files = await _picker.pickMultiImage();
+                    if (files.isNotEmpty) {
+                      setState(() {
+                        selectedImages.addAll(files);
+                      });
+                    }
+                  } catch (e) {
+                    print(e);
+                  }
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: const Text('カメラ起動'),
+                onPressed: () async {
+                  try {
+                    XFile? file = await _picker.pickImage(source: ImageSource.camera);
+                    if (file!=null) {
+                      setState(() {
+                        selectedImages.add(file);
+                      });
+                    }
+                  } catch (e) {
+                    print(e);
+                  }
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        }
+    );
   }
 
   bool isOnline = true;

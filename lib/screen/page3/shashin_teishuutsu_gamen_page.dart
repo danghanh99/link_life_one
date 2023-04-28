@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -34,16 +35,47 @@ class _ShashinTeishuutsuGamenPageState
   List<XFile> selectedImages = [];
 
   void selectImage() async {
-    try {
-      List<XFile> files = await _picker.pickMultiImage();
-      if (files.isNotEmpty) {
-        setState(() {
-          selectedImages.addAll(files);
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context){
+          return CupertinoActionSheet(
+            actions: <CupertinoActionSheetAction>[
+              CupertinoActionSheetAction(
+                child: const Text('ライブラリから画像選択'),
+                onPressed: () async {
+                  try {
+                    List<XFile> files = await _picker.pickMultiImage();
+                    if (files.isNotEmpty) {
+                      setState(() {
+                        selectedImages.addAll(files);
+                      });
+                    }
+                  } catch (e) {
+                    print(e);
+                  }
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: const Text('カメラ起動'),
+                onPressed: () async {
+                  try {
+                    XFile? file = await _picker.pickImage(source: ImageSource.camera);
+                    if (file!=null) {
+                      setState(() {
+                        selectedImages.add(file);
+                      });
+                    }
+                  } catch (e) {
+                    print(e);
+                  }
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        }
+    );
   }
 
   @override

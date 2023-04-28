@@ -101,25 +101,59 @@ class KojiHoukokuNotifier extends ChangeNotifier {
     return name;
   }
 
-  void selectOthersImage(int? index) async {
+  void selectOthersImage(context, int? index) async {
     final ImagePicker picker = ImagePicker();
-    try {
-      List<XFile> files = await picker.pickMultiImage();
-      if (files.isNotEmpty) {
-        if (index != null) {
-          listKojiHoukoku[index].isAddOthers = true;
-          listKojiHoukoku
-              .elementAt(index)
-              .otherPhotoFolderPath
-              ?.addAll(files.map((e) => e.path).toList());
-        } else {
-          otherImages = files;
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context){
+          return CupertinoActionSheet(
+            actions: <CupertinoActionSheetAction>[
+              CupertinoActionSheetAction(
+                child: const Text('ライブラリから画像選択'),
+                onPressed: () async {
+                  try {
+                    List<XFile> files = await picker.pickMultiImage();
+                    if (files.isNotEmpty) {
+                      if (index != null) {
+                        listKojiHoukoku[index].isAddOthers = true;
+                        listKojiHoukoku
+                            .elementAt(index)
+                            .otherPhotoFolderPath
+                            ?.addAll(files.map((e) => e.path).toList());
+                      } else {
+                        otherImages = files;
+                      }
+                    }
+                  } catch (e) {}
+                  notifyListeners();
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: const Text('カメラ起動'),
+                onPressed: () async {
+                  try {
+                    XFile? file = await picker.pickImage(source: ImageSource.camera);
+                    if (file!=null) {
+                      if (index != null) {
+                        listKojiHoukoku[index].isAddOthers = true;
+                        listKojiHoukoku
+                            .elementAt(index)
+                            .otherPhotoFolderPath
+                            ?.add(file.path);
+                      } else {
+                        otherImages = [file];
+                      }
+                    }
+                  } catch (e) {}
+                  notifyListeners();
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
         }
-      }
-    } catch (e) {
-      print(e);
-    }
-    notifyListeners();
+    );
   }
 
   void selectBeforeImage(context, int? index) async {
@@ -130,7 +164,7 @@ class KojiHoukokuNotifier extends ChangeNotifier {
           return CupertinoActionSheet(
             actions: <CupertinoActionSheetAction>[
               CupertinoActionSheetAction(
-                child: const Text('Choose a picture'),
+                child: const Text('ライブラリから画像選択'),
                 onPressed: () async {
                   try {
                     XFile? file = await picker.pickImage(source: ImageSource.gallery);
@@ -148,7 +182,7 @@ class KojiHoukokuNotifier extends ChangeNotifier {
                 },
               ),
               CupertinoActionSheetAction(
-                child: const Text('Take a photo'),
+                child: const Text('カメラ起動'),
                 onPressed: () async {
                   try {
                     XFile? file = await picker.pickImage(source: ImageSource.camera);
@@ -179,7 +213,7 @@ class KojiHoukokuNotifier extends ChangeNotifier {
           return CupertinoActionSheet(
             actions: <CupertinoActionSheetAction>[
               CupertinoActionSheetAction(
-                child: const Text('Choose a picture'),
+                child: const Text('ライブラリから画像選択'),
                 onPressed: () async {
                   try {
                     XFile? file = await picker.pickImage(source: ImageSource.gallery);
@@ -197,7 +231,7 @@ class KojiHoukokuNotifier extends ChangeNotifier {
                 },
               ),
               CupertinoActionSheetAction(
-                child: const Text('Take a photo'),
+                child: const Text('カメラ起動'),
                 onPressed: () async {
                   try {
                     XFile? file = await picker.pickImage(source: ImageSource.camera);

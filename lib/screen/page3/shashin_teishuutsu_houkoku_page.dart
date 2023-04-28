@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -34,17 +35,49 @@ class _ShashinTeishuutsuHoukokuPageState
   XFile? imageFile;
 
   void selectImage() async {
-    try {
-      final XFile? selectedImage =
-          await _picker.pickImage(source: ImageSource.gallery);
-      if (selectedImage != null) {
-        setState(() {
-          imageFile = selectedImage;
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context){
+          return CupertinoActionSheet(
+            actions: <CupertinoActionSheetAction>[
+              CupertinoActionSheetAction(
+                child: const Text('ライブラリから画像選択'),
+                onPressed: () async {
+                  try {
+                    final XFile? selectedImage =
+                    await _picker.pickImage(source: ImageSource.gallery);
+                    if (selectedImage != null) {
+                      setState(() {
+                        imageFile = selectedImage;
+                      });
+                    }
+                  } catch (e) {
+                    print(e);
+                  }
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: const Text('カメラ起動'),
+                onPressed: () async {
+                  try {
+                    final XFile? selectedImage =
+                    await _picker.pickImage(source: ImageSource.camera);
+                    if (selectedImage != null) {
+                      setState(() {
+                        imageFile = selectedImage;
+                      });
+                    }
+                  } catch (e) {
+                    print(e);
+                  }
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        }
+    );
   }
 
   @override
