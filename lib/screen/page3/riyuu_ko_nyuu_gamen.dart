@@ -250,16 +250,20 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
                         }
                       },
                       child: Container(
+                        width: 180,
+                        height: 37,
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black, width: 1.5),
+                          color: const Color(0xFFFFA800),
+                          borderRadius: BorderRadius.circular(26),
                         ),
-                        height: 50,
-                        width: 100,
                         child: const Center(
                           child: Text(
                             '次へ',
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w300),
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),

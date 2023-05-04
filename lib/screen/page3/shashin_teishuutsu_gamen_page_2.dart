@@ -359,16 +359,20 @@ class _ShashinTeishuutsuGamenPage2State
                           }
                         },
                         child: Container(
-                          width: 150,
-                          height: 40,
+                          width: 80,
+                          height: 37,
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black, width: 1.5),
+                            color: const Color(0xFFFFA800),
+                            borderRadius: BorderRadius.circular(26),
                           ),
                           child: const Center(
                             child: Text(
                               '登録',
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w300),
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),

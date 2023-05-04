@@ -242,15 +242,20 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
         GestureDetector(
           onTap: () {},
           child: Container(
+            width: 80,
+            height: 37,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1.5),
+              color: const Color(0xFFFFA800),
+              borderRadius: BorderRadius.circular(26),
             ),
-            height: 50,
-            width: 150,
             child: const Center(
               child: Text(
                 '登録',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
@@ -350,15 +355,20 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
                 });
           },
           child: Container(
+            width: 80,
+            height: 37,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1.5),
+              color: const Color(0xFFFFA800),
+              borderRadius: BorderRadius.circular(26),
             ),
-            height: 50,
-            width: 200,
             child: const Center(
               child: Text(
                 '登録',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
