@@ -361,7 +361,8 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
             ),
             Row(
               children: [
-                Container(
+                widget.isShitami
+                ? Container(
                   width: 130.w,
                   height: 37,
                   decoration: BoxDecoration(
@@ -447,7 +448,8 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                       ),
                     ),
                   ),
-                ),
+                )
+                : Container(),
                 const SizedBox(
                   width: 5,
                 ),
