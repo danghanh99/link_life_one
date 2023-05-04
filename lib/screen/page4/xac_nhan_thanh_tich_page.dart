@@ -69,6 +69,7 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
                 (size.width - 33) / 7,
               ];
     return List.generate(count, (col) {
+      var y = NumberFormat("###,###");
       if (row == 0) {
         return Container(
           decoration: BoxDecoration(
@@ -96,49 +97,49 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
           if (col == 1) {
             text = listThanhTich.isEmpty
                 ? '0'
-                : listThanhTich
+                : y.format(listThanhTich
                     .map((e) => e.chiPhiKyGuiChuaXacNhan ?? 0)
-                    .reduce((value, element) => value + element)
+                    .reduce((value, element) => value + element))
                     .toString();
           }
           if (col == 2) {
             text = listThanhTich.isEmpty
                 ? '0'
-                : listThanhTich
+                : y.format(listThanhTich
                     .map((e) => e.chiPhiKyGuiDaXacNhan ?? 0)
-                    .reduce((value, element) => value + element)
+                    .reduce((value, element) => value + element))
                     .toString();
           }
           if (col == 3) {
             text = listThanhTich.isEmpty
                 ? '0'
-                : listThanhTich
+                : y.format(listThanhTich
                     .map((e) => e.soLuongCongTrinh ?? 0)
-                    .reduce((value, element) => value + element)
+                    .reduce((value, element) => value + element))
                     .toString();
           }
           if (col == 4) {
             text = listThanhTich.isEmpty
                 ? '0'
-                : listThanhTich
+                : y.format(listThanhTich
                     .map((e) => e.soLuongXemTruoc ?? 0)
-                    .reduce((value, element) => value + element)
+                    .reduce((value, element) => value + element))
                     .toString();
           }
           if (col == 5) {
             text = listThanhTich.isEmpty
                 ? '0'
-                : listThanhTich
+                : y.format(listThanhTich
                     .map((e) => e.soLuongBoSung ?? 0)
-                    .reduce((value, element) => value + element)
+                    .reduce((value, element) => value + element))
                     .toString();
           }
           if (col == 6) {
             text = listThanhTich.isEmpty
                 ? '0'
-                : listThanhTich
+                : y.format(listThanhTich
                     .map((e) => e.soLuongBanHang ?? 0)
-                    .reduce((value, element) => value + element)
+                    .reduce((value, element) => value + element))
                     .toString();
           }
         }
@@ -162,7 +163,6 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
         );
       }
       String text = '';
-      var y = NumberFormat("###,###");
       bool isToday = DateFormat('yyyyMMdd').format(listThanhTich[row - 2].ngayThang)==DateFormat('yyyyMMdd').format(DateTime.now());
       switch (col) {
         case (0):
@@ -178,16 +178,16 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
               y.format(listThanhTich[row - 2].chiPhiKyGuiDaXacNhan).toString();
           break;
         case (3):
-          text = listThanhTich[row - 2].soLuongCongTrinh.toString();
+          text = y.format(listThanhTich[row - 2].soLuongCongTrinh).toString();
           break;
         case (4):
-          text = listThanhTich[row - 2].soLuongXemTruoc.toString();
+          text = y.format(listThanhTich[row - 2].soLuongXemTruoc).toString();
           break;
         case (5):
-          text = listThanhTich[row - 2].soLuongBoSung.toString();
+          text = y.format(listThanhTich[row - 2].soLuongBoSung).toString();
           break;
         case (6):
-          text = listThanhTich[row - 2].soLuongBanHang.toString();
+          text = y.format(listThanhTich[row - 2].soLuongBanHang).toString();
           break;
 
         default:
