@@ -34,7 +34,7 @@ class MaterialAPI {
       bool showPopup = false;
       if (data.isNotEmpty) {
         Map<String, dynamic> firstData = data.first;
-        if (firstData.containsKey(['show_poup'])) {
+        if (firstData.containsKey('show_popup')) {
           showPopup = firstData['show_popup'];
           onSuccess(showPopup);
         } else {
