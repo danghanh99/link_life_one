@@ -19,10 +19,14 @@ class MaterialAPI {
   User user = BoxManager.user;
 
   Future<void> checkSave({
+    Function? onStart,
     required Function(bool) onSuccess,
     required Function(List<MaterialModel>) onSuccessList,
     required Function onFailed,
   }) async {
+
+    if(onStart!=null) onStart.call();
+
     String urlEndpoint = '${Constant.checkSaveMaterial}TANT_CD=${user.TANT_CD}';
 
     final Response response = await RestAPI.shared.getData(urlEndpoint);
@@ -152,9 +156,11 @@ class MaterialAPI {
   }
 
   Future<void> getListDefaultMaterialTakeBack({
+    Function? onStart,
     required Function(List<MaterialTakeBackModel>) onSuccess,
     required Function onFailed,
   }) async {
+    if(onStart!=null) onStart.call();
     String currentDate = DateFormat(('yyyy-MM-dd')).format(DateTime.now());
     String urlEndpoint =
         '${Constant.getListDefaultMaterialTakeBack}SYOZOKU_CD=${user.SYOZOKU_CD}&SYUKKO_DATE=$currentDate';

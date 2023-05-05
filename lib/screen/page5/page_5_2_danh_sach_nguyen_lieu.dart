@@ -288,67 +288,82 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
   }
 
   void checkSave() {
-    MaterialAPI.shared.checkSave(onSuccess: (showPopUp) {
-      if (showPopUp) {
-        showDialog(
-          context: context,
-          builder: (dialogContext) {
-            return SizedBox(
-              width: double.infinity,
-              child: CupertinoAlertDialog(
-                content: const Padding(
-                  padding: EdgeInsets.only(top: 15),
-                  child: Text(
-                    "前回編集途中のリストがあります。",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
+    MaterialAPI.shared.checkSave(
+      onStart: (){
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          CustomToast.show(context,
+              message: '読み込み中です。', backGround: Colors.grey);
+        });
+      },
+      onSuccess: (showPopUp) {
+        if (showPopUp) {
+          showDialog(
+            context: context,
+            builder: (dialogContext) {
+              return SizedBox(
+                width: double.infinity,
+                child: CupertinoAlertDialog(
+                  content: const Padding(
+                    padding: EdgeInsets.only(top: 15),
+                    child: Text(
+                      "前回編集途中のリストがあります。",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                ),
-                actions: <Widget>[
-                  TextButton(
+                  actions: <Widget>[
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(dialogContext);
+                          getEditMaterial(showPopUp);
+                        },
+                        child: const Text(
+                          '続きから編集する',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )),
+                    TextButton(
                       onPressed: () {
-                        Navigator.pop(dialogContext);
-                        getEditMaterial(showPopUp);
+                        Navigator.pop(dialogContext); //close Dialog
+                        // deleteMaterial();
+                        deleteExistSave();
                       },
                       child: const Text(
-                        '続きから編集する',
+                        '破棄して新規リスト作成',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
-                      )),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(dialogContext); //close Dialog
-                      // deleteMaterial();
-                      deleteExistSave();
-                    },
-                    child: const Text(
-                      '破棄して新規リスト作成',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
                       ),
-                    ),
-                  )
-                ],
-              ),
-            );
-          },
-        );
-      } else {}
-    }, onSuccessList: (listMaterials) {
-      setState(() {
-        materials = listMaterials;
+                    )
+                  ],
+                ),
+              );
+            },
+          );
+        } else {}
+      },
+      onSuccessList: (listMaterials) {
+        setState(() {
+          materials = listMaterials;
+        });
+        if(listMaterials.isEmpty){
+          CustomToast.show(
+            context,
+            message: 'データがありません。'
+          );
+        }
+        // CustomToast.show(context,
+        //     message: '保存したデータを確認できました。', backGround: Colors.green);
+      },
+      onFailed: () {
+        CustomToast.show(context, message: '保存したデータを確認できません。');
       });
-      CustomToast.show(context,
-          message: '保存したデータを確認できました。', backGround: Colors.green);
-    }, onFailed: () {
-      CustomToast.show(context, message: '保存したデータを確認できません。');
-    });
   }
 
   void deleteMaterial() {

@@ -33,15 +33,30 @@ class _Page53DanhSachNhanLaiVatLieuState
   }
 
   void getMaterialTakeBack() {
-    MaterialAPI.shared.getListDefaultMaterialTakeBack(onSuccess: (materials) {
-      setState(() {
-        this.materials = materials;
-      });
-      CustomToast.show(context,
-          message: 'データを取得できました。', backGround: Colors.green);
-    }, onFailed: () {
-      CustomToast.show(context, message: 'データを取得できません。');
-    });
+    MaterialAPI.shared.getListDefaultMaterialTakeBack(
+      onStart: (){
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          CustomToast.show(context,
+              message: '読み込み中です。', backGround: Colors.grey);
+        });
+      },
+      onSuccess: (materials) {
+        setState(() {
+          this.materials = materials;
+        });
+        if(materials.isEmpty){
+          CustomToast.show(
+              context,
+              message: 'データがありません。'
+          );
+        }
+        // CustomToast.show(context,
+        //     message: 'データを取得できました。', backGround: Colors.green);
+      },
+      onFailed: () {
+        CustomToast.show(context, message: 'データを取得できません。');
+      }
+    );
   }
 
   @override
