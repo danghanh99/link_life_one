@@ -18,9 +18,13 @@ class InventoryAPI {
   User user = BoxManager.user;
 
   Future<void> getListInventorySchedule({
+    Function? onStart,
     required Function(List<InventorySchedule>) onSuccess,
     required Function onFailed,
   }) async {
+
+    if(onStart!=null) onStart.call();
+
     String urlEndpoint =
         '${Constant.getListInventorySchedule}SYOZOKU_CD=${user.SYOZOKU_CD}';
 
