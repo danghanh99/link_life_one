@@ -503,13 +503,11 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
         child: Column(
           children: [
             header(),
-
             title(),
             const SizedBox(
               height: 35,
             ),
-
-            Flexible(
+            Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Row(
@@ -678,30 +676,30 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                     ),
                   ),
                 ),
-              ],
-            ),
-            Expanded(child: Container()),
-            Container(
-              width: 120,
-              height: 37,
-              decoration: BoxDecoration(
-                color: const Color(0xFF6D8FDB),
-                borderRadius: BorderRadius.circular(26),
-              ),
-              child: TextButton(
-                onPressed: () {
-                  _saveData(false);
-                },
-                child: const Text(
-                  '持ち出し登録',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                Expanded(child: Container()),
+                Container(
+                  width: 120,
+                  height: 37,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF6D8FDB),
+                    borderRadius: BorderRadius.circular(26),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      _saveData(false);
+                    },
+                    child: const Text(
+                      '持ち出し登録',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
             // const SizedBox(
             //   height: 10,

@@ -81,7 +81,7 @@ class _Page53DanhSachNhanLaiVatLieuState
             const SizedBox(
               height: 25,
             ),
-            Flexible(
+            Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Row(
@@ -100,7 +100,7 @@ class _Page53DanhSachNhanLaiVatLieuState
                 ),
               ),
             ),
-            Expanded(child: Container()),
+            const SizedBox(height: 10.0,),
             Container(
               width: 120,
               height: 37,
