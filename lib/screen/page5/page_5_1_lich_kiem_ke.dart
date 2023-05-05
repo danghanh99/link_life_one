@@ -85,7 +85,7 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
             const SizedBox(
               height: 35,
             ),
-            Flexible(
+            Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Row(
@@ -108,7 +108,6 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
             const SizedBox(
               height: 10,
             ),
-            const Spacer(),
             Container(
               width: 120,
               height: 37,
