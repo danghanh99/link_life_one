@@ -828,7 +828,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
               content: const Padding(
                 padding: EdgeInsets.only(top: 15),
                 child: Text(
-                  "変更されたデータを保存しますか。",
+                  "編集途中のリストを保存しますか。",
                   style: TextStyle(
                     color: Color.fromARGB(255, 24, 23, 23),
                     fontSize: 16,
@@ -861,6 +861,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                     )),
                 TextButton(
                   onPressed: () {
+                    Navigator.pop(context);
                     Navigator.pop(context);
                   },
                   child: const Text(
