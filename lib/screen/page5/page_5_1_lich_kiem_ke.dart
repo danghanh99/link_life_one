@@ -26,14 +26,12 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
     '部材管理',
     '出納帳',
   ];
-  late int currentRadioRow;
+  List<bool> currentCheckBoxState = [];
 
   List<InventorySchedule> schedules = [];
 
   @override
   void initState() {
-    currentRadioRow = -1;
-
     super.initState();
     getData();
   }
@@ -47,10 +45,14 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
         });
       },
       onSuccess: (result) {
+        currentCheckBoxState.clear();
         WidgetsBinding.instance.addPostFrameCallback((_) {
           setState(() {
             schedules = result;
           });
+          for(var res in result){
+            currentCheckBoxState.add(false);
+          }
           if(result.isEmpty){
             CustomToast.show(context,
                 message: 'データがありません。');
@@ -63,16 +65,17 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
     });
   }
 
-  Future<void> updateSchedule(String id) async {
-    InventoryAPI.shared.updateInventorySchedule(id, onSuccess: (dynamic) {
+  Future<void> updateSchedule(List<String> id) async {
+    await InventoryAPI.shared.updateInventorySchedule(id, onSuccess: (dynamic) {
       CustomToast.show(context,
           message: 'リストで選択した項目のデータを更新できました。', backGround: Colors.green);
-    }, onFailed: (dynamic) {
+    }, onFailed: () {
       CustomToast.show(context, message: 'リストで選択した項目のデータを更新できません。');
     });
+    await getData();
   }
 
-  void showAlertConfirm(String nyukoId) {
+  void showAlertConfirm(List<String> nyukoId) {
     MyDialog.showCustomDialog(context, '', '入庫処理を実行します。よろしいですか？', 'はい', 'いいえ',
         () {
       updateSchedule(nyukoId);
@@ -130,12 +133,14 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
               ),
               child: TextButton(
                 onPressed: () {
-                  if (currentRadioRow > 0 &&
-                      currentRadioRow <= schedules.length) {
-                    InventorySchedule schedule =
-                        schedules.elementAt(currentRadioRow - 1);
-                    print('schedule.nyukoId: ${schedule.nyukoId}');
-                    showAlertConfirm(schedule.nyukoId??'');
+                  if (currentCheckBoxState.isNotEmpty) {
+                    List<String> nyukoIds = [];
+                    for(int i=0; i<currentCheckBoxState.length; i++){
+                      if(currentCheckBoxState[i]){
+                        nyukoIds.add(schedules[i].nyukoId ?? '');
+                      }
+                    }
+                    showAlertConfirm(nyukoIds);
                   } else {
                     CustomToast.show(context, message: "一つを選択してください。");
                   }
@@ -362,17 +367,16 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
 
   Widget contentTable(int col, int row) {
     return col == 0
-        ? RadioListTile(
-            value: row,
-            groupValue: currentRadioRow,
-            onChanged: (e) {
-              if (row <= schedules.length) {
-                setState(() {
-                  currentRadioRow = row;
-                });
-              }
-            },
-          )
+        ? Checkbox(
+          activeColor: Colors.blue,
+          checkColor: Colors.white,
+          value: currentCheckBoxState[row - 1],
+          onChanged: (newValue) {
+            setState(() {
+              currentCheckBoxState[row - 1] = newValue ?? false;
+            });
+          },
+        )
         : Text(
             valueFrom(col, row),
             textAlign: TextAlign.center,

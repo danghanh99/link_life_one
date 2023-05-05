@@ -41,14 +41,17 @@ class InventoryAPI {
   }
 
   Future<void> updateInventorySchedule(
-    String id, {
+    List<String> id, {
     required Function(dynamic) onSuccess,
     required Function onFailed,
   }) async {
     String urlEndpoint = Constant.updateInventoryScheduleById;
 
     final Response response = await RestAPI.shared
-        .postDataWithFormData(urlEndpoint, {'NYUKO_ID': id});
+        .postData(urlEndpoint, {
+          'LOGIN_ID': user.TANT_CD,
+          'NYUKO_ID': id
+        });
 
     if (response.statusCode == 200) {
       onSuccess(response);
