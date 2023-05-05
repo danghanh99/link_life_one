@@ -75,21 +75,34 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
       String jisyaCode = '',
       String syohinName = ''}) {
     InventoryAPI.shared.getListDefaultInventory(
-        categoryCode: categoryCode,
-        makerName: makerName,
-        jisyaCode: jisyaCode,
-        syohinName: syohinName,
-        onSuccess: (inventories) {
-          setState(() {
-            this.inventories = inventories;
-            // selectAmounts = List.generate(inventories.length, (index) => 0);
-          });
+      categoryCode: categoryCode,
+      makerName: makerName,
+      jisyaCode: jisyaCode,
+      syohinName: syohinName,
+      onStart: (){
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           CustomToast.show(context,
-              message: 'データリストを取得できました。', backGround: Colors.green);
-        },
-        onFailed: () {
-          CustomToast.show(context, message: 'データリストを取得できません。');
+              message: '読み込み中です。', backGround: Colors.grey);
         });
+      },
+      onSuccess: (inventories) {
+        setState(() {
+          this.inventories = inventories;
+          // selectAmounts = List.generate(inventories.length, (index) => 0);
+        });
+        if(inventories.isEmpty){
+          CustomToast.show(
+              context,
+              message: 'データがありません。'
+          );
+        }
+        // CustomToast.show(context,
+        //     message: 'データリストを取得できました。', backGround: Colors.green);
+      },
+      onFailed: () {
+        CustomToast.show(context, message: 'データリストを取得できません。');
+      }
+    );
   }
 
   @override

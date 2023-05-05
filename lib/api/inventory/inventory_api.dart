@@ -80,9 +80,13 @@ class InventoryAPI {
     String makerName = '',
     String jisyaCode = '',
     String syohinName = '',
+    Function? onStart,
     required Function(List<DefaultInventory>) onSuccess,
     required Function onFailed,
   }) async {
+
+    if(onStart!=null) onStart.call();
+
     String urlEndpoint =
         '${Constant.getListDefaultInventory}SYOZOKU_CD=${user.SYOZOKU_CD}&CTGORY_CD=$categoryCode&MAKER_CD=$makerName&JISYA_CD=$jisyaCode&SYOHIN_NAME=$syohinName';
 
