@@ -18,6 +18,9 @@ class Koji {
   final String? setsakiName;
   final String kojiSt;
   final String hojinFlag;
+  final String kbnmsaiName;
+  final String yobikomoku1;
+  final String yobikomoku2;
 
   Koji(
       {this.sitamiHomonJikan,
@@ -34,7 +37,10 @@ class Koji {
       required this.setsakiAddress,
       this.setsakiName,
       required this.kojiSt,
-      required this.hojinFlag});
+      required this.hojinFlag,
+      required this.kbnmsaiName,
+      required this.yobikomoku1,
+      required this.yobikomoku2});
 
   factory Koji.fromJson(Map<String, dynamic> json) {
     return Koji(
@@ -48,7 +54,10 @@ class Koji {
         setsakiAddress: json["SETSAKI_ADDRESS"],
         setsakiName: json["SETSAKI_NAME"],
         kojiSt: json['KOJI_ST'],
-        hojinFlag: json['HOJIN_FLG']
+        hojinFlag: json['HOJIN_FLG'],
+        kbnmsaiName: json['KBNMSAI_NAME'],
+        yobikomoku1: json['YOBIKOMOKU1_KBN2'],
+        yobikomoku2: json['YOBIKOMOKU2_KBN2']
     );
   }
 }

@@ -540,11 +540,21 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                                 borderRadius: BorderRadius.circular(10),
                                 color: showMauXanh(item.kojiSt)
                                     ? const Color(0xffc5d8f1)
-                                    : const Color(0xfffce9d9),
+                                    : Color.fromARGB(
+                                      int.parse(item.yobikomoku2.split(", ")[0]),
+                                      int.parse(item.yobikomoku2.split(", ")[1]),
+                                      int.parse(item.yobikomoku2.split(", ")[2]),
+                                      int.parse(item.yobikomoku2.split(", ")[3]),
+                                    ),
                                 border: Border.all(
                                   color: showMauXanh(item.kojiSt)
                                       ? const Color(0xffc5d8f1)
-                                      : const Color(0xfffce9d9),
+                                      : Color.fromARGB(
+                                        int.parse(item.yobikomoku2.split(", ")[0]),
+                                        int.parse(item.yobikomoku2.split(", ")[1]),
+                                        int.parse(item.yobikomoku2.split(", ")[2]),
+                                        int.parse(item.yobikomoku2.split(", ")[3]),
+                                      ),
                                 ),
                               ),
                               child: Padding(
@@ -552,8 +562,25 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      "訪問時間：${isShitami ? item.sitamiHomonJikan : item.kojiHomonJikan} - ${isShitami ? item.sitamiHomonJikanEnd : item.kojiHomonJikanEnd}   報告： ${item.kojiSt == '03' ? '済' : '未'}",
+                                    Row(
+                                      children: [
+                                        Container(
+                                          color: Color(int.parse(item.yobikomoku1)),
+                                          margin: const EdgeInsets.only(right: 10.0),
+                                          child: Text(
+                                            item.kbnmsaiName,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                            )
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            "訪問時間：${isShitami ? item.sitamiHomonJikan : item.kojiHomonJikan} - ${isShitami ? item.sitamiHomonJikanEnd : item.kojiHomonJikanEnd}   報告： ${item.kojiSt == '03' ? '済' : '未'}",
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                     isShitami
                                         ? Text(

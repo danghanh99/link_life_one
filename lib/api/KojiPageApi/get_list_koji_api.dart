@@ -7,6 +7,7 @@ import 'package:link_life_one/local_storage_services/local_storage_base.dart';
 import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 import 'package:link_life_one/models/koji.dart';
 import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
+import 'package:link_life_one/models/local_storage/m_kbn.dart';
 import 'package:link_life_one/models/local_storage/t_koji.dart';
 import 'dart:convert';
 
@@ -18,6 +19,7 @@ class GetListKojiApi {
   Future<List<Koji>> _notSuccess({required DateTime date, required loginId, required Function onFailed, required Function(List<Koji>) onSuccess}) async {
     if(await LocalStorageServices.isTodayDataDownloaded() && DateFormat('yyyyMMdd').format(date)==DateFormat('yyyyMMdd').format(DateTime.now())){
       var tkoji = await LocalStorageBase.getValues(boxName: boxKojiName);
+      var mKbn = await LocalStorageBase.getValues(boxName: boxKbnName);
       // List<Koji> list = tkoji.map<Koji>((t) => t.toKoji()).toList();
       // List<Koji> list = (tkoji.where((element) => element.homonTantCd1==loginId || element.homonTantCd2==loginId || element.homonTantCd3==loginId).toList())
       //     .map<Koji>((e) => e.toKoji()).toList();
@@ -28,14 +30,38 @@ class GetListKojiApi {
             && t.delFlg == 0
             && (t.homonSbt=="02" || t.homonSbt=="2")
             && t.kojiYMD==DateFormat('yyyy-MM-dd').format(date)){
-          list.add(t.toKoji());
+          for(MKBN k in mKbn){
+            if(t.tagKbn==k.kbnmsaiCd && k.kbnCd=="05"){
+              for(MKBN k2 in mKbn){
+                if(t.tagKbn==k2.kbnmsaiCd && k2.kbnCd=="L1"){
+                  list.add(t.toKojiWithKbn(
+                      kbnmsaiName: k.kbnmsaiName,
+                      yobikomoku1: k2.yobikomoku1,
+                      yobikomoku2: k2.yobikomoku2
+                  ));
+                }
+              }
+            }
+          }
         }
         else if(t.homonTantCd4==loginId
             && t.syuyakuJyucyuId == null
             && t.delFlg == 0
             && (t.homonSbt=="01" || t.homonSbt=="1")
             && t.sitamiYMD==DateFormat('yyyy-MM-dd').format(date)){
-          list.add(t.toSitami());
+          for(MKBN k in mKbn){
+            if(t.tagKbn==k.kbnmsaiCd && k.kbnCd=="05"){
+              for(MKBN k2 in mKbn){
+                if(t.tagKbn==k2.kbnmsaiCd && k2.kbnCd=="L1"){
+                  list.add(t.toSitami(
+                      kbnmsaiName: k.kbnmsaiName,
+                      yobikomoku1: k2.yobikomoku1,
+                      yobikomoku2: k2.yobikomoku2
+                  ));
+                }
+              }
+            }
+          }
         }
       }
       onSuccess.call(_sort(list));
@@ -113,7 +139,10 @@ class GetListKojiApi {
               setsakiAddress: e["SETSAKI_ADDRESS"],
               setsakiName: e["SETSAKI_NAME"],
               kojiSt: e['KOJI_ST'],
-              hojinFlag: e['HOJIN_FLG']),
+              hojinFlag: e['HOJIN_FLG'],
+              kbnmsaiName: e['KBNMSAI_NAME'],
+              yobikomoku1: e['YOBIKOMOKU1_KBN2'],
+              yobikomoku2: e['YOBIKOMOKU2_KBN2']),
         )
             .toList();
         onSuccess.call(_sort(list));

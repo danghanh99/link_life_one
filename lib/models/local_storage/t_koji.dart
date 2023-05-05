@@ -418,7 +418,11 @@ class TKoji extends HiveObject{
     'UPD_YMD': updYMD
   };
 
-  Koji toKoji(){
+  Koji toKojiWithKbn({
+    required kbnmsaiName,
+    required yobikomoku1,
+    required yobikomoku2
+  }){
     return Koji(
         homonSbt: homonSbt!,
         jyucyuId: jyucyuId,
@@ -431,6 +435,9 @@ class TKoji extends HiveObject{
         kojiHomonJikanEnd: kojiHomonJikanEnd,
         kojiJinin: kojiJinin,
         kojiJikan: kojiJikan,
+        kbnmsaiName: kbnmsaiName,
+        yobikomoku1: yobikomoku1,
+        yobikomoku2: yobikomoku2
     );
   }
   // Koji toKoji(){
@@ -453,7 +460,11 @@ class TKoji extends HiveObject{
   //   );
   // }
 
-  Koji toSitami(){
+  Koji toSitami({
+    required kbnmsaiName,
+    required yobikomoku1,
+    required yobikomoku2
+  }){
     return Koji(
       homonSbt: homonSbt!,
       jyucyuId: jyucyuId,
@@ -466,6 +477,9 @@ class TKoji extends HiveObject{
       sitamiHomonJikan: sitamiHomonJikan,
       sitamiHomonJikanEnd: sitamiHomonJikanEnd,
       shitamiJikan: sitamiJikan,
+      kbnmsaiName: kbnmsaiName,
+      yobikomoku1: yobikomoku1,
+      yobikomoku2: yobikomoku2
     );
   }
 
