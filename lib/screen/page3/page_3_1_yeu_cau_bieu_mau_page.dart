@@ -1,22 +1,16 @@
-import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/api/KojiPageApi/get_list_pdf.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:link_life_one/local_storage_services/local_storage_services.dart';
 import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 import 'package:link_life_one/models/pdf_file.dart';
 import 'package:link_life_one/screen/page3/shashin_kakinin_page.dart';
 import 'package:link_life_one/screen/page3/shashin_teishuutsu_gamen_page.dart';
 import 'package:link_life_one/screen/page3/shitami_houkoku_page.dart';
 import 'package:link_life_one/screen/page7/component/dialog.dart';
-import 'package:link_life_one/screen/page7/component/pdf_viewer.dart';
 import 'package:link_life_one/shared/cache_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -361,7 +355,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
             ),
             Row(
               children: [
-                widget.isShitami
+                !widget.isShitami
                 ? Container(
                   width: 130.w,
                   height: 37,
@@ -449,7 +443,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                     ),
                   ),
                 )
-                : Container(),
+                : const SizedBox.shrink(),
                 const SizedBox(
                   width: 5,
                 ),
@@ -483,7 +477,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                     ),
                   ),
                 ),
-                Expanded(child: Container()),
+                const Spacer(),
                 Container(
                   width: 180.w,
                   height: 37,

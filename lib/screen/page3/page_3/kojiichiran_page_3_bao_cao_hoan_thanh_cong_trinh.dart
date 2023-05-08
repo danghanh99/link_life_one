@@ -731,6 +731,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                     children: [
                       Expanded(
                         child: Container(
+                          height: 40,
                           decoration: BoxDecoration(
                             color: const Color(0xFFFFA800),
                             borderRadius: BorderRadius.circular(26),
@@ -764,6 +765,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                       const SizedBox(width: 10.0,),
                       Expanded(
                         child: Container(
+                          height: 40,
                           decoration: BoxDecoration(
                             color: const Color(0xFFFFA800),
                             borderRadius: BorderRadius.circular(26),
