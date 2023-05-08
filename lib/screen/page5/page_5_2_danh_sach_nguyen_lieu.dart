@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/api/material/material_api.dart';
 import 'package:link_life_one/models/default_inventory.dart';
@@ -10,10 +7,8 @@ import 'package:link_life_one/models/material_model.dart';
 import 'package:link_life_one/screen/page5/page_5_2_1_danh_sach_ton_kho.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../components/custom_header_widget.dart';
-import '../../components/custom_text_field.dart';
 import '../../components/toast.dart';
 import '../../shared/assets.dart';
-import '../../shared/colors.dart';
 import '../../shared/custom_button.dart';
 
 class Page52DanhSachNguyenLieu extends StatefulWidget {
@@ -71,7 +66,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     List<double> colwidth =
         MediaQuery.of(context).orientation == Orientation.portrait
             ? [
-                30,
+                40,
                 130,
                 130,
                 100,
@@ -80,8 +75,8 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                 160,
               ]
             : [
-                30,
-                (size.width - 33) * 2 / 7 + -30,
+                40,
+                (size.width - 33) * 2 / 7 + -40,
                 (size.width - 33) / 7,
                 (size.width - 33) / 7,
                 (size.width - 33) / 7,
@@ -116,7 +111,9 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
           color: Colors.white,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
-        alignment: col==1 || col==2 || col==3 || col==4 ? Alignment.centerLeft : Alignment.center,
+        alignment: col == 1 || col == 2 || col == 3 || col == 4
+            ? Alignment.centerLeft
+            : Alignment.center,
         width: colwidth[col],
         height: 50,
         child: contentTable(col, row),
@@ -125,26 +122,23 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
   }
 
   Widget _moreButton(BuildContext context, int jussu, Function(int) onChange) {
-
     List<PopupMenuEntry<int>> widgets = [];
 
     for (var i = 0; i <= jussu; i++) {
-      widgets.add(
-          PopupMenuItem(
-            height: 25,
-            padding: const EdgeInsets.only(right: 0, left: 10),
-            value: i,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  width: 14,
-                ),
-                Text('$i'),
-              ],
+      widgets.add(PopupMenuItem(
+        height: 25,
+        padding: const EdgeInsets.only(right: 0, left: 10),
+        value: i,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(
+              width: 14,
             ),
-          )
-      );
+            Text('$i'),
+          ],
+        ),
+      ));
       if (i < jussu) {
         widgets.add(const PopupMenuDivider());
       }
@@ -172,7 +166,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
         children: [
           Expanded(
             child: Center(
-              child: Text('${materials[row-1].suryo}'),
+              child: Text('${materials[row - 1].suryo}'),
             ),
           ),
           Container(
@@ -187,16 +181,13 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 7, left: 7),
-            child: _moreButton(
-              context,
-              int.parse(valueFrom(5, row)),
-              (number){
-                print('number: $number');
-                setState(() {
-                  materials[row-1].suryo = '$number';
-                });
-              }
-            ),
+            child: _moreButton(context, int.tryParse(valueFrom(5, row)) ?? 0,
+                (number) {
+              print('number: $number');
+              setState(() {
+                materials[row - 1].suryo = '$number';
+              });
+            }),
           ),
         ],
       );
@@ -288,82 +279,74 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
   }
 
   void checkSave() {
-    MaterialAPI.shared.checkSave(
-      onStart: (){
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          CustomToast.show(context,
-              message: '読み込み中です。', backGround: Colors.grey);
-        });
-      },
-      onSuccess: (showPopUp) {
-        if (showPopUp) {
-          showDialog(
-            context: context,
-            builder: (dialogContext) {
-              return SizedBox(
-                width: double.infinity,
-                child: CupertinoAlertDialog(
-                  content: const Padding(
-                    padding: EdgeInsets.only(top: 15),
-                    child: Text(
-                      "前回編集途中のリストがあります。",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                      ),
+    MaterialAPI.shared.checkSave(onStart: () {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        CustomToast.show(context, message: '読み込み中です。', backGround: Colors.grey);
+      });
+    }, onSuccess: (showPopUp) {
+      if (showPopUp) {
+        showDialog(
+          context: context,
+          builder: (dialogContext) {
+            return SizedBox(
+              width: double.infinity,
+              child: CupertinoAlertDialog(
+                content: const Padding(
+                  padding: EdgeInsets.only(top: 15),
+                  child: Text(
+                    "前回編集途中のリストがあります。",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  actions: <Widget>[
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pop(dialogContext);
-                          getEditMaterial(showPopUp);
-                        },
-                        child: const Text(
-                          '続きから編集する',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )),
-                    TextButton(
+                ),
+                actions: <Widget>[
+                  TextButton(
                       onPressed: () {
-                        Navigator.pop(dialogContext); //close Dialog
-                        // deleteMaterial();
-                        deleteExistSave();
+                        Navigator.pop(dialogContext);
+                        getEditMaterial(showPopUp);
                       },
                       child: const Text(
-                        '破棄して新規リスト作成',
+                        '続きから編集する',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
+                      )),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(dialogContext); //close Dialog
+                      // deleteMaterial();
+                      deleteExistSave();
+                    },
+                    child: const Text(
+                      '破棄して新規リスト作成',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
-                    )
-                  ],
-                ),
-              );
-            },
-          );
-        } else {}
-      },
-      onSuccessList: (listMaterials) {
-        setState(() {
-          materials = listMaterials;
-        });
-        if(listMaterials.isEmpty){
-          CustomToast.show(
-            context,
-            message: 'データがありません。'
-          );
-        }
-        // CustomToast.show(context,
-        //     message: '保存したデータを確認できました。', backGround: Colors.green);
-      },
-      onFailed: () {
-        CustomToast.show(context, message: '保存したデータを確認できません。');
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      } else {}
+    }, onSuccessList: (listMaterials) {
+      setState(() {
+        materials = listMaterials;
       });
+      if (listMaterials.isEmpty) {
+        CustomToast.show(context, message: 'データがありません。');
+      }
+      // CustomToast.show(context,
+      //     message: '保存したデータを確認できました。', backGround: Colors.green);
+    }, onFailed: () {
+      CustomToast.show(context, message: '保存したデータを確認できません。');
+    });
   }
 
   void deleteMaterial() {
@@ -388,12 +371,10 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     MaterialAPI.shared.deleteMaterialById(
         syukkoId: item.syukkoId ?? '',
         onSuccess: (message) {
-          log('deleteListMaterial onSuccess');
           CustomToast.show(context,
               message: '選択した項目を削除できました。', backGround: Colors.green);
         },
         onFailed: () {
-          log('deleteListMaterial onFailed');
           CustomToast.show(context, message: '選択した項目を削除できません。');
         });
   }
@@ -657,7 +638,6 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                         : () {
                             MaterialModel selectedItem =
                                 materials.elementAt(currentRadioRow - 1);
-                            log('selectedItem: ${selectedItem.ctgoryName}');
                             if (selectedItem.syukkoId != null) {
                               deleteMaterialItem(selectedItem);
                             } else {
@@ -710,11 +690,9 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     );
   }
 
-  _saveData(isBack){
-    if (currentRadioRow > 0 &&
-        currentRadioRow <= materials.length) {
-      MaterialModel material =
-      materials.elementAt(currentRadioRow - 1);
+  _saveData(isBack) {
+    if (currentRadioRow > 0 && currentRadioRow <= materials.length) {
+      MaterialModel material = materials.elementAt(currentRadioRow - 1);
 
       int quantity = 0;
 
@@ -726,12 +704,12 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
       }
 
       if (quantity == 0) {
-        if(!isBack) showAlertEmptyQuantity();
+        if (!isBack) showAlertEmptyQuantity();
       } else {
         registerMaterialItem(material);
       }
     } else {
-      if(!isBack) CustomToast.show(context, message: "一つを選択してください。");
+      if (!isBack) CustomToast.show(context, message: "一つを選択してください。");
     }
   }
 
