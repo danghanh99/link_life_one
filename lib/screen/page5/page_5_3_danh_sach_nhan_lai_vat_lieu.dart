@@ -22,6 +22,7 @@ class Page53DanhSachNhanLaiVatLieu extends StatefulWidget {
 class _Page53DanhSachNhanLaiVatLieuState
     extends State<Page53DanhSachNhanLaiVatLieu> {
   late int currentRadioRow;
+  bool isValidate = false;
   List<MaterialTakeBackModel> materials = [];
   List<TextEditingController> textControllers = [];
 
@@ -114,6 +115,12 @@ class _Page53DanhSachNhanLaiVatLieuState
               child: TextButton(
                 onPressed: () {
                   if (currentRadioRow < 1) {
+                    return;
+                  }
+                  if(textControllers[currentRadioRow-1].text.isEmpty){
+                    setState(() {
+                      isValidate = true;
+                    });
                     return;
                   }
                   MaterialTakeBackModel material =
@@ -245,7 +252,7 @@ class _Page53DanhSachNhanLaiVatLieuState
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
         alignment: col==1 || col==2 || col==3 || col==4 ? Alignment.centerLeft : Alignment.center,
         width: colwidth[col],
-        height: 50,
+        height: isValidate && currentRadioRow!=-1 && textControllers[currentRadioRow-1].text.isEmpty && row==currentRadioRow ? 100 : 70,
         child: contentTable(col, row),
       );
     });
@@ -315,32 +322,53 @@ class _Page53DanhSachNhanLaiVatLieuState
         borderRadius: BorderRadius.all(Radius.circular(0)),
         borderSide: BorderSide(color: AppColors.BORDER, width: 1),
       );
-      return Container(
-        height: 80,
-        alignment: Alignment.center,
-        child: Center(
-          child: TextField(
-            controller: textControllers[row-1],
-            decoration: InputDecoration(
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Center(
+            child: TextField(
+              controller: textControllers[row-1],
+              decoration: InputDecoration(
                 // hintText: '0',
-                contentPadding: EdgeInsets.zero,
+                contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
                 enabledBorder: borderOutline,
                 focusedBorder: borderOutline,
-                disabledBorder: borderOutline),
-            textAlign: TextAlign.center,
-            onChanged: (text) {
-              // materials.elementAt(row - 1).suryo = text;
-            },
-            keyboardType: TextInputType.number,
-            inputFormatters: [
-              // for below version 2 use this
-              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-              // for version 2 and greater youcan also use this
-              FilteringTextInputFormatter.digitsOnly,
-            ],
-            maxLines: 1,
+                disabledBorder: borderOutline,
+                isDense: true,
+              ),
+              textAlign: TextAlign.center,
+              onChanged: (text) {
+                // materials.elementAt(row - 1).suryo = text;
+              },
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                // for below version 2 use this
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                // for version 2 and greater youcan also use this
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              maxLines: 1,
+              onTap: (){
+                setState(() {
+                  isValidate = false;
+                });
+              },
+            ),
           ),
-        ),
+          Visibility(
+            visible: isValidate && currentRadioRow!=-1 && textControllers[currentRadioRow-1].text.isEmpty && row==currentRadioRow,
+            child: const Padding(
+              padding: EdgeInsets.only(top: 2.0),
+              child: Text(
+                '数量を入力して下さい',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 13
+                ),
+              ),
+            )
+          )
+        ],
       );
     }
 
