@@ -538,22 +538,22 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: showMauXanh(item.kojiSt)
+                                color: showMauXanh(item.kojiSt) || item.yobikomoku2==null
                                     ? const Color(0xffc5d8f1)
                                     : Color.fromARGB(
-                                      int.parse(item.yobikomoku2.split(", ")[0]),
-                                      int.parse(item.yobikomoku2.split(", ")[1]),
-                                      int.parse(item.yobikomoku2.split(", ")[2]),
-                                      int.parse(item.yobikomoku2.split(", ")[3]),
+                                      int.parse(item.yobikomoku2!.split(", ")[0]),
+                                      int.parse(item.yobikomoku2!.split(", ")[1]),
+                                      int.parse(item.yobikomoku2!.split(", ")[2]),
+                                      int.parse(item.yobikomoku2!.split(", ")[3]),
                                     ),
                                 border: Border.all(
-                                  color: showMauXanh(item.kojiSt)
+                                  color: showMauXanh(item.kojiSt) || item.yobikomoku2==null
                                       ? const Color(0xffc5d8f1)
                                       : Color.fromARGB(
-                                        int.parse(item.yobikomoku2.split(", ")[0]),
-                                        int.parse(item.yobikomoku2.split(", ")[1]),
-                                        int.parse(item.yobikomoku2.split(", ")[2]),
-                                        int.parse(item.yobikomoku2.split(", ")[3]),
+                                        int.parse(item.yobikomoku2!.split(", ")[0]),
+                                        int.parse(item.yobikomoku2!.split(", ")[1]),
+                                        int.parse(item.yobikomoku2!.split(", ")[2]),
+                                        int.parse(item.yobikomoku2!.split(", ")[3]),
                                       ),
                                 ),
                               ),
@@ -564,17 +564,19 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                                   children: [
                                     Row(
                                       children: [
-                                        Container(
-                                          color: Color(int.parse(item.yobikomoku1)),
+                                        item.yobikomoku1!=null && item.kbnmsaiName!=null
+                                        ? Container(
+                                          color: Color(int.parse(item.yobikomoku1!)),
                                           margin: const EdgeInsets.only(right: 10.0),
                                           child: Text(
-                                            item.kbnmsaiName,
+                                            item.kbnmsaiName!,
                                             style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 14,
                                             )
                                           ),
-                                        ),
+                                        )
+                                        : Container(),
                                         Expanded(
                                           child: Text(
                                             "訪問時間：${isShitami ? item.sitamiHomonJikan : item.kojiHomonJikan} - ${isShitami ? item.sitamiHomonJikanEnd : item.kojiHomonJikanEnd}   報告： ${item.kojiSt == '03' ? '済' : '未'}",
