@@ -124,7 +124,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
   Widget _moreButton(BuildContext context, int jussu, Function(int) onChange) {
     List<PopupMenuEntry<int>> widgets = [];
 
-    for (var i = 0; i <= jussu; i++) {
+    for (var i = 1; i <= jussu; i++) {
       widgets.add(PopupMenuItem(
         height: 25,
         padding: const EdgeInsets.only(right: 0, left: 10),
