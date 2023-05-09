@@ -7,11 +7,12 @@ class GetQR {
   GetQR() : super();
 
   Future<List<dynamic>> getQrApi({
+    required String code,
     required Function(List<dynamic>) onSuccess,
     required Function onFailed,
   }) async {
     final response = await http.get(
-      Uri.parse("${Constant.url}Request/Order/requestGetQR.php"),
+      Uri.parse("${Constant.url}Request/Order/requestGetQR.php?HINBAN=$code"),
     );
 
     if (response.statusCode == 200) {

@@ -227,47 +227,49 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                                   key: qrKey,
                                   onQRViewCreated: (controller) {
                                     this.controller = controller;
-                                    controller.scannedDataStream
-                                        .listen((scanData) {
+                                    controller.scannedDataStream.listen((scanData) {
+                                      String code = (scanData.code!).split(';')[1];
+                                      print('code: $code');
+                                      GetQR().getQrApi(
+                                        code: code,
+                                        onSuccess: (data) {
+                                          print(data);
+
+                                          if (data.isNotEmpty) {
+                                            List<dynamic> mtp = [];
+
+                                            for (var item in data) {
+                                              var itemConvert = {
+                                                "MAKER_NAME": item["MAKER_NAME"],
+                                                "BUNRUI": item["BUZAI_BUNRUI"],
+                                                "JISYA_CD": item["MAKER_NAME"],
+                                                "SYOHIN_NAME": item["SYOHIN_NAME"],
+                                                "LOT": item["LOT"],
+                                                "HACYU_TANKA": item["SIIRE_TANKA"],
+                                                "SURYO": "",
+                                                "TANI_CD": item["TANI"],
+                                                "KINGAK": "",
+                                                "HINBAN": item["HINBAN"],
+                                                "BUZAI_HACYU_ID": "",
+                                                "BUZAI_HACYUMSAI_ID": "",
+                                                "status": false,
+                                              };
+                                              mtp.add(itemConvert);
+                                            }
+                                            setState(() {
+                                              // list;
+                                              saibuList.addAll(mtp);
+                                            });
+                                          }
+                                        },
+                                        onFailed: () {
+                                          CustomToast.show(context,
+                                              message: "データを取得出来ませんでした。");
+                                        }
+                                      );
                                       setState(() {
                                         result = scanData;
                                         isShowScandQR = false;
-                                      });
-
-                                      GetQR().getQrApi(onSuccess: (data) {
-                                        print(data);
-
-                                        if (data.isNotEmpty) {
-                                          List<dynamic> mtp = [];
-
-                                          for (var item in data) {
-                                            var itemConvert = {
-                                              "MAKER_NAME": item["MAKER_NAME"],
-                                              "BUNRUI": item["BUZAI_BUNRUI"],
-                                              "JISYA_CD": item["MAKER_NAME"],
-                                              "SYOHIN_NAME":
-                                                  item["SYOHIN_NAME"],
-                                              "LOT": item["LOT"],
-                                              "HACYU_TANKA":
-                                                  item["SIIRE_TANKA"],
-                                              "SURYO": "",
-                                              "TANI_CD": item["TANI"],
-                                              "KINGAK": "",
-                                              "HINBAN": item["HINBAN"],
-                                              "BUZAI_HACYU_ID": "",
-                                              "BUZAI_HACYUMSAI_ID": "",
-                                              "status": false,
-                                            };
-                                            mtp.add(itemConvert);
-                                          }
-                                          setState(() {
-                                            // list;
-                                            saibuList.addAll(mtp);
-                                          });
-                                        }
-                                      }, onFailed: () {
-                                        CustomToast.show(context,
-                                            message: "データを取得出来ませんでした。");
                                       });
                                     });
                                   },
