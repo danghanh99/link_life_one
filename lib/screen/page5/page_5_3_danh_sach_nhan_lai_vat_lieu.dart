@@ -23,7 +23,7 @@ class _Page53DanhSachNhanLaiVatLieuState
     extends State<Page53DanhSachNhanLaiVatLieu> {
   late int currentRadioRow;
   List<MaterialTakeBackModel> materials = [];
-  Map<String, TextEditingController> textControllers = {};
+  List<TextEditingController> textControllers = [];
 
   @override
   void initState() {
@@ -41,6 +41,9 @@ class _Page53DanhSachNhanLaiVatLieuState
         });
       },
       onSuccess: (materials) {
+        for(var m in materials){
+          textControllers.add(TextEditingController());
+        }
         setState(() {
           this.materials = materials;
         });
@@ -115,10 +118,9 @@ class _Page53DanhSachNhanLaiVatLieuState
                   }
                   MaterialTakeBackModel material =
                       materials.elementAt(currentRadioRow - 1);
-                  print('suryo: ${textControllers[material.jisyaCode]!.text}');
                   MaterialAPI.shared.insertMaterialTakeBackById(
                       syukkoId: material.syukkoId ?? '',
-                      suryo: int.tryParse(textControllers[material.jisyaCode]!.text),//int.tryParse(material.suryo ?? '0') ?? 0,
+                      suryo: int.tryParse(textControllers[currentRadioRow-1].text),//int.tryParse(material.suryo ?? '0') ?? 0,
                       onSuccess: (result) {
                         CustomToast.show(context,
                             message: '画面で選択した項目を登録できました。',
@@ -309,13 +311,6 @@ class _Page53DanhSachNhanLaiVatLieuState
   Widget contentTable(int col, int row) {
     if (col == 6) {
       MaterialTakeBackModel material = materials.elementAt(row - 1);
-      TextEditingController? textController =
-          textControllers[material.jisyaCode];
-      if (textController == null) {
-        // textController = TextEditingController(text: material.suryo ?? '');
-        textController = TextEditingController();
-        textControllers[material.jisyaCode ?? ''] = textController;
-      }
       OutlineInputBorder borderOutline = const OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(0)),
         borderSide: BorderSide(color: AppColors.BORDER, width: 1),
@@ -325,7 +320,7 @@ class _Page53DanhSachNhanLaiVatLieuState
         alignment: Alignment.center,
         child: Center(
           child: TextField(
-            controller: textController,
+            controller: textControllers[row-1],
             decoration: InputDecoration(
                 // hintText: '0',
                 contentPadding: EdgeInsets.zero,
