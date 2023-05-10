@@ -33,7 +33,7 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
   List<MemberCategory> members = [];
   int currentDropdownIndex = -1;
   List<DefaultInventory> inventories = [];
-  // List<int> selectAmounts = [];
+  List<int> selectAmounts = [];
   final TextEditingController _jisyaCodeController = TextEditingController();
   final TextEditingController _makerNameController = TextEditingController();
   final TextEditingController _syohinNameController = TextEditingController();
@@ -88,7 +88,7 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
       onSuccess: (inventories) {
         setState(() {
           this.inventories = inventories;
-          // selectAmounts = List.generate(inventories.length, (index) => 0);
+          selectAmounts = List.generate(inventories.length, (index) => 0);
         });
         if(inventories.isEmpty){
           CustomToast.show(
@@ -275,8 +275,8 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
                           currentRadioRow <= inventories.length) {
                         DefaultInventory inventory =
                             inventories.elementAt(currentRadioRow - 1);
-                        Navigator.pop(context, inventory);
-                        // Navigator.pop(context, MaterialModel.fromDefaultInventoryWithSuryo(inventory, selectAmounts[currentRadioRow-1]));
+                        // Navigator.pop(context, inventory);
+                        Navigator.pop(context, MaterialModel.fromDefaultInventoryWithSuryo(inventory, selectAmounts[currentRadioRow-1]));
                       } else {
                         CustomToast.show(context, message: "一つを選択してください。");
                       }
@@ -474,11 +474,11 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
         children: [
           const Text(''),
           const Spacer(),
-          // Expanded(
-          //   child: Center(
-          //     child: Text('${(row-1)>=selectAmounts.length ? '' : selectAmounts[row-1]}'),
-          //   ),
-          // ),
+          Expanded(
+            child: Center(
+              child: Text('${(row-1)>=selectAmounts.length ? '' : selectAmounts[row-1]}'),
+            ),
+          ),
           Container(
             decoration: const BoxDecoration(
               border: Border(
@@ -491,17 +491,17 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 7, left: 7),
-            child: _moreButton(context),
-            // child: _moreButton(
-            //   context,
-            //   int.parse(valueFrom(5, row)),
-            //   (number){
-            //     print('number: $number');
-            //     setState(() {
-            //       selectAmounts[row-1] = number;
-            //     });
-            //   }
-            // ),
+            // child: _moreButton(context),
+            child: _moreButton(
+              context,
+              int.parse(valueFrom(5, row)),
+              (number){
+                print('number: $number');
+                setState(() {
+                  selectAmounts[row-1] = number;
+                });
+              }
+            ),
           ),
         ],
       );
@@ -543,98 +543,98 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
     }
   }
 
-  // Widget _moreButton(BuildContext context, int jussu, Function(int) onChange) {
-  //
-  //   List<PopupMenuEntry<int>> widgets = [];
-  //
-  //   for (var i = 0; i <= jussu; i++) {
-  //     widgets.add(
-  //         PopupMenuItem(
-  //           height: 25,
-  //           padding: const EdgeInsets.only(right: 0, left: 10),
-  //           value: i,
-  //           child: Row(
-  //             mainAxisAlignment: MainAxisAlignment.start,
-  //             children: [
-  //               const SizedBox(
-  //                 width: 14,
-  //               ),
-  //               Text('$i'),
-  //             ],
-  //           ),
-  //         )
-  //     );
-  //     if (i < jussu) {
-  //       widgets.add(const PopupMenuDivider());
-  //     }
-  //   }
-  //
-  //   return PopupMenuButton<int>(
-  //     color: Colors.white,
-  //     padding: EdgeInsets.zero,
-  //     onSelected: (number) {
-  //       onChange(number);
-  //     },
-  //     shape: const RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.all(Radius.circular(12.0))),
-  //     itemBuilder: (context) => widgets,
-  //     offset: const Offset(-25, -10),
-  //     child: Image.asset(
-  //       Assets.icDropdown,
-  //     ),
-  //   );
-  // }
+  Widget _moreButton(BuildContext context, int jussu, Function(int) onChange) {
 
-  Widget _moreButton(BuildContext context) {
+    List<PopupMenuEntry<int>> widgets = [];
+
+    for (var i = 0; i <= jussu; i++) {
+      widgets.add(
+          PopupMenuItem(
+            height: 25,
+            padding: const EdgeInsets.only(right: 0, left: 10),
+            value: i,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  width: 14,
+                ),
+                Text('$i'),
+              ],
+            ),
+          )
+      );
+      if (i < jussu) {
+        widgets.add(const PopupMenuDivider());
+      }
+    }
+
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {
-        if (number == 1) {}
-        if (number == 2) {}
+        onChange(number);
       },
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 1,
-          child: Row(
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "Dropdown item",
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          height: 25,
-          padding: const EdgeInsets.only(right: 0, left: 10),
-          value: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
-              SizedBox(
-                width: 14,
-              ),
-              Text(
-                "Dropdown item",
-              ),
-            ],
-          ),
-        ),
-      ],
+      itemBuilder: (context) => widgets,
       offset: const Offset(-25, -10),
       child: Image.asset(
         Assets.icDropdown,
       ),
     );
   }
+
+  // Widget _moreButton(BuildContext context) {
+  //   return PopupMenuButton<int>(
+  //     color: Colors.white,
+  //     padding: EdgeInsets.zero,
+  //     onSelected: (number) {
+  //       if (number == 1) {}
+  //       if (number == 2) {}
+  //     },
+  //     shape: const RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.all(Radius.circular(12.0))),
+  //     itemBuilder: (context) => [
+  //       PopupMenuItem(
+  //         height: 25,
+  //         padding: const EdgeInsets.only(right: 0, left: 10),
+  //         value: 1,
+  //         child: Row(
+  //           children: const [
+  //             SizedBox(
+  //               width: 14,
+  //             ),
+  //             Text(
+  //               "Dropdown item",
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //       const PopupMenuDivider(),
+  //       PopupMenuItem(
+  //         height: 25,
+  //         padding: const EdgeInsets.only(right: 0, left: 10),
+  //         value: 2,
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.start,
+  //           children: const [
+  //             SizedBox(
+  //               width: 14,
+  //             ),
+  //             Text(
+  //               "Dropdown item",
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ],
+  //     offset: const Offset(-25, -10),
+  //     child: Image.asset(
+  //       Assets.icDropdown,
+  //     ),
+  //   );
+  // }
 
   List<Widget> _buildCells2(int count, int row) {
     List<String> colNames = [
