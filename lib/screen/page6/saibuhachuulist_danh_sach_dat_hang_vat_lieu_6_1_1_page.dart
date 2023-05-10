@@ -234,7 +234,6 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                                         code: code,
                                         onSuccess: (data) {
                                           print(data);
-
                                           if (data.isNotEmpty) {
                                             List<dynamic> mtp = [];
 
@@ -242,14 +241,14 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                                               var itemConvert = {
                                                 "MAKER_NAME": item["MAKER_NAME"],
                                                 "BUNRUI": item["BUZAI_BUNRUI"],
-                                                "JISYA_CD": item["MAKER_NAME"],
+                                                "HINBAN": item["HINBAN"],
                                                 "SYOHIN_NAME": item["SYOHIN_NAME"],
                                                 "LOT": item["LOT"],
                                                 "HACYU_TANKA": item["SIIRE_TANKA"],
-                                                "SURYO": "",
                                                 "TANI_CD": item["TANI"],
+                                                "JISYA_CD": "",
+                                                "SURYO": "",
                                                 "KINGAK": "",
-                                                "HINBAN": item["HINBAN"],
                                                 "BUZAI_HACYU_ID": "",
                                                 "BUZAI_HACYUMSAI_ID": "",
                                                 "status": false,

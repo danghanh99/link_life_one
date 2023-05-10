@@ -141,7 +141,7 @@ class MaterialAPI {
     required Function(List<DefaultInventory>) onSuccess,
     required Function onFailed,
   }) async {
-    String urlEndpoint = '${Constant.getDataQRById}ZAIKO_ID=$zaikoId';
+    String urlEndpoint = '${Constant.getDataQRById}HINBAN=$zaikoId&LOGIN_ID=${user.TANT_CD}';
 
     final Response response = await RestAPI.shared.getData(urlEndpoint);
 

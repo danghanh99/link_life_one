@@ -16,10 +16,10 @@ class DefaultInventory {
 
   factory DefaultInventory.fromJson(Map<String, dynamic> json) =>
       DefaultInventory(
-          zaikoId: json['ZAIKO_ID'] ?? '',
+          zaikoId: '',
           categoryName: json['CTGORY_NAME'] ?? '',
           makerName: json['MAKER_NAME'] ?? '',
-          jisyaCode: json['JISYA_CD'] ?? '',
+          jisyaCode: json['HINBAN'] ?? '',
           syoshinName: json['SYOHIN_NAME'] ?? '',
           jissu: json['JISSU'] ?? '');
 }

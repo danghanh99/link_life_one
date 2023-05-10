@@ -522,11 +522,6 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                             onQRViewCreated: (controller) {
                               this.controller = controller;
                               controller.scannedDataStream.listen((scanData) {
-                                // print('scanData: $scanData}');
-                                // print('scanDataCode: ${scanData.code}');
-                                // print('scanDataFormat: ${scanData.format}');
-                                // print('scanDataRawByte: ${scanData.rawBytes}');
-                                // print('scanDataString: ${scanData.toString()}');
                                 String code = (scanData.code!).split(';')[1];
                                 print('code: $code');
                                 getDataQRById(code);
