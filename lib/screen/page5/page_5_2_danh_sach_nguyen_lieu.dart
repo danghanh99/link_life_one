@@ -22,7 +22,9 @@ class Page52DanhSachNguyenLieu extends StatefulWidget {
 }
 
 class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
-  late int currentRadioRow;
+
+  List<bool> checkboxsState = [];
+
   List<MaterialModel> materials = [];
   Map<String, TextEditingController> textControllers = {};
   QRViewController? controller;
@@ -235,17 +237,16 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     //   );
     // }
     return col == 0
-        ? RadioListTile(
-            value: row,
-            groupValue: currentRadioRow,
-            onChanged: (e) {
-              if (row <= materials.length) {
-                setState(() {
-                  currentRadioRow = row;
-                });
-              }
-            },
-          )
+        ? Checkbox(
+          activeColor: Colors.blue,
+          checkColor: Colors.white,
+          value: checkboxsState[row - 1],
+          onChanged: (newValue) {
+            setState(() {
+              checkboxsState[row - 1] = newValue ?? false;
+            });
+          },
+        )
         : Text(
             valueFrom(col, row),
             style: const TextStyle(color: Colors.black),
@@ -338,6 +339,10 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     }, onSuccessList: (listMaterials) {
       setState(() {
         materials = listMaterials;
+        checkboxsState.clear();
+        for(var m in materials) {
+          checkboxsState.add(false);
+        }
       });
       if (listMaterials.isEmpty) {
         CustomToast.show(context, message: 'データがありません。');
@@ -388,6 +393,10 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
 
           setState(() {
             materials.addAll(materialList);
+            checkboxsState.clear();
+            for(var m in materials) {
+              checkboxsState.add(false);
+            }
           });
           CustomToast.show(context,
               message: 'QRコードからデータを取得できました。', backGround: Colors.green);
@@ -403,6 +412,10 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
         onSuccess: (result) {
           setState(() {
             materials = result;
+            checkboxsState.clear();
+            for(var m in materials) {
+              checkboxsState.add(false);
+            }
           });
           CustomToast.show(context,
               message: 'データを取得できました。', backGround: Colors.green);
@@ -412,9 +425,9 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
         });
   }
 
-  void registerMaterialItem(MaterialModel item) {
+  void registerMaterialItem(List<MaterialModel> items) {
     MaterialAPI.shared.registerMaterialItem(
-        item: item,
+        items: items,
         onSuccess: (message) {
           CustomToast.show(context,
               message: '選択した項目を登録できました。', backGround: Colors.green);
@@ -465,7 +478,6 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
 
   @override
   void initState() {
-    currentRadioRow = -1;
     checkSave();
     super.initState();
   }
@@ -623,22 +635,28 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                   width: 100,
                   height: 37,
                   decoration: BoxDecoration(
-                    color: currentRadioRow < 0
+                    color: !checkboxsState.contains(true)
                         ? const Color(0xFFA1A1A1)
                         : const Color(0xFFFA6366),
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: currentRadioRow < 1
+                    onPressed: !checkboxsState.contains(true)
                         ? null
                         : () {
-                            MaterialModel selectedItem =
-                                materials.elementAt(currentRadioRow - 1);
-                            if (selectedItem.syukkoId != null) {
-                              deleteMaterialItem(selectedItem);
-                            } else {
-                              materials.remove(selectedItem);
-                              setState(() {});
+                            for(int i = 0; i<checkboxsState.length; i++){
+                              if(checkboxsState[i]) {
+                                if (materials[i].syukkoId != null) {
+                                  deleteMaterialItem(materials[i]);
+                                } else {
+                                  materials.removeAt(i);
+                                  checkboxsState.clear();
+                                  for (var m in materials) {
+                                    checkboxsState.add(false);
+                                  }
+                                  setState(() {});
+                                }
+                              }
                             }
                           },
                     child: const Text(
@@ -687,23 +705,30 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
   }
 
   _saveData(isBack) {
-    if (currentRadioRow > 0 && currentRadioRow <= materials.length) {
-      MaterialModel material = materials.elementAt(currentRadioRow - 1);
+    if (checkboxsState.contains(true)) {
 
-      int quantity = 0;
+      List<MaterialModel> selectedMaterials = [];
 
-      String text = material.suryo ?? '0';
-      if (text.isEmpty) {
-        quantity = 0;
-      } else {
-        quantity = int.parse(text);
+      for(int i=0; i<checkboxsState.length; i++){
+        if(checkboxsState[i]){
+          int quantity = 0;
+          String text = materials[i].suryo ?? '0';
+          if (text.isEmpty) {
+            quantity = 0;
+          } else {
+            quantity = int.parse(text);
+          }
+
+          if (quantity == 0) {
+            if (!isBack) showAlertEmptyQuantity();
+          } else {
+            selectedMaterials.add(materials[i]);
+          }
+        }
       }
 
-      if (quantity == 0) {
-        if (!isBack) showAlertEmptyQuantity();
-      } else {
-        registerMaterialItem(material);
-      }
+      registerMaterialItem(selectedMaterials);
+
     } else {
       if (!isBack) CustomToast.show(context, message: "一つを選択してください。");
     }

@@ -25,9 +25,9 @@ class RestAPI {
     }
   }
 
-  Future<Response> postData(String endpoint, Map<String, dynamic> data) async {
+  Future<Response> postData(String endpoint, Map<String, dynamic> data, {ResponseType? type}) async {
     try {
-      Response response = await dio.post(endpoint, data: data);
+      Response response = await (type==null ? dio : Dio(BaseOptions(responseType: type))).post(endpoint, data: data);
       return response;
     } catch (error, stacktrace) {
       log('Exception occured: $error stackTrace: $stacktrace');

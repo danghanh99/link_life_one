@@ -196,25 +196,20 @@ class MaterialAPI {
   }
 
   Future<void> registerMaterialItem({
-    required MaterialModel item,
+    required List<MaterialModel> items,
     required Function(String) onSuccess,
     required Function onFailed,
   }) async {
     String urlEndpoint = Constant.registrationMaterialById;
 
-    Map<String, dynamic> itemJson = item.toJson();
-    itemJson['TANT_CD'] = user.TANT_CD;
-
+    List<Map<String, dynamic>> materialJsonList = items.map((i) => i.toJson()).toList();
+    Map<String, dynamic> body = {
+      'MATERIAL_LIST': materialJsonList,
+      'TANT_CD': user.TANT_CD
+    };
     final Response response =
-        await RestAPI.shared.postDataWithFormData(urlEndpoint, itemJson);
-
+        await RestAPI.shared.postData(urlEndpoint, body, type: ResponseType.plain);
     if (response.statusCode == 200) {
-      // print('res data: ${response.data}');
-      // List<dynamic> data = json.decode(response.data);
-      // String message = '';
-      // if (data.isNotEmpty) {
-      //   message = data.first['message'];
-      // }
       onSuccess('');
     } else {
       onFailed();
