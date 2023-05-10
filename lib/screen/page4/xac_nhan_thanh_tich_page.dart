@@ -282,8 +282,8 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
           }
           if (listMonthResponse.isNotEmpty) {
             await Default().getDefault(
-                JISEKI_YMD: listMonthResponse.first.formatedDate,
-                TANT_CD: listMonthResponse.first.tantoCd,
+                JISEKI_YMD: monthSelected!=null ? monthSelected!.formatedDate : listMonthResponse.first.formatedDate,
+                TANT_CD: monthSelected!=null ? monthSelected!.tantoCd : listMonthResponse.first.tantoCd,
                 onSuccess: ((listThanhTichResponse) {
                   List<ThanhTich> tam = [];
                   listThanhTich.forEach((elementA) {
