@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:link_life_one/api/inventory/inventory_api.dart';
 import 'package:link_life_one/components/custom_dialog.dart';
 import 'package:link_life_one/models/inventory_schedule.dart';
@@ -37,14 +38,24 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
   }
 
   Future<void> getData() async {
+
+    FToast? gettingToast;
+
     InventoryAPI.shared.getListInventorySchedule(
       onStart: (){
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          CustomToast.show(context,
-              message: '読み込み中です。', backGround: Colors.grey);
+          CustomToast.show(
+              context,
+              onShow: (toast){
+                gettingToast = toast;
+              },
+              message: '読み込み中です。', backGround: Colors.grey
+          );
         });
       },
       onSuccess: (result) {
+        if(gettingToast!=null) gettingToast!.removeCustomToast();
+
         currentCheckBoxState.clear();
         WidgetsBinding.instance.addPostFrameCallback((_) {
           setState(() {
@@ -60,7 +71,10 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
         });
       // CustomToast.show(context,
       //     message: 'データリストを取得できました。', backGround: Colors.green);
-    }, onFailed: (dynamic) {
+    }, onFailed: () {
+
+      if(gettingToast!=null) gettingToast!.removeCustomToast();
+
       CustomToast.show(context, message: 'データリストを取得できません。');
     });
   }

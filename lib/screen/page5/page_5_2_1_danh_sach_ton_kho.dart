@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:link_life_one/api/inventory/inventory_api.dart';
 import 'package:link_life_one/models/default_inventory.dart';
 import 'package:link_life_one/models/material_model.dart';
@@ -74,6 +75,9 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
       String makerName = '',
       String jisyaCode = '',
       String syohinName = ''}) {
+
+    FToast? gettingToast;
+
     InventoryAPI.shared.getListDefaultInventory(
       categoryCode: categoryCode,
       makerName: makerName,
@@ -81,11 +85,19 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
       syohinName: syohinName,
       onStart: (){
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          CustomToast.show(context,
-              message: '読み込み中です。', backGround: Colors.grey);
+          CustomToast.show(
+              context,
+              onShow: (toast){
+                gettingToast = toast;
+              },
+              message: '読み込み中です。', backGround: Colors.grey
+          );
         });
       },
       onSuccess: (inventories) {
+
+        if(gettingToast!=null) gettingToast!.removeCustomToast();
+
         setState(() {
           this.inventories = inventories;
           selectAmounts = List.generate(inventories.length, (index) => 0);
@@ -100,6 +112,8 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
         //     message: 'データリストを取得できました。', backGround: Colors.green);
       },
       onFailed: () {
+        if(gettingToast!=null) gettingToast!.removeCustomToast();
+
         CustomToast.show(context, message: 'データリストを取得できません。');
       }
     );

@@ -9,8 +9,10 @@ class CustomToast {
     Color? backGround,
     TextStyle? textStyle,
     Widget? icon,
+    Function(FToast)? onShow
   }) {
     FToast fToast = FToast();
+    if(onShow!=null) onShow.call(fToast);
     fToast.init(context);
     Widget toast = Container(
       padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),

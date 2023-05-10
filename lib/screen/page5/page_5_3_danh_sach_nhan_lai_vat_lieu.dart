@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:link_life_one/api/material/material_api.dart';
 import 'package:link_life_one/components/custom_text_field.dart';
 import 'package:link_life_one/components/toast.dart';
@@ -37,14 +38,23 @@ class _Page53DanhSachNhanLaiVatLieuState
   }
 
   void getMaterialTakeBack() {
+    FToast? gettingToast;
     MaterialAPI.shared.getListDefaultMaterialTakeBack(
       onStart: (){
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          CustomToast.show(context,
-              message: '読み込み中です。', backGround: Colors.grey);
+          CustomToast.show(
+              context,
+              onShow: (toast){
+                gettingToast = toast;
+              },
+              message: '読み込み中です。', backGround: Colors.grey
+          );
         });
       },
       onSuccess: (materials) {
+
+        if(gettingToast!=null) gettingToast!.removeCustomToast();
+
         for(var m in materials){
           textControllers.add(TextEditingController());
         }
@@ -64,6 +74,9 @@ class _Page53DanhSachNhanLaiVatLieuState
         //     message: 'データを取得できました。', backGround: Colors.green);
       },
       onFailed: () {
+
+        if(gettingToast!=null) gettingToast!.removeCustomToast();
+
         CustomToast.show(context, message: 'データを取得できません。');
       }
     );

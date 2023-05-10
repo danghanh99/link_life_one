@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:link_life_one/api/material/material_api.dart';
 import 'package:link_life_one/models/default_inventory.dart';
 import 'package:link_life_one/models/material_model.dart';
@@ -280,11 +281,23 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
   }
 
   void checkSave() {
+
+    FToast? gettingToast;
+
     MaterialAPI.shared.checkSave(onStart: () {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        CustomToast.show(context, message: '読み込み中です。', backGround: Colors.grey);
+        CustomToast.show(
+            context,
+            onShow: (toast){
+              gettingToast = toast;
+            },
+            message: '読み込み中です。', backGround: Colors.grey
+        );
       });
     }, onSuccess: (showPopUp) {
+
+      if(gettingToast!=null) gettingToast!.removeCustomToast();
+
       if (showPopUp) {
         showDialog(
           context: context,
@@ -337,6 +350,9 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
         );
       } else {}
     }, onSuccessList: (listMaterials) {
+
+      if(gettingToast!=null) gettingToast!.removeCustomToast();
+
       setState(() {
         materials = listMaterials;
         checkboxsState.clear();
@@ -350,6 +366,9 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
       // CustomToast.show(context,
       //     message: '保存したデータを確認できました。', backGround: Colors.green);
     }, onFailed: () {
+
+      if(gettingToast!=null) gettingToast!.removeCustomToast();
+
       CustomToast.show(context, message: '保存したデータを確認できません。');
     });
   }
