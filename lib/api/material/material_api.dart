@@ -178,15 +178,28 @@ class MaterialAPI {
   }
 
   Future<void> insertMaterialTakeBackById({
-    required String syukkoId,
-    required int? suryo,
+    required List<MaterialTakeBackModel> items,
+    required List<int> returnSus,
     required Function(dynamic) onSuccess,
     required Function onFailed,
   }) async {
     String urlEndpoint = Constant.insertMaterialTakeBackById;
 
-    final Response response = await RestAPI.shared.postDataWithFormData(
-        urlEndpoint, {'SYUKKO_ID': syukkoId, 'SURYO': suryo??''});
+    List<Map<String, dynamic>> materialJsonList = [];
+    for(int i=0; i<items.length; i++){
+      var json = {
+        "SYUKKO_ID": items[i].syukkoId,
+        "SURYO": items[i].suryo,
+        "RETURN_SU": '${returnSus[i]}'
+      };
+      materialJsonList.add(json);
+    }
+    Map<String, dynamic> body = {
+      "MATERIAL_LIST": materialJsonList,
+      "LOGIN_ID": user.TANT_CD
+    };
+    
+    final Response response = await RestAPI.shared.postData(urlEndpoint, body);
 
     if (response.statusCode == 200) {
       onSuccess(response);

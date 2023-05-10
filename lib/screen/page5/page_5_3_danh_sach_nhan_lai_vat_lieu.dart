@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:link_life_one/api/material/material_api.dart';
+import 'package:link_life_one/components/custom_text_field.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/models/material_take_back_model.dart';
 import 'package:link_life_one/shared/colors.dart';
@@ -21,14 +22,16 @@ class Page53DanhSachNhanLaiVatLieu extends StatefulWidget {
 
 class _Page53DanhSachNhanLaiVatLieuState
     extends State<Page53DanhSachNhanLaiVatLieu> {
-  late int currentRadioRow;
+
+  final TextEditingController dateSearchController = TextEditingController();
+
   bool isValidate = false;
   List<MaterialTakeBackModel> materials = [];
   List<TextEditingController> textControllers = [];
+  List<bool> checkboxState = [];
 
   @override
   void initState() {
-    currentRadioRow = -1;
     getMaterialTakeBack();
     super.initState();
   }
@@ -47,6 +50,9 @@ class _Page53DanhSachNhanLaiVatLieuState
         }
         setState(() {
           this.materials = materials;
+          for(var m in this.materials){
+            checkboxState.add(false);
+          }
         });
         if(materials.isEmpty){
           CustomToast.show(
@@ -80,7 +86,66 @@ class _Page53DanhSachNhanLaiVatLieuState
             header(),
             title(),
             const SizedBox(
-              height: 10,
+              height: 25,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  '持ち出し日',
+                  style: TextStyle(
+                    color: Color(0xFF042C5C),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                Container(
+                  color: Colors.red,
+                  child: SizedBox(
+                    width: 200,
+                    child: TextField(
+                      controller: dateSearchController,
+                      decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey, width: 1)
+                        ),
+                        isDense: true,
+                        contentPadding: EdgeInsets.all(16.0)
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                Container(
+                  width: 100,
+                  height: 37,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF6D8FDB),
+                    borderRadius: BorderRadius.circular(26),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+
+                    },
+                    child: const Text(
+                      '確定',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
             const SizedBox(
               height: 25,
@@ -114,20 +179,31 @@ class _Page53DanhSachNhanLaiVatLieuState
               ),
               child: TextButton(
                 onPressed: () {
-                  if (currentRadioRow < 1) {
+                  if (!checkboxState.contains(true)) {
                     return;
                   }
-                  if(textControllers[currentRadioRow-1].text.isEmpty){
-                    setState(() {
-                      isValidate = true;
-                    });
-                    return;
+
+                  List<MaterialTakeBackModel> selectedMaterials = [];
+                  List<int> returnSus = [];
+
+                  for(int i = 0; i < checkboxState.length; i++){
+                    if(checkboxState[i]){
+                      if(textControllers[i].text.isEmpty){
+                        setState(() {
+                          isValidate = true;
+                        });
+                        return;
+                      }
+                      else{
+                        selectedMaterials.add(materials[i]);
+                        returnSus.add(int.tryParse(textControllers[i].text)??0);
+                      }
+                    }
                   }
-                  MaterialTakeBackModel material =
-                      materials.elementAt(currentRadioRow - 1);
+
                   MaterialAPI.shared.insertMaterialTakeBackById(
-                      syukkoId: material.syukkoId ?? '',
-                      suryo: int.tryParse(textControllers[currentRadioRow-1].text),//int.tryParse(material.suryo ?? '0') ?? 0,
+                      items: selectedMaterials,
+                      returnSus: returnSus,
                       onSuccess: (result) {
                         CustomToast.show(context,
                             message: '画面で選択した項目を登録できました。',
@@ -252,7 +328,7 @@ class _Page53DanhSachNhanLaiVatLieuState
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
         alignment: col==1 || col==2 || col==3 || col==4 ? Alignment.centerLeft : Alignment.center,
         width: colwidth[col],
-        height: isValidate && currentRadioRow!=-1 && textControllers[currentRadioRow-1].text.isEmpty && row==currentRadioRow ? 100 : 70,
+        height: isValidate && checkboxState[row-1] && textControllers[row-1].text.isEmpty ? 100 : 70,
         child: contentTable(col, row),
       );
     });
@@ -356,7 +432,7 @@ class _Page53DanhSachNhanLaiVatLieuState
             ),
           ),
           Visibility(
-            visible: isValidate && currentRadioRow!=-1 && textControllers[currentRadioRow-1].text.isEmpty && row==currentRadioRow,
+            visible: isValidate && checkboxState[row-1] && textControllers[row-1].text.isEmpty,
             child: const Padding(
               padding: EdgeInsets.only(top: 2.0),
               child: Text(
@@ -373,17 +449,16 @@ class _Page53DanhSachNhanLaiVatLieuState
     }
 
     return col == 0
-        ? RadioListTile(
-            value: row,
-            groupValue: currentRadioRow,
-            onChanged: (e) {
-              if (row <= materials.length) {
-                setState(() {
-                  currentRadioRow = row;
-                });
-              }
-            },
-          )
+        ? Checkbox(
+          activeColor: Colors.blue,
+          checkColor: Colors.white,
+          value: checkboxState[row - 1],
+          onChanged: (newValue) {
+            setState(() {
+              checkboxState[row - 1] = newValue ?? false;
+            });
+          },
+        )
         : Text(
             valueFrom(col, row),
             style: const TextStyle(color: Colors.black),
