@@ -510,7 +510,6 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
               context,
               int.parse(valueFrom(5, row)),
               (number){
-                print('number: $number');
                 setState(() {
                   selectAmounts[row-1] = number;
                 });
@@ -561,7 +560,7 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
 
     List<PopupMenuEntry<int>> widgets = [];
 
-    for (var i = 0; i <= jussu; i++) {
+    for (var i = 1; i <= jussu; i++) {
       widgets.add(
           PopupMenuItem(
             height: 25,
