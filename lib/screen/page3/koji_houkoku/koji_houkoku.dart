@@ -400,7 +400,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                     Expanded(
                       child: textUnderline(
                         initial: notifier.listKojiHoukoku[index].makerCd,
-                        enable: notifier.listKojiHoukoku[index].hinban==null || notifier.listKojiHoukoku[index].hinban!.isEmpty ? true : false,
+                        enable: !notifier.hasHinBan[index],
                         onChange: (value) {
                           notifier.updateMakerCd(value, index);
                         },
@@ -423,7 +423,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                     Expanded(
                       child: textUnderline(
                         initial: notifier.listKojiHoukoku[index].hinban,
-                        enable: false,
+                        enable: !notifier.hasHinBan[index],
                         onChange: (value) {
                           notifier.updateHinban(value, index);
                         },
@@ -554,7 +554,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 Expanded(
                   child: textUnderline(
                     initial: notifier.listKojiHoukoku[index].makerCd,
-                    enable: notifier.listKojiHoukoku[index].hinban==null || notifier.listKojiHoukoku[index].hinban!.isEmpty ? true : false,
+                    enable: !notifier.hasHinBan[index],
                     onChange: (value) {
                       notifier.updateMakerCd(value, index);
                     },
@@ -577,7 +577,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 Expanded(
                   child: textUnderline(
                     initial: notifier.listKojiHoukoku[index].hinban,
-                    enable: false,
+                    enable: !notifier.hasHinBan[index],
                     onChange: (value) {
                       notifier.updateHinban(value, index);
                     },
@@ -833,7 +833,9 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
             invalidIndexs.clear();
             for(var k in notifier.listKojiHoukoku){
               if(
-                k.kisetuMaker==null || k.kisetuMaker!.isEmpty
+                k.makerCd==null || k.makerCd!.isEmpty
+                || k.hinban==null || k.hinban!.isEmpty
+                || k.kisetuMaker==null || k.kisetuMaker!.isEmpty
                 || k.kisetuHinban==null || k.kisetuHinban!.isEmpty
                 || k.kensetuKeitai==null
               ){

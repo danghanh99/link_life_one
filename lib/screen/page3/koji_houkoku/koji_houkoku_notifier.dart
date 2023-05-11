@@ -21,6 +21,8 @@ class KojiHoukokuNotifier extends ChangeNotifier {
 
   String tenpoId = '';
 
+  List<bool> hasHinBan = [];
+
   Future<void> getData(BuildContext context, String jyucyuId,
       String singleSummarize, String kojiSt, String syuyakuJyucyuId) async {
     final dynamic result = await GetKojiHoukoku().getKojiHoukoku(
@@ -44,6 +46,11 @@ class KojiHoukokuNotifier extends ChangeNotifier {
             originListKojiHoukoku = [KojiHoukokuModel.empty()];
             listKojiHoukoku = [KojiHoukokuModel.empty()];
           }
+
+          for(var kojiHoukoku in listKojiHoukoku){
+            hasHinBan.add(kojiHoukoku.hinban!=null && kojiHoukoku.hinban!.isNotEmpty);
+          }
+
           if (res["TENPO_CD"] != null) {
             tenpoId = res['TENPO_CD'];
           }
