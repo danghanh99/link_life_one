@@ -21,6 +21,7 @@ class Constant {
   static const String registrationMaterialById = '${url}src/APIs/Material/registrationMaterialById.php';
   static const String backMaterial = '${url}src/APIs/Material/backMaterial.php';
   static const String getListPersonSchedule = '${url}Request/Schedule/requestGetListPeople.php?';
+  static const String getSearchListMaterial = '${url}src/APIs/Material/getSearchListMaterial.php?';
 
   static const int compressTargetWidth = 600;
 }

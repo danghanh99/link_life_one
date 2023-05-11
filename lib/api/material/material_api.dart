@@ -177,6 +177,27 @@ class MaterialAPI {
     }
   }
 
+  Future<void> getSearchListMaterial({
+    required String searchDate,
+    Function? onStart,
+    required Function(List<MaterialTakeBackModel>) onSuccess,
+    required Function onFailed,
+  }) async {
+    if(onStart!=null) onStart.call();
+    String urlEndpoint = '${Constant.getSearchListMaterial}TANT_CD=${user.TANT_CD}&SEARCH_DATE=$searchDate';
+
+    final Response response = await RestAPI.shared.getData(urlEndpoint);
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = response.data;
+      List<MaterialTakeBackModel> materials =
+      data.map((e) => MaterialTakeBackModel.fromJson(e)).toList();
+      onSuccess(materials);
+    } else {
+      onFailed();
+    }
+  }
+
   Future<void> insertMaterialTakeBackById({
     required List<MaterialTakeBackModel> items,
     required List<int> returnSus,

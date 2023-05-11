@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:link_life_one/api/material/material_api.dart';
 import 'package:link_life_one/components/custom_text_field.dart';
 import 'package:link_life_one/components/toast.dart';
@@ -86,6 +87,52 @@ class _Page53DanhSachNhanLaiVatLieuState
     );
   }
 
+  void searchMaterialTakeBack({required String date, bool isFirstTime = true}) async {
+    FToast? gettingToast;
+    MaterialAPI.shared.getSearchListMaterial(
+        searchDate: date,
+        onStart: (){
+          if(isFirstTime){
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              CustomToast.show(
+                  context,
+                  onShow: (toast){
+                    gettingToast = toast;
+                  },
+                  message: '読み込み中です。', backGround: Colors.grey
+              );
+            });
+          }
+        },
+        onSuccess: (materials) {
+          if(gettingToast!=null && isFirstTime) gettingToast!.removeCustomToast();
+          textControllers.clear();
+          for(var m in materials){
+            textControllers.add(TextEditingController());
+          }
+          setState(() {
+            checkboxState.clear();
+            this.materials = materials;
+            for(var m in this.materials){
+              checkboxState.add(false);
+            }
+          });
+          if(materials.isEmpty && isFirstTime){
+            CustomToast.show(
+                context,
+                message: 'データがありません。'
+            );
+          }
+        },
+        onFailed: () {
+          if(gettingToast!=null && isFirstTime) {
+            gettingToast!.removeCustomToast();
+            CustomToast.show(context, message: 'データを取得できません。');
+          }
+        },
+    );
+  }
+  
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -125,14 +172,15 @@ class _Page53DanhSachNhanLaiVatLieuState
                     width: 200,
                     child: TextField(
                       controller: dateSearchController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
-                        border: OutlineInputBorder(
+                        border: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey, width: 1)
                         ),
                         isDense: true,
-                        contentPadding: EdgeInsets.all(16.0)
+                        contentPadding: const EdgeInsets.all(16.0),
+                        hintText: DateFormat('yyyy-MM-dd').format(DateTime.now())
                       ),
                     ),
                   ),
@@ -149,7 +197,12 @@ class _Page53DanhSachNhanLaiVatLieuState
                   ),
                   child: TextButton(
                     onPressed: () {
-
+                      if(dateSearchController.text.isEmpty){
+                        getMaterialTakeBack(isFirstTime: false);
+                      }
+                      else if(isDate(dateSearchController.text, 'yyyy-MM-dd')){
+                        searchMaterialTakeBack(date: dateSearchController.text);
+                      }
                     },
                     child: const Text(
                       '確定',
@@ -222,9 +275,15 @@ class _Page53DanhSachNhanLaiVatLieuState
                       items: selectedMaterials,
                       returnSus: returnSus,
                       onSuccess: (result) {
-                        getMaterialTakeBack(
-                          isFirstTime: false
-                        );
+                        if(dateSearchController.text.isEmpty){
+                          getMaterialTakeBack(isFirstTime: false);
+                        }
+                        else if(isDate(dateSearchController.text, 'yyyy-MM-dd')){
+                          searchMaterialTakeBack(
+                            date: dateSearchController.text,
+                            isFirstTime: false
+                          );
+                        }
                         CustomToast.show(context,
                             message: '画面で選択した項目を登録できました。',
                             backGround: Colors.green);
@@ -249,6 +308,15 @@ class _Page53DanhSachNhanLaiVatLieuState
         ),
       ),
     );
+  }
+
+  bool isDate(String input, String format) {
+    try {
+      final DateTime d = DateFormat(format).parseStrict(input);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   Widget header() {
