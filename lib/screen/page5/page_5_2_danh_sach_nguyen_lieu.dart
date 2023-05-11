@@ -731,6 +731,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
 
       List<MaterialModel> selectedMaterials = [];
 
+      bool hasAnyEmptyMaterial = false;
       for(int i=0; i<checkboxsState.length; i++){
         if(checkboxsState[i]){
           int quantity = 0;
@@ -742,14 +743,21 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
           }
 
           if (quantity == 0) {
-            if (!isBack) showAlertEmptyQuantity();
+            if (!isBack) {
+              hasAnyEmptyMaterial = true;
+            }
           } else {
             selectedMaterials.add(materials[i]);
           }
         }
       }
 
-      registerMaterialItem(selectedMaterials);
+      if(hasAnyEmptyMaterial){
+        showAlertEmptyQuantity();
+      }
+      else{
+        registerMaterialItem(selectedMaterials);
+      }
 
     } else {
       if (!isBack) CustomToast.show(context, message: "一つを選択してください。");
