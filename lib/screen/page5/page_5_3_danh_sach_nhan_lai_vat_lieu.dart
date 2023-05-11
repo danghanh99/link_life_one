@@ -37,34 +37,38 @@ class _Page53DanhSachNhanLaiVatLieuState
     super.initState();
   }
 
-  void getMaterialTakeBack() {
+  void getMaterialTakeBack({bool isFirstTime = true}) async {
     FToast? gettingToast;
     MaterialAPI.shared.getListDefaultMaterialTakeBack(
       onStart: (){
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          CustomToast.show(
-              context,
-              onShow: (toast){
-                gettingToast = toast;
-              },
-              message: '読み込み中です。', backGround: Colors.grey
-          );
-        });
+        if(isFirstTime) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            CustomToast.show(
+                context,
+                onShow: (toast){
+                  gettingToast = toast;
+                },
+                message: '読み込み中です。', backGround: Colors.grey
+            );
+          });
+        }
       },
       onSuccess: (materials) {
 
-        if(gettingToast!=null) gettingToast!.removeCustomToast();
+        if(gettingToast!=null && isFirstTime) gettingToast!.removeCustomToast();
 
+        textControllers.clear();
         for(var m in materials){
           textControllers.add(TextEditingController());
         }
         setState(() {
+          checkboxState.clear();
           this.materials = materials;
           for(var m in this.materials){
             checkboxState.add(false);
           }
         });
-        if(materials.isEmpty){
+        if(materials.isEmpty && isFirstTime){
           CustomToast.show(
               context,
               message: 'データがありません。'
@@ -74,11 +78,11 @@ class _Page53DanhSachNhanLaiVatLieuState
         //     message: 'データを取得できました。', backGround: Colors.green);
       },
       onFailed: () {
-
-        if(gettingToast!=null) gettingToast!.removeCustomToast();
-
-        CustomToast.show(context, message: 'データを取得できません。');
-      }
+        if(gettingToast!=null && isFirstTime) {
+          gettingToast!.removeCustomToast();
+          CustomToast.show(context, message: 'データを取得できません。');
+        }
+    }
     );
   }
 
@@ -218,6 +222,9 @@ class _Page53DanhSachNhanLaiVatLieuState
                       items: selectedMaterials,
                       returnSus: returnSus,
                       onSuccess: (result) {
+                        getMaterialTakeBack(
+                          isFirstTime: false
+                        );
                         CustomToast.show(context,
                             message: '画面で選択した項目を登録できました。',
                             backGround: Colors.green);
