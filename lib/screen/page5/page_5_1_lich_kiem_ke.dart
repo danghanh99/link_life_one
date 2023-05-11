@@ -37,24 +37,26 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
     getData();
   }
 
-  Future<void> getData() async {
+  Future<void> getData({isFirstTime = true}) async {
 
     FToast? gettingToast;
 
     InventoryAPI.shared.getListInventorySchedule(
       onStart: (){
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          CustomToast.show(
-              context,
-              onShow: (toast){
-                gettingToast = toast;
-              },
-              message: '読み込み中です。', backGround: Colors.grey
-          );
-        });
+        if(isFirstTime){
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            CustomToast.show(
+                context,
+                onShow: (toast){
+                  gettingToast = toast;
+                },
+                message: '読み込み中です。', backGround: Colors.grey
+            );
+          });
+        }
       },
       onSuccess: (result) {
-        if(gettingToast!=null) gettingToast!.removeCustomToast();
+        if(isFirstTime && gettingToast!=null) gettingToast!.removeCustomToast();
 
         currentCheckBoxState.clear();
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -64,7 +66,7 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
           for(var res in result){
             currentCheckBoxState.add(false);
           }
-          if(result.isEmpty){
+          if(isFirstTime && result.isEmpty){
             CustomToast.show(context,
                 message: 'データがありません。');
           }
@@ -72,10 +74,10 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
       // CustomToast.show(context,
       //     message: 'データリストを取得できました。', backGround: Colors.green);
     }, onFailed: () {
-
-      if(gettingToast!=null) gettingToast!.removeCustomToast();
-
-      CustomToast.show(context, message: 'データリストを取得できません。');
+        if(isFirstTime){
+          if(gettingToast!=null) gettingToast!.removeCustomToast();
+          CustomToast.show(context, message: 'データリストを取得できません。');
+        }
     });
   }
 
@@ -86,7 +88,7 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
     }, onFailed: () {
       CustomToast.show(context, message: 'リストで選択した項目のデータを更新できません。');
     });
-    await getData();
+    await getData(isFirstTime: false);
   }
 
   void showAlertConfirm(List<String> nyukoId) {

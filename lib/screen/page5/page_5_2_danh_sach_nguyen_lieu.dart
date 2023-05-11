@@ -670,16 +670,15 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                               if(checkboxsState[i]) {
                                 if (materials[i].syukkoId != null) {
                                   deleteMaterialItem(materials[i]);
-                                } else {
                                   materials.removeAt(i);
-                                  checkboxsState.clear();
-                                  for (var m in materials) {
-                                    checkboxsState.add(false);
-                                  }
-                                  setState(() {});
                                 }
                               }
                             }
+                            checkboxsState.clear();
+                            for (var m in materials) {
+                              checkboxsState.add(false);
+                            }
+                            setState(() {});
                           },
                     child: const Text(
                       '削除',
