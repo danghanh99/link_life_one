@@ -260,6 +260,13 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                                               saibuList.addAll(mtp);
                                             });
                                           }
+                                          else{
+                                            CustomToast.show(
+                                                context,
+                                                message: 'QRコードのデータが存在しないため、データ取得できません。',
+                                                backGround: Colors.grey
+                                            );
+                                          }
                                         },
                                         onFailed: () {
                                           CustomToast.show(context,
