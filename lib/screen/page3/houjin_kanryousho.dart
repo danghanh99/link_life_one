@@ -316,14 +316,20 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
           },
           child: Container(
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1.5),
+              color: const Color(0xFF6D8FDB),
+              borderRadius: BorderRadius.circular(26),
             ),
-            height: 50,
-            width: 200,
+            height: 37,
+            width: 170,
             child: const Center(
               child: Text(
                 '写真の添付',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),

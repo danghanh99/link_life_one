@@ -354,12 +354,18 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 alignment: Alignment.center,
                 width: 300.sp,
                 height: 50.sp,
-                decoration:
-                BoxDecoration(border: Border.all(color: Colors.black)),
-                child: Text(
+                decoration: BoxDecoration(
+                  color: const Color(0xFF6D8FDB),
+                  borderRadius: BorderRadius.circular(26),
+                ),
+                child: const Text(
                   'その他写真を添付',
-                  style:
-                  TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),

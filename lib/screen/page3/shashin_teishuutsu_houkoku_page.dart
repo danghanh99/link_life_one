@@ -162,16 +162,21 @@ class _ShashinTeishuutsuHoukokuPageState
                         selectImage();
                       },
                       child: Container(
-                        width: 150,
-                        height: 40,
+                        width: 130.w,
+                        height: 37,
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black, width: 1.5),
+                          color: const Color(0xFF6D8FDB),
+                          borderRadius: BorderRadius.circular(26),
                         ),
                         child: const Center(
                           child: Text(
                             '写真を添付',
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w300),
+                              decoration: TextDecoration.underline,
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),
