@@ -204,7 +204,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 alignment: Alignment.center,
                 width: 180.sp,
                 height: 200.sp,
-                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  color: Colors.orange
+                ),
                 child: Padding(
                   padding: EdgeInsets.all(8.0.sp),
                   child: Column(
@@ -257,7 +260,10 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 width: 180.sp,
                 height: 200.sp,
                 decoration:
-                    BoxDecoration(border: Border.all(color: Colors.black)),
+                  BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    color: Colors.orange
+                  ),
                 child: Padding(
                   padding: EdgeInsets.all(8.sp),
                   child: Column(
@@ -317,7 +323,8 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 width: 300.sp,
                 height: 50.sp,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF6D8FDB),
+                  color: Colors.orange,
+                  // color: const Color(0xFF6D8FDB),
                   borderRadius: BorderRadius.circular(26),
                 ),
                 child: const Text(
