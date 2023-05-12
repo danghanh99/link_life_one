@@ -448,6 +448,12 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     MaterialAPI.shared.registerMaterialItem(
         items: items,
         onSuccess: (message) {
+          setState(() {
+            checkboxsState.clear();
+            for(var m in materials) {
+              checkboxsState.add(false);
+            }
+          });
           CustomToast.show(context,
               message: '選択した項目を登録できました。', backGround: Colors.green);
         },
