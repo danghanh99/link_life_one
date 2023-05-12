@@ -272,10 +272,10 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     }
   }
 
-  List<Widget> _buildRows(int count) {
+  List<Widget> _buildRows(int count, int start) {
     return List.generate(count, (index) {
       return Row(
-        children: _buildCells2(7, index),
+        children: _buildCells2(7, start+index),
       );
     });
   }
@@ -551,19 +551,18 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
             ),
             Expanded(
               child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Flexible(
+                scrollDirection: Axis.horizontal,
+                child: Column(
+                  children: _buildRows(1, 0)+[
+                    Expanded(
                       child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
+                        scrollDirection: Axis.vertical,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: _buildRows(materials.length + 1),
+                          children: _buildRows(materials.length, 1),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
