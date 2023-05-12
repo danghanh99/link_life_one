@@ -43,7 +43,7 @@ class KojiHoukoku extends StatefulWidget {
 class _KojiHoukokuState extends State<KojiHoukoku> {
   final KojiHoukokuNotifier _notifier = KojiHoukokuNotifier();
 
-  List<int> invalidIndexs = [];
+  List<String> invalidIndexs = [];
 
   @override
   void initState() {
@@ -116,71 +116,33 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                         height: 40.sp,
                       ),
                       widget.SINGLE_SUMMARIZE == "0" || widget.SINGLE_SUMMARIZE == "00"
-                          ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start, // k gop: 1 doi tuong - gom nhieu item
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    leftSide(notifier),
-                                    SizedBox(width: 20.sp),
-                                    rightSide(notifier, null, null),
-                                  ],
-                                ),
-                              Visibility(
-                                  visible: invalidIndexs.isNotEmpty,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 10.0, left: 10.0),
-                                    child: Text(
-                                      '入力必須です。',
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 20.sp,
-                                          fontWeight: FontWeight.w700
-                                      ),
-                                    ),
-                                  )
-                              )
-                            ],
-                          )
+                          ? Row(
+                              crossAxisAlignment: CrossAxisAlignment.start, // k gop: 1 doi tuong - gom nhieu item
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                leftSide(notifier),
+                                SizedBox(width: 20.sp),
+                                rightSide(notifier, null, null),
+                              ],
+                            )
                           : ListView.separated(
                               physics: const NeverScrollableScrollPhysics(),
                               scrollDirection: Axis.vertical, // gop lai: nhieu doi tuong - 1 doi tuong  = 1 item
                               shrinkWrap: true,
                               itemCount: notifier.listKojiHoukoku.length,
                               itemBuilder: (context, index) {
-                                return Column(
+                                return Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        leftSide1Item(notifier, index),
-                                        SizedBox(width: 20.sp),
-                                        rightSide(
-                                            notifier,
-                                            notifier.listKojiHoukoku
-                                                .elementAt(index),
-                                            index),
-                                      ],
-                                    ),
-                                    Visibility(
-                                      visible: invalidIndexs.contains(index),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 10.0, left: 10.0),
-                                        child: Text(
-                                          '入力必須です。',
-                                          style: TextStyle(
-                                              color: Colors.red,
-                                              fontSize: 20.sp,
-                                              fontWeight: FontWeight.w700
-                                          ),
-                                        ),
-                                      )
-                                    )
+                                    leftSide1Item(notifier, index),
+                                    SizedBox(width: 20.sp),
+                                    rightSide(
+                                        notifier,
+                                        notifier.listKojiHoukoku
+                                            .elementAt(index),
+                                        index),
                                   ],
                                 );
                               },
@@ -439,6 +401,23 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 ),
               ),
               SizedBox(
+                height: 4.sp,
+              ),
+              Visibility(
+                  visible: invalidIndexs.contains('$index.1'),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                    child: Text(
+                      '入力必須です。',
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w700
+                      ),
+                    ),
+                  )
+              ),
+              SizedBox(
                 height: 10.sp,
               ),
               Text(
@@ -511,6 +490,23 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                     _dropDownButton(context, notifier, index),
                   ],
                 ),
+              ),
+              SizedBox(
+                height: 4.sp,
+              ),
+              Visibility(
+                  visible: invalidIndexs.contains('$index.2'),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                    child: Text(
+                      '入力必須です。',
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w700
+                      ),
+                    ),
+                  )
               ),
             ],
           );
@@ -593,6 +589,23 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
             ),
           ),
           SizedBox(
+            height: 4.sp,
+          ),
+          Visibility(
+              visible: invalidIndexs.contains('$index.1'),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                child: Text(
+                  '入力必須です。',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w700
+                  ),
+                ),
+              )
+          ),
+          SizedBox(
             height: 10.sp,
           ),
           Column(
@@ -650,9 +663,6 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                   ],
                 ),
               ),
-              SizedBox(
-                height: 10.sp,
-              ),
             ],
           ),
           Padding(
@@ -670,6 +680,26 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 _dropDownButton(context, notifier, index),
               ],
             ),
+          ),
+          SizedBox(
+            height: 4.sp,
+          ),
+          Visibility(
+              visible: invalidIndexs.contains('$index.2'),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                child: Text(
+                  '入力必須です。',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w700
+                  ),
+                ),
+              )
+          ),
+          SizedBox(
+            height: 10.sp,
           ),
         ],
       ),
@@ -841,11 +871,15 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
               if(
                 k.makerCd==null || k.makerCd!.isEmpty
                 || k.hinban==null || k.hinban!.isEmpty
-                || k.kisetuMaker==null || k.kisetuMaker!.isEmpty
+              ){
+                invalidIndexs.add('${notifier.listKojiHoukoku.indexOf(k)}.1');
+              }
+              if(
+                k.kisetuMaker==null || k.kisetuMaker!.isEmpty
                 || k.kisetuHinban==null || k.kisetuHinban!.isEmpty
                 || k.kensetuKeitai==null
               ){
-                invalidIndexs.add(notifier.listKojiHoukoku.indexOf(k));
+                invalidIndexs.add('${notifier.listKojiHoukoku.indexOf(k)}.2');
               }
             }
             if(invalidIndexs.isNotEmpty){
