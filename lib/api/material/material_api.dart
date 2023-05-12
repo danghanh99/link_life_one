@@ -43,9 +43,13 @@ class MaterialAPI {
           onSuccess(showPopup);
         } else {
           List<MaterialModel> materials =
-              data.map((e) => MaterialModel.fromJson(e)).toList();
+          data.map((e) => MaterialModel.fromJson(e)).toList();
           onSuccessList(materials);
         }
+      } else {
+        List<MaterialModel> materials =
+        data.map((e) => MaterialModel.fromJson(e)).toList();
+        onSuccessList(materials);
       }
     } else {
       onFailed();
