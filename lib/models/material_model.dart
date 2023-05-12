@@ -80,6 +80,7 @@ class MaterialModel {
     'SURYO': suryo ?? '',
     'BASYO_GYOSYA_SYBET_CD': basyoGyosyaSybetCode ?? '',
     'SOKO_CD': sokoCode ?? '',
-    'ZAIKO_SYBET_CD': zaikoSybetCode ?? ''
+    'ZAIKO_SYBET_CD': zaikoSybetCode ?? '',
+    'ZAIKO_ID': zaikoId ?? ''
   };
 }

@@ -373,6 +373,24 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     });
   }
 
+  void reloadList() {
+    MaterialAPI.shared.checkSave(
+      onSuccess: (showPopUp) {},
+      onSuccessList: (listMaterials) {
+        setState(() {
+          materials = listMaterials;
+          checkboxsState.clear();
+          for(var m in materials) {
+            checkboxsState.add(false);
+          }
+        });
+      },
+      onFailed: () {
+        CustomToast.show(context, message: '保存したデータを確認できません。');
+      }
+    );
+  }
+
   void deleteMaterial() {
     MaterialAPI.shared.deleteListMaterial(onSuccess: (message) {
       CustomToast.show(context,
@@ -407,18 +425,29 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     MaterialAPI.shared.getDataQRById(
         zaikoId: zaikoId,
         onSuccess: (result) {
-          List<MaterialModel> materialList =
-              result.map((e) => MaterialModel.fromDefaultInventory(e)).toList();
 
-          setState(() {
-            materials.addAll(materialList);
-            checkboxsState.clear();
-            for(var m in materials) {
-              checkboxsState.add(false);
-            }
-          });
-          CustomToast.show(context,
-              message: 'QRコードからデータを取得できました。', backGround: Colors.green);
+          if(result.isEmpty){
+            CustomToast.show(
+                context,
+                message: 'QRコードのデータが存在しないため、データ取得できません。',
+                backGround: Colors.grey
+            );
+          }
+          else{
+            List<MaterialModel> materialList = result.map((e) => MaterialModel.fromDefaultInventory(e)).toList();
+
+            setState(() {
+              materials.addAll(materialList);
+              checkboxsState.clear();
+              for(var m in materials) {
+                checkboxsState.add(false);
+              }
+            });
+            CustomToast.show(
+              context,
+              message: 'QRコードからデータを取得できました。', backGround: Colors.green
+            );
+          }
         },
         onFailed: () {
           CustomToast.show(context, message: 'QRコードからデータを取得できません。');
@@ -448,12 +477,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     MaterialAPI.shared.registerMaterialItem(
         items: items,
         onSuccess: (message) {
-          setState(() {
-            checkboxsState.clear();
-            for(var m in materials) {
-              checkboxsState.add(false);
-            }
-          });
+          reloadList();
           CustomToast.show(context,
               message: '選択した項目を登録できました。', backGround: Colors.green);
         },
