@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:link_life_one/api/KojiPageApi/hou_jin_kan_ryo_sho_api.dart';
@@ -302,17 +303,7 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
         // ),
         GestureDetector(
           onTap: () async {
-            final List<XFile> images = await _picker.pickMultiImage();
-            if (images.isNotEmpty) {
-              setState(
-                () {
-                  List<dynamic> tmp = listImage;
-                  tmp.addAll(images);
-                  listImage = tmp;
-                },
-              );
-              carouselController.jumpToPage(listImage.length - 1);
-            }
+            selectImages(context);
           },
           child: Container(
             decoration: BoxDecoration(
@@ -382,4 +373,55 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
       ],
     );
   }
+
+  void selectImages(context) async {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context){
+          return CupertinoActionSheet(
+            actions: <CupertinoActionSheetAction>[
+              CupertinoActionSheetAction(
+                child: const Text('ライブラリから画像選択'),
+                onPressed: () async {
+                  try {
+                    final List<XFile> images = await _picker.pickMultiImage();
+                    if (images.isNotEmpty) {
+                      setState(
+                            () {
+                          List<dynamic> tmp = listImage;
+                          tmp.addAll(images);
+                          listImage = tmp;
+                        },
+                      );
+                      carouselController.jumpToPage(listImage.length - 1);
+                    }
+                  } catch (e) {}
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: const Text('カメラ起動'),
+                onPressed: () async {
+                  try {
+                    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+                    if (image!=null) {
+                      setState(
+                            () {
+                          List<dynamic> tmp = listImage;
+                          tmp.add(image);
+                          listImage = tmp;
+                        },
+                      );
+                      carouselController.jumpToPage(listImage.length - 1);
+                    }
+                  } catch (e) {}
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        }
+    );
+  }
+
 }
