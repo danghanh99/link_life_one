@@ -225,4 +225,69 @@ class SubmitLastPage {
     }
 
   }
+
+  Future<dynamic> _notRemoveSignImageSuccess({
+    required String jyucyuId,
+    required loginId,
+    required Function() onSuccess,
+    required Function() onFailed
+  }) async {
+    if(await LocalStorageServices.isTodayDataDownloaded()){
+      var res = await LocalStorageServices().postRemoveRegisterSignImage(
+          jyucyuId: jyucyuId,
+          loginId: loginId
+      );
+      onSuccess.call();
+      return res;
+    }
+    else{
+      onFailed.call();
+    }
+  }
+
+  Future<void> removeRegisterSignImage(
+      {required String jyucyuId,
+        required Function() onSuccess,
+        required Function() onFailed}) async {
+
+    final box = await Hive.openBox<String>('user');
+    String loginID = box.values.last;
+
+    bool isOnline = await LocalStorageNotifier.isOnline();
+
+    if(!isOnline && LocalStorageNotifier.isTodayDownload()){
+      return _notRemoveSignImageSuccess(
+          jyucyuId: jyucyuId,
+          loginId: loginID,
+          onSuccess: onSuccess,
+          onFailed: onFailed
+      );
+    }
+
+    try{
+
+      String urlEndpoint = Constant.requestPostRemoveRegisterSignImage;
+
+      Map<String, dynamic> body = {
+        'JYUCYU_ID': jyucyuId,
+        'LOGIN_ID': loginID
+      };
+
+      final Response response =
+      await RestAPI.shared.postDataWithFormData(urlEndpoint, body);
+
+      if (response.statusCode == 200) {
+        onSuccess();
+      } else {
+        onFailed.call();
+      }
+
+    }
+    catch(e){
+      onFailed.call();
+    }
+
+  }
+
+
 }

@@ -75,6 +75,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
     _controller.addListener(() => debugPrint('Value changed'));
     _controller.onDrawStart = onDrawStart;
     _controller.onDrawEnd = onDrawEnd;
+    registeredSignature = widget.checkSign;
     super.initState();
   }
 
@@ -1046,6 +1047,15 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
               return;
             }
 
+            if(!registeredSignature){
+              CustomToast.show(
+                context,
+                message: "サインが未登録です",
+                backGround: Colors.red
+              );
+              return;
+            }
+
             // if (_controller.isEmpty) {
             //   setState(() {
             //     signatureEmptyError = true;
@@ -1211,7 +1221,23 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
       children: [
         GestureDetector(
           onTap: () {
+
             setState(() => _controller.clear());
+
+            SubmitLastPage.shared.removeRegisterSignImage(
+                jyucyuId: widget.jyucyuId,
+                onSuccess: () {
+                  print('s');
+                  setState(() {
+                    registeredSignature = false;
+                    msgSignature = '';
+                  });
+                },
+                onFailed: () {
+                  print('f');
+                  setState(() {});
+                });
+
           },
           child: Container(
             decoration: BoxDecoration(
@@ -1284,7 +1310,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
           width: 30,
         ),
         Text(
-          widget.checkSign ? 'サイン登録済み' : 'サイン未登録',
+          registeredSignature ? 'サイン登録済み' : 'サイン未登録',
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
         )
       ],

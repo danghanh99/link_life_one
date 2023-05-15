@@ -330,8 +330,6 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                 child: const Text(
                   'その他写真を添付',
                   style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),

@@ -1016,6 +1016,25 @@ class LocalStorageServices{
 
   }
 
+  Future<void> postRemoveRegisterSignImage({
+    required jyucyuId,
+    required loginId
+  })async{
+
+    var now = DateTime.now();
+
+    var tKojiFilePathList = await LocalStorageBase.getValues(boxName: boxKojiFilePathName);
+    for(TKojiFilePath tfp in tKojiFilePathList) {
+      if(tfp.id==jyucyuId && (tfp.fileKbnCd == '08' || tfp.fileKbnCd == '8')) {
+        tfp.delFlg = '1';
+        tfp.updPGID = 'KOJ1120F';
+        tfp.updTantCd = loginId;
+        tfp.updYMD = DateFormat('yyyy-MM-dd HH:mm:ss', 'ja').format(now);
+      }
+    }
+
+  }
+
   Future<void> photoSubmissionRegistrationFromSendPhoto({
     required loginId,
     required filePaths,
