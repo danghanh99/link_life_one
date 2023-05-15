@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/shared/cache_notifier.dart';
@@ -10,6 +11,7 @@ import 'package:link_life_one/shared/extension.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:signature/signature.dart';
+import 'package:image/image.dart' as image;
 
 import '../../api/shoudakusho/submit_last_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -75,6 +77,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
     _controller.addListener(() => debugPrint('Value changed'));
     _controller.onDrawStart = onDrawStart;
     _controller.onDrawEnd = onDrawEnd;
+    _createSignatureFromImage('url');
     registeredSignature = widget.checkSign;
     super.initState();
   }
@@ -1215,15 +1218,41 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
     return file;
   }
 
+  _createSignatureFromImage(url)async{
+    String imgurl = url;
+    Uint8List bytes = (await NetworkAssetBundle(Uri.parse(imgurl)).load(imgurl)).buffer.asUint8List();
+    image.Image? img = image.decodeImage(bytes);
+    List<Point> whitePixels = [];
+    if(img!=null) {
+      for (int x = 0; x < img.width; x++) {
+        for (int y = 0; y < img.height; y++) {
+          int pixel = img.getPixel(x, y);
+          int red = image.getRed(pixel);
+          int green = image.getGreen(pixel);
+          int blue = image.getBlue(pixel);
+          int alpha = image.getAlpha(pixel);
+
+          if (red == 255 && green == 255 && blue == 255 && alpha == 255) {
+            var offset = Offset(x.toDouble(), y.toDouble());
+            whitePixels.add(Point(offset, PointType.tap, 1.0));
+          }
+        }
+      }
+      for(var p in whitePixels) {
+        _controller.addPoint(p);
+      }
+    }
+  }
+
   Widget sendButton2() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
           onTap: () {
-
+            
             setState(() => _controller.clear());
-
+            
             SubmitLastPage.shared.removeRegisterSignImage(
                 jyucyuId: widget.jyucyuId,
                 onSuccess: () {

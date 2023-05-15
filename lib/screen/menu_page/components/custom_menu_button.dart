@@ -157,10 +157,13 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
         CheckShowPopupApi().checkShowPopup(
             onSuccess: (tt) {
               if (tt) {
-                MaterialPageRoute(
-                  builder: (context) => const TanaoroshiDanhMucHangTonKho62Page(
-                    isContinue: false,
-                  ),
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TanaoroshiDanhMucHangTonKho62Page(
+                        isContinue: false,
+                      ),
+                    )
                 );
               } else {
                 showDialog(

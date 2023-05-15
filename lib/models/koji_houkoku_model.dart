@@ -98,12 +98,10 @@ class KojiHoukokuModel extends HiveObject {
 
   factory KojiHoukokuModel.fromJson(Map<String, dynamic> json) {
     List<String> otherFilePath = [];
-    dynamic otherPath = json['OTHER_PHOTO_FOLDERPATH'];
-    if (otherPath.runtimeType == String) {
-      otherFilePath = [otherPath];
-    }
-    if (otherPath.runtimeType == List<String>) {
-      otherFilePath = otherPath;
+    if(json['OTHER_PHOTO_FOLDERPATH']!=null && '${json['OTHER_PHOTO_FOLDERPATH']}'.isNotEmpty) {
+      otherFilePath = ((json['OTHER_PHOTO_FOLDERPATH'] ?? []) as List)
+          .map((e) => '$e')
+          .toList();
     }
     return KojiHoukokuModel(
     jyucyuMsaiId: json['JYUCYUMSAI_ID'],
