@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:link_life_one/api/inventory/check_show_popup_api.dart';
+import 'package:link_life_one/api/order/get_check_order_save.dart';
 import 'package:link_life_one/screen/page6/saibuhacchuuichiran_page.dart';
+import 'package:link_life_one/screen/page6/saibuhachuulist_danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
 import '../../../shared/custom_button.dart';
 import '../../page3/page_3/kojiichiran_page_3_bao_cao_hoan_thanh_cong_trinh.dart';
@@ -144,15 +146,32 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
 
 // page 6 begin
       case ('部材発注'):
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                const SaibuhachuuDanhSachDatHangCacBoPhan61Page(),
-          ),
+        CheckOrderSave().checkOrderSave(
+            onSuccess: (isExist){
+              if(!isExist){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                    const SaibuhachuuDanhSachDatHangCacBoPhan61Page(),
+                  ),
+                );
+              }
+              else{
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        SaibuhacchuulistDanhSachDatHangVatLieu611Page(
+                            isShowPopup: true
+                        ),
+                  ),
+                );
+              }
+            },
+            onFailed: (){}
         );
         break;
-
       case ('棚卸'):
         CheckShowPopupApi().checkShowPopup(
             onSuccess: (tt) {

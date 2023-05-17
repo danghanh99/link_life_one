@@ -9,6 +9,10 @@ class GetBuzaiApi {
   GetBuzaiApi() : super();
 
   Future<void> getBuzai({
+    String? buzaiBunrui,
+    String? makerName,
+    String? hinban,
+    String? syohinName,
     required Function(List<Buzai> list) onSuccess,
     required Function onFailed,
   }) async {
@@ -17,7 +21,7 @@ class GetBuzaiApi {
     String SYOZOKU_CD = user.SYOZOKU_CD;
     dynamic response = await http.get(
       Uri.parse(
-          "${Constant.url}Request/Order/requestGetInventoryListMaterialListSearch.php?BUZAI_BUNRUI=&MAKER_NAME=&HINBAN&SYOHIN_NAME&SYOZOKU_CD=$SYOZOKU_CD"),
+          "${Constant.url}Request/Order/requestGetInventoryListMaterialListSearch.php?BUZAI_BUNRUI=${buzaiBunrui??''}&MAKER_NAME=${makerName??''}&HINBAN=${hinban??''}&SYOHIN_NAME=${syohinName??''}&SYOZOKU_CD=$SYOZOKU_CD"),
     );
 
     if (response.statusCode == 200) {

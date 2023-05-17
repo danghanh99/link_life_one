@@ -23,6 +23,10 @@ class Constant {
   static const String backMaterial = '${url}src/APIs/Material/backMaterial.php';
   static const String getListPersonSchedule = '${url}Request/Schedule/requestGetListPeople.php?';
   static const String getSearchListMaterial = '${url}src/APIs/Material/getSearchListMaterial.php?';
+  static const String updateMaterialOrdering = '${url}Request/Order/requestPostUpdateMaterialOrdering.php';
+  static const String postInventoryListWithoutSaved = '${url}Request/Order/requesPostInventoryListWithoutSaved.php';
+  static const String postTanamsaiSaveDelete = '${url}Request/Order/requestPostTanamsaiSaveDelete.php';
+  static const String postInventoryListMaterialList = '${url}Request/Order/requestPostInventoryListMaterialList.php';
 
   static const int compressTargetWidth = 600;
 }

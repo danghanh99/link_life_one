@@ -27,6 +27,10 @@ class SaibuhachuuDanhSachDatHangCacBoPhan61Page extends StatefulWidget {
 
 class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
     extends State<SaibuhachuuDanhSachDatHangCacBoPhan61Page> {
+
+  final idTextEditController = TextEditingController();
+  final ymdTextEditController = TextEditingController();
+
   late int currentRadioRow;
 
   List<dynamic> listOrder = [];
@@ -108,44 +112,20 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       columnText(
+                        controller: idTextEditController,
                         width: size.width / 2 - 30,
                         text: '発注ID',
-                        onChange: (text) {
-                          if (text == '') {
-                            setState(() {
-                              listOrderKhongCoDinh = listOrder;
-                            });
-                          } else {
-                            setState(() {
-                              listOrderKhongCoDinh = listOrderKhongCoDinh
-                                  .where((element) => element["BUZAI_HACYU_ID"]
-                                      .toString()
-                                      .contains(text))
-                                  .toList();
-                            });
-                          }
-                        },
+                        onChange: (value){
+                          setState(() {});
+                        }
                       ),
                       columnText(
+                        controller: ymdTextEditController,
                         width: size.width / 2 - 30,
                         text: '発注者',
-                        onChange: (text) {
-                          listOrderKhongCoDinh;
-                          if (text == '') {
-                            setState(() {
-                              listOrderKhongCoDinh = listOrder;
-                            });
-                          } else {
-                            setState(() {
-                              listOrderKhongCoDinh = listOrderKhongCoDinh
-                                  .where((element) => element["TANT_NAME"]
-                                      .toString()
-                                      .toLowerCase()
-                                      .contains(text.toLowerCase()))
-                                  .toList();
-                            });
-                          }
-                        },
+                        onChange: (value){
+                          setState(() {});
+                        }
                       ),
                     ],
                   ),
@@ -179,7 +159,44 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+
+                      listOrderKhongCoDinh = listOrder;
+
+                      if (idTextEditController.text == '') {
+                        listOrderKhongCoDinh = listOrderKhongCoDinh;
+                      } else {
+                        listOrderKhongCoDinh = listOrderKhongCoDinh
+                            .where((element) => element["BUZAI_HACYU_ID"]
+                            .toString()
+                            .contains(idTextEditController.text))
+                            .toList();
+                      }
+
+                      if (ymdTextEditController.text == '') {
+                        listOrderKhongCoDinh = listOrderKhongCoDinh;
+                      } else {
+                        listOrderKhongCoDinh = listOrderKhongCoDinh
+                            .where((element) => element["TANT_NAME"]
+                            .toString()
+                            .toLowerCase()
+                            .contains(ymdTextEditController.text.toLowerCase()))
+                            .toList();
+                      }
+
+                      if (currentPullDownValue == 'カテゴリを選択') {
+                        listOrderKhongCoDinh = listOrderKhongCoDinh;
+                      } else {
+                        List<dynamic> tmp = listOrderKhongCoDinh
+                            .where((element) =>
+                        element["KBNMSAI_NAME"] == currentPullDownValue)
+                            .toList();
+                        listOrderKhongCoDinh = tmp;
+                      }
+
+                      setState(() {});
+
+                    },
                     child: const Text(
                       '検索',
                       style: TextStyle(
@@ -198,11 +215,20 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
                   width: 100,
                   height: 37,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFA1A1A1),
+                    color: idTextEditController.text.isNotEmpty || ymdTextEditController.text.isNotEmpty || currentPullDownValue!='カテゴリを選択'
+                      ? Colors.red
+                      : const Color(0xFFA1A1A1),
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        listOrderKhongCoDinh = listOrder;
+                        idTextEditController.clear();
+                        ymdTextEditController.clear();
+                        currentPullDownValue = 'カテゴリを選択';
+                      });
+                    },
                     child: const Text(
                       'クリア',
                       style: TextStyle(
@@ -335,21 +361,13 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
       itemBuilder: (context) => listPullDown.map((item) {
         return PopupMenuItem(
           onTap: () {
-            if (currentPullDownValue == item["KBNMSAI_NAME"]) {
-              setState(() {
+            setState(() {
+              if (currentPullDownValue == item["KBNMSAI_NAME"]) {
                 currentPullDownValue = 'カテゴリを選択';
-                listOrderKhongCoDinh = listOrder;
-              });
-            } else {
-              setState(() {
-                List<dynamic> tmp = listOrder
-                    .where((element) =>
-                        element["KBNMSAI_NAME"] == item["KBNMSAI_NAME"])
-                    .toList();
-                listOrderKhongCoDinh = tmp;
+              } else {
                 currentPullDownValue = item["KBNMSAI_NAME"];
-              });
-            }
+              }
+            });
           },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
@@ -437,6 +455,7 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
   }
 
   Widget columnText({
+    TextEditingController? controller,
     double? width,
     Color? color,
     String? hint,
@@ -460,6 +479,7 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
         SizedBox(
           width: width ?? 30,
           child: CustomTextField(
+            controller: controller,
             fillColor: color,
             hint: hint ?? '',
             type: TextInputType.emailAddress,
@@ -499,7 +519,6 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
   }
 
   Widget contentTable(int col, int row) {
-    listOrder;
     List<dynamic> tmp = [];
     tmp = listOrderKhongCoDinh;
     if (row != 0 && col != 0) {

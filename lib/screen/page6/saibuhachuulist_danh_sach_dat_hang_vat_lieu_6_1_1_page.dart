@@ -1,13 +1,16 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
 import 'package:link_life_one/api/order/get_qr.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
+import 'package:link_life_one/models/user.dart';
 import 'package:link_life_one/screen/login_page.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-import '../../api/order/post_add_material_ordering.dart';
+import '../../api/order/material_ordering.dart';
 import '../../api/order/saibuhachuu_list/get_check_list.dart';
 import '../../api/order/saibuhachuu_list/get_material_ordering_list.dart';
 import '../../components/custom_header_widget.dart';
@@ -24,10 +27,13 @@ class SaibuhacchuulistDanhSachDatHangVatLieu611Page extends StatefulWidget {
   String? SYOZOKU_CD;
   String? JISYA_CD;
   String? BUZAI_HACYU_ID;
+  bool isShowPopup;
+
   SaibuhacchuulistDanhSachDatHangVatLieu611Page({
     this.SYOZOKU_CD,
     this.JISYA_CD,
     this.BUZAI_HACYU_ID,
+    this.isShowPopup = false,
     Key? key,
   }) : super(key: key);
 
@@ -45,6 +51,10 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
   QRViewController? controller;
   bool isShowScandQR = false;
 
+  bool? _isSave;
+  
+  List<List<TextEditingController>> textControllerNewValues = [];
+
   dynamic first = {
     "MAKER_NAME": "",
     "BUNRUI": '',
@@ -61,6 +71,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
     "status": false,
   };
   List<dynamic> saibuList = [];
+  List<dynamic> newRecords = [];
 
   @override
   void reassemble() {
@@ -80,29 +91,132 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
 
   @override
   void initState() {
-    currentRadioRow = -1;
-
     super.initState();
-    if (widget.JISYA_CD != null && widget.SYOZOKU_CD != null) {
-      call2ApiGetList();
-    } else {}
+    currentRadioRow = -1;
+    if(widget.isShowPopup){
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showSavePopup();
+      });
+    }
+    else{
+      if (widget.JISYA_CD != null && widget.SYOZOKU_CD != null) {
+        call2ApiGetList(
+          syozokuCd: widget.SYOZOKU_CD!,
+          jisyaCd: widget.JISYA_CD
+        );
+      } else {}
+    }
   }
 
-  Future<dynamic> call2ApiGetList() async {
-    final dynamic result =
-        await GetMaterialOrderingList().getMaterialOrderingList(
-            SYOZOKU_CD: widget.SYOZOKU_CD!,
-            JISYA_CD: widget.JISYA_CD!,
+  _showSavePopup(){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return SizedBox(
+          width: double.infinity,
+          child: CupertinoAlertDialog(
+            content: const Padding(
+              padding: EdgeInsets.only(top: 15),
+              child: Text(
+                "前回編集途中のリストがあります。",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    final box = Hive.box<User>('userBox');
+                    final User user = box.values.last;
+                    call2ApiGetList(
+                      syozokuCd: user.SYOZOKU_CD,
+                    );
+                    Navigator.pop(context);
+                    setState(() {
+                      _isSave = true;
+                    });
+                  },
+                  child: const Text(
+                    '続きから編集する',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  '破棄して新規リスト作成',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  toJson(element, {bool hasStatus = true, bool nullId = false}){
+    return hasStatus
+      ? {
+        "MAKER_NAME": element["MAKER_NAME"] ?? '',
+        "BUNRUI": element["BUNRUI"] ?? element["BUZAI_BUNRUI"] ?? '',
+        "HINBAN": element["HINBAN"] ?? '',
+        "SYOHIN_NAME": element["SYOHIN_NAME"] ?? '',
+        "LOT": element["LOT"] ?? '',
+        "HACYU_TANKA": element["HACYU_TANKA"] ?? element["SIIRE_TANKA"] ?? '',
+        "TANI_CD": element["TANI_CD"] ?? element["TANI"] ?? '',
+        "JISYA_CD": element["JISYA_CD"] ?? '',
+        "SURYO": element["SURYO"] ?? '',
+        "KINGAK": element["KINGAK"] ?? '',
+        "BUZAI_HACYU_ID": nullId ? '' : element["BUZAI_HACYU_ID"] ?? '',
+        "BUZAI_HACYUMSAI_ID": nullId ? '' : element["BUZAI_HACYUMSAI_ID"] ?? '',
+        "status": false,
+      }
+      : {
+        "MAKER_NAME": element["MAKER_NAME"] ?? '',
+        "BUNRUI": element["BUNRUI"] ?? element["BUZAI_BUNRUI"] ?? '',
+        "HINBAN": element["HINBAN"] ?? '',
+        "SYOHIN_NAME": element["SYOHIN_NAME"] ?? '',
+        "LOT": element["LOT"] ?? '',
+        "HACYU_TANKA": element["HACYU_TANKA"] ?? element["SIIRE_TANKA"] ?? '',
+        "TANI_CD": element["TANI_CD"] ?? element["TANI"] ?? '',
+        "JISYA_CD": element["JISYA_CD"] ?? '',
+        "SURYO": element["SURYO"] ?? '',
+        "KINGAK": element["KINGAK"] ?? '',
+        "BUZAI_HACYU_ID": nullId ? '' : element["BUZAI_HACYU_ID"] ?? '',
+        "BUZAI_HACYUMSAI_ID": nullId ? '' : element["BUZAI_HACYUMSAI_ID"] ?? ''
+      };
+  }
+
+  Future<dynamic> call2ApiGetList({
+    required String syozokuCd,
+    String? jisyaCd
+  }) async {
+    final dynamic result = await GetMaterialOrderingList().getMaterialOrderingList(
+            SYOZOKU_CD: syozokuCd,
+            JISYA_CD: jisyaCd,
             onSuccess: (data) {
               if (data.isEmpty && saibuList.isEmpty) {
                 setState(() {});
               } else {
+                List<dynamic> tmpList = [];
                 for (var element in data) {
-                  element["status"] = false;
+                  var itemConvert = toJson(element);
+                  tmpList.add(itemConvert);
                 }
 
                 setState(() {
-                  saibuList.addAll(data);
+                  saibuList.addAll(tmpList);
                 });
 
                 if (widget.BUZAI_HACYU_ID != null) {
@@ -110,11 +224,13 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                     if (res.isEmpty && saibuList.isEmpty) {
                       setState(() {});
                     } else {
+                      List<dynamic> tmpCheckList = [];
                       for (var element in res) {
-                        element["status"] = false;
+                        var itemConvert = toJson(element);
+                        tmpCheckList.add(itemConvert);
                       }
                       setState(() {
-                        saibuList.addAll(res);
+                        saibuList.addAll(tmpCheckList);
                       });
                     }
                   });
@@ -177,7 +293,9 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                               scrollDirection: Axis.horizontal,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: _buildRows(saibuList.length + 1),
+                                children: (widget.SYOZOKU_CD!=null && widget.JISYA_CD!=null) || (_isSave ?? false)
+                                  ? _buildRows(saibuList.length + 1)
+                                  : _buildRows(saibuList.length + 1)+_emptyRow(newRecords.length+1),
                               ),
                             ),
                           )
@@ -238,21 +356,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                                             List<dynamic> mtp = [];
 
                                             for (var item in data) {
-                                              var itemConvert = {
-                                                "MAKER_NAME": item["MAKER_NAME"],
-                                                "BUNRUI": item["BUZAI_BUNRUI"],
-                                                "HINBAN": item["HINBAN"],
-                                                "SYOHIN_NAME": item["SYOHIN_NAME"],
-                                                "LOT": item["LOT"],
-                                                "HACYU_TANKA": item["SIIRE_TANKA"],
-                                                "TANI_CD": item["TANI"],
-                                                "JISYA_CD": "",
-                                                "SURYO": "",
-                                                "KINGAK": "",
-                                                "BUZAI_HACYU_ID": "",
-                                                "BUZAI_HACYUMSAI_ID": "",
-                                                "status": false,
-                                              };
+                                              var itemConvert = toJson(item, nullId: true);
                                               mtp.add(itemConvert);
                                             }
                                             setState(() {
@@ -323,16 +427,17 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                         ),
                         child: TextButton(
                           onPressed: () {
-                            print("object");
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => DanhSachCacBoPhan512Page(
                                   onAdd: (data) {
-                                    data;
-                                    saibuList;
+                                    List<dynamic> tmp = [];
+                                    for(var d in data){
+                                      tmp.add(toJson(d, nullId: true));
+                                    }
                                     setState(() {
-                                      saibuList.addAll(data);
+                                      saibuList.addAll(tmp);
                                     });
                                   },
                                 ),
@@ -361,22 +466,37 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                           borderRadius: BorderRadius.circular(26),
                         ),
                         child: TextButton(
-                          onPressed: () {
-                            //delete
-                            List<dynamic> list = saibuList
+                          onPressed: () async {
+                            List<dynamic> list = (saibuList+newRecords)
                                 .where((element) => element["status"] == true)
                                 .toList();
-                            list;
 
                             if (list.isEmpty) {
                               CustomToast.show(context,
                                   message: "一つを選択してください。",
                                   backGround: Colors.yellow);
                             } else {
-                              setState(() {
-                                saibuList.removeWhere(
-                                    (element) => element["status"] == true);
-                              });
+                              await MaterialOrdering().postUpdateMaterialOrdering(
+                                  addUpdateList: [],
+                                  removeList: list.map((e) => toJson(e, hasStatus: false)).toList(),
+                                  onSuccess: () {
+                                    setState(() {
+                                      saibuList.removeWhere(
+                                              (element) => element["status"] == true);
+                                      newRecords.removeWhere(
+                                              (element) => element["status"] == true);
+                                    });
+                                    CustomToast.show(
+                                      context,
+                                      message: "登録出来ました。",
+                                      backGround: Colors.green,
+                                    );
+                                  },
+                                  onFailed: () {
+                                    CustomToast.show(context,
+                                        message: "登録できませんでした。。");
+                                  }
+                              );
                             }
                           },
                           child: const Text(
@@ -402,11 +522,9 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                         ),
                         child: TextButton(
                           onPressed: () {
-                            //copy
-                            List<dynamic> list = saibuList
+                            List<dynamic> list = (saibuList+newRecords)
                                 .where((element) => element["status"] == true)
                                 .toList();
-                            list;
 
                             if (list.isEmpty) {
                               CustomToast.show(context,
@@ -416,27 +534,12 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                               List<dynamic> list2 = [];
 
                               for (var element in list) {
-                                dynamic first = {
-                                  "MAKER_NAME": element["MAKER_NAME"],
-                                  "BUNRUI": element["BUNRUI"],
-                                  "JISYA_CD": element["JISYA_CD"],
-                                  "SYOHIN_NAME": element["SYOHIN_NAME"],
-                                  "LOT": element["LOT"],
-                                  "HACYU_TANKA": element["HACYU_TANKA"],
-                                  "SURYO": element["SURYO"],
-                                  "TANI_CD": element["TANI_CD"],
-                                  "KINGAK": element["KINGAK"],
-                                  "HINBAN": element["HINBAN"],
-                                  "BUZAI_HACYU_ID": element["BUZAI_HACYU_ID"],
-                                  "BUZAI_HACYUMSAI_ID":
-                                      element["BUZAI_HACYUMSAI_ID"],
-                                  "status": element["status"],
-                                };
+                                dynamic first = toJson(element, nullId: true);
                                 list2.add(first);
                               }
 
                               setState(() {
-                                saibuList.addAll(list2);
+                                newRecords.addAll(list2);
                               });
                             }
                           },
@@ -462,33 +565,35 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                       borderRadius: BorderRadius.circular(26),
                     ),
                     child: TextButton(
-                      onPressed: () {
-                        List<dynamic> list = saibuList
-                            .where((element) => element["status"] == true)
-                            .toList();
-                        list;
-                        print(list);
-                        if (list.isEmpty) {
-                          CustomToast.show(context,
-                              message: "一つを選択してください。",
-                              backGround: Colors.yellow);
-                        }
-
-                        list.forEach((item) => item..remove("status"));
-
-                        PostAddMaterialOrdering().postAddMaterialOrdering(
-                            list: list,
-                            onSuccess: () {
-                              CustomToast.show(
+                      onPressed: () async {
+                        if(await _showConfirmDialog()){
+                          List<dynamic> list = [];
+                          list = (saibuList+newRecords).where((element) => element["status"] == true).toList();
+                          if (list.isEmpty) {
+                            CustomToast.show(
                                 context,
-                                message: "登録出来ました。",
-                                backGround: Colors.green,
-                              );
-                            },
-                            onFailed: () {
-                              CustomToast.show(context,
-                                  message: "登録できませんでした。。");
-                            });
+                                message: "一つを選択してください。",
+                                backGround: Colors.yellow
+                            );
+                          }
+                          else{
+                            await MaterialOrdering().postUpdateMaterialOrdering(
+                              addUpdateList: list.map((e) => toJson(e, hasStatus: false)).toList(),
+                              removeList: [],
+                              onSuccess: () {
+                                CustomToast.show(
+                                  context,
+                                  message: "登録出来ました。",
+                                  backGround: Colors.green,
+                                );
+                              },
+                              onFailed: () {
+                                CustomToast.show(context,
+                                    message: "登録できませんでした。。");
+                              }
+                            );
+                          }
+                        }
                       },
                       child: const Text(
                         '発注申請',
@@ -511,6 +616,70 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
         ),
       ),
     );
+  }
+
+  Future<bool> _showConfirmDialog() async {
+    bool isConfirm = false;
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return SizedBox(
+          width: double.infinity,
+          child: CupertinoAlertDialog(
+            title: const Text(
+              "",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            content: const Padding(
+              padding: EdgeInsets.only(top: 15),
+              child: Text(
+                "発注申請を実行します。\nよろしいでしょうか。",
+                style: TextStyle(
+                  color: Color.fromARGB(255, 24, 23, 23),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    isConfirm = true;
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'はい',
+                    style: TextStyle(
+                      color: Color(0xFF007AFF),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )),
+              TextButton(
+                onPressed: () {
+                  isConfirm = false;
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  'いいえ',
+                  style: TextStyle(
+                    color: Color(0xFFEB5757),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+
+    return isConfirm;
   }
 
   Widget header() {
@@ -577,8 +746,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
       if (col == 7) {
         return Row(
           children: [
-            Text(saibuList[row - 1]["SURYO"] ?? ''),
-            const Spacer(),
+            Expanded(child: Center(child: Text(saibuList[row - 1]["SURYO"] ?? ''))),
             Container(
               decoration: const BoxDecoration(
                 border: Border(
@@ -662,23 +830,49 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
     );
   }
 
-  List<Widget> _buildCells(int count) {
-    return List.generate(
-      count,
-      (index) => Container(
-        decoration: BoxDecoration(
-          border: Border.all(),
-          color: Colors.black,
-        ),
-        alignment: Alignment.center,
-        width: 50,
-        height: 50,
-        // color: Colors.white,
-        margin: const EdgeInsets.all(1.0),
-        child: Text(
-          "col ${index + 1}",
-          style: const TextStyle(color: Colors.white),
-        ),
+  Widget _moreButtonForNewRecords(BuildContext context, int row) {
+    return PopupMenuButton<int>(
+      color: Colors.white,
+      padding: EdgeInsets.zero,
+      onSelected: (number) {},
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0))),
+      itemBuilder: (context) =>
+          List.generate(100, (index) => index + 1).map((item) {
+            return PopupMenuItem(
+              onTap: () {
+                setState(() {
+                  newRecords[row]["SURYO"] = item.toString();
+                });
+              },
+              height: 25,
+              padding: const EdgeInsets.only(right: 0, left: 10),
+              value: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: 14,
+                        ),
+                        Text(
+                          item.toString(),
+                          style: TextStyle(color: Color(0xFF999999)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Divider(),
+                ],
+              ),
+            );
+          }).toList(),
+      offset: const Offset(-25, -10),
+      child: Image.asset(
+        Assets.icDropdown,
       ),
     );
   }
@@ -746,6 +940,147 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
         child: contentTable(col, row),
       );
     });
+  }
+
+  List<Widget> _emptyRow(int rowCounts) {
+    List<double> colwidth = [
+      30,
+      130,
+      130,
+      100,
+      150,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+    ];
+    return List.generate(rowCounts, (row) => Row(
+      children: List.generate(10, (col) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(width: 0.5),
+            color: Colors.white,
+          ),
+          alignment: Alignment.center,
+          width: colwidth[col],
+          height: 50,
+          child: Builder(builder: (context) {
+            if(row<newRecords.length  && row>=textControllerNewValues.length){
+              textControllerNewValues.add(List.generate(10, (index) {
+                if(index==1) return TextEditingController(text: newRecords[row]['MAKER_NAME']);
+                if(index==2) return TextEditingController(text: newRecords[row]['BUNRUI']);
+                if(index==3) return TextEditingController(text: newRecords[row]['HINBAN']);
+                if(index==4) return TextEditingController(text: newRecords[row]['SYOHIN_NAME']);
+                if(index==5) return TextEditingController(text: newRecords[row]['LOT']);
+                if(index==6) return TextEditingController(text: newRecords[row]['HACYU_TANKA']);
+                if(index==8) return TextEditingController(text: newRecords[row]['TANI_CD']);
+                if(index==9) return TextEditingController(text: newRecords[row]['KINGAK']);
+                return TextEditingController();
+              }));
+            }
+            switch(col){
+              case 0:
+                return row<newRecords.length
+                  ? Checkbox(
+                    key: Key('$row'),
+                    activeColor: Colors.blue,
+                    checkColor: Colors.white,
+                    value: newRecords[row]["status"],
+                    onChanged: (newValue) {
+                      setState(() {
+                        newRecords[row]["status"] = newValue ?? false;
+                      });
+                    },
+                  )
+                  : Container();
+              case 7:
+                return row<newRecords.length
+                  ? Row(
+                  children: [
+                    Expanded(child: Center(child: Text(newRecords[row]["SURYO"] ?? ''))),
+                    Container(
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          left: BorderSide(
+                            color: Colors.black,
+                            width: 0.7,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 7, left: 7),
+                      child: _moreButtonForNewRecords(context, row),
+                    ),
+                  ],
+                )
+                : Container();
+              default: return TextField(
+                controller: row>=textControllerNewValues.length ? null : textControllerNewValues[row][col],
+                textAlign: TextAlign.center,
+                onTap: (){
+                  if(row==newRecords.length){
+                    setState(() {
+                      newRecords.add(toJson(first));
+                    });
+                  }
+                },
+                onChanged: (value){
+                  switch(col){
+                    case 1:
+                      setState(() {
+                        newRecords[row]['MAKER_NAME'] = value;
+                      });
+                      break;
+                    case 2:
+                      setState(() {
+                        newRecords[row]['BUNRUI'] = value;
+                      });
+                      break;
+                    case 3:
+                      setState(() {
+                        newRecords[row]['HINBAN'] = value;
+                      });
+                      break;
+                    case 4:
+                      setState(() {
+                        newRecords[row]['SYOHIN_NAME'] = value;
+                      });
+                      break;
+                    case 5:
+                      setState(() {
+                        newRecords[row]['LOT'] = value;
+                      });
+                      break;
+                    case 6:
+                      setState(() {
+                        newRecords[row]['HACYU_TANKA'] = value;
+                      });
+                      break;
+                    case 8:
+                      setState(() {
+                        newRecords[row]['TANI_CD'] = value;
+                      });
+                      break;
+                    case 9:
+                      setState(() {
+                        newRecords[row]['KINGAK'] = value;
+                      });
+                      break;
+                  }
+                },
+              );
+            }
+          }),
+        );
+      }),
+    ));
   }
 
   List<Widget> _buildRows(int count) {

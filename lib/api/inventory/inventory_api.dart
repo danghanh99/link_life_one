@@ -143,4 +143,79 @@ class InventoryAPI {
       onFailed();
     }
   }
+
+  Future<void> postInventoryWithoutSaved({
+    required List INVENTORY_DETAIL,
+    required bool isContinue,
+    required Function onSuccess,
+    required Function onFailed,
+  }) async {
+
+    String urlEndpoint = Constant.postInventoryListWithoutSaved;
+
+    final Response response = await RestAPI.shared.postData(
+        urlEndpoint,
+        {
+          'USER_INFO': {
+            'LOGIN_ID': user.TANT_CD,
+            'SYOZOKU_CD': user.SYOZOKU_CD
+          },
+          'INVENTORY_DETAIL': INVENTORY_DETAIL
+        }
+    );
+
+    if (response.statusCode == 200) {
+      if(isContinue){
+        postTanamsaiSaveDelete(onSuccess: onSuccess, onFailed: onFailed);
+      }
+    } else {
+      onFailed.call();
+    }
+  }
+
+  Future<void> postTanamsaiSaveDelete({
+    required Function onSuccess,
+    required Function onFailed,
+  }) async {
+
+    String urlEndpoint = Constant.postTanamsaiSaveDelete;
+
+    final Response response = await RestAPI.shared.postData(
+        urlEndpoint,
+        {
+          'LOGIN_ID': user.TANT_CD
+        }
+    );
+
+    if (response.statusCode == 200) {
+      onSuccess.call();
+    } else {
+      onFailed.call();
+    }
+  }
+
+  Future<void> postInventoryListMaterialList({
+    // List<>
+    required Function onSuccess,
+    required Function onFailed,
+  }) async {
+
+    String urlEndpoint = Constant.postInventoryListMaterialList;
+
+    final Response response = await RestAPI.shared.postData(
+        urlEndpoint,
+        {
+          'LOGIN_ID': user.TANT_CD
+        }
+    );
+
+    if (response.statusCode == 200) {
+      onSuccess.call();
+    } else {
+      onFailed.call();
+    }
+  }
+
+
+
 }

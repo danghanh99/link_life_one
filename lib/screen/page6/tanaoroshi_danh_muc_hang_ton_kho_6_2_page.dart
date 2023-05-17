@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:link_life_one/api/inventory/QR_api.dart';
-import 'package:link_life_one/api/inventory/create_or_edit_api.dart';
 import 'package:link_life_one/api/inventory/get_inventories_api.dart';
+import 'package:link_life_one/api/inventory/inventory_api.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/models/inventory.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -340,7 +340,15 @@ class _TanaoroshiDanhMucHangTonKho62PageState
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+
+                      for(var i in listInventory.where((e) => e.STATUS == true).toList()){
+                        listInventory.removeAt(listInventory.indexOf(i));
+                      }
+
+                      setState(() {});
+
+                    },
                     child: const Text(
                       '削除',
                       style: TextStyle(
@@ -366,20 +374,22 @@ class _TanaoroshiDanhMucHangTonKho62PageState
                   ),
                   child: TextButton(
                     onPressed: () {
-                      CreateOrEditApi().createOrEditInventory(
-                          INVENTORY_DETAIL: listInventory
-                              .where((element) => element.STATUS == true)
-                              .toList(),
-                          onSuccess: () {
-                            CustomToast.show(context,
-                                message: '登録出来ました。', backGround: Colors.green);
-                          },
-                          onFailed: () {
-                            CustomToast.show(
-                              context,
-                              message: '登録できませんでした。。',
-                            );
-                          });
+                      InventoryAPI.shared.postInventoryWithoutSaved(
+                        isContinue: widget.isContinue,
+                        INVENTORY_DETAIL: listInventory
+                            .where((element) => element.STATUS == true)
+                            .toList(),
+                        onSuccess: () {
+                          CustomToast.show(context,
+                              message: '登録出来ました。', backGround: Colors.green);
+                        },
+                        onFailed: () {
+                          CustomToast.show(
+                            context,
+                            message: '登録できませんでした。。',
+                          );
+                        }
+                      );
                       setState(() {
                         listInventory = listInventory.map((e) {
                           e.STATUS = false;
@@ -441,7 +451,11 @@ class _TanaoroshiDanhMucHangTonKho62PageState
   }
 
   Widget header() {
-    return const CustomHeaderWidget();
+    return CustomHeaderWidget(
+      onBack: (){
+
+      },
+    );
   }
 
   Widget title() {

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/screen/page6/danh_sach_cac_bo_phan_5_1_2_page.dart';
 import 'package:link_life_one/screen/page6/page631/hacchuushounin_phe_duyet_don_dat_hang_6_3_1_page.dart';
+import 'package:link_life_one/screen/page6/saibuhachuulist_danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
 import '../../api/order/saibuhacchu_ichiran/get_part_order_list_ichiran.dart';
 import '../../api/order/saibuhacchu_ichiran/get_pull_down_status_ichiran.dart';
@@ -12,6 +14,7 @@ import '../../components/text_line_down.dart';
 import '../../shared/assets.dart';
 import '../../shared/custom_button.dart';
 import '../menu_page/menu_page.dart';
+import 'inventories/danh_sach_cac_bo_phan_5_1_3_page.dart';
 
 class SaibuhacchuuichiranPage extends StatefulWidget {
   const SaibuhacchuuichiranPage({
@@ -30,6 +33,8 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
 
   List<dynamic> listIchiranThayDoi = [];
 
+  final TextEditingController idController = TextEditingController();
+  final TextEditingController tantController = TextEditingController();
   String currentPullDownValue = 'カテゴリを選択';
 
   List<dynamic> listPullDown = [];
@@ -54,15 +59,16 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
   }
 
   Future<dynamic> callGetPartOrderListIchiran() async {
-    final dynamic result = await GetPartOrderListIchiran()
-        .getPartOrderListIchiran(onSuccess: (data) {
-      setState(() {
-        listIchiran = data;
-        listIchiranThayDoi = listIchiran;
-      });
-    }, onFailed: () {
-      CustomToast.show(context, message: "部材発注一覧リストを取得出来ませんでした。");
-    });
+    final dynamic result = await GetPartOrderListIchiran().getPartOrderListApprove(
+      onSuccess: (data) {
+        setState(() {
+          listIchiran = data;
+          listIchiranThayDoi = listIchiran;
+        });
+      }, onFailed: () {
+        CustomToast.show(context, message: "部材発注一覧リストを取得出来ませんでした。");
+      }
+    );
   }
 
   @override
@@ -99,10 +105,12 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       columnText(
+                        controller: idController,
                         width: size.width / 2 - 30,
                         text: '発注ID',
                       ),
                       columnText(
+                        controller: tantController,
                         width: size.width / 2 - 30,
                         text: '発注者',
                       ),
@@ -138,7 +146,25 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      
+                      listIchiranThayDoi = listIchiran;
+                      
+                      if(idController.text.isNotEmpty){
+                        listIchiranThayDoi = listIchiranThayDoi.where((element) => '${element['BUZAI_HACYU_ID']}'.contains(idController.text)).toList();
+                      }
+
+                      if(tantController.text.isNotEmpty){
+                        listIchiranThayDoi = listIchiranThayDoi.where((element) => '${element['TANT_NAME']}'.contains(idController.text)).toList();
+                      }
+                      
+                      if(currentPullDownValue!='カテゴリを選択'){
+                        listIchiranThayDoi = listIchiranThayDoi.where((element) => element['KBNMSAI_NAME']==currentPullDownValue).toList();
+                      }
+
+                      setState(() {});
+                      
+                    },
                     child: const Text(
                       '検索',
                       style: TextStyle(
@@ -156,11 +182,20 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                   width: 100,
                   height: 37,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFA1A1A1),
+                    color: currentPullDownValue!='カテゴリを選択' || idController.text.isNotEmpty || tantController.text.isNotEmpty
+                      ? Colors.red
+                      : const Color(0xFFA1A1A1),
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        currentPullDownValue = 'カテゴリを選択';
+                        idController.clear();
+                        tantController.clear();
+                        listIchiranThayDoi = listIchiran;
+                      });
+                    },
                     child: const Text(
                       'クリア',
                       style: TextStyle(
@@ -191,7 +226,6 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
             const SizedBox(
               height: 10,
             ),
-            Expanded(child: Container()),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -243,12 +277,12 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const DanhSachNhanLaiVatLieuPage(),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SaibuhacchuulistDanhSachDatHangVatLieu611Page(),
+                        ),
+                      );
                     },
                     child: const Text(
                       '新規部材発注',
@@ -272,13 +306,16 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) =>
-                      //         const DanhSachDatHangVatLieu611Page(),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DanhSachCacBoPhan513Page(
+                            back: (list) {
+                              print('list: $list');
+                            },
+                          ),
+                        ),
+                      );
                     },
                     child: const Text(
                       'リスト確認',
@@ -317,32 +354,11 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
       itemBuilder: (context) => listPullDown.map((item) {
         return PopupMenuItem(
           onTap: () {
-            List<dynamic> tmp = [];
-            tmp = listIchiran.where((element) {
-              return element;
-            }).toList();
             setState(() {
               if (currentPullDownValue == item["KBNMSAI_NAME"]) {
                 currentPullDownValue = "カテゴリを選択";
-                listIchiranThayDoi = tmp;
               } else {
                 currentPullDownValue = item["KBNMSAI_NAME"];
-                listIchiranThayDoi = tmp
-                    .where((element) =>
-                        element["KBNMSAI_NAME"] == item["KBNMSAI_NAME"])
-                    .toList();
-
-                // list = listBuzai
-                //     .where((element) => (element.HINBAN!.toUpperCase().contains(
-                //             hinbanController.text.toUpperCase().trim()) &&
-                //         element.MAKER_NAME!.toUpperCase().contains(
-                //             mekaController.text.toUpperCase().trim()) &&
-                //         element.SYOHIN_NAME!.contains(
-                //             shohinmeiController.text.toUpperCase().trim()) &&
-                //         element.BUNRUI!
-                //             .toUpperCase()
-                //             .contains(pullDownSelected.toUpperCase())))
-                //     .toList();
               }
             });
           },
@@ -432,6 +448,7 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
   }
 
   Widget columnText({
+    TextEditingController? controller,
     double? width,
     Color? color,
     String? hint,
@@ -451,10 +468,13 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
         SizedBox(
           width: width ?? 30,
           child: CustomTextField(
+            controller: controller,
             fillColor: color,
             hint: hint ?? '',
             type: TextInputType.emailAddress,
-            onChanged: (text) {},
+            onChanged: (text) {
+              setState(() {});
+            },
             maxLines: 1,
           ),
         ),

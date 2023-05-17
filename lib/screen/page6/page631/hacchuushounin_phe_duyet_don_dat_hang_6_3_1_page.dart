@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:link_life_one/api/order/hachuushounin/post_purchase_order_reject.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/screen/login_page.dart';
 
@@ -144,7 +145,7 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                             .where((element) => element["status"] == true)
                             .toList();
                         if (list.length > 0) {
-                          PostPurchaseOrderApproval().postPurchaseOrderApproval(
+                          PostPurchaseOrderReject().postPurchaseOrderReject(
                               BUZAI_HACYU_ID_List: list
                                   .map((item) => item["BUZAI_HACYU_ID"])
                                   .toList(),

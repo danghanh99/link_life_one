@@ -26,6 +26,11 @@ class DanhSachCacBoPhan512Page extends StatefulWidget {
 }
 
 class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
+
+  final hinbanEditTextController = TextEditingController();
+  final markerNameEditTextController = TextEditingController();
+  final syohinNameEditTextController = TextEditingController();
+
   late int currentRadioRow;
 
   List<dynamic> saibuList = [];
@@ -40,17 +45,35 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
 
     super.initState();
     callGetPartList();
+    // _callSearchAPI();
     callGetPullDownCategory();
+  }
+
+  toMap(element) {
+    return{
+      "BUZAI_HACYUMSAI_ID": element['BUZAI_HACYUMSAI_ID'] ?? element['BUZAI_KANRI_NO'] ?? '',
+      "BUNRUI": element['BUNRUI'] ?? element['BUZAI_BUNRUI'] ?? '',
+      "MAKER_NAME": element['MAKER_NAME'] ?? element['MAKER_NAME_BUZAI'] ?? '',
+      "HINBAN": element['HINBAN'] ?? element['HINBAN_BUZAI'] ?? '',
+      "SYOHIN_NAME": element['SYOHIN_NAME'] ?? element['SYOHIN_NAME_BUZAI'] ?? '',
+      "SURYO": element['SURYO'] ?? '',
+      "LOT": element['LOT'] ?? '',
+      "HACYU_TANKA": element['LOT'] ?? '',
+      "TANI_CD": element['TANI'] ?? '',
+      "HAIBAN_FLG": element ['HAIBAN_FLG'] ?? '0',
+      'status': false
+    };
   }
 
   Future<dynamic> callGetPartList() async {
     final dynamic result = await GetPartList().getPartList(onSuccess: (data) {
+      List<dynamic> elements = [];
       for (var element in data) {
-        element["status"] = false;
+        elements.add(toMap(element));
       }
-
+      saibuList.clear();
       setState(() {
-        saibuList.addAll(data);
+        saibuList.addAll(elements);
       });
     }, onFailed: () {
       CustomToast.show(context, message: "データを取得出来ませんでした。");
@@ -58,14 +81,16 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
   }
 
   Future<dynamic> callGetPullDownCategory() async {
-    final dynamic result =
-        await GetPullDownCategory().getPullDownCategory(onSuccess: (data) {
-      setState(() {
-        listPullDown.addAll(data);
-      });
-    }, onFailed: () {
-      CustomToast.show(context, message: "データを取得出来ませんでした。");
-    });
+    final dynamic result = await GetPullDownCategory().getPullDownCategory(
+      onSuccess: (data) {
+        listPullDown.clear();
+        setState(() {
+          listPullDown.addAll(data);
+        });
+      }, onFailed: () {
+        CustomToast.show(context, message: "データを取得出来ませんでした。");
+      }
+    );
   }
 
   @override
@@ -110,6 +135,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
                       columnText(
                         width: size.width / 2 - 30,
                         text: '品番',
+                        controller: hinbanEditTextController
                       ),
                     ],
                   ),
@@ -122,10 +148,12 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
                       columnText(
                         width: size.width / 2 - 30,
                         text: 'メーカー',
+                        controller: markerNameEditTextController
                       ),
                       columnText(
                         width: size.width / 2 - 30,
                         text: '商品名',
+                        controller: syohinNameEditTextController
                       ),
                     ],
                   ),
@@ -146,7 +174,9 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _callSearchAPI();
+                    },
                     child: const Text(
                       '検索',
                       style: TextStyle(
@@ -165,11 +195,21 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
                   width: 100,
                   height: 37,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFA1A1A1),
+                    color: pulldownCategory != 'カテゴリを選択' || hinbanEditTextController.text.isNotEmpty || markerNameEditTextController.text.isNotEmpty || syohinNameEditTextController.text.isNotEmpty
+                      ? Colors.red
+                      : const Color(0xFFA1A1A1),
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      hinbanEditTextController.clear();
+                      markerNameEditTextController.clear();
+                      syohinNameEditTextController.clear();
+                      pulldownCategory = 'カテゴリを選択';
+                      callGetPartList();
+                      // _callSearchAPI();
+                      callGetPullDownCategory();
+                    },
                     child: const Text(
                       'クリア',
                       style: TextStyle(
@@ -240,6 +280,27 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
           ],
         ),
       ),
+    );
+  }
+
+  _callSearchAPI() async {
+    final dynamic result = await GetPartList().getPartList2(
+      bunrui: pulldownCategory!='カテゴリを選択' ? pulldownCategory : '',
+      markerName: markerNameEditTextController.text,
+      hinban: hinbanEditTextController.text,
+      syohinName: syohinNameEditTextController.text,
+      onSuccess: (data) {
+        List<dynamic> elements = [];
+        for (var element in data) {
+          elements.add(toMap(element));
+        }
+        saibuList.clear();
+        setState(() {
+          saibuList.addAll(elements);
+        });
+      }, onFailed: () {
+        CustomToast.show(context, message: "データを取得出来ませんでした。");
+      }
     );
   }
 
@@ -378,6 +439,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
   }
 
   Widget columnText({
+    TextEditingController? controller,
     double? width,
     Color? color,
     String? hint,
@@ -400,6 +462,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
         SizedBox(
           width: width ?? 30,
           child: CustomTextField(
+            controller: controller ?? TextEditingController(),
             fillColor: color,
             hint: hint ?? '',
             type: TextInputType.emailAddress,
@@ -416,22 +479,22 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
       String value = '';
 
       if (col == 1) {
-        value = saibuList[row - 1]["BUZAI_HACYUMSAI_ID"] ?? '';
+        value = saibuList[row - 1]["BUZAI_HACYUMSAI_ID"] ?? saibuList[row - 1]["BUZAI_KANRI_NO"] ?? '';
       }
       if (col == 2) {
-        value = saibuList[row - 1]["BUNRUI"] ?? '';
+        value = saibuList[row - 1]["BUNRUI"] ?? saibuList[row - 1]["BUZAI_BUNRUI"] ?? '';
       }
       if (col == 3) {
-        value = saibuList[row - 1]["MAKER_NAME"] ?? '';
+        value = saibuList[row - 1]["MAKER_NAME"] ?? saibuList[row - 1]["MAKER_NAME_BUZAI"] ?? '';
       }
       if (col == 4) {
-        value = saibuList[row - 1]["HINBAN"] ?? '';
+        value = saibuList[row - 1]["HINBAN"] ?? saibuList[row - 1]["HINBAN_BUZAI"] ?? '';
       }
       if (col == 5) {
-        value = saibuList[row - 1]["SYOHIN_NAME"] ?? '';
+        value = saibuList[row - 1]["SYOHIN_NAME"] ?? saibuList[row - 1]["SYOHIN_NAME_BUZAI"] ?? '';
       }
       if (col == 6) {
-        value = saibuList[row - 1]["SURYO"] ?? '';
+        value = saibuList[row - 1]["SURYO"] ?? saibuList[row - 1]["SURYO"] ?? '';
       }
 
       return Text(
@@ -444,10 +507,14 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
       return Checkbox(
         activeColor: Colors.blue,
         checkColor: Colors.white,
-        value: saibuList[row - 1]["status"],
+        value: saibuList[row - 1]["status"] && (saibuList[row - 1]["HAIBAN_FLG"]=='0'),
         onChanged: (newValue) {
           setState(() {
-            saibuList[row - 1]["status"] = newValue ?? false;
+            print('new value: $newValue');
+            print('saibuList: ${saibuList[row - 1]["HAIBAN_FLG"]}');
+            print('saibuList value: ${saibuList[row - 1]["HAIBAN_FLG"]=='0'}');
+            print('value: ${(newValue ?? false) && (saibuList[row - 1]["HAIBAN_FLG"]=='0')}');
+            saibuList[row - 1]["status"] = (newValue ?? false) && (saibuList[row - 1]["HAIBAN_FLG"]=='0');
           });
         },
       );
@@ -511,11 +578,12 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
           ),
         );
       }
-
       return Container(
         decoration: BoxDecoration(
           border: Border.all(width: 0.5),
-          color: Colors.white,
+          color: saibuList[row - 1]["HAIBAN_FLG"]=='1'
+            ? Colors.black12
+            : Colors.white,
         ),
         alignment: Alignment.center,
         width: colwidth[col],

@@ -32,7 +32,6 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
   ];
 
   List<Buzai> listBuzai = [];
-  List<Buzai> tmp = [];
 
   List<dynamic> pullDown = [];
 
@@ -51,15 +50,26 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
     super.initState();
   }
 
-  Future<void> getListBuzai() async {
-    await GetBuzaiApi().getBuzai(onSuccess: (buzaiResponse) {
-      setState(() {
-        listBuzai = buzaiResponse;
-        tmp = listBuzai;
-      });
-    }, onFailed: () {
-      CustomToast.show(context, message: 'データを取得出来ませんでした。');
-    });
+  Future<void> getListBuzai({
+    String? buzaiBunrui,
+    String? makerName,
+    String? hinban,
+    String? syohinName
+  }) async {
+    await GetBuzaiApi().getBuzai(
+      buzaiBunrui: buzaiBunrui,
+      makerName: makerName,
+      hinban: hinban,
+      syohinName: syohinName,
+      onSuccess: (buzaiResponse) {
+        setState(() {
+          listBuzai.clear();
+          listBuzai = buzaiResponse;
+        });
+      }, onFailed: () {
+        CustomToast.show(context, message: 'データを取得出来ませんでした。');
+      }
+    );
   }
 
   Future<void> getPullDown() async {
@@ -154,43 +164,12 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      List<Buzai> list = [];
-                      if (pullDownSelected != '全部') {
-                        list = listBuzai
-                            .where((element) => (element.HINBAN!
-                                    .toUpperCase()
-                                    .contains(hinbanController.text
-                                        .toUpperCase()
-                                        .trim()) &&
-                                element.MAKER_NAME!.toUpperCase().contains(
-                                    mekaController.text.toUpperCase().trim()) &&
-                                element.SYOHIN_NAME!.contains(
-                                    shohinmeiController.text
-                                        .toUpperCase()
-                                        .trim()) &&
-                                element.BUZAI_BUNRUI!
-                                    .toUpperCase()
-                                    .contains(pullDownSelected.toUpperCase())))
-                            .toList();
-                      } else {
-                        list = listBuzai
-                            .where((element) => (element.HINBAN!
-                                    .toUpperCase()
-                                    .contains(hinbanController.text
-                                        .toUpperCase()
-                                        .trim()) &&
-                                element.MAKER_NAME!.toUpperCase().contains(
-                                    mekaController.text.toUpperCase().trim()) &&
-                                element.SYOHIN_NAME!.contains(
-                                    shohinmeiController.text
-                                        .toUpperCase()
-                                        .trim())))
-                            .toList();
-                      }
-
-                      setState(() {
-                        tmp = list;
-                      });
+                      getListBuzai(
+                        buzaiBunrui: pullDownSelected == '全部' ? '' : pullDownSelected,
+                        makerName: mekaController.text,
+                        hinban: hinbanController.text,
+                        syohinName: shohinmeiController.text
+                      );
                     },
                     child: const Text(
                       '検索',
@@ -210,11 +189,19 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
                   width: 100,
                   height: 37,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFA1A1A1),
+                    color: pullDown.contains(pullDownSelected) || mekaController.text.isNotEmpty || hinbanController.text.isNotEmpty || shohinmeiController.text.isNotEmpty
+                        ? Colors.red
+                        : const Color(0xFFA1A1A1),
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      pullDownSelected = '全部';
+                      mekaController.clear();
+                      hinbanController.clear();
+                      shohinmeiController.clear();
+                      getListBuzai();
+                    },
                     child: const Text(
                       'クリア',
                       style: TextStyle(
@@ -238,7 +225,7 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
                   scrollDirection: Axis.horizontal,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: _buildRows(tmp.length + 1),
+                    children: _buildRows(listBuzai.length + 1),
                   ),
                 ),
               ),
@@ -246,11 +233,9 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
             const SizedBox(
               height: 10,
             ),
-            Expanded(child: Container()),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(),
                 Container(
                   width: 120,
                   height: 37,
@@ -449,7 +434,9 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
             hint: hint ?? '',
             controller: controller,
             type: TextInputType.emailAddress,
-            onChanged: (text) {},
+            onChanged: (text) {
+              setState(() {});
+            },
             maxLines: 1,
           ),
         ),
@@ -460,25 +447,25 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
   Widget contentTable(int col, int row) {
     if (col == 1) {
       return Text(
-        tmp.isNotEmpty ? tmp[row - 1].BUZAI_KANRI_NO.toString() : '',
+        listBuzai.isNotEmpty ? listBuzai[row - 1].BUZAI_KANRI_NO.toString() : '',
         style: const TextStyle(color: Colors.black),
       );
     }
     if (col == 2) {
       return Text(
-        tmp.isNotEmpty ? tmp[row - 1].BUZAI_BUNRUI.toString() : '',
+        listBuzai.isNotEmpty ? listBuzai[row - 1].BUZAI_BUNRUI.toString() : '',
         style: const TextStyle(color: Colors.black),
       );
     }
     if (col == 3) {
       return Text(
-        tmp.isNotEmpty ? tmp[row - 1].MAKER_NAME.toString() : '',
+        listBuzai.isNotEmpty ? listBuzai[row - 1].MAKER_NAME.toString() : '',
         style: const TextStyle(color: Colors.black),
       );
     }
     if (col == 4) {
       return Text(
-        tmp.isNotEmpty ? tmp[row - 1].HINBAN.toString() : '',
+        listBuzai.isNotEmpty ? listBuzai[row - 1].HINBAN.toString() : '',
         style: const TextStyle(color: Colors.black),
       );
     }
@@ -486,10 +473,10 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
         ? Checkbox(
             activeColor: Colors.blue,
             checkColor: Colors.white,
-            value: tmp[row - 1].STATUS,
+            value: listBuzai[row - 1].STATUS,
             onChanged: (newValue) {
               setState(() {
-                tmp[row - 1].STATUS = newValue ?? false;
+                listBuzai[row - 1].STATUS = newValue ?? false;
               });
             },
           )
