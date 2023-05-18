@@ -469,6 +469,12 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
         style: const TextStyle(color: Colors.black),
       );
     }
+    if (col == 5) {
+      return Text(
+        listBuzai.isNotEmpty ? listBuzai[row - 1].SYOHIN_NAME.toString() : '',
+        style: const TextStyle(color: Colors.black),
+      );
+    }
     return col == 0
         ? Checkbox(
             activeColor: Colors.blue,
@@ -493,8 +499,8 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
       '分類',
       'メーカー',
       '品番',
-      '',
-      '',
+      '商品名',
+      '実数量',
     ];
 
     Size size = MediaQuery.of(context).size;

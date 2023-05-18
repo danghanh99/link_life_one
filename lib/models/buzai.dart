@@ -18,7 +18,7 @@ class Buzai {
     return Buzai(
       MAKER_NAME: json['BUZAI_MAKER_NAME'] ?? '',
       HINBAN: json['BUZAI_HINBAN'] ?? '',
-      SYOHIN_NAME: json['SYOHIN_NAME'] ?? '',
+      SYOHIN_NAME: json['SYOHIN_NAME'] ?? json['BUZAI_SYOHIN_NAME'] ?? '',
       BUZAI_KANRI_NO: json['BUZAI_KANRI_NO'] ?? '',
       BUZAI_BUNRUI: json['BUZAI_BUNRUI'] ?? '',
     );

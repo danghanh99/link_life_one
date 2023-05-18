@@ -453,7 +453,7 @@ class _TanaoroshiDanhMucHangTonKho62PageState
   Widget header() {
     return CustomHeaderWidget(
       onBack: (){
-
+        Navigator.pop(context);
       },
     );
   }

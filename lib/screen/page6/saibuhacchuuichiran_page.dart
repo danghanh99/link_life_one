@@ -151,11 +151,13 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                       listIchiranThayDoi = listIchiran;
                       
                       if(idController.text.isNotEmpty){
-                        listIchiranThayDoi = listIchiranThayDoi.where((element) => '${element['BUZAI_HACYU_ID']}'.contains(idController.text)).toList();
+                        listIchiranThayDoi = listIchiranThayDoi.where((element) =>
+                            '${element['BUZAI_HACYU_ID']}'.toLowerCase().trim().contains(idController.text.toLowerCase().trim())).toList();
                       }
 
                       if(tantController.text.isNotEmpty){
-                        listIchiranThayDoi = listIchiranThayDoi.where((element) => '${element['TANT_NAME']}'.contains(idController.text)).toList();
+                        listIchiranThayDoi = listIchiranThayDoi.where((element) =>
+                            '${element['TANT_NAME']}'.toLowerCase().trim().contains(tantController.text.toLowerCase().trim())).toList();
                       }
                       
                       if(currentPullDownValue!='カテゴリを選択'){
@@ -564,7 +566,11 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
       return Container(
         decoration: BoxDecoration(
           border: Border.all(width: 0.5),
-          color: Colors.white,
+          color: listIchiranThayDoi[row - 1]["HACYU_OKFLG"]=="02"
+              ? const Color(0xffffff00)
+              : listIchiranThayDoi[row - 1]["HACYU_OKFLG"]=="03"
+              ? const Color(0xff00bfff)
+              : Colors.white,
         ),
         alignment: Alignment.center,
         width: colwidth[col],

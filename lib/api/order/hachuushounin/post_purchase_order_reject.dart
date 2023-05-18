@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:hive_flutter/adapters.dart';
 import "package:http/http.dart" as http;
 import 'package:intl/intl.dart';
@@ -18,7 +20,7 @@ class PostPurchaseOrderReject {
           "${Constant.url}Request/Order/requestPostPurchaseOrderReject.php";
       final response = await http.post(
         Uri.parse(url),
-        body: {"BUZAI_HACYU_ID": BUZAI_HACYU_ID_List.toString()}.toString(),
+        body: json.encode({"BUZAI_HACYU_ID": BUZAI_HACYU_ID_List}),
       );
       if (response.statusCode == 200) {
         onSuccess.call();

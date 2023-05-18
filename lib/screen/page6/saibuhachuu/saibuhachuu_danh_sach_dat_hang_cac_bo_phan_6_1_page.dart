@@ -55,7 +55,6 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
     final dynamic result = await GetPartOrderList().getPartOrderList(
         SYOZOKU_CD: user.SYOZOKU_CD,
         onSuccess: (data) {
-          print(data);
           setState(() {
             listOrder = data;
             listOrderKhongCoDinh = listOrder;
@@ -642,7 +641,11 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
       return Container(
         decoration: BoxDecoration(
           border: Border.all(width: 0.5),
-          color: Colors.white,
+          color: listOrderKhongCoDinh[row - 1]["HACYU_OKFLG"]=="02"
+            ? const Color(0xffffff00)
+            : listOrderKhongCoDinh[row - 1]["HACYU_OKFLG"]=="03"
+              ? const Color(0xff00bfff)
+              : Colors.white,
         ),
         alignment: Alignment.center,
         width: colwidth[col],
