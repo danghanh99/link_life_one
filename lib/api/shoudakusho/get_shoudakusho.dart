@@ -64,4 +64,63 @@ class GetShoudakusho {
       throw Exception('Failed to GetShoudakusho');
     }
   }
+
+  Future<String> _notSucessGetImage({
+    required String jyucyuId,
+    required Function onSuccess,
+    required Function onFailed
+  }) async {
+    if(await LocalStorageServices.isTodayDataDownloaded()){
+      var res = await LocalStorageServices().getSignImage(
+          jyucyuId: jyucyuId
+      );
+      onSuccess.call(res);
+      return res;
+    }
+    else{
+      onFailed.call();
+      throw Exception('Failed to get sign image');
+    }
+  }
+
+  Future<String> getCheckSignImage({
+    required String jyucyuId,
+    required Function onSuccess,
+    required Function onFailed,
+  }) async {
+
+    bool isOnline = await LocalStorageNotifier.isOnline();
+
+    if(!isOnline && LocalStorageNotifier.isTodayDownload()){
+      return _notSucessGetImage(
+          jyucyuId: jyucyuId,
+          onSuccess: onSuccess,
+          onFailed: onFailed
+      );
+    }
+
+    try{
+      final response = await http.get(Uri.parse(
+          "${Constant.url}Request/Koji/requestGetCheckSignImage.php?JYUCYU_ID=$jyucyuId"));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> body = jsonDecode(response.body)[0];
+        if(body.containsKey('message')){
+          onSuccess.call();
+          return '';
+        }
+        else{
+          onSuccess.call();
+          return body['FILEPATH'];
+        }
+      } else {
+        onFailed.call();
+        throw Exception('Failed to get sign image');
+      }
+    } catch(e){
+      onFailed.call();
+      throw Exception('Failed to get sign image');
+    }
+  }
+
 }

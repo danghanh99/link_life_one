@@ -15,10 +15,10 @@ class CheckOrderSave {
     required Function onFailed,
   }) async {
     final userBox = await Hive.openBox<User>('userBox');
-    String SYOZOKU_CD = userBox.values.last.SYOZOKU_CD;
+    String tantCd = userBox.values.last.TANT_CD;
     final response = await http.get(
       Uri.parse(
-          "${Constant.url}/Request/Order/requestGetCheckBuzaihacyumsaiSave.php?SYOZOKU_CD=$SYOZOKU_CD"),
+          "${Constant.url}/Request/Order/requestGetCheckBuzaihacyumsaiSave.php?SYOZOKU_CD=$tantCd"),
     );
 
     if (response.statusCode == 200) {

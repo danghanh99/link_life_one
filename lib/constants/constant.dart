@@ -27,6 +27,7 @@ class Constant {
   static const String postInventoryListWithoutSaved = '${url}Request/Order/requesPostInventoryListWithoutSaved.php';
   static const String postTanamsaiSaveDelete = '${url}Request/Order/requestPostTanamsaiSaveDelete.php';
   static const String postInventoryListMaterialList = '${url}Request/Order/requestPostInventoryListMaterialList.php';
+  static const String postRemoveInventory = '${url}Request/Order/requesPostTanamsaiDelete.php';
 
   static const int compressTargetWidth = 600;
 }

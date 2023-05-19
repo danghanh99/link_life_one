@@ -725,6 +725,21 @@ class LocalStorageServices{
     return resultList;
   }
 
+  Future<String> getSignImage({
+    required jyucyuId
+  })async{
+
+    var tKojiFilePath = await LocalStorageBase.getValues(boxName: boxKojiFilePathName);
+
+    for(TKojiFilePath kf in tKojiFilePath){
+      if(kf.id == jyucyuId && (kf.fileKbnCd == "08" || kf.fileKbnCd=="8") && (kf.delFlg=="0" || kf.delFlg=="00")){
+        return kf.filePath ?? '';
+      }
+    }
+
+    return '';
+  }
+
   Future<dynamic> getPhotoSubmission({
     required jyucyuId,
     required kojiSt

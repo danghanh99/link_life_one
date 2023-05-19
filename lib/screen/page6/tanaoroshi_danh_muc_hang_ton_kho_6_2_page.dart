@@ -340,13 +340,23 @@ class _TanaoroshiDanhMucHangTonKho62PageState
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {
+                    onPressed: () async {
 
-                      for(var i in listInventory.where((e) => e.STATUS == true).toList()){
-                        listInventory.removeAt(listInventory.indexOf(i));
-                      }
-
-                      setState(() {});
+                      List removeItems = listInventory.where((element) => element.STATUS && element.isFromDatabase).toList();
+                      await GetInventoriesApi().removeInventory(
+                          removeItems: removeItems,
+                          onSuccess: () {
+                            setState(() {
+                              for(var i in listInventory.where((e) => e.STATUS == true).toList()){
+                                listInventory.removeAt(listInventory.indexOf(i));
+                              }
+                            });
+                            CustomToast.show(context,
+                                message: '選択した項目を削除できました。', backGround: Colors.green);
+                          },
+                          onFailed: () {
+                            CustomToast.show(context, message: 'データを取得出来ませんでした。');
+                          });
 
                     },
                     child: const Text(

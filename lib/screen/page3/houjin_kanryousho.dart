@@ -61,7 +61,7 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
     }
     setState(
       () {
-        listKbn = result['KBN'];
+        listKbn = result['KBN'] ?? [];
         for (var element in listKbn) {
           element.forEach((key, value) {
             if (value != null && value != '') {
@@ -69,7 +69,9 @@ class _HoujinKanryoushoState extends State<HoujinKanryousho> {
             }
           });
         }
-        for(var f in result['FILE']){
+
+        var listFiles = result['FILE'] ?? [];
+        for(var f in (listFiles as List)){
           if(f!=null) listImage.add(f);
         }
         // listImage = (result['FILE'] ?? []);

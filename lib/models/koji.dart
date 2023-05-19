@@ -60,4 +60,28 @@ class Koji {
         yobikomoku2: json['YOBIKOMOKU2_KBN2']
     );
   }
+
+  String getYobikomoku1Color(){
+    String colorHex = '$yobikomoku1';
+    if(colorHex.contains('#')){
+      colorHex = colorHex.substring(1);
+      if(colorHex.length==6) return '0xff$colorHex';
+      if(colorHex.length==8) return '0x$colorHex';
+    }
+    else{
+      colorHex = colorHex.substring(2);
+      if(colorHex.length==6) return '0xff$colorHex';
+      if(colorHex.length==8) return '0x$colorHex';
+    }
+    return '';
+  }
+
+  int getYobikomoku2Color(int index){
+    List<String> colors = yobikomoku2!.split(", ");
+    if(colors.length==3){
+      colors.insert(0, '255');
+    }
+    return int.parse(colors[index]);
+  }
+
 }

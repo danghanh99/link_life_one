@@ -149,6 +149,7 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                               BUZAI_HACYU_ID_List: list
                                   .map((item) => item["BUZAI_HACYU_ID"])
                                   .toList(),
+                              note: textEditingController.text,
                               onSuccess: () {
                                 CustomToast.show(
                                   context,
@@ -201,6 +202,7 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                               BUZAI_HACYU_ID_List: list
                                   .map((item) => item["BUZAI_HACYU_ID"])
                                   .toList(),
+                              note: textEditingController.text,
                               onSuccess: () {
                                 CustomToast.show(
                                   context,

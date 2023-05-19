@@ -541,19 +541,19 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                                 color: showMauXanh(item.kojiSt) || item.yobikomoku2==null
                                     ? const Color(0xffc5d8f1)
                                     : Color.fromARGB(
-                                      int.parse(item.yobikomoku2!.split(", ")[0]),
-                                      int.parse(item.yobikomoku2!.split(", ")[1]),
-                                      int.parse(item.yobikomoku2!.split(", ")[2]),
-                                      int.parse(item.yobikomoku2!.split(", ")[3]),
+                                      item.getYobikomoku2Color(0),
+                                      item.getYobikomoku2Color(1),
+                                      item.getYobikomoku2Color(2),
+                                      item.getYobikomoku2Color(3)
                                     ),
                                 border: Border.all(
                                   color: showMauXanh(item.kojiSt) || item.yobikomoku2==null
                                       ? const Color(0xffc5d8f1)
                                       : Color.fromARGB(
-                                        int.parse(item.yobikomoku2!.split(", ")[0]),
-                                        int.parse(item.yobikomoku2!.split(", ")[1]),
-                                        int.parse(item.yobikomoku2!.split(", ")[2]),
-                                        int.parse(item.yobikomoku2!.split(", ")[3]),
+                                        item.getYobikomoku2Color(0),
+                                        item.getYobikomoku2Color(1),
+                                        item.getYobikomoku2Color(2),
+                                        item.getYobikomoku2Color(3)
                                       ),
                                 ),
                               ),
@@ -566,7 +566,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                                       children: [
                                         item.yobikomoku1!=null && item.kbnmsaiName!=null
                                         ? Container(
-                                          color: Color(int.parse(item.yobikomoku1!)),
+                                          color: Color(int.parse(item.getYobikomoku1Color())),
                                           margin: const EdgeInsets.only(right: 10.0),
                                           child: Text(
                                             item.kbnmsaiName!,
