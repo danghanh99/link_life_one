@@ -132,7 +132,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                     final box = Hive.box<User>('userBox');
                     final User user = box.values.last;
                     call2ApiGetList(
-                      syozokuCd: user.SYOZOKU_CD,
+                      syozokuCd: user.TANT_CD,
                     );
                     Navigator.pop(context);
                     setState(() {
