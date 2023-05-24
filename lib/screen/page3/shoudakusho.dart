@@ -66,6 +66,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
   bool checkedValue7 = false;
 
   bool registeredSignature = false;
+  String? signImageUrl;
   bool checkBoxError = false;
   // bool signatureEmptyError = false;
   // bool signatureNotRegistedError = false;
@@ -91,12 +92,13 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
   }
 
   _getSignImage()async{
-    String signImageUrl = await GetShoudakusho().getCheckSignImage(
+    signImageUrl = await GetShoudakusho().getCheckSignImage(
         jyucyuId: widget.jyucyuId,
         onSuccess: (){},
         onFailed: (){}
     );
     _createSignatureFromImage(signImageUrl);
+    setState(() {});
   }
 
   void loadCachedata(BuildContext context) {
@@ -1351,7 +1353,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
           width: 30,
         ),
         Text(
-          registeredSignature ? 'サイン登録済み' : 'サイン未登録',
+          signImageUrl!=null && signImageUrl!.isNotEmpty ? 'サイン登録済み' : 'サイン未登録',
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
         )
       ],
