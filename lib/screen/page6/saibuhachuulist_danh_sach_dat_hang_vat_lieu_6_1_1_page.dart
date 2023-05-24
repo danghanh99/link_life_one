@@ -791,7 +791,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
       itemBuilder: (context) =>
-          List.generate(100, (index) => index + 1).map((item) {
+          List.generate(99, (index) => index + 1).map((item) {
         return PopupMenuItem(
           onTap: () {
             setState(() {
@@ -838,7 +838,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
       itemBuilder: (context) =>
-          List.generate(100, (index) => index + 1).map((item) {
+          List.generate(99, (index) => index + 1).map((item) {
             return PopupMenuItem(
               onTap: () {
                 setState(() {

@@ -80,7 +80,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
     _controller.onDrawStart = onDrawStart;
     _controller.onDrawEnd = onDrawEnd;
     _getSignImage();
-    registeredSignature = widget.checkSign;
+    // registeredSignature = widget.checkSign;
     super.initState();
   }
 
@@ -97,6 +97,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
         onSuccess: (){},
         onFailed: (){}
     );
+    registeredSignature = signImageUrl!=null && signImageUrl!.isNotEmpty;
     _createSignatureFromImage(signImageUrl);
     setState(() {});
   }
@@ -1353,7 +1354,7 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
           width: 30,
         ),
         Text(
-          signImageUrl!=null && signImageUrl!.isNotEmpty ? 'サイン登録済み' : 'サイン未登録',
+          registeredSignature ? 'サイン登録済み' : 'サイン未登録',
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
         )
       ],

@@ -59,7 +59,7 @@ class MaterialOrdering {
     String SYOZOKU_CD = userBox.values.last.SYOZOKU_CD;
 
     List<Map<String, dynamic>> removeData = removeList.map((e) => {
-      'SYOZOKU_CD': SYOZOKU_CD,
+      'LOGIN_ID': LOGIN_ID,
       'BUZAI_HACYUMSAI_ID': e['BUZAI_HACYUMSAI_ID']
     }).toList();
 
