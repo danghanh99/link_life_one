@@ -636,37 +636,33 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                   ),
                   child: TextButton(
                     onPressed: () async {
-                      MaterialModel? material = await Navigator.push(
-                      // DefaultInventory? inventory = await Navigator.push(
+                      List<MaterialModel>? material = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const Page521DanhSachTonKho(),
                         ),
                       );
                       if (material == null) {
-                      // if (inventory == null) {
                         return;
                       }
-                      bool existed = false;
-                      for (var element in materials) {
-                        if (element.jisyaCode!=null && material.jisyaCode!=null && element.jisyaCode == material.jisyaCode) {
-                        // if (element.jisyaCode == inventory.jisyaCode) {
-                          setState(() {
-                            element.suryo = '${int.parse(element.suryo??'0')+int.parse(material.suryo??'0')}';
-                          });
-                          existed = true;
+                      for(MaterialModel mModel in material){
+                        bool existed = false;
+                        for (var element in materials) {
+                          if (element.jisyaCode!=null && mModel.jisyaCode!=null && element.jisyaCode == mModel.jisyaCode) {
+                            element.suryo = '${int.parse(element.suryo??'0')+int.parse(mModel.suryo??'0')}';
+                            existed = true;
+                          }
                         }
-                      }
-                      if (!existed) {
-                        setState(() {
-                          materials.add(material);
+                        if (!existed) {
+                          materials.add(mModel);
                           checkboxsState.clear();
                           for (var m in materials) {
                             checkboxsState.add(false);
                           }
-                          // materials.add(MaterialModel.fromDefaultInventory(inventory));
-                        });
+                        }
                       }
+
+                      setState(() {});
                     },
                     child: const Text(
                       'リストから選択',

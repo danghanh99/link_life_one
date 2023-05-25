@@ -39,11 +39,10 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
   final TextEditingController _makerNameController = TextEditingController();
   final TextEditingController _syohinNameController = TextEditingController();
 
-  late int currentRadioRow;
+  List<bool> checkBoxState = [];
 
   @override
   void initState() {
-    currentRadioRow = -1;
     getData();
     super.initState();
   }
@@ -98,9 +97,12 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
 
         if(gettingToast!=null) gettingToast!.removeCustomToast();
 
+        selectAmounts.clear();
+        checkBoxState.clear();
         setState(() {
           this.inventories = inventories;
           selectAmounts = List.generate(inventories.length, (index) => 0);
+          checkBoxState = List.generate(inventories.length, (index) => false);
         });
         if(inventories.isEmpty){
           CustomToast.show(
@@ -285,12 +287,14 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      if (currentRadioRow > 0 &&
-                          currentRadioRow <= inventories.length) {
-                        DefaultInventory inventory =
-                            inventories.elementAt(currentRadioRow - 1);
-                        // Navigator.pop(context, inventory);
-                        Navigator.pop(context, MaterialModel.fromDefaultInventoryWithSuryo(inventory, selectAmounts[currentRadioRow-1]));
+                      List<MaterialModel> responseModel = [];
+                      for(int i = 0; i< inventories.length; i++){
+                        if(checkBoxState[i]){
+                          responseModel.add(MaterialModel.fromDefaultInventoryWithSuryo(inventories[i], selectAmounts[i]));
+                        }
+                      }
+                      if (responseModel.isNotEmpty) {
+                        Navigator.pop(context, responseModel);
                       } else {
                         CustomToast.show(context, message: "一つを選択してください。");
                       }
@@ -521,13 +525,12 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
     }
 
     return col == 0
-        ? RadioListTile(
-            value: row,
-            groupValue: currentRadioRow,
-            onChanged: (e) {
+        ? Checkbox(
+            value: checkBoxState[row-1],
+            onChanged: (value) {
               if (row <= inventories.length) {
                 setState(() {
-                  currentRadioRow = row;
+                  checkBoxState[row-1] = value ?? false;
                 });
               }
             },
