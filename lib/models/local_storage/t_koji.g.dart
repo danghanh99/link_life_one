@@ -86,13 +86,15 @@ class TKojiAdapter extends TypeAdapter<TKoji> {
       ..localKojiiraisyoFilePath = fields[64] as String?
       ..localSitamiiraisyoFilePath = fields[65] as String?
       ..originalKojiiraisyoFilePath = fields[67] as String?
-      ..originalSitamiiraisyoFilePath = fields[68] as String?;
+      ..originalSitamiiraisyoFilePath = fields[68] as String?
+      ..localCoCdFilePath = fields[69] as String?
+      ..originalCoCdFilePath = fields[70] as String?;
   }
 
   @override
   void write(BinaryWriter writer, TKoji obj) {
     writer
-      ..writeByte(69)
+      ..writeByte(71)
       ..writeByte(0)
       ..write(obj.jyucyuId)
       ..writeByte(1)
@@ -230,7 +232,11 @@ class TKojiAdapter extends TypeAdapter<TKoji> {
       ..writeByte(67)
       ..write(obj.originalKojiiraisyoFilePath)
       ..writeByte(68)
-      ..write(obj.originalSitamiiraisyoFilePath);
+      ..write(obj.originalSitamiiraisyoFilePath)
+      ..writeByte(69)
+      ..write(obj.localCoCdFilePath)
+      ..writeByte(70)
+      ..write(obj.originalCoCdFilePath);
   }
 
   @override
@@ -325,7 +331,9 @@ TKoji _$TKojiFromJson(Map<String, dynamic> json) {
     ..originalKojiiraisyoFilePath =
         json['originalKojiiraisyoFilePath'] as String?
     ..originalSitamiiraisyoFilePath =
-        json['originalSitamiiraisyoFilePath'] as String?;
+        json['originalSitamiiraisyoFilePath'] as String?
+    ..localCoCdFilePath = json['localCoCdFilePath'] as String?
+    ..originalCoCdFilePath = json['originalCoCdFilePath'] as String?;
 }
 
 Map<String, dynamic> _$TKojiToJson(TKoji instance) => <String, dynamic>{
@@ -398,4 +406,6 @@ Map<String, dynamic> _$TKojiToJson(TKoji instance) => <String, dynamic>{
       'status': instance.status,
       'originalKojiiraisyoFilePath': instance.originalKojiiraisyoFilePath,
       'originalSitamiiraisyoFilePath': instance.originalSitamiiraisyoFilePath,
+      'localCoCdFilePath': instance.localCoCdFilePath,
+      'originalCoCdFilePath': instance.originalCoCdFilePath,
     };

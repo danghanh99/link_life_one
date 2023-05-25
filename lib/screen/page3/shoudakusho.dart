@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:link_life_one/api/shoudakusho/get_shoudakusho.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/components/toast.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 import 'package:link_life_one/shared/cache_notifier.dart';
 import 'package:link_life_one/shared/custom_button.dart';
 import 'package:link_life_one/shared/extension.dart';
@@ -72,8 +73,16 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
   // bool signatureNotRegistedError = false;
   String msgSignature = '';
 
+  bool isOnline = true;
+
+  _checkOnline()async{
+    isOnline = await LocalStorageNotifier.isOnline();
+    setState((){});
+  }
+
   @override
   void initState() {
+    _checkOnline();
     loadCachedata(context);
     file = null;
     _controller.addListener(() => debugPrint('Value changed'));
@@ -756,11 +765,12 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
                                 child: widget.kojiData['CO_CD'] != null
                                     ? FadeInImage(
                                         placeholder: Assets.blankImage,
-                                        image: NetworkImage(
-                                            widget.kojiData['CO_CD']),
+                                        image: NetworkImage(widget.kojiData['CO_CD']),
                                         imageErrorBuilder:
                                             (context, error, stackTrace) {
-                                          return const Icon(Icons.error);
+                                          return !isOnline && LocalStorageNotifier.isTodayDownload()
+                                              ? Image.file(File(widget.kojiData['CO_CD']))
+                                              : const Icon(Icons.error);
                                         },
                                       )
                                     : const SizedBox.shrink()),

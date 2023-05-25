@@ -74,7 +74,7 @@ class GetShoudakusho {
       var res = await LocalStorageServices().getSignImage(
           jyucyuId: jyucyuId
       );
-      onSuccess.call(res);
+      onSuccess();
       return res;
     }
     else{

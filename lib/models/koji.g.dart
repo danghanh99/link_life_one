@@ -22,9 +22,9 @@ Koji _$KojiFromJson(Map<String, dynamic> json) => Koji(
       setsakiName: json['setsakiName'] as String?,
       kojiSt: json['kojiSt'] as String,
       hojinFlag: json['hojinFlag'] as String,
-      kbnmsaiName: json['kbnmsaiName'] as String,
-      yobikomoku1: json['yobikomoku1'] as String,
-      yobikomoku2: json['yobikomoku2'] as String,
+      kbnmsaiName: json['kbnmsaiName'] as String?,
+      yobikomoku1: json['yobikomoku1'] as String?,
+      yobikomoku2: json['yobikomoku2'] as String?,
     );
 
 Map<String, dynamic> _$KojiToJson(Koji instance) => <String, dynamic>{

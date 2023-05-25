@@ -629,193 +629,177 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
             //   ),
             // ),
             const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Form(
-                  key: _formKey,
-                  child: Container(
-                    height: 100.h,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            Form(
+              key: _formKey,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Text(
+                      'チラシ投函数',
+                      style: TextStyle(
+                        color: const Color(0xFF042C5C),
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 2),
-                          child: Text(
-                            'チラシ投函数',
-                            style: TextStyle(
-                              color: const Color(0xFF042C5C),
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                width: 240.w,
-                                height: 100.h,
-                                child: CustomTextField(
-                                  controller: textEditingController,
-                                  maxLength: 10,
-                                  hint: '',
-                                  type: TextInputType.phone,
-                                  validator: _validateNumber,
-                                  onChanged: (text) {
-                                    setState(() {
-                                      tiraru = text;
-                                    });
-                                    // validateNumber(text);
-                                  },
-                                ),
-                              ),
-                              // !isValid
-                              //     ? Text(
-                              //         '整数のみ',
-                              //         style: TextStyle(
-                              //             color: Colors.red, fontSize: 12.sp),
-                              //       )
-                              //     : Container(),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          width: 70,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFFA800),
-                            borderRadius: BorderRadius.circular(26),
-                          ),
-                          child: TextButton(
-                            onPressed: () async {
-                              if (_formKey.currentState?.validate() == true) {
-                                final box = await Hive.openBox<String>('user');
-                                String loginID = box.values.last;
-
-                                PostTirasiUpdateApi().postTirasiUpdateApi(
-                                    YMD: DateFormat('yyyy-MM-dd', 'ja')
-                                        .format(date)
-                                        .toString(),
-                                    LOGIN_ID: loginID,
-                                    KOJI_TIRASISU: tiraru,
-                                    onFailed: () {
-                                      CustomToast.show(context,
-                                          message: "エラー!!!投函数更新ができませんでした。");
-                                    },
-                                    onSuccess: () {
-                                      CustomToast.show(context,
-                                          message: "投函数更新ができました。",
-                                          backGround: Colors.green);
-                                    });
-                              }
+                        SizedBox(
+                          width: 200.w,
+                          child: CustomTextField(
+                            controller: textEditingController,
+                            maxLength: 10,
+                            hint: '',
+                            type: TextInputType.phone,
+                            validator: _validateNumber,
+                            onChanged: (text) {
+                              setState(() {
+                                tiraru = text;
+                              });
+                              // validateNumber(text);
                             },
-                            child: const Text(
-                              '更新',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
                           ),
                         ),
+                        // !isValid
+                        //     ? Text(
+                        //         '整数のみ',
+                        //         style: TextStyle(
+                        //             color: Colors.red, fontSize: 12.sp),
+                        //       )
+                        //     : Container(),
                       ],
                     ),
                   ),
-                ),
-                const SizedBox(width: 30.0,),
-                DateFormat('yyyyMMdd').format(date)==DateFormat('yyyyMMdd').format(DateTime.now())
-                  ?  Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFFA800),
-                            borderRadius: BorderRadius.circular(26),
-                          ),
-                          child: TextButton(
-                            onPressed: () async {
-                              var dialogContext;
-                              showLoadingPopup(
-                                onShow: (context){
-                                  dialogContext = context;
-                                }
-                              );
-                              await context.read<LocalStorageNotifier>().downloadData();
-                              Navigator.pop(dialogContext);
-                              setState(() {
-                                callGetListKojiApi(inputDate: date);
-                                callGetTirasi(inputDate: date);
+                  Container(
+                    width: 70,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFA800),
+                      borderRadius: BorderRadius.circular(26),
+                    ),
+                    child: TextButton(
+                      onPressed: () async {
+                        if (_formKey.currentState?.validate() == true) {
+                          final box = await Hive.openBox<String>('user');
+                          String loginID = box.values.last;
+
+                          PostTirasiUpdateApi().postTirasiUpdateApi(
+                              YMD: DateFormat('yyyy-MM-dd', 'ja')
+                                  .format(date)
+                                  .toString(),
+                              LOGIN_ID: loginID,
+                              KOJI_TIRASISU: tiraru,
+                              onFailed: () {
+                                CustomToast.show(context,
+                                    message: "エラー!!!投函数更新ができませんでした。");
+                              },
+                              onSuccess: () {
+                                CustomToast.show(context,
+                                    message: "投函数更新ができました。",
+                                    backGround: Colors.green);
                               });
-                            },
-                            child: const Text(
-                              'オフライン用ダウンロード',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                        }
+                      },
+                      child: const Text(
+                        '更新',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            DateFormat('yyyyMMdd').format(date)==DateFormat('yyyyMMdd').format(DateTime.now())
+                ?  Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      height: 40,
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFA800),
+                        borderRadius: BorderRadius.circular(26),
+                      ),
+                      child: TextButton(
+                        onPressed: () async {
+                          var dialogContext;
+                          showLoadingPopup(
+                              onShow: (context){
+                                dialogContext = context;
+                              }
+                          );
+                          await context.read<LocalStorageNotifier>().downloadData();
+                          Navigator.pop(dialogContext);
+                          setState(() {
+                            callGetListKojiApi(inputDate: date);
+                            callGetTirasi(inputDate: date);
+                          });
+                        },
+                        child: const Text(
+                          'オフライン用ダウンロード',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10.0,),
-                      Expanded(
-                        child: Container(
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFFA800),
-                            borderRadius: BorderRadius.circular(26),
-                          ),
-                          child: TextButton(
-                            onPressed: () async {
-                              var dialogContext;
-                              var screenContext = context;
-                              showLoadingPopup(
-                                  onShow: (context)async{
-                                    dialogContext = context;
-                                    await context.read<LocalStorageNotifier>().uploadData(
-                                      onSuccess: (){
-                                        Navigator.pop(dialogContext);
-                                        CustomToast.show(screenContext, message: "工事データアップロードが完了しました。", backGround: Colors.green);
-                                      },
-                                      onFailed: (){
-                                        Navigator.pop(dialogContext);
-                                        CustomToast.show(screenContext, message: "工事データアップロードが完了できませんでした。", backGround: Colors.red);
-                                      }
-                                    );
-                                    setState(() {
-                                      callGetListKojiApi(inputDate: date);
-                                      callGetTirasi(inputDate: date);
-                                    });
-                                  }
-                              );
-                            },
-                            child: const Text(
-                              'オンラインアップロード',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                    ),
+                    const SizedBox(width: 10.0,),
+                    Container(
+                      height: 40,
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFA800),
+                        borderRadius: BorderRadius.circular(26),
+                      ),
+                      child: TextButton(
+                        onPressed: () async {
+                          var dialogContext;
+                          var screenContext = context;
+                          showLoadingPopup(
+                              onShow: (context)async{
+                                dialogContext = context;
+                                await context.read<LocalStorageNotifier>().uploadData(
+                                    onSuccess: (){
+                                      Navigator.pop(dialogContext);
+                                      CustomToast.show(screenContext, message: "工事データアップロードが完了しました。", backGround: Colors.green);
+                                    },
+                                    onFailed: (){
+                                      Navigator.pop(dialogContext);
+                                      CustomToast.show(screenContext, message: "工事データアップロードが完了できませんでした。", backGround: Colors.red);
+                                    }
+                                );
+                                setState(() {
+                                  callGetListKojiApi(inputDate: date);
+                                  callGetTirasi(inputDate: date);
+                                });
+                              }
+                          );
+                        },
+                        child: const Text(
+                          'オンラインアップロード',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 )
-                  : Container()
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            )
+                : Container(),
+            const SizedBox(height: 32.0),
           ],
         ),
       ),

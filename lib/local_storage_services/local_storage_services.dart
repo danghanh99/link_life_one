@@ -127,12 +127,15 @@ class LocalStorageServices{
             TKoji tKoji = TKoji.fromRequest(r);
             tKoji.storage(
               localKojiiraisyoFilePath: await _storageLocalDirectory(r, 'KOJIIRAISYO_FILEPATH'),
-              localSitamiiraisyoFilePath: await _storageLocalDirectory(r, 'SITAMIIRAISYO_FILEPATH')
+              localSitamiiraisyoFilePath: await _storageLocalDirectory(r, 'SITAMIIRAISYO_FILEPATH'),
+              localCoCdFilePath: await _storageLocalDirectory(r, 'CO_CD')
             );
             tKoji.origin(
               kojiiraisyoFilePath: r['KOJIIRAISYO_FILEPATH'],
-              sitamiiraisyoFilePath: r['SITAMIIRAISYO_FILEPATH']
+              sitamiiraisyoFilePath: r['SITAMIIRAISYO_FILEPATH'],
+              coCd: r['CO_CD']
             );
+
             await LocalStorageBase.add(
                 boxName: boxKojiName,
                 key: tKoji.jyucyuId,
@@ -674,7 +677,7 @@ class LocalStorageServices{
               "CO_NAME": k.coName,
               "CO_POSTNO": k.coPostno,
               "CO_ADDRESS": k.coAddress,
-              "CO_CD": k.coCd,
+              "CO_CD": k.localCoCdFilePath!=null?'${(await FileController().prepareSaveDir()).path}${k.localCoCdFilePath}':null,
               "KOJIGYOSYA_CD": k.kojigyosyaCd,
               "KOJI_ST": k.kojiSt,
               "HOJIN_FLG": k.hojinFlg,
@@ -1672,10 +1675,10 @@ class LocalStorageServices{
   Future<String?> _storageLocalDirectory(r, filedName) async {
     return await r[filedName]!=null  && '${r[filedName]}'.isNotEmpty
       ? await FileController().downloadFile(
-        url: '${Constant.url}${r[filedName]}',
+        url: filedName!='CO_CD' ? '${Constant.url}${r[filedName]}' : '${Constant.url}koji-app/TEMP/gazo/${r[filedName]}.png',
         fileName: '${r[filedName]}'.contains('/') || '${r[filedName]}'.contains('\\')
             ? '${r[filedName]}'.substring(('${r[filedName]}'.lastIndexOf('/')>=0 ? '${r[filedName]}'.lastIndexOf('/') : '${r[filedName]}'.lastIndexOf('\\'))+1)
-            : '${r[filedName]}',
+            : filedName!='CO_CD' ? '${r[filedName]}' : '${r[filedName]}.png',
         onFailed: (){}
       )
       : null;
