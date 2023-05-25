@@ -15,7 +15,7 @@ class CheckShowPopupApi {
     final User user = box.values.last;
     dynamic response = await http.get(
       Uri.parse(
-          "${Constant.url}Request/Order/requestCheckInventorySaved.php?LOGIN_ID=${user.TANT_CD}"),
+          "${Constant.url}Request/Order/requestCheckInventorySaved.php?SYOZOKU_CD=${user.SYOZOKU_CD}&LOGIN_ID=${user.TANT_CD}"),
     );
 
     if (response.statusCode == 200) {
