@@ -13,7 +13,7 @@ class GetCheckList {
   }) async {
     final response = await http.get(
       Uri.parse(
-          "${Constant.url}Request/Order/requestGetCheckList.php?BUZAI_HACYU_ID=0000000001"),
+          "${Constant.url}Request/Order/requestGetCheckList.php?BUZAI_HACYU_ID=$BUZAI_HACYU_ID"),
     );
 
     if (response.statusCode == 200) {

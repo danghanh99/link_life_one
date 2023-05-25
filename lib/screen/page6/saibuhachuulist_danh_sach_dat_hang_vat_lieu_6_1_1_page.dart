@@ -202,44 +202,48 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
     required String syozokuCd,
     String? jisyaCd
   }) async {
-    final dynamic result = await GetMaterialOrderingList().getMaterialOrderingList(
-            SYOZOKU_CD: syozokuCd,
-            JISYA_CD: jisyaCd,
-            onSuccess: (data) {
-              if (data.isEmpty && saibuList.isEmpty) {
-                setState(() {});
-              } else {
-                List<dynamic> tmpList = [];
-                for (var element in data) {
-                  var itemConvert = toJson(element);
-                  tmpList.add(itemConvert);
-                }
-
-                setState(() {
-                  saibuList.addAll(tmpList);
-                });
-
-                if (widget.BUZAI_HACYU_ID != null) {
-                  callGetCheckList((res) {
-                    if (res.isEmpty && saibuList.isEmpty) {
-                      setState(() {});
-                    } else {
-                      List<dynamic> tmpCheckList = [];
-                      for (var element in res) {
-                        var itemConvert = toJson(element);
-                        tmpCheckList.add(itemConvert);
-                      }
-                      setState(() {
-                        saibuList.addAll(tmpCheckList);
-                      });
-                    }
-                  });
-                }
+    saibuList.clear();
+    if(widget.isShowPopup){
+      await GetMaterialOrderingList().getMaterialOrderingList(
+          SYOZOKU_CD: syozokuCd,
+          JISYA_CD: jisyaCd,
+          onSuccess: (data) {
+            if (data.isEmpty) {
+              setState(() {});
+            } else {
+              List<dynamic> tmpList = [];
+              for (var element in data) {
+                var itemConvert = toJson(element);
+                tmpList.add(itemConvert);
               }
-            },
-            onFailed: () {
-              CustomToast.show(context, message: "データを取得出来ませんでした。");
-            });
+
+              setState(() {
+                saibuList.addAll(tmpList);
+              });
+
+            }
+          },
+          onFailed: () {
+            CustomToast.show(context, message: "データを取得出来ませんでした。");
+          });
+    }
+    else{
+      await callGetCheckList((res) {
+        if (res.isEmpty) {
+          setState(() {});
+        } else {
+          List<dynamic> tmpCheckList = [];
+          for (var element in res) {
+            var itemConvert = toJson(element);
+            tmpCheckList.add(itemConvert);
+          }
+          setState(() {
+            saibuList.addAll(tmpCheckList);
+          });
+        }
+      });
+    }
+
   }
 
   Future<dynamic> callGetCheckList(Function(List<dynamic>) onSccess) async {
