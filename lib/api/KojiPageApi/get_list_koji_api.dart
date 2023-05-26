@@ -30,38 +30,73 @@ class GetListKojiApi {
             && t.delFlg == 0
             && (t.homonSbt=="02" || t.homonSbt=="2")
             && t.kojiYMD==DateFormat('yyyy-MM-dd').format(date)){
+
+          String? kbnName;
+          String? yobikomoku1;
+          String? yobikomoku2;
+
           for(MKBN k in mKbn){
-            if(t.tagKbn==k.kbnmsaiCd && k.kbnCd=="05"){
-              for(MKBN k2 in mKbn){
-                if(t.tagKbn==k2.kbnmsaiCd && k2.kbnCd=="L1"){
-                  list.add(t.toKojiWithKbn(
-                      kbnmsaiName: k.kbnmsaiName,
-                      yobikomoku1: k2.yobikomoku1,
-                      yobikomoku2: k2.yobikomoku2
-                  ));
-                }
-              }
+            String? kbnCd;
+            String? kbnmsaiCd;
+
+            if(t.kojiSt == '01' || t.kojiSt == '02') {
+              kbnCd = 'K7';
+              kbnmsaiCd = t.tagKbn;
+            } else {
+              kbnCd = '02';
+              kbnmsaiCd = '03';
             }
+
+            if(k.kbnCd == kbnCd && k.kbnmsaiCd == kbnmsaiCd){
+              kbnName = k.kbnName;
+              yobikomoku1 = k.yobikomoku1;
+              yobikomoku2 = k.yobikomoku2;
+            }
+
           }
+
+          list.add(t.toKojiWithKbn(
+              kbnmsaiName: kbnName,
+              yobikomoku1: yobikomoku1,
+              yobikomoku2: yobikomoku2
+          ));
         }
         else if(t.homonTantCd4==loginId
             && t.syuyakuJyucyuId == null
             && t.delFlg == 0
             && (t.homonSbt=="01" || t.homonSbt=="1")
             && t.sitamiYMD==DateFormat('yyyy-MM-dd').format(date)){
+
+          String? kbnName;
+          String? yobikomoku1;
+          String? yobikomoku2;
+
           for(MKBN k in mKbn){
-            if(t.tagKbn==k.kbnmsaiCd && k.kbnCd=="05"){
-              for(MKBN k2 in mKbn){
-                if(t.tagKbn==k2.kbnmsaiCd && k2.kbnCd=="L1"){
-                  list.add(t.toSitami(
-                      kbnmsaiName: k.kbnmsaiName,
-                      yobikomoku1: k2.yobikomoku1,
-                      yobikomoku2: k2.yobikomoku2
-                  ));
-                }
-              }
+            String? kbnCd;
+            String? kbnmsaiCd;
+
+            if(t.kojiSt == '01' || t.kojiSt == '02') {
+              kbnCd = 'K7';
+              kbnmsaiCd = t.tagKbn;
+            } else {
+              kbnCd = '02';
+              kbnmsaiCd = '03';
             }
+
+            if(k.kbnCd == kbnCd && k.kbnmsaiCd == kbnmsaiCd){
+              kbnName = k.kbnName;
+              yobikomoku1 = k.yobikomoku1;
+              yobikomoku2 = k.yobikomoku2;
+            }
+
           }
+
+          list.add(t.toSitami(
+            kbnmsaiName: kbnName,
+            yobikomoku1: yobikomoku1,
+            yobikomoku2: yobikomoku2
+          ));
+
         }
       }
       onSuccess.call(_sort(list));

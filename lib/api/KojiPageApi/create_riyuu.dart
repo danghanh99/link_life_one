@@ -102,7 +102,7 @@ class CreateRiyuu {
     try {
 
       var dio = Dio();
-      String url = _getUrl(SHITAMI_MENU);
+      String url = "${Constant.url}Request/Koji/requestPhotoSubmissionPreviewPost.php";
       FormData formData = FormData.fromMap(
         await _getData(
           JYUCYU_ID: JYUCYU_ID,
@@ -127,22 +127,6 @@ class CreateRiyuu {
       }
     } catch (e) {
       onFailed.call('$e');
-    }
-  }
-
-  String _getUrl(String SHITAMI_MENU) {
-    String domain = "${Constant.url}Request/Koji/";
-    switch (SHITAMI_MENU) {
-      case '1':
-        return '${domain}requestPhotoSubmissionRegistrationFromSendPhoto.php';
-      case '2':
-        return '${domain}requestPhotoSubmissionRegistrationFromReportDelayed.php';
-      case '3':
-        return "${domain}requestPhotoSubmissionRegistrationFromCancel.php";
-      case '4':
-        return '${domain}requestPhotoSubmissionRegistrationFromReportNoQuoation.php';
-      default:
-        return '';
     }
   }
 
