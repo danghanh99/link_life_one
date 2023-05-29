@@ -411,6 +411,7 @@ class _Page31YeuCauBieuMauPageState extends State<Page31YeuCauBieuMauPage> {
                                       MaterialPageRoute(
                                         builder: (context) => ShashinTeishuutsuGamenPage(
                                           JYUCYU_ID: widget.JYUCYU_ID,
+                                          kojiSt: widget.KOJI_ST,
                                           HOMON_SBT: widget.koji.homonSbt,
                                           initialDate: widget.initialDate,
                                         ),

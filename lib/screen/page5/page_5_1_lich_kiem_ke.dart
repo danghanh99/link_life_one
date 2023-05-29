@@ -68,7 +68,7 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
           }
           if(isFirstTime && result.isEmpty){
             CustomToast.show(context,
-                message: 'データがありません。');
+                message: 'データはありません。');
           }
         });
       // CustomToast.show(context,

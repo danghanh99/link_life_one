@@ -162,6 +162,7 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                                     element["status"] = false;
                                   }
                                 });
+                                Navigator.pop(context);
                               },
                               onFailed: () {
                                 CustomToast.show(context,
@@ -215,6 +216,7 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                                     element["status"] = false;
                                   }
                                 });
+                                Navigator.pop(context);
                               },
                               onFailed: () {
                                 CustomToast.show(context,

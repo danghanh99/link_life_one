@@ -443,10 +443,10 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                 checkboxsState.add(false);
               }
             });
-            CustomToast.show(
-              context,
-              message: 'QRコードからデータを取得できました。', backGround: Colors.green
-            );
+            // CustomToast.show(
+            //   context,
+            //   message: 'QRコードからデータを取得できました。', backGround: Colors.green
+            // );
           }
         },
         onFailed: () {
@@ -465,8 +465,10 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
               checkboxsState.add(false);
             }
           });
-          CustomToast.show(context,
-              message: 'データを取得できました。', backGround: Colors.green);
+          if(materials.isEmpty){
+            CustomToast.show(context,
+                message: 'データはありません。', backGround: Colors.green);
+          }
         },
         onFailed: () {
           CustomToast.show(context, message: 'データを取得できません。');
@@ -480,6 +482,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
           reloadList();
           CustomToast.show(context,
               message: '選択した項目を登録できました。', backGround: Colors.green);
+          Navigator.pop(context);
         },
         onFailed: () {
           CustomToast.show(context, message: '選択した項目を登録できません。');

@@ -915,6 +915,31 @@ class LocalStorageServices{
 
   }
 
+  Future<List<dynamic>> getPhotoAPIOffline({
+    required jyucyuId,
+  })async{
+
+    var tKojiFilePath = await LocalStorageBase.getValues(boxName: boxKojiFilePathName);
+    var tKoji = await LocalStorageBase.getValues(boxName: boxKojiName);
+
+    List fileList = [];
+    for(TKojiFilePath kfp in tKojiFilePath) {
+      for(TKoji k in tKoji){
+        if(kfp.id == k.jyucyuId && k.jyucyuId == jyucyuId && kfp.fileKbnCd == "10" && k.kojiSt == "03" && kfp.delFlg == "0"){
+          fileList.add({
+            'FILEPATH': kfp.filePath,
+            'FILEPATH_ID': kfp.filePathId,
+            'ID': kfp.id,
+            'KOJI_ST': k.kojiSt
+          });
+        }
+      }
+    }
+
+    return fileList;
+
+  }
+
   Future<void> postPhotoSubmissionRegistration({
     required jyucyuId,
     required loginId,

@@ -9,9 +9,13 @@ class GetMaterialOrderingList {
   Future<List<dynamic>> getMaterialOrderingList({
     required String SYOZOKU_CD,
     required String? JISYA_CD,
+    required Function onStart,
     required Function(List<dynamic>) onSuccess,
     required Function onFailed,
   }) async {
+
+    onStart();
+
     final response = await http.get(
       Uri.parse(
           "${Constant.url}Request/Order/requestGetMaterialOrderingList.php?SYOZOKU_CD=$SYOZOKU_CD${JISYA_CD==null ? '' : '&JISYA_CD=$JISYA_CD'}"),

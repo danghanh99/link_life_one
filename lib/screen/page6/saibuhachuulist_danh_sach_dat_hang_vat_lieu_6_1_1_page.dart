@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:link_life_one/api/order/get_qr.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
@@ -204,12 +205,31 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
   }) async {
     saibuList.clear();
     if(widget.isShowPopup){
+      FToast? gettingToast;
       await GetMaterialOrderingList().getMaterialOrderingList(
           SYOZOKU_CD: syozokuCd,
           JISYA_CD: jisyaCd,
+          onStart: (){
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              CustomToast.show(
+                  context,
+                  onShow: (toast){
+                    gettingToast = toast;
+                  },
+                  message: '読み込み中です。', backGround: Colors.grey
+              );
+            });
+          },
           onSuccess: (data) {
+
+            if(gettingToast!=null) gettingToast!.removeCustomToast();
+
             if (data.isEmpty) {
               setState(() {});
+              CustomToast.show(
+                  context,
+                  message: 'データはありません。'
+              );
             } else {
               List<dynamic> tmpList = [];
               for (var element in data) {
@@ -247,10 +267,29 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
   }
 
   Future<dynamic> callGetCheckList(Function(List<dynamic>) onSccess) async {
+    FToast? gettingToast;
     final dynamic result = await GetCheckList().getCheckList(
         BUZAI_HACYU_ID: widget.BUZAI_HACYU_ID!,
+        onStart: (){
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            CustomToast.show(
+                context,
+                onShow: (toast){
+                  gettingToast = toast;
+                },
+                message: '読み込み中です。', backGround: Colors.grey
+            );
+          });
+        },
         onSuccess: (data) {
+          if(gettingToast!=null) gettingToast!.removeCustomToast();
           onSccess.call(data);
+          if(data.isEmpty){
+            CustomToast.show(
+                context,
+                message: 'データはありません。'
+            );
+          }
         },
         onFailed: () {
           CustomToast.show(context, message: "データを取得出来ませんでした。");

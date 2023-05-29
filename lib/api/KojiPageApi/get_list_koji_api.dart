@@ -20,15 +20,11 @@ class GetListKojiApi {
     if(await LocalStorageServices.isTodayDataDownloaded() && DateFormat('yyyyMMdd').format(date)==DateFormat('yyyyMMdd').format(DateTime.now())){
       var tkoji = await LocalStorageBase.getValues(boxName: boxKojiName);
       var mKbn = await LocalStorageBase.getValues(boxName: boxKbnName);
-      // List<Koji> list = tkoji.map<Koji>((t) => t.toKoji()).toList();
-      // List<Koji> list = (tkoji.where((element) => element.homonTantCd1==loginId || element.homonTantCd2==loginId || element.homonTantCd3==loginId).toList())
-      //     .map<Koji>((e) => e.toKoji()).toList();
       List<Koji> list = [];
       for(TKoji t in tkoji){
         if((t.homonTantCd1==loginId || t.homonTantCd2==loginId || t.homonTantCd3==loginId)
             && t.syuyakuJyucyuId == null
             && t.delFlg == 0
-            && (t.homonSbt=="02" || t.homonSbt=="2")
             && t.kojiYMD==DateFormat('yyyy-MM-dd').format(date)){
 
           String? kbnName;
@@ -64,7 +60,6 @@ class GetListKojiApi {
         else if(t.homonTantCd4==loginId
             && t.syuyakuJyucyuId == null
             && t.delFlg == 0
-            && (t.homonSbt=="01" || t.homonSbt=="1")
             && t.sitamiYMD==DateFormat('yyyy-MM-dd').format(date)){
 
           String? kbnName;
@@ -114,15 +109,15 @@ class GetListKojiApi {
       if (a.homonSbt == '01') {
         // isShitami
         if (b.homonSbt == '01') {
-          return a.sitamiHomonJikan!.compareTo(b.sitamiHomonJikan!);
+          return (a.sitamiHomonJikan ?? a.kojiHomonJikan)!.compareTo((b.sitamiHomonJikan ?? b.kojiHomonJikan)!);
         } else {
-          return a.sitamiHomonJikan!.compareTo(b.kojiHomonJikan!);
+          return (a.sitamiHomonJikan ?? a.kojiHomonJikan)!.compareTo((b.kojiHomonJikan ?? b.sitamiHomonJikan)!);
         }
       } else {
         if (b.homonSbt == '01') {
-          return a.kojiHomonJikan!.compareTo(b.sitamiHomonJikan!);
+          return (a.kojiHomonJikan ?? a.sitamiHomonJikan)!.compareTo((b.sitamiHomonJikan ?? b.kojiHomonJikan)!);
         } else {
-          return a.kojiHomonJikan!.compareTo(b.kojiHomonJikan!);
+          return (a.kojiHomonJikan ?? a.sitamiHomonJikan)!.compareTo((b.kojiHomonJikan ?? b.sitamiHomonJikan)!);
         }
       }
     });

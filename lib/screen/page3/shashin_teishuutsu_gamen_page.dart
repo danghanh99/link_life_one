@@ -12,6 +12,7 @@ import 'package:link_life_one/shared/custom_button.dart';
 class ShashinTeishuutsuGamenPage extends StatefulWidget {
   final DateTime? initialDate;
   final String JYUCYU_ID;
+  final String kojiSt;
   final String HOMON_SBT;
   final String? cancelRiyuu;
   final DateTime? mitmoriYmd;
@@ -20,6 +21,7 @@ class ShashinTeishuutsuGamenPage extends StatefulWidget {
     this.initialDate,
     this.cancelRiyuu,
     required this.JYUCYU_ID,
+    required this.kojiSt,
     required this.HOMON_SBT,
     this.mitmoriYmd,
   });
@@ -33,6 +35,26 @@ class _ShashinTeishuutsuGamenPageState
     extends State<ShashinTeishuutsuGamenPage> {
   final ImagePicker _picker = ImagePicker();
   List<XFile> selectedImages = [];
+  List<String> allImages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _getImages();
+  }
+
+  _getImages() async {
+    await PhotoApi().getPhotoApi(
+        jyucyuId: widget.JYUCYU_ID,
+        kojiSt: widget.kojiSt,
+        onSuccess: (listImages){
+          setState(() {
+            allImages = listImages.map((e) => '${e['FILEPATH']}').toList();
+          });
+        },
+        onFailed: (){}
+    );
+  }
 
   void selectImage() async {
     showCupertinoModalPopup(
@@ -145,6 +167,19 @@ class _ShashinTeishuutsuGamenPageState
                       spacing: 5.0,
                       runSpacing: 5.0,
                       children: [
+                        ...allImages.map((e){
+                          return SizedBox(
+                            width: ((size.width - 60)) / 6 - 5,
+                            height: ((size.width - 60)) / 6 - 5,
+                            child: Stack(
+                              children: [
+                                Positioned.fill(
+                                  child: Image.network(e),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
                         ...selectedImages.map((e) {
                           return SizedBox(
                             width: ((size.width - 60)) / 6 - 5,
@@ -236,7 +271,7 @@ class _ShashinTeishuutsuGamenPageState
                               backGround: Colors.orange,
                             );
                           } else {
-                            UploadPhotoApi().uploadPhotoApi(
+                            PhotoApi().uploadPhotoApi(
                                 JYUCYU_ID: widget.JYUCYU_ID,
                                 LOGIN_ID: loginID,
                                 HOMON_SBT: widget.HOMON_SBT,

@@ -8,9 +8,13 @@ class GetCheckList {
 
   Future<List<dynamic>> getCheckList({
     required String BUZAI_HACYU_ID,
+    required Function onStart,
     required Function(List<dynamic>) onSuccess,
     required Function onFailed,
   }) async {
+
+    onStart();
+
     final response = await http.get(
       Uri.parse(
           "${Constant.url}Request/Order/requestGetCheckList.php?BUZAI_HACYU_ID=$BUZAI_HACYU_ID"),

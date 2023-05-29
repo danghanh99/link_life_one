@@ -763,6 +763,7 @@ class _KojiHoukokuState extends State<KojiHoukoku> {
                             MaterialPageRoute(
                               builder: (context) => ShashinTeishuutsuGamenPage(
                                 JYUCYU_ID: widget.JYUCYU_ID,
+                                kojiSt: widget.KOJI_ST,
                                 HOMON_SBT: widget.HOMON_SBT,
                                 initialDate: widget.initialDate,
                               ),

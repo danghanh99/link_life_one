@@ -8,9 +8,13 @@ class GetPartOrderList {
 
   Future<List<dynamic>> getPartOrderList({
     required String SYOZOKU_CD,
+    required Function onStart,
     required Function(List<dynamic>) onSuccess,
     required Function onFailed,
   }) async {
+
+    onStart();
+
     final response = await http.get(
       Uri.parse(
           "${Constant.url}Request/Order/requestGetPartOrderList.php?SYOZOKU_CD=${SYOZOKU_CD}"),

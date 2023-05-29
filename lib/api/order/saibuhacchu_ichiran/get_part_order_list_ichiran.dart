@@ -33,9 +33,12 @@ class GetPartOrderListIchiran {
   }
 
   Future<List<dynamic>> getPartOrderListApprove({
+    required Function onStart,
     required Function(List<dynamic>) onSuccess,
     required Function onFailed,
   }) async {
+    onStart();
+
     final box = Hive.box<User>('userBox');
     final User user = box.values.last;
     String SYOZOKU_CD = user.SYOZOKU_CD;

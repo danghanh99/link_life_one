@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/screen/page6/danh_sach_cac_bo_phan_5_1_2_page.dart';
@@ -59,12 +60,31 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
   }
 
   Future<dynamic> callGetPartOrderListIchiran() async {
+    FToast? gettingToast;
     final dynamic result = await GetPartOrderListIchiran().getPartOrderListApprove(
+      onStart: (){
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          CustomToast.show(
+              context,
+              onShow: (toast){
+                gettingToast = toast;
+              },
+              message: '読み込み中です。', backGround: Colors.grey
+          );
+        });
+      },
       onSuccess: (data) {
+        if(gettingToast!=null) gettingToast!.removeCustomToast();
         setState(() {
           listIchiran = data;
           listIchiranThayDoi = listIchiran;
         });
+        if(data.isEmpty){
+          CustomToast.show(
+              context,
+              message: 'データはありません。'
+          );
+        }
       }, onFailed: () {
         CustomToast.show(context, message: "部材発注一覧リストを取得出来ませんでした。");
       }

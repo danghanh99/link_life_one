@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/models/user.dart';
@@ -52,13 +53,34 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
     final box = Hive.box<User>('userBox');
     final User user = box.values.last;
 
+    FToast? gettingToast;
     final dynamic result = await GetPartOrderList().getPartOrderList(
         SYOZOKU_CD: user.SYOZOKU_CD,
+        onStart: (){
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            CustomToast.show(
+                context,
+                onShow: (toast){
+                  gettingToast = toast;
+                },
+                message: '読み込み中です。', backGround: Colors.grey
+            );
+          });
+        },
         onSuccess: (data) {
+
+          if(gettingToast!=null) gettingToast!.removeCustomToast();
+
           setState(() {
             listOrder = data;
             listOrderKhongCoDinh = listOrder;
           });
+          if(data.isEmpty){
+            CustomToast.show(
+                context,
+                message: 'データはありません。'
+            );
+          }
         },
         onFailed: () {
           CustomToast.show(context, message: "データを取得出来ませんでした。");
@@ -524,22 +546,22 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
       String value = '';
 
       if (col == 1) {
-        value = tmp[row - 1]["BUZAI_HACYU_ID"];
+        value = tmp[row - 1]["BUZAI_HACYU_ID"] ?? '';
       }
       if (col == 2) {
         value = tmp[row - 1]["KBNMSAI_NAME"] ?? '';
       }
       if (col == 3) {
-        value = tmp[row - 1]["HACYU_YMD"];
+        value = tmp[row - 1]["HACYU_YMD"] ?? '';
       }
       if (col == 4) {
-        value = tmp[row - 1]["TANT_NAME"];
+        value = tmp[row - 1]["TANT_NAME"] ?? '';
       }
       if (col == 5) {
-        value = tmp[row - 1]["JISYA_CD"];
+        value = tmp[row - 1]["JISYA_CD"] ?? '';
       }
       if (col == 6) {
-        value = tmp[row - 1]["SYOHIN_NAME"];
+        value = tmp[row - 1]["SYOHIN_NAME"] ?? '';
       }
 
       return Text(

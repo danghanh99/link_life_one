@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/material/material_api.dart';
@@ -29,8 +30,8 @@ class _Page53DanhSachNhanLaiVatLieuState
 
   bool isValidate = false;
   List<MaterialTakeBackModel> materials = [];
-  List<TextEditingController> textControllers = [];
   List<bool> checkboxState = [];
+  List<int> amountState = [];
 
   @override
   void initState() {
@@ -58,25 +59,22 @@ class _Page53DanhSachNhanLaiVatLieuState
 
         if(gettingToast!=null && isFirstTime) gettingToast!.removeCustomToast();
 
-        textControllers.clear();
-        for(var m in materials){
-          textControllers.add(TextEditingController());
-        }
         setState(() {
           checkboxState.clear();
+          amountState.clear();
           this.materials = materials;
           for(var m in this.materials){
             checkboxState.add(false);
+            amountState.add(0);
           }
         });
         if(materials.isEmpty && isFirstTime){
           CustomToast.show(
               context,
-              message: 'データがありません。'
+              message: 'データはありません。'
           );
         }
-        // CustomToast.show(context,
-        //     message: 'データを取得できました。', backGround: Colors.green);
+
       },
       onFailed: () {
         if(gettingToast!=null && isFirstTime) {
@@ -106,15 +104,14 @@ class _Page53DanhSachNhanLaiVatLieuState
         },
         onSuccess: (materials) {
           if(gettingToast!=null && isFirstTime) gettingToast!.removeCustomToast();
-          textControllers.clear();
-          for(var m in materials){
-            textControllers.add(TextEditingController());
-          }
+
           setState(() {
             checkboxState.clear();
+            amountState.clear();
             this.materials = materials;
             for(var m in this.materials){
               checkboxState.add(false);
+              amountState.add(0);
             }
           });
           if(materials.isEmpty && isFirstTime){
@@ -172,6 +169,7 @@ class _Page53DanhSachNhanLaiVatLieuState
                     width: 200,
                     child: TextField(
                       controller: dateSearchController,
+                      readOnly: true,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -182,6 +180,21 @@ class _Page53DanhSachNhanLaiVatLieuState
                         contentPadding: const EdgeInsets.all(16.0),
                         hintText: DateFormat('yyyy-MM-dd').format(DateTime.now())
                       ),
+                      onTap: (){
+                        DateTime? picked;
+                        DatePicker.showDatePicker(context,
+                            showTitleActions: true,
+                            minTime: DateTime(1990, 3, 5),
+                            maxTime: DateTime(2200, 6, 7),
+                            onChanged: (datePick) {}, onConfirm: (datePick) {
+                              picked = datePick;
+                              if (picked != null) {
+                                setState(() {
+                                  dateSearchController.text = DateFormat('yyyy-MM-dd').format(picked!);
+                                });
+                              }
+                            }, currentTime: DateTime.now(), locale: LocaleType.jp);
+                      },
                     ),
                   ),
                 ),
@@ -258,16 +271,8 @@ class _Page53DanhSachNhanLaiVatLieuState
 
                   for(int i = 0; i < checkboxState.length; i++){
                     if(checkboxState[i]){
-                      if(textControllers[i].text.isEmpty){
-                        setState(() {
-                          isValidate = true;
-                        });
-                        return;
-                      }
-                      else{
-                        selectedMaterials.add(materials[i]);
-                        returnSus.add(int.tryParse(textControllers[i].text)??0);
-                      }
+                      selectedMaterials.add(materials[i]);
+                      returnSus.add(amountState[i]);
                     }
                   }
 
@@ -416,122 +421,80 @@ class _Page53DanhSachNhanLaiVatLieuState
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
         alignment: col==1 || col==2 || col==3 || col==4 ? Alignment.centerLeft : Alignment.center,
         width: colwidth[col],
-        height: isValidate && checkboxState[row-1] && textControllers[row-1].text.isEmpty ? 100 : 70,
+        height: isValidate && checkboxState[row-1] ? 100 : 70,
         child: contentTable(col, row),
       );
     });
   }
 
-  // Widget _moreButton(BuildContext context) {
-  //   return PopupMenuButton<int>(
-  //     color: Colors.white,
-  //     padding: EdgeInsets.zero,
-  //     onSelected: (number) {
-  //       if (number == 1) {
-  //         // Navigator.of(context).push(MaterialPageRoute(
-  //         //     builder: (context) => EditThemePage(
-  //         //           index: index,
-  //         //           meditationThemeDTO: meditationThemeDTO,
-  //         //         )));
-  //       }
-  //       if (number == 2) {}
-  //     },
-  //     shape: const RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.all(Radius.circular(12.0))),
-  //     itemBuilder: (context) => [
-  //       PopupMenuItem(
-  //         height: 25,
-  //         padding: const EdgeInsets.only(right: 0, left: 10),
-  //         value: 1,
-  //         child: Row(
-  //           children: const [
-  //             SizedBox(
-  //               width: 14,
-  //             ),
-  //             Text(
-  //               "Dropdown item",
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //       const PopupMenuDivider(),
-  //       PopupMenuItem(
-  //         height: 25,
-  //         padding: const EdgeInsets.only(right: 0, left: 10),
-  //         value: 2,
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.start,
-  //           children: const [
-  //             SizedBox(
-  //               width: 14,
-  //             ),
-  //             Text(
-  //               "Dropdown item",
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ],
-  //     offset: const Offset(-25, -10),
-  //     child: Image.asset(
-  //       Assets.icDropdown,
-  //     ),
-  //   );
-  // }
+  Widget _moreButton(BuildContext context, int number, Function(int) onChange) {
+    List<PopupMenuEntry<int>> widgets = [];
+
+    for (var i = 1; i <= number; i++) {
+      widgets.add(PopupMenuItem(
+        height: 25,
+        padding: const EdgeInsets.only(right: 0, left: 10),
+        value: i,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(
+              width: 14,
+            ),
+            Text('$i'),
+          ],
+        ),
+      ));
+      if (i < number) {
+        widgets.add(const PopupMenuDivider());
+      }
+    }
+
+    return PopupMenuButton<int>(
+      color: Colors.white,
+      padding: EdgeInsets.zero,
+      onSelected: (number) {
+        onChange(number);
+      },
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0))),
+      itemBuilder: (context) => widgets,
+      offset: const Offset(-25, -10),
+      child: Image.asset(
+        Assets.icDropdown,
+      ),
+    );
+  }
 
   Widget contentTable(int col, int row) {
     if (col == 6) {
-      MaterialTakeBackModel material = materials.elementAt(row - 1);
-      OutlineInputBorder borderOutline = const OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(0)),
-        borderSide: BorderSide(color: AppColors.BORDER, width: 1),
-      );
-      return Column(
-        mainAxisSize: MainAxisSize.min,
+      return Row(
         children: [
-          Center(
-            child: TextField(
-              controller: textControllers[row-1],
-              decoration: InputDecoration(
-                // hintText: '0',
-                contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
-                enabledBorder: borderOutline,
-                focusedBorder: borderOutline,
-                disabledBorder: borderOutline,
-                isDense: true,
-              ),
-              textAlign: TextAlign.center,
-              onChanged: (text) {
-                // materials.elementAt(row - 1).suryo = text;
-              },
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                // for below version 2 use this
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                // for version 2 and greater youcan also use this
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-              maxLines: 1,
-              onTap: (){
-                setState(() {
-                  isValidate = false;
-                });
-              },
+          Expanded(
+            child: Center(
+              child: Text('${amountState[row - 1]}'),
             ),
           ),
-          Visibility(
-            visible: isValidate && checkboxState[row-1] && textControllers[row-1].text.isEmpty,
-            child: const Padding(
-              padding: EdgeInsets.only(top: 2.0),
-              child: Text(
-                '数量を入力して下さい',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 13
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                left: BorderSide(
+                  color: Colors.black,
+                  width: 0.7,
                 ),
               ),
-            )
-          )
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 7, left: 7),
+            child: _moreButton(context, int.tryParse(valueFrom(5, row)) ?? 0,
+                    (number) {
+                  print('number: $number');
+                  setState(() {
+                    amountState[row - 1] = number;
+                  });
+                }),
+          ),
         ],
       );
     }

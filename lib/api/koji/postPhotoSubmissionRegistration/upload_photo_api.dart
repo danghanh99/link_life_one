@@ -9,8 +9,8 @@ import 'package:link_life_one/models/local_storage/local_storage_notifier/local_
 
 import '../../../constants/constant.dart';
 
-class UploadPhotoApi {
-  UploadPhotoApi() : super();
+class PhotoApi {
+  PhotoApi() : super();
 
   Future<void> _notSuccess({
     required jyucyuId,
@@ -113,4 +113,56 @@ class UploadPhotoApi {
       onFailed.call();
     }
   }
+
+  Future<void> _notGetSuccess({
+    required jyucyuId,
+    required Function onFailed,
+    required Function(List<dynamic>) onSuccess,
+  }) async {
+
+    if(await LocalStorageServices.isTodayDataDownloaded()){
+      var res = await LocalStorageServices().getPhotoAPIOffline(
+          jyucyuId: jyucyuId
+      );
+      onSuccess.call(res);
+    }
+    else{
+      onFailed.call();
+    }
+  }
+
+  Future<void> getPhotoApi({
+    required String jyucyuId,
+    required String kojiSt,
+    required Function onFailed,
+    required Function(List<dynamic>) onSuccess,
+  }) async {
+
+    bool isOnline = await LocalStorageNotifier.isOnline();
+
+    if(!isOnline && LocalStorageNotifier.isTodayDownload()){
+      return _notGetSuccess(
+          jyucyuId: jyucyuId,
+          onFailed: onFailed,
+          onSuccess: onSuccess
+      );
+    }
+
+    try {
+      var dio = Dio();
+      String url =
+          "${Constant.url}Request/Koji/requestGetPhotoSubmission.php?JYUCYU_ID=$jyucyuId&KOJI_ST=$kojiSt";
+
+      final response = await dio.get(url);
+
+      if (response.statusCode == 200) {
+        onSuccess.call((response.data ?? []) as List);
+      } else {
+        onFailed.call();
+      }
+    } catch (e) {
+      onFailed.call();
+    }
+  }
+
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:link_life_one/api/inventory/get_buzai_api.dart';
 import 'package:link_life_one/api/inventory/get_pulldown_api.dart';
 import 'package:link_life_one/components/toast.dart';
@@ -56,16 +57,35 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
     String? hinban,
     String? syohinName
   }) async {
+    FToast? gettingToast;
     await GetBuzaiApi().getBuzai(
       buzaiBunrui: buzaiBunrui,
       makerName: makerName,
       hinban: hinban,
       syohinName: syohinName,
+      onStart: (){
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          CustomToast.show(
+              context,
+              onShow: (toast){
+                gettingToast = toast;
+              },
+              message: '読み込み中です。', backGround: Colors.grey
+          );
+        });
+      },
       onSuccess: (buzaiResponse) {
+        if(gettingToast!=null) gettingToast!.removeCustomToast();
         setState(() {
           listBuzai.clear();
           listBuzai = buzaiResponse;
         });
+        if(buzaiResponse.isEmpty){
+          CustomToast.show(
+              context,
+              message: 'データはありません。'
+          );
+        }
       }, onFailed: () {
         CustomToast.show(context, message: 'データを取得出来ませんでした。');
       }

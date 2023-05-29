@@ -13,9 +13,11 @@ class GetBuzaiApi {
     String? makerName,
     String? hinban,
     String? syohinName,
+    required Function onStart,
     required Function(List<Buzai> list) onSuccess,
     required Function onFailed,
   }) async {
+    onStart();
     final box = Hive.box<User>('userBox');
     final User user = box.values.last;
     String SYOZOKU_CD = user.SYOZOKU_CD;

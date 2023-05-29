@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:link_life_one/api/inventory/QR_api.dart';
 import 'package:link_life_one/api/inventory/get_inventories_api.dart';
 import 'package:link_life_one/api/inventory/inventory_api.dart';
@@ -66,14 +67,33 @@ class _TanaoroshiDanhMucHangTonKho62PageState
   }
 
   Future<void> getListInventory() async {
+    FToast? gettingToast;
     await GetInventoriesApi().getInventories(
         isContinue: widget.isContinue,
+        onStart: (){
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            CustomToast.show(
+                context,
+                onShow: (toast){
+                  gettingToast = toast;
+                },
+                message: '読み込み中です。', backGround: Colors.grey
+            );
+          });
+        },
         onSuccess: (list) {
+          if(gettingToast!=null) gettingToast!.removeCustomToast();
           setState(
             () {
               listInventory = list;
             },
           );
+          if(list.isEmpty){
+            CustomToast.show(
+                context,
+                message: 'データはありません。'
+            );
+          }
         },
         onFailed: () {
           CustomToast.show(context, message: 'データを取得出来ませんでした。');
