@@ -162,6 +162,13 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
+                    const SaibuhachuuDanhSachDatHangCacBoPhan61Page(),
+                  ),
+                );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
                         SaibuhacchuulistDanhSachDatHangVatLieu611Page(
                             isShowPopup: true
                         ),

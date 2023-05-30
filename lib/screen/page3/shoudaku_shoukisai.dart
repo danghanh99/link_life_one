@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'dart:developer' as dev;
 
@@ -7,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_life_one/components/text_line_down.dart';
 import 'package:link_life_one/models/koji_houkoku_model.dart';
+import 'package:link_life_one/models/local_storage/local_storage_notifier/local_storage_notifier.dart';
 import 'package:link_life_one/screen/page3/shoudakusho.dart';
 import 'package:link_life_one/shared/cache_notifier.dart';
 import 'package:link_life_one/shared/custom_button.dart';
@@ -60,8 +62,16 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
   @override
   void initState() {
     super.initState();
+    _checkOnline();
     initScroll();
     callGetKojiHoukoku();
+  }
+
+  bool isOnline = true;
+
+  _checkOnline()async{
+    isOnline = await LocalStorageNotifier.isOnline();
+    setState((){});
   }
 
   @override
@@ -105,7 +115,8 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
         _listKey.currentContext?.findRenderObject() as RenderBox;
     int index = 0;
     for (double h = 0;
-        h < offset && index < TABLE_DATA.length + NEW_TABLE_DATA.length;
+        h < offset && index < NEW_TABLE_DATA.length;
+        // h < offset && index < TABLE_DATA.length + NEW_TABLE_DATA.length;
         index++) {
       h += renderBox.size.height;
     }
@@ -134,6 +145,18 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
 
           if (body["TABLE_DATA"] != null) {
             TABLE_DATA = body["TABLE_DATA"];
+            List tableData = TABLE_DATA;
+            for(var t in tableData){
+              Map<String, String> newData = {
+                'TUIKA_SYOHIN_NAME': t['TUIKA_SYOHIN_NAME'],
+                'TUIKA_JISYA_CD': t['TUIKA_JISYA_CD'],
+                'SURYO': t['SURYO'],
+                'HANBAI_TANKA': t['HANBAI_TANKA'],
+                'KINGAK': t['KINGAK'],
+                'CHANGE_FLG': '0'
+              };
+              NEW_TABLE_DATA[tableData.indexOf(t)] = newData;
+            }
           }
 
           if (body["KOJI_KAKAKU"] != null) {
@@ -155,7 +178,8 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
             .cacheNewTableShoudakuShoukisai[widget.JYUCYU_ID] ??
         [];
     for (var element in newTableData) {
-      int row = TABLE_DATA.length + NEW_TABLE_DATA.length;
+      int row = NEW_TABLE_DATA.length;
+      // int row = TABLE_DATA.length + NEW_TABLE_DATA.length;
       NEW_TABLE_DATA[row] = element;
     }
 
@@ -392,8 +416,9 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
                                                     KOJI_DATA['CO_CD']),
                                                 imageErrorBuilder: (context,
                                                     error, stackTrace) {
-                                                  return const SizedBox
-                                                      .shrink();
+                                                  return !isOnline && LocalStorageNotifier.isTodayDownload()
+                                                      ? Image.file(File(KOJI_DATA['CO_CD']))
+                                                      : const Icon(Icons.error);
                                                 },
                                               )
                                             : const SizedBox.shrink()),
@@ -438,7 +463,8 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
       key: _listKey,
       padding: EdgeInsets.zero,
       controller: _scrollController,
-      itemCount: max(TABLE_DATA.length + NEW_TABLE_DATA.length + 5, 20),
+      itemCount: max(NEW_TABLE_DATA.length + 5, 20),
+      // itemCount: max(TABLE_DATA.length + NEW_TABLE_DATA.length + 5, 20),
       itemBuilder: (context, index) {
         return IntrinsicHeight(
           child: Row(
@@ -452,11 +478,11 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
 
   int getSum() {
     int result = 0;
-    for (var element in TABLE_DATA) {
-      if (element['KINGAK'] != null) {
-        result += int.tryParse(element['KINGAK']) ?? 0;
-      }
-    }
+    // for (var element in TABLE_DATA) {
+    //   if (element['KINGAK'] != null) {
+    //     result += int.tryParse(element['KINGAK']) ?? 0;
+    //   }
+    // }
 
     for (var key in NEW_TABLE_DATA.keys) {
       Map? data = NEW_TABLE_DATA[key];
@@ -940,32 +966,32 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
   }
 
   Widget contentTable({required int col, required int row, String? initial}) {
-    if (TABLE_DATA.isNotEmpty && row < TABLE_DATA.length) {
-      List<String> list = [
-        "TUIKA_SYOHIN_NAME",
-        "TUIKA_JISYA_CD",
-        "HANBAI_TANKA",
-        "SURYO",
-        "KINGAK",
-      ];
-      var item = TABLE_DATA.elementAt(row);
-      String text = '';
-      if (item is Map) {
-        text = TABLE_DATA[row][list[col]] ?? '';
-      }
-      if (col == 2 || col == 3 || col == 4) {
-        text = text.formatNumber;
-      }
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 3.0),
-        child: Text(
-          text,
-          // textAlign: align(col),
-          softWrap: true,
-          style: const TextStyle(color: Colors.black, fontSize: 16),
-        ),
-      );
-    }
+    // if (TABLE_DATA.isNotEmpty && row < TABLE_DATA.length) {
+    //   List<String> list = [
+    //     "TUIKA_SYOHIN_NAME",
+    //     "TUIKA_JISYA_CD",
+    //     "HANBAI_TANKA",
+    //     "SURYO",
+    //     "KINGAK",
+    //   ];
+    //   var item = TABLE_DATA.elementAt(row);
+    //   String text = '';
+    //   if (item is Map) {
+    //     text = TABLE_DATA[row][list[col]] ?? '';
+    //   }
+    //   if (col == 2 || col == 3 || col == 4) {
+    //     text = text.formatNumber;
+    //   }
+    //   return Padding(
+    //     padding: const EdgeInsets.symmetric(horizontal: 3.0),
+    //     child: Text(
+    //       text,
+    //       // textAlign: align(col),
+    //       softWrap: true,
+    //       style: const TextStyle(color: Colors.black, fontSize: 16),
+    //     ),
+    //   );
+    // }
 
     Map<String, String>? data = NEW_TABLE_DATA[row];
 
@@ -1157,7 +1183,8 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
                 MaterialPageRoute(
                   builder: (context) => ShoudakuSho(
                     kojiData: KOJI_DATA,
-                    tableData: TABLE_DATA,
+                    tableData: [],
+                    // tableData: TABLE_DATA,
                     newTableData: NEW_TABLE_DATA.values.toList(),
                     jyucyuId: widget.JYUCYU_ID,
                     singleSummarize: widget.SINGLE_SUMMARIZE,

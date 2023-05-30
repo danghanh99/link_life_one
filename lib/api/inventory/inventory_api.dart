@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:link_life_one/api/base/rest_api.dart';
+import 'package:link_life_one/models/inventory.dart';
 import 'package:link_life_one/models/inventory_schedule.dart';
 import 'package:link_life_one/models/material_take_back_model.dart';
 import 'package:link_life_one/models/member_category.dart';
@@ -145,7 +148,7 @@ class InventoryAPI {
   }
 
   Future<void> postInventoryWithoutSaved({
-    required List INVENTORY_DETAIL,
+    required List<Inventory> INVENTORY_DETAIL,
     required bool isContinue,
     required Function onSuccess,
     required Function onFailed,
@@ -153,15 +156,23 @@ class InventoryAPI {
 
     String urlEndpoint = Constant.postInventoryListWithoutSaved;
 
+    Map<String, dynamic> body = {
+      'USER_INFO': {
+        'LOGIN_ID': user.TANT_CD,
+        'SYOZOKU_CD': user.SYOZOKU_CD
+      },
+      'INVENTORY_DETAIL': INVENTORY_DETAIL.map((e) => {
+        'BUZAI_KANRI_NO': e.buzaiKanriGoban,
+        "JISYA_CD": e.hinban,
+        "HINBAN": e.hinban,
+        "SYOHIN_NAME": e.shohinmei,
+        "JITUZAIKO_SU": e.tougetsuJitsuZaiko ?? "0"
+      }).toList()
+    };
+
     final Response response = await RestAPI.shared.postData(
         urlEndpoint,
-        {
-          'USER_INFO': {
-            'LOGIN_ID': user.TANT_CD,
-            'SYOZOKU_CD': user.SYOZOKU_CD
-          },
-          'INVENTORY_DETAIL': INVENTORY_DETAIL
-        }
+        body
     );
 
     if (response.statusCode == 200) {
@@ -180,7 +191,7 @@ class InventoryAPI {
 
     String urlEndpoint = Constant.postTanamsaiSaveDelete;
 
-    final Response response = await RestAPI.shared.postData(
+    final Response response = await RestAPI.shared.postDataWithFormData(
         urlEndpoint,
         {
           'LOGIN_ID': user.TANT_CD
@@ -195,18 +206,27 @@ class InventoryAPI {
   }
 
   Future<void> postInventoryListMaterialList({
-    // List<>
+    required List<Inventory> items,
     required Function onSuccess,
     required Function onFailed,
   }) async {
 
     String urlEndpoint = Constant.postInventoryListMaterialList;
 
+    Map<String, dynamic> body = {
+      "LOGIN_ID": user.TANT_CD,
+      "MATERIAL_LIST_DETAIL": items.map((e) => {
+        "BUZAI_KANRI_NO": e.buzaiKanriGoban,
+        "JISYA_CD": e.hinban,
+        "HINBAN": e.hinban,
+        "SYOHIN_NAME": e.shohinmei,
+        "JITUZAIKO_SU": e.tougetsuJitsuZaiko
+      }).toList()
+    };
+
     final Response response = await RestAPI.shared.postData(
         urlEndpoint,
-        {
-          'LOGIN_ID': user.TANT_CD
-        }
+        body
     );
 
     if (response.statusCode == 200) {

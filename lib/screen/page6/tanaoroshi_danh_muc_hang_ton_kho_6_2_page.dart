@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:link_life_one/api/inventory/QR_api.dart';
@@ -62,8 +63,18 @@ class _TanaoroshiDanhMucHangTonKho62PageState
   @override
   void initState() {
     currentRadioRow = -1;
+    if(!widget.isContinue){
+      InventoryAPI.shared.postTanamsaiSaveDelete(
+          onSuccess: (){},
+          onFailed: (){}
+      );
+    }
     getListInventory();
     super.initState();
+  }
+
+  deleteSaved(){
+
   }
 
   Future<void> getListInventory() async {
@@ -331,7 +342,12 @@ class _TanaoroshiDanhMucHangTonKho62PageState
                           builder: (context) => DanhSachCacBoPhan513Page(
                             back: (List<Inventory> a) {
                               setState(() {
-                                listInventory.addAll(a);
+                                List<String?> hinbans = listInventory.map((e) => e.hinban).toList();
+                                for(Inventory i in a){
+                                  if(!hinbans.contains(i.hinban)){
+                                    listInventory.add(i);
+                                  }
+                                }
                               });
                             },
                           ),
@@ -426,6 +442,7 @@ class _TanaoroshiDanhMucHangTonKho62PageState
                           return e;
                         }).toList();
                       });
+                      Navigator.pop(context);
                     },
                     child: const Text(
                       '棚卸確定',
@@ -483,7 +500,69 @@ class _TanaoroshiDanhMucHangTonKho62PageState
   Widget header() {
     return CustomHeaderWidget(
       onBack: (){
-        Navigator.pop(context);
+        showDialog(
+          context: context,
+          builder: (context) {
+            return SizedBox(
+              width: double.infinity,
+              child: CupertinoAlertDialog(
+                title: const Text(
+                  "",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                content: const Padding(
+                  padding: EdgeInsets.only(top: 15),
+                  child: Text(
+                    "編集途中のリストを保存しますか？",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 24, 23, 23),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                      onPressed: () async {
+                        await InventoryAPI.shared.postInventoryListMaterialList(
+                            items: listInventory,
+                            onSuccess: (){},
+                            onFailed: (){}
+                        );
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'はい',
+                        style: TextStyle(
+                          color: Color(0xFF007AFF),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      'いいえ',
+                      style: TextStyle(
+                        color: Color(0xFFEB5757),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
+        );
       },
     );
   }
@@ -536,12 +615,12 @@ class _TanaoroshiDanhMucHangTonKho62PageState
     if (col == 7) {
       return Text(listInventory.isEmpty
           ? ''
-          : (listInventory[row - 1].shukkoSuuryou ?? ''));
+          : (listInventory[row - 1].shukkoSuuryou ?? '0'));
     }
     if (col == 8) {
       return Text(listInventory.isEmpty
           ? ''
-          : (listInventory[row - 1].hacchuuSuuryou ?? ''));
+          : (listInventory[row - 1].hacchuuSuuryou ?? '0'));
     }
     if (col == 9) {
       return Text(listInventory.isEmpty

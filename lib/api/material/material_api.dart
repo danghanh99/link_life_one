@@ -223,7 +223,7 @@ class MaterialAPI {
       "MATERIAL_LIST": materialJsonList,
       "LOGIN_ID": user.TANT_CD
     };
-    
+
     final Response response = await RestAPI.shared.postData(urlEndpoint, body);
 
     if (response.statusCode == 200) {
@@ -274,4 +274,84 @@ class MaterialAPI {
       onFailed();
     }
   }
+
+  insertTSyukkojisekiSave({
+    required List<MaterialModel> items,
+    required Function() onSuccess,
+    required Function() onFailed,
+  }) async {
+    String urlEndpoint = Constant.insertTSyukkojisekiSave;
+
+    Map<String, dynamic> body = {
+      'SYUZOKU_CD': user.SYOZOKU_CD,
+      'LOGIN_ID': user.TANT_CD,
+      'T_SYUKKOJISEKI_SAVE': items.map((e) => {
+        "CTGORY_NAME": e.ctgoryName,
+        "MAKER_NAME": e.makerName,
+        "JISYA_CD": e.jisyaCode,
+        "SYOHIN_NAME": e.syoshinName,
+        "SURYO": e.suryo,
+        "AUTO_FLG": e.autoFlg
+      }).toList()
+    };
+
+    final Response response = await RestAPI.shared.postData(urlEndpoint, body);
+
+    if (response.statusCode == 200) {
+      onSuccess();
+    } else {
+      onFailed();
+    }
+  }
+
+  clearSavedAll({
+    required Function() onSuccess,
+    required Function() onFailed,
+  }) async {
+    String urlEndpoint = Constant.requestPostClearSavedAll;
+
+    Map<String, dynamic> body = {
+      'LOGIN_ID': user.TANT_CD
+    };
+
+    final Response response = await RestAPI.shared.postDataWithFormData(urlEndpoint, body);
+
+    if (response.statusCode == 200) {
+      onSuccess();
+    } else {
+      onFailed();
+    }
+  }
+
+  postAddBuzaihacyumsaiSave({
+    required List<dynamic> items,
+    required Function() onSuccess,
+    required Function() onFailed,
+  }) async {
+    String urlEndpoint = Constant.requestPostAddBuzaihacyumsaiSave;
+
+    Map<String, dynamic> body = {
+      'TANT_CD': user.TANT_CD,
+      'T_BUZAIHACYUMSAI_SAVE': items.map((e) => {
+        "MAKER_NAME": e['MAKER_NAME'],
+        "BUNRUI": e['BUNRUI'],
+        "JISYA_CD": e['JISYA_CD'],
+        "SYOHIN_NAME": e['SYOHIN_NAME'],
+        "LOT": e['LOT'],
+        "HACYU_TANKA": e['HACYU_TANKA'],
+        "SURYO": e['SURYO'],
+        "TANI_CD": e['TANI_CD'],
+        "KINGAK": e['KINGAK']
+      }).toList()
+    };
+print('body: ${json.encode(body)}');
+    final Response response = await RestAPI.shared.postData(urlEndpoint, body);
+print('res: ${response.data}');
+    if (response.statusCode == 200) {
+      onSuccess();
+    } else {
+      onFailed();
+    }
+  }
+
 }

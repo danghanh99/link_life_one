@@ -59,4 +59,28 @@ class GetPartOrderListIchiran {
     }
   }
 
+  Future<bool> checkBuzaiHacokFlg({
+    required Function onSuccess,
+    required Function onFailed,
+  }) async {
+
+    final box = Hive.box<User>('userBox');
+    final User user = box.values.last;
+
+    final response = await http.get(
+      Uri.parse(
+          "${Constant.url}Request/Order/requestCheckBuzaiHacokFlg.php?TANT_CD=${user.TANT_CD}"),
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> body = jsonDecode(response.body);
+      onSuccess.call();
+      return body[0]['message'] == 'Data exist';
+    } else {
+      onFailed.call();
+      return false;
+      // throw Exception('Failed to GetPartOrderList');
+    }
+  }
+
 }

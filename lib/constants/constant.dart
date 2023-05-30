@@ -28,6 +28,9 @@ class Constant {
   static const String postTanamsaiSaveDelete = '${url}Request/Order/requestPostTanamsaiSaveDelete.php';
   static const String postInventoryListMaterialList = '${url}Request/Order/requestPostInventoryListMaterialList.php';
   static const String postRemoveInventory = '${url}Request/Order/requesPostTanamsaiDelete.php';
+  static const String insertTSyukkojisekiSave = '${url}src/APIs/Material/insertTSyukkojisekiSave.php';
+  static const String requestPostClearSavedAll = '${url}Request/Order/requestPostClearSavedAll.php';
+  static const String requestPostAddBuzaihacyumsaiSave = '${url}Request/Order/requestPostAddBuzaihacyumsaiSave.php';
 
   static const int compressTargetWidth = 600;
 }

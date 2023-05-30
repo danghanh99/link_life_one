@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
+import 'package:link_life_one/api/material/material_api.dart';
 import 'package:link_life_one/api/order/get_qr.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
 import 'package:link_life_one/models/user.dart';
@@ -148,7 +149,11 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                     ),
                   )),
               TextButton(
-                onPressed: () {
+                onPressed: () async {
+                  await MaterialAPI.shared.clearSavedAll(
+                      onSuccess: (){},
+                      onFailed: (){}
+                  );
                   Navigator.pop(context);
                 },
                 child: const Text(
@@ -206,7 +211,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
     saibuList.clear();
     if(widget.isShowPopup){
       FToast? gettingToast;
-      await GetMaterialOrderingList().getMaterialOrderingList(
+      await MaterialOrderingList().getMaterialOrderingList(
           SYOZOKU_CD: syozokuCd,
           JISYA_CD: jisyaCd,
           onStart: (){
@@ -629,6 +634,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                                   message: "登録出来ました。",
                                   backGround: Colors.green,
                                 );
+                                Navigator.pop(context);
                               },
                               onFailed: () {
                                 CustomToast.show(context,
@@ -726,7 +732,63 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
   }
 
   Widget header() {
-    return const CustomHeaderWidget();
+    return CustomHeaderWidget(
+      onBack: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return SizedBox(
+              width: double.infinity,
+              child: CupertinoAlertDialog(
+                content: const Padding(
+                  padding: EdgeInsets.only(top: 15),
+                  child: Text(
+                    "編集途中のリストを保存しますか？",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                      onPressed: () async {
+                        await MaterialAPI.shared.postAddBuzaihacyumsaiSave(
+                            items: saibuList + newRecords,
+                            onSuccess: (){},
+                            onFailed: (){}
+                        );
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'はい',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )),
+                  TextButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      'いいえ',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   Widget title() {

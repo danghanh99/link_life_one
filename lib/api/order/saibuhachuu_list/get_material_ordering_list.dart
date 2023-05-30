@@ -3,8 +3,8 @@ import 'dart:convert';
 
 import '../../../constants/constant.dart';
 
-class GetMaterialOrderingList {
-  GetMaterialOrderingList() : super();
+class MaterialOrderingList {
+  MaterialOrderingList() : super();
 
   Future<List<dynamic>> getMaterialOrderingList({
     required String SYOZOKU_CD,
@@ -30,4 +30,5 @@ class GetMaterialOrderingList {
       return [];
     }
   }
+
 }

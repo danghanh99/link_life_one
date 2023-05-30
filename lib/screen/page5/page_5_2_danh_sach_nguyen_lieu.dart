@@ -867,73 +867,84 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
 
   Widget header() {
     return CustomHeaderWidget(onBack: () async {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return SizedBox(
-            width: double.infinity,
-            child: CupertinoAlertDialog(
-              title: const Text(
-                "",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              content: const Padding(
-                padding: EdgeInsets.only(top: 15),
-                child: Text(
-                  "編集途中のリストを保存しますか。",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 24, 23, 23),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              actions: <Widget>[
-                TextButton(
-                    onPressed: () {
-                      // _saveData(true);
-                      MaterialAPI.shared.onBackMaterial(
-                          items: materials,
-                          onSuccess: () {
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          },
-                          onFailed: () {
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          });
-                    },
-                    child: const Text(
-                      'はい',
-                      style: TextStyle(
-                        color: Color(0xFFEB5757),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    )),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    'いいえ',
+      bool isSave = false;
+      for(var m in materials){
+        print(m.autoFlg);
+        if(m.autoFlg=='0'){
+          isSave = true;
+          showDialog(
+            context: context,
+            builder: (context) {
+              return SizedBox(
+                width: double.infinity,
+                child: CupertinoAlertDialog(
+                  title: const Text(
+                    "",
                     style: TextStyle(
-                      color: Color(0xFF007AFF),
-                      fontSize: 16,
+                      color: Colors.black,
+                      fontSize: 18,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                )
-              ],
-            ),
+                  content: const Padding(
+                    padding: EdgeInsets.only(top: 15),
+                    child: Text(
+                      "編集途中のリストを保存しますか。",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 24, 23, 23),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                        onPressed: () async {
+                          await MaterialAPI.shared.insertTSyukkojisekiSave(
+                              items: materials,
+                              onSuccess: (){
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                              onFailed: (){
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              }
+                          );
+                        },
+                        child: const Text(
+                          'はい',
+                          style: TextStyle(
+                            color: Color(0xFFEB5757),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'いいえ',
+                        style: TextStyle(
+                          color: Color(0xFF007AFF),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              );
+            },
           );
-        },
-      );
+          break;
+        }
+      }
+      if(!isSave){
+        Navigator.pop(context);
+      }
     });
   }
 

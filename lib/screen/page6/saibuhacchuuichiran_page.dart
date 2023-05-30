@@ -328,16 +328,24 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DanhSachCacBoPhan513Page(
-                            back: (list) {
-                              print('list: $list');
-                            },
+                      if (currentRadioRow <= 0) {
+                        CustomToast.show(context,
+                            message: "一つの部材発注一覧を選んでください。");
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                SaibuhacchuulistDanhSachDatHangVatLieu611Page(
+                                    SYOZOKU_CD: listIchiranThayDoi[currentRadioRow - 1]
+                                    ["SYOZOKU_CD"],
+                                    JISYA_CD: listIchiranThayDoi[currentRadioRow - 1]
+                                    ["JISYA_CD"],
+                                    BUZAI_HACYU_ID: listIchiranThayDoi[currentRadioRow - 1]
+                                    ["BUZAI_HACYU_ID"]),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     },
                     child: const Text(
                       'リスト確認',

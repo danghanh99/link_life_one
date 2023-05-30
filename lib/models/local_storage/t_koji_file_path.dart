@@ -72,14 +72,14 @@ class TKojiFilePath extends HiveObject{
     'ID': id,
     'FILEPATH': filePath,
     'FILE_KBN_CD': fileKbnCd,
+    'RENKEIZUMI_FLG': renkeiZumiFlg,
     'DEL_FLG': delFlg,
     'ADD_PGID': addPGID,
     'ADD_TANTCD': addTantCd,
     'ADD_YMD': addYMD,
     'UPD_PGID': updPGID,
     'UPD_TANTCD': updTantCd,
-    'UPD_YMD': updYMD,
-    'RENKEIZUMI_FLG': renkeiZumiFlg
+    'UPD_YMD': updYMD
   };
 
   void storage(localPath){
