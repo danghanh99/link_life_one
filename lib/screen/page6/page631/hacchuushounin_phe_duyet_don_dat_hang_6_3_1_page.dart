@@ -145,7 +145,7 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                             .where((element) => element["status"] == true)
                             .toList();
                         if (list.length > 0) {
-                          PostPurchaseOrderReject().postPurchaseOrderReject(
+                          PostPurchaseOrderApproval().postPurchaseOrderApproval(
                               BUZAI_HACYU_ID_List: list
                                   .map((item) => item["BUZAI_HACYU_ID"])
                                   .toList(),
@@ -153,7 +153,7 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                               onSuccess: () {
                                 CustomToast.show(
                                   context,
-                                  message: "発注却下ができました。",
+                                  message: "発注承認ができました。",
                                   backGround: Colors.green,
                                 );
 
@@ -166,7 +166,7 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                               },
                               onFailed: () {
                                 CustomToast.show(context,
-                                    message: "発注却下がで出来ませんでした。");
+                                    message: "発注承認が出来ませんでした。");
                               });
                         } else {
                           CustomToast.show(context,
@@ -199,7 +199,7 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                             .where((element) => element["status"] == true)
                             .toList();
                         if (list.length > 0) {
-                          PostPurchaseOrderApproval().postPurchaseOrderApproval(
+                          PostPurchaseOrderReject().postPurchaseOrderReject(
                               BUZAI_HACYU_ID_List: list
                                   .map((item) => item["BUZAI_HACYU_ID"])
                                   .toList(),
@@ -207,7 +207,7 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                               onSuccess: () {
                                 CustomToast.show(
                                   context,
-                                  message: "発注承認ができました。",
+                                  message: "発注却下ができました。",
                                   backGround: Colors.green,
                                 );
 
@@ -220,7 +220,7 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                               },
                               onFailed: () {
                                 CustomToast.show(context,
-                                    message: "発注承認が出来ませんでした。");
+                                    message: "発注却下がで出来ませんでした。");
                               });
                         } else {
                           CustomToast.show(context,

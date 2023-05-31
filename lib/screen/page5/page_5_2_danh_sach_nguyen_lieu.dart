@@ -320,7 +320,6 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                   TextButton(
                       onPressed: () {
                         Navigator.pop(dialogContext);
-                        getEditMaterial(showPopUp);
                       },
                       child: const Text(
                         '続きから編集する',
@@ -331,9 +330,9 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                       )),
                   TextButton(
                     onPressed: () {
-                      Navigator.pop(dialogContext); //close Dialog
-                      // deleteMaterial();
                       deleteExistSave();
+                      getEditMaterial(showPopUp);
+                      Navigator.pop(dialogContext);
                     },
                     child: const Text(
                       '破棄して新規リスト作成',

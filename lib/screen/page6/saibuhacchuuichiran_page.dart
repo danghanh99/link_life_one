@@ -51,6 +51,7 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
   Future<dynamic> callGetPullDownStatusIchiran() async {
     final dynamic result = await GetPullDownStatusIchiran()
         .getPullDownStatusIchiran(onSuccess: (data) {
+          listPullDown.clear();
       setState(() {
         listPullDown = data;
       });
@@ -59,22 +60,26 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
     });
   }
 
-  Future<dynamic> callGetPartOrderListIchiran() async {
+  Future<dynamic> callGetPartOrderListIchiran({bool isFirstTime = true}) async {
     FToast? gettingToast;
     final dynamic result = await GetPartOrderListIchiran().getPartOrderListApprove(
       onStart: (){
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          CustomToast.show(
-              context,
-              onShow: (toast){
-                gettingToast = toast;
-              },
-              message: '読み込み中です。', backGround: Colors.grey
-          );
-        });
+        if(isFirstTime){
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            CustomToast.show(
+                context,
+                onShow: (toast){
+                  gettingToast = toast;
+                },
+                message: '読み込み中です。', backGround: Colors.grey
+            );
+          });
+        }
       },
       onSuccess: (data) {
-        if(gettingToast!=null) gettingToast!.removeCustomToast();
+        if(gettingToast!=null && isFirstTime) gettingToast!.removeCustomToast();
+        listIchiran.clear();
+        listIchiranThayDoi.clear();
         setState(() {
           listIchiran = data;
           listIchiranThayDoi = listIchiran;
@@ -86,7 +91,10 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
           );
         }
       }, onFailed: () {
-        CustomToast.show(context, message: "部材発注一覧リストを取得出来ませんでした。");
+        if(gettingToast!=null && isFirstTime) {
+          gettingToast!.removeCustomToast();
+          CustomToast.show(context, message: "部材発注一覧リストを取得出来ませんでした。");
+        }
       }
     );
   }
@@ -259,12 +267,12 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (currentRadioRow <= 0) {
                         CustomToast.show(context,
                             message: "一つの部材発注一覧を選んでください。");
                       } else {
-                        Navigator.push(
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
@@ -274,6 +282,8 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                                             ["BUZAI_HACYU_ID"]),
                           ),
                         );
+                        callGetPullDownStatusIchiran();
+                        callGetPartOrderListIchiran(isFirstTime: false);
                       }
                     },
                     child: const Text(

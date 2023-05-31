@@ -1244,29 +1244,39 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
   _createSignatureFromImage(url)async{
     final size = MediaQuery.of(context).size;
     String imgurl = url;
-    Uint8List bytes = (await NetworkAssetBundle(Uri.parse(imgurl)).load(imgurl)).buffer.asUint8List();
+    Uint8List bytes;
+    if(_isNetworkPath(url)){
+      bytes = (await NetworkAssetBundle(Uri.parse(imgurl)).load(imgurl)).buffer.asUint8List();
+    }
+    else{
+      bytes = await File(url).readAsBytes();
+    }
     image.Image? img = image.decodeImage(bytes);
     img = image.copyCrop(img!, (size.width-100)~/2, 150, (size.width-100).toInt(), 300);
     List<Point> hasDataPixels = [];
-    if(img!=null) {
-      for (int x = 0; x < img.width; x++) {
-        for (int y = 0; y < img.height; y++) {
-          int pixel = img.getPixel(x, y);
-          int red = image.getRed(pixel);
-          int green = image.getGreen(pixel);
-          int blue = image.getBlue(pixel);
-          int alpha = image.getAlpha(pixel);
+    for (int x = 0; x < img.width; x++) {
+      for (int y = 0; y < img.height; y++) {
+        int pixel = img.getPixel(x, y);
+        int red = image.getRed(pixel);
+        int green = image.getGreen(pixel);
+        int blue = image.getBlue(pixel);
+        int alpha = image.getAlpha(pixel);
 
-          if (!(red == 255 && green == 255 && blue == 255 && alpha == 255)) {
-            var offset = Offset(x.toDouble(), y.toDouble());
-            hasDataPixels.add(Point(offset, PointType.tap, 0.3));
-          }
+        if (!(red == 255 && green == 255 && blue == 255 && alpha == 255)) {
+          var offset = Offset(x.toDouble(), y.toDouble());
+          hasDataPixels.add(Point(offset, PointType.tap, 0.3));
         }
       }
-      for(var p in hasDataPixels) {
-        _controller.addPoint(p);
-      }
     }
+    for(var p in hasDataPixels) {
+      _controller.addPoint(p);
+    }
+  }
+
+  bool _isNetworkPath(String? path) {
+    if(path==null || path.isEmpty) return true;
+    final uri = Uri.parse(path);
+    return uri.scheme.startsWith('http') || uri.scheme.startsWith('ftp');
   }
 
   Widget sendButton2() {
