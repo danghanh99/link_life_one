@@ -26,16 +26,13 @@ import '../menu_page/menu_page.dart';
 import 'danh_sach_cac_bo_phan_5_1_2_page.dart';
 
 class SaibuhacchuulistDanhSachDatHangVatLieu611Page extends StatefulWidget {
-  String? SYOZOKU_CD;
-  String? JISYA_CD;
-  String? BUZAI_HACYU_ID;
-  bool isShowPopup;
+
+  String? buzaiHacyuId;
+  bool fromMenu;
 
   SaibuhacchuulistDanhSachDatHangVatLieu611Page({
-    this.SYOZOKU_CD,
-    this.JISYA_CD,
-    this.BUZAI_HACYU_ID,
-    this.isShowPopup = false,
+    this.buzaiHacyuId,
+    required this.fromMenu,
     Key? key,
   }) : super(key: key);
 
@@ -52,8 +49,6 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
   Barcode? result;
   QRViewController? controller;
   bool isShowScandQR = false;
-
-  bool? _isSave;
   
   List<List<TextEditingController>> textControllerNewValues = [];
 
@@ -95,80 +90,12 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
   void initState() {
     super.initState();
     currentRadioRow = -1;
-    if(widget.isShowPopup){
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showSavePopup();
-      });
+    if(widget.fromMenu){
+      getMaterialOrderingListSave();
     }
-    else{
-      if (widget.JISYA_CD != null && widget.SYOZOKU_CD != null) {
-        call2ApiGetList(
-          syozokuCd: widget.SYOZOKU_CD!,
-          jisyaCd: widget.JISYA_CD
-        );
-      } else {}
+    else if(widget.buzaiHacyuId != null){
+      getCheckList(buzaiHacyuId: widget.buzaiHacyuId!);
     }
-  }
-
-  _showSavePopup(){
-    showDialog(
-      context: context,
-      builder: (context) {
-        return SizedBox(
-          width: double.infinity,
-          child: CupertinoAlertDialog(
-            content: const Padding(
-              padding: EdgeInsets.only(top: 15),
-              child: Text(
-                "前回編集途中のリストがあります。",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                  onPressed: () {
-                    final box = Hive.box<User>('userBox');
-                    final User user = box.values.last;
-                    call2ApiGetList(
-                      syozokuCd: user.TANT_CD,
-                    );
-                    Navigator.pop(context);
-                    setState(() {
-                      _isSave = true;
-                    });
-                  },
-                  child: const Text(
-                    '続きから編集する',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  )),
-              TextButton(
-                onPressed: () async {
-                  await MaterialAPI.shared.clearSavedAll(
-                      onSuccess: (){},
-                      onFailed: (){}
-                  );
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  '破棄して新規リスト作成',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              )
-            ],
-          ),
-        );
-      },
-    );
   }
 
   toJson(element, {bool hasStatus = true, bool nullId = false}){
@@ -204,77 +131,72 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
       };
   }
 
-  Future<dynamic> call2ApiGetList({
-    required String syozokuCd,
-    String? jisyaCd
-  }) async {
-    saibuList.clear();
-    if(widget.isShowPopup){
-      FToast? gettingToast;
-      await MaterialOrderingList().getMaterialOrderingList(
-          SYOZOKU_CD: syozokuCd,
-          JISYA_CD: jisyaCd,
-          onStart: (){
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              CustomToast.show(
-                  context,
-                  onShow: (toast){
-                    gettingToast = toast;
-                  },
-                  message: '読み込み中です。', backGround: Colors.grey
-              );
-            });
-          },
-          onSuccess: (data) {
+  Future<dynamic> getMaterialOrderingListSave() async {
+    FToast? gettingToast;
+    await MaterialOrderingList().getMaterialOrderingList(
+        onStart: (){
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            CustomToast.show(
+                context,
+                onShow: (toast){
+                  gettingToast = toast;
+                },
+                message: '読み込み中です。', backGround: Colors.grey
+            );
+          });
+        },
+        onSuccess: (data) {
+          if(gettingToast!=null) gettingToast!.removeCustomToast();
+          if (data.isEmpty) {
+            setState(() {});
+            CustomToast.show(
+                context,
+                message: 'データはありません。'
+            );
+          } else {
 
-            if(gettingToast!=null) gettingToast!.removeCustomToast();
-
-            if (data.isEmpty) {
-              setState(() {});
-              CustomToast.show(
-                  context,
-                  message: 'データはありません。'
-              );
-            } else {
-              List<dynamic> tmpList = [];
-              for (var element in data) {
-                var itemConvert = toJson(element);
-                tmpList.add(itemConvert);
-              }
-
-              setState(() {
-                saibuList.addAll(tmpList);
-              });
-
+            saibuList.clear();
+            List<dynamic> tmpList = [];
+            for (var element in data) {
+              var itemConvert = toJson(element);
+              tmpList.add(itemConvert);
             }
-          },
-          onFailed: () {
-            CustomToast.show(context, message: "データを取得出来ませんでした。");
-          });
-    }
-    else{
-      await callGetCheckList((res) {
-        if (res.isEmpty) {
-          setState(() {});
-        } else {
-          List<dynamic> tmpCheckList = [];
-          for (var element in res) {
-            var itemConvert = toJson(element);
-            tmpCheckList.add(itemConvert);
+            setState(() {
+              saibuList.addAll(tmpList);
+            });
+
           }
-          setState(() {
-            saibuList.addAll(tmpCheckList);
-          });
+        },
+        onFailed: () {
+          CustomToast.show(context, message: "データを取得出来ませんでした。");
+        });
+  }
+
+  Future<dynamic> getCheckList({required String buzaiHacyuId}) async {
+
+    saibuList.clear();
+
+    await callGetCheckList((res) {
+      if (res.isEmpty) {
+        setState(() {});
+      } else {
+        List<dynamic> tmpCheckList = [];
+        for (var element in res) {
+          var itemConvert = toJson(element);
+          tmpCheckList.add(itemConvert);
         }
-      });
-    }
+        setState(() {
+          saibuList.addAll(tmpCheckList);
+        });
+      }
+    });
 
   }
 
   Future<dynamic> callGetCheckList(Function(List<dynamic>) onSccess) async {
     FToast? gettingToast;
-    final dynamic result = await GetCheckList().getCheckList(
-        BUZAI_HACYU_ID: widget.BUZAI_HACYU_ID!,
+    await GetCheckList().getCheckList(
+        BUZAI_HACYU_ID: widget.buzaiHacyuId ?? '',
         onStart: (){
           WidgetsBinding.instance.addPostFrameCallback((_) {
             CustomToast.show(
@@ -341,7 +263,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                               scrollDirection: Axis.horizontal,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: (widget.SYOZOKU_CD!=null && widget.JISYA_CD!=null) || (_isSave ?? false)
+                                children: widget.buzaiHacyuId!=null || widget.fromMenu
                                   ? _buildRows(saibuList.length + 1)
                                   : _buildRows(saibuList.length + 1)+_emptyRow(newRecords.length+1),
                               ),

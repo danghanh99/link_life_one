@@ -3,21 +3,20 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:link_life_one/components/toast.dart';
 import 'package:link_life_one/models/user.dart';
-import 'package:link_life_one/screen/login_page.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../api/order/get_part_order_list.dart';
 import '../../../api/order/get_pull_down_status.dart';
 import '../../../components/custom_header_widget.dart';
 import '../../../components/custom_text_field.dart';
-import '../../../components/login_widget.dart';
-import '../../../components/text_line_down.dart';
 import '../../../shared/assets.dart';
 import '../../../shared/custom_button.dart';
-import '../../menu_page/menu_page.dart';
 import '../saibuhachuulist_danh_sach_dat_hang_vat_lieu_6_1_1_page.dart';
 
 class SaibuhachuuDanhSachDatHangCacBoPhan61Page extends StatefulWidget {
+
+  final bool isDeleteEditingData;
+
   const SaibuhachuuDanhSachDatHangCacBoPhan61Page({
+    required this.isDeleteEditingData,
     Key? key,
   }) : super(key: key);
 
@@ -54,8 +53,8 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
     final User user = box.values.last;
 
     FToast? gettingToast;
-    final dynamic result = await GetPartOrderList().getPartOrderList(
-        SYOZOKU_CD: user.SYOZOKU_CD,
+    await GetPartOrderList().getPartOrderList(
+        isDelete: widget.isDeleteEditingData,
         onStart: (){
           WidgetsBinding.instance.addPostFrameCallback((_) {
             CustomToast.show(
@@ -299,10 +298,8 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
                           MaterialPageRoute(
                             builder: (context) =>
                                 SaibuhacchuulistDanhSachDatHangVatLieu611Page(
-                              SYOZOKU_CD: null,
-                              JISYA_CD: null,
-                              BUZAI_HACYU_ID: null,
-                            ),
+                                  fromMenu: false,
+                                ),
                           ));
                     },
                     child: const Text(
@@ -334,12 +331,9 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
                           MaterialPageRoute(
                             builder: (context) =>
                                 SaibuhacchuulistDanhSachDatHangVatLieu611Page(
-                                    SYOZOKU_CD: tmp[currentRadioRow - 1]
-                                        ["SYOZOKU_CD"],
-                                    JISYA_CD: tmp[currentRadioRow - 1]
-                                        ["JISYA_CD"],
-                                    BUZAI_HACYU_ID: tmp[currentRadioRow - 1]
-                                        ["BUZAI_HACYU_ID"]),
+                                  buzaiHacyuId: tmp[currentRadioRow - 1]["BUZAI_HACYU_ID"],
+                                  fromMenu: false,
+                                ),
                           ),
                         );
                       } else {

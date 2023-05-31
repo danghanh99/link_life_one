@@ -148,13 +148,29 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
       case ('部材発注'):
         CheckOrderSave().checkOrderSave(
             onSuccess: (isExist){
-              if(!isExist){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                    const SaibuhachuuDanhSachDatHangCacBoPhan61Page(),
-                  ),
+              if(isExist){
+                _showSavePopup(
+                    (){
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              SaibuhacchuulistDanhSachDatHangVatLieu611Page(
+                                  fromMenu: true
+                              ),
+                        ),
+                      );
+                    },
+                    (){
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SaibuhachuuDanhSachDatHangCacBoPhan61Page(isDeleteEditingData: true),
+                        ),
+                      );
+                    }
                 );
               }
               else{
@@ -162,16 +178,7 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                    const SaibuhachuuDanhSachDatHangCacBoPhan61Page(),
-                  ),
-                );
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        SaibuhacchuulistDanhSachDatHangVatLieu611Page(
-                            isShowPopup: true
-                        ),
+                    const SaibuhachuuDanhSachDatHangCacBoPhan61Page(isDeleteEditingData: false),
                   ),
                 );
               }
@@ -282,4 +289,50 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
         {}
     }
   }
+
+  _showSavePopup(Function action1, Function action2){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return SizedBox(
+          width: double.infinity,
+          child: CupertinoAlertDialog(
+            content: const Padding(
+              padding: EdgeInsets.only(top: 15),
+              child: Text(
+                "前回編集途中のリストがあります。",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () => action1(),
+                  child: const Text(
+                    '続きから編集する',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )),
+              TextButton(
+                onPressed: () => action2(),
+                child: const Text(
+                  '破棄して新規リスト作成',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 }

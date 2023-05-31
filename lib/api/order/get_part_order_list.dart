@@ -1,4 +1,6 @@
+import 'package:hive/hive.dart';
 import "package:http/http.dart" as http;
+import 'package:link_life_one/models/user.dart';
 import 'dart:convert';
 
 import '../../constants/constant.dart';
@@ -7,7 +9,7 @@ class GetPartOrderList {
   GetPartOrderList() : super();
 
   Future<List<dynamic>> getPartOrderList({
-    required String SYOZOKU_CD,
+    required bool isDelete,
     required Function onStart,
     required Function(List<dynamic>) onSuccess,
     required Function onFailed,
@@ -15,9 +17,12 @@ class GetPartOrderList {
 
     onStart();
 
+    final box = Hive.box<User>('userBox');
+    final User user = box.values.last;
+
     final response = await http.get(
       Uri.parse(
-          "${Constant.url}Request/Order/requestGetPartOrderList.php?SYOZOKU_CD=${SYOZOKU_CD}"),
+          "${Constant.url}Request/Order/requestGetPartOrderList.php?SYOZOKU_CD=${user.SYOZOKU_CD}&LOGIN_ID=${user.TANT_CD}&T_BUZAIHACYUMSAI_SAVE_DELETE=${isDelete ? '1' : '0'}"),
     );
 
     if (response.statusCode == 200) {

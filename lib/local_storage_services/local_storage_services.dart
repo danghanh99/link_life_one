@@ -696,7 +696,7 @@ class LocalStorageServices{
             tableData.add({
               "STATUS": k.jyucyuId,
               "TUIKA_SYOHIN_NAME": km.tuikaSyohinName,
-              "TUIKA_JISYA_CD": km.tuikaJisyaCd,
+              "TUIKA_JISYA_CD": '${km.tuikaJisyaCd}'.substring(4),
               "SURYO": km.suryo,
               "HANBAI_TANKA": km.hanbaiTanka,
               "KINGAK": km.kingak
@@ -1310,7 +1310,7 @@ class LocalStorageServices{
     bool isExist = false;
     var tKojiFilePathList = await LocalStorageBase.getValues(boxName: boxKojiFilePathName);
     for(TKojiFilePath tfp in tKojiFilePathList) {
-      if(tfp.id==jyucyuId) {
+      if(tfp.id==jyucyuId && tfp.fileKbnCd == "08") {
         isExist = true;
       }
     }
@@ -1322,10 +1322,7 @@ class LocalStorageServices{
     //UPDATE T_KOJI
     var tKojis = await LocalStorageBase.getValues(boxName: boxKojiName);
     for(TKoji k in tKojis) {
-      if(
-        k.jyucyuId==jyucyuId && (singleSummarize=="01" || singleSummarize=="1")
-        || k.syuyakuJyucyuId==jyucyuId && (singleSummarize=="02" || singleSummarize=="2")
-      ){
+      if(k.jyucyuId == jyucyuId){
         k.kojiRenkeiYMD = DateFormat('yyyy-MM-dd HH:mm:ss', 'ja').format(now).toString();
         k.kojiKekka = "01";
         k.kojiSt = "03";
@@ -1343,6 +1340,15 @@ class LocalStorageServices{
 
     //INSERT T_KOJIMSAI
     var tKojimsais = await LocalStorageBase.getValues(boxName: boxKojimsaiName);
+
+    for(TKojimsai tKm in tKojimsais){
+      if(tKm.kojijituikaFlg == "1" || tKm.kojijituikaFlg == "01"){
+        await LocalStorageBase.delete(
+            boxName: boxKojimsaiName,
+            key: '${tKm.jyucyuId}_${tKm.jyucyumsaiId}'
+        );
+      }
+    }
 
     for(var t in tableList){
       String newId = IdNameController().getId();

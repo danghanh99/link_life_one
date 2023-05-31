@@ -312,7 +312,7 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SaibuhacchuulistDanhSachDatHangVatLieu611Page(),
+                          builder: (context) => SaibuhacchuulistDanhSachDatHangVatLieu611Page(fromMenu: false),
                         ),
                       );
                     },
@@ -347,12 +347,9 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                           MaterialPageRoute(
                             builder: (context) =>
                                 SaibuhacchuulistDanhSachDatHangVatLieu611Page(
-                                    SYOZOKU_CD: listIchiranThayDoi[currentRadioRow - 1]
-                                    ["SYOZOKU_CD"],
-                                    JISYA_CD: listIchiranThayDoi[currentRadioRow - 1]
-                                    ["JISYA_CD"],
-                                    BUZAI_HACYU_ID: listIchiranThayDoi[currentRadioRow - 1]
-                                    ["BUZAI_HACYU_ID"]),
+                                  buzaiHacyuId: listIchiranThayDoi[currentRadioRow - 1]["BUZAI_HACYU_ID"],
+                                  fromMenu: false,
+                                ),
                           ),
                         );
                       }
