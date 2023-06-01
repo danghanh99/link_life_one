@@ -10,15 +10,15 @@ class QRApi {
   QRApi() : super();
 
   Future<void> getQRApi({
+    required String hinban,
     required Function(Inventory list) onSuccess,
     required Function onFailed,
   }) async {
     final box = Hive.box<User>('userBox');
     final User user = box.values.last;
-    String SYOZOKU_CD = user.SYOZOKU_CD;
     final dynamic response = await http.get(
       Uri.parse(
-          "${Constant.url}Request/Order/requestGetQRInventoryList.php?SYOZOKU_CD=$SYOZOKU_CD"),
+          "${Constant.url}Request/Order/requestGetQRInventoryList.php?SYOZOKU_CD=${user.SYOZOKU_CD}&HINBAN=$hinban"),
     );
 
     if (response.statusCode == 200) {

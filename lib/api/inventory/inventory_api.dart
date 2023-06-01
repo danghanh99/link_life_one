@@ -215,6 +215,7 @@ class InventoryAPI {
 
     Map<String, dynamic> body = {
       "LOGIN_ID": user.TANT_CD,
+      "SYOZOKU_CD": user.SYOZOKU_CD,
       "MATERIAL_LIST_DETAIL": items.map((e) => {
         "BUZAI_KANRI_NO": e.buzaiKanriGoban,
         "JISYA_CD": e.hinban,

@@ -66,6 +66,7 @@ class MaterialOrdering {
     List<Map<String, dynamic>> addUpdateData = addUpdateList.map((e) => {
       "BUZAI_HACYU_ID": e['BUZAI_HACYU_ID'],
       "BUZAI_HACYUMSAI_ID": e['BUZAI_HACYUMSAI_ID'],
+      "MAKER_CD": e['MAKER_CD'],
       "MAKER_NAME": e['MAKER_NAME'],
       "BUNRUI": e['BUNRUI'],
       "JISYA_CD": e['JISYA_CD'],

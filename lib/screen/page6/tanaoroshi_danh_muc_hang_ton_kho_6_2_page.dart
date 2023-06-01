@@ -73,10 +73,6 @@ class _TanaoroshiDanhMucHangTonKho62PageState
     super.initState();
   }
 
-  deleteSaved(){
-
-  }
-
   Future<void> getListInventory() async {
     FToast? gettingToast;
     await GetInventoriesApi().getInventories(
@@ -469,17 +465,22 @@ class _TanaoroshiDanhMucHangTonKho62PageState
                             onQRViewCreated: (controller) {
                               this.controller = controller;
                               controller.scannedDataStream.listen((scanData) {
+                                String code = (scanData.code!).split(';')[1];
                                 setState(() {
                                   result = scanData;
                                   isShowScandQR = false;
                                 });
-                                QRApi().getQRApi(onSuccess: (api) {
-                                  setState(() {
-                                    listInventory.add(api);
-                                  });
-                                }, onFailed: () {
-                                  CustomToast.show(context, message: 'エーラ');
-                                });
+                                QRApi().getQRApi(
+                                  hinban: code,
+                                  onSuccess: (api) {
+                                    setState(() {
+                                      listInventory.add(api);
+                                    });
+                                  },
+                                  onFailed: () {
+                                    CustomToast.show(context, message: 'エーラ');
+                                  }
+                                );
                               });
                             },
                           ),

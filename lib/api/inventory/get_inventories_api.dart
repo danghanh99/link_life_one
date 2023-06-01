@@ -17,7 +17,6 @@ class GetInventoriesApi {
     onStart();
     final box = Hive.box<User>('userBox');
     final User user = box.values.last;
-    String SYOZOKU_CD = user.SYOZOKU_CD;
     dynamic response;
     if (isContinue) {
       response = await http.get(

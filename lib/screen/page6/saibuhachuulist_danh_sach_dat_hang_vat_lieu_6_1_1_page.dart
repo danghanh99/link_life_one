@@ -101,6 +101,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
   toJson(element, {bool hasStatus = true, bool nullId = false}){
     return hasStatus
       ? {
+        "MAKER_CD": element["MAKER_CD"] ?? '',
         "MAKER_NAME": element["MAKER_NAME"] ?? '',
         "BUNRUI": element["BUNRUI"] ?? element["BUZAI_BUNRUI"] ?? '',
         "HINBAN": element["HINBAN"] ?? '',
@@ -116,6 +117,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
         "status": false,
       }
       : {
+        "MAKER_CD": element["MAKER_CD"] ?? '',
         "MAKER_NAME": element["MAKER_NAME"] ?? '',
         "BUNRUI": element["BUNRUI"] ?? element["BUZAI_BUNRUI"] ?? '',
         "HINBAN": element["HINBAN"] ?? '',
@@ -371,7 +373,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                         child: TextButton(
                           onPressed: () {
                             setState(() {
-                              isShowScandQR = true;
+                              isShowScandQR = !isShowScandQR;
                             });
                           },
                           child: const Text(
@@ -526,7 +528,6 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                       ),
                     ],
                   ),
-                  Expanded(child: Container()),
                   Container(
                     width: 120,
                     height: 37,

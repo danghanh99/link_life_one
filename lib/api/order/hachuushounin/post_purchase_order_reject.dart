@@ -17,6 +17,10 @@ class PostPurchaseOrderReject {
     required onFailed,
   }) async {
     try {
+
+      final box = Hive.box<User>('userBox');
+      final User user = box.values.last;
+
       String url =
           "${Constant.url}Request/Order/requestPostPurchaseOrderReject.php";
 
@@ -29,6 +33,7 @@ class PostPurchaseOrderReject {
       }
 
       Map<String, dynamic> body = {
+        "LOGIN_ID": user.TANT_CD,
         "BUZAI_HACYU": buzaiHacyu
       };
 
