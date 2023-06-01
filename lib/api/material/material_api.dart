@@ -152,7 +152,7 @@ class MaterialAPI {
     if (response.statusCode == 200) {
       List<dynamic> data = response.data;
       List<DefaultInventory> materials =
-          data.map((e) => DefaultInventory.fromJson(e)).toList();
+          data.map((e) => DefaultInventory.fromQRJson(e)).toList();
       onSuccess(materials);
     } else {
       onFailed();

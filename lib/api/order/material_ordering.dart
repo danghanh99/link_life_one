@@ -49,7 +49,8 @@ class MaterialOrdering {
 
   Future<void> postUpdateMaterialOrdering({
     required List<dynamic> addUpdateList,
-    required List<dynamic> removeList,
+    required List<dynamic> removeSaveList,
+    required List<dynamic> removeBuzaiList,
     required Function onSuccess,
     required onFailed,
   }) async {
@@ -58,8 +59,14 @@ class MaterialOrdering {
     String LOGIN_NAME = userBox.values.last.TANT_NAME;
     String SYOZOKU_CD = userBox.values.last.SYOZOKU_CD;
 
-    List<Map<String, dynamic>> removeData = removeList.map((e) => {
+    List<Map<String, dynamic>> removeSaveData = removeSaveList.map((e) => {
       'LOGIN_ID': LOGIN_ID,
+      'BUZAI_HACYUMSAI_ID': e['BUZAI_HACYUMSAI_ID']
+    }).toList();
+
+    List<Map<String, dynamic>> removeBuzaiData = removeBuzaiList.map((e) => {
+      'LOGIN_ID': LOGIN_ID,
+      'BUZAI_HACYU_ID': e['BUZAI_HACYU_ID'],
       'BUZAI_HACYUMSAI_ID': e['BUZAI_HACYUMSAI_ID']
     }).toList();
 
@@ -80,7 +87,8 @@ class MaterialOrdering {
     }).toList();
 
     Map<String, dynamic> body = {
-      'DELETE_T_BUZAIHACYUMSAI_SAVE': removeData,
+      'DELETE_T_BUZAIHACYUMSAI_SAVE': removeSaveData,
+      'DELETE_T_BUZAIHACYUMSAI': removeBuzaiData,
       'T_BUZAIHACYU': {
         'LOGIN_ID': LOGIN_ID,
         'TANT_NAME': LOGIN_NAME,

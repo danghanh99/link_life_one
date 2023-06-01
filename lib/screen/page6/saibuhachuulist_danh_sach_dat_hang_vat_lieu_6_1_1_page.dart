@@ -133,6 +133,19 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
       };
   }
 
+  isEmptyElement(e){
+    if (e['MAKER_NAME'].toString().trim().isNotEmpty) return false;
+    if (e['BUNRUI'].toString().trim().isNotEmpty) return false;
+    if (e['HINBAN'].toString().trim().isNotEmpty) return false;
+    if (e['SYOHIN_NAME'].toString().trim().isNotEmpty) return false;
+    if (e['LOT'].toString().trim().isNotEmpty) return false;
+    if (e['HACYU_TANKA'].toString().trim().isNotEmpty) return false;
+    if (e['SURYO'].toString().trim().isNotEmpty) return false;
+    if (e['TANI_CD'].toString().trim().isNotEmpty) return false;
+    if (e['KINGAK'].toString().trim().isNotEmpty) return false;
+    return true;
+  }
+
   Future<dynamic> getMaterialOrderingListSave() async {
     FToast? gettingToast;
     await MaterialOrderingList().getMaterialOrderingList(
@@ -448,27 +461,62 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                                   message: "一つを選択してください。",
                                   backGround: Colors.yellow);
                             } else {
-                              await MaterialOrdering().postUpdateMaterialOrdering(
-                                  addUpdateList: [],
-                                  removeList: list.map((e) => toJson(e, hasStatus: false)).toList(),
-                                  onSuccess: () {
-                                    setState(() {
-                                      saibuList.removeWhere(
-                                              (element) => element["status"] == true);
-                                      newRecords.removeWhere(
-                                              (element) => element["status"] == true);
-                                    });
-                                    CustomToast.show(
-                                      context,
-                                      message: "登録出来ました。",
-                                      backGround: Colors.green,
-                                    );
-                                  },
-                                  onFailed: () {
-                                    CustomToast.show(context,
-                                        message: "登録できませんでした。。");
-                                  }
-                              );
+                              if(widget.fromMenu){
+                                await MaterialOrdering().postUpdateMaterialOrdering(
+                                    addUpdateList: [],
+                                    removeSaveList: list.map((e) => toJson(e, hasStatus: false)).toList(),
+                                    removeBuzaiList: [],
+                                    onSuccess: () {
+                                      setState(() {
+                                        saibuList.removeWhere(
+                                                (element) => element["status"] == true);
+                                        newRecords.removeWhere(
+                                                (element) => element["status"] == true);
+                                      });
+                                      CustomToast.show(
+                                        context,
+                                        message: "登録出来ました。",
+                                        backGround: Colors.green,
+                                      );
+                                    },
+                                    onFailed: () {
+                                      CustomToast.show(context,
+                                          message: "登録できませんでした。。");
+                                    }
+                                );
+                              }
+                              else if(widget.buzaiHacyuId!=null){
+                                await MaterialOrdering().postUpdateMaterialOrdering(
+                                    addUpdateList: [],
+                                    removeSaveList: [],
+                                    removeBuzaiList: list.map((e) => toJson(e, hasStatus: false)).toList(),
+                                    onSuccess: () {
+                                      setState(() {
+                                        saibuList.removeWhere(
+                                                (element) => element["status"] == true);
+                                        newRecords.removeWhere(
+                                                (element) => element["status"] == true);
+                                      });
+                                      CustomToast.show(
+                                        context,
+                                        message: "登録出来ました。",
+                                        backGround: Colors.green,
+                                      );
+                                    },
+                                    onFailed: () {
+                                      CustomToast.show(context,
+                                          message: "登録できませんでした。。");
+                                    }
+                                );
+                              }
+                              else{
+                                setState(() {
+                                  saibuList.removeWhere(
+                                          (element) => element["status"] == true);
+                                  newRecords.removeWhere(
+                                          (element) => element["status"] == true);
+                                });
+                              }
                             }
                           },
                           child: const Text(
@@ -538,8 +586,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                     child: TextButton(
                       onPressed: () async {
                         if(await _showConfirmDialog()){
-                          List<dynamic> list = [];
-                          list = (saibuList+newRecords).where((element) => element["status"] == true).toList();
+                          List<dynamic> list = (saibuList+newRecords).where((element) => element["status"] == true).toList();
                           if (list.isEmpty) {
                             CustomToast.show(
                                 context,
@@ -550,7 +597,8 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                           else{
                             await MaterialOrdering().postUpdateMaterialOrdering(
                               addUpdateList: list.map((e) => toJson(e, hasStatus: false)).toList(),
-                              removeList: [],
+                              removeSaveList: [],
+                              removeBuzaiList: [],
                               onSuccess: () {
                                 CustomToast.show(
                                   context,
@@ -677,8 +725,17 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                 actions: <Widget>[
                   TextButton(
                       onPressed: () async {
+
+                        List list = [];
+
+                        for(var l in (saibuList+newRecords)){
+                          if(!isEmptyElement(l)){
+                            list.add(l);
+                          }
+                        }
+
                         await MaterialAPI.shared.postAddBuzaihacyumsaiSave(
-                            items: saibuList + newRecords,
+                            items: list,
                             onSuccess: (){},
                             onFailed: (){}
                         );

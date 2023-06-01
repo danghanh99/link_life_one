@@ -83,6 +83,7 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
         setState(() {
           listIchiran = data;
           listIchiranThayDoi = listIchiran;
+          currentRadioRow = -1;
         });
         if(data.isEmpty){
           CustomToast.show(

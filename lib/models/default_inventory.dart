@@ -22,4 +22,13 @@ class DefaultInventory {
           jisyaCode: json['HINBAN'] ?? '',
           syoshinName: json['SYOHIN_NAME'] ?? '',
           jissu: json['JISSU'] ?? '');
+
+  factory DefaultInventory.fromQRJson(Map<String, dynamic> json) =>
+      DefaultInventory(
+          zaikoId: '',
+          categoryName: json['CTGORY_NAME'] ?? '',
+          makerName: json['MAKER_NAME'] ?? '',
+          jisyaCode: json['HINBAN'] ?? '',
+          syoshinName: json['SYOHIN_NAME'] ?? '',
+          jissu: json['ZAIKO_SU'] ?? '');
 }
