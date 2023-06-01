@@ -574,57 +574,58 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  Container(
-                    width: 120,
-                    height: 37,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF6D8FDB),
-                      borderRadius: BorderRadius.circular(26),
-                    ),
-                    child: TextButton(
-                      onPressed: () async {
-                        if(await _showConfirmDialog()){
-                          List<dynamic> list = (saibuList+newRecords).where((element) => element["status"] == true).toList();
-                          if (list.isEmpty) {
-                            CustomToast.show(
-                                context,
-                                message: "一つを選択してください。",
-                                backGround: Colors.yellow
-                            );
-                          }
-                          else{
-                            await MaterialOrdering().postUpdateMaterialOrdering(
-                              addUpdateList: list.map((e) => toJson(e, hasStatus: false)).toList(),
-                              removeSaveList: [],
-                              removeBuzaiList: [],
-                              onSuccess: () {
+                      const Spacer(),
+                      Container(
+                        width: 120,
+                        height: 37,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF6D8FDB),
+                          borderRadius: BorderRadius.circular(26),
+                        ),
+                        child: TextButton(
+                          onPressed: () async {
+                            if(await _showConfirmDialog()){
+                              List<dynamic> list = (saibuList+newRecords).where((element) => element["status"] == true).toList();
+                              if (list.isEmpty) {
                                 CustomToast.show(
-                                  context,
-                                  message: "登録出来ました。",
-                                  backGround: Colors.green,
+                                    context,
+                                    message: "一つを選択してください。",
+                                    backGround: Colors.yellow
                                 );
-                                Navigator.pop(context);
-                              },
-                              onFailed: () {
-                                CustomToast.show(context,
-                                    message: "登録できませんでした。。");
                               }
-                            );
-                          }
-                        }
-                      },
-                      child: const Text(
-                        '発注申請',
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                              else{
+                                await MaterialOrdering().postUpdateMaterialOrdering(
+                                    addUpdateList: list.map((e) => toJson(e, hasStatus: false)).toList(),
+                                    removeSaveList: [],
+                                    removeBuzaiList: [],
+                                    onSuccess: () {
+                                      CustomToast.show(
+                                        context,
+                                        message: "登録出来ました。",
+                                        backGround: Colors.green,
+                                      );
+                                      Navigator.pop(context);
+                                    },
+                                    onFailed: () {
+                                      CustomToast.show(context,
+                                          message: "登録できませんでした。。");
+                                    }
+                                );
+                              }
+                            }
+                          },
+                          child: const Text(
+                            '発注申請',
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                   const SizedBox(
                     height: 40,

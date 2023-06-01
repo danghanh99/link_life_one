@@ -73,6 +73,7 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
           setState(() {
             listOrder = data;
             listOrderKhongCoDinh = listOrder;
+            currentRadioRow = -1;
           });
           if(data.isEmpty){
             CustomToast.show(
@@ -292,8 +293,8 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
@@ -301,6 +302,9 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
                                   fromMenu: false,
                                 ),
                           ));
+                      setState(() {
+                        currentRadioRow = -1;
+                      });
                     },
                     child: const Text(
                       '新規部材発注',
@@ -323,10 +327,10 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (currentRadioRow - 1 >= 0) {
                         List<dynamic> tmp = listOrderKhongCoDinh;
-                        Navigator.push(
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
@@ -336,6 +340,9 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
                                 ),
                           ),
                         );
+                        setState(() {
+                          currentRadioRow = -1;
+                        });
                       } else {
                         CustomToast.show(context, message: "一つを選択してください。");
                       }

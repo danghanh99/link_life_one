@@ -309,13 +309,16 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => SaibuhacchuulistDanhSachDatHangVatLieu611Page(fromMenu: false),
                         ),
                       );
+                      setState(() {
+                        currentRadioRow = -1;
+                      });
                     },
                     child: const Text(
                       '新規部材発注',
@@ -338,12 +341,12 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (currentRadioRow <= 0) {
                         CustomToast.show(context,
                             message: "一つの部材発注一覧を選んでください。");
                       } else {
-                        Navigator.push(
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
@@ -353,6 +356,9 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                                 ),
                           ),
                         );
+                        setState(() {
+                          currentRadioRow = -1;
+                        });
                       }
                     },
                     child: const Text(
