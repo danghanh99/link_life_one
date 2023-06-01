@@ -170,7 +170,7 @@ class GetListKojiApi {
               setsakiName: e["SETSAKI_NAME"],
               kojiSt: e['KOJI_ST'],
               hojinFlag: e['HOJIN_FLG'],
-              kbnmsaiName: e['KBNMSAI_NAME'],
+              kbnmsaiName: e['KBN_NAME'],
               yobikomoku1: e['YOBIKOMOKU1_KBN2'],
               yobikomoku2: e['YOBIKOMOKU2_KBN2']),
         )

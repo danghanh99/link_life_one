@@ -30,5 +30,5 @@ class DefaultInventory {
           makerName: json['MAKER_NAME'] ?? '',
           jisyaCode: json['HINBAN'] ?? '',
           syoshinName: json['SYOHIN_NAME'] ?? '',
-          jissu: json['ZAIKO_SU'] ?? '');
+          jissu: '${json['ZAIKO_SU']}' ?? '');
 }

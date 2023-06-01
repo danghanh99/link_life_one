@@ -55,7 +55,7 @@ class Koji {
         setsakiName: json["SETSAKI_NAME"],
         kojiSt: json['KOJI_ST'],
         hojinFlag: json['HOJIN_FLG'],
-        kbnmsaiName: json['KBNMSAI_NAME'],
+        kbnmsaiName: json['KBN_NAME'],
         yobikomoku1: json['YOBIKOMOKU1_KBN2'],
         yobikomoku2: json['YOBIKOMOKU2_KBN2']
     );
