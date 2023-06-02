@@ -18,6 +18,9 @@ class Assets {
 
   static const String icDropdown = './assets/images/ic_dropdown.png';
 
+  static const String gettingMessage = '読み込み中です。';
+  static const String emptyMessage = 'データはありません。';
+
   static ImageProvider blankImage = MemoryImage(const Base64Codec()
       .decode("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"));
 }

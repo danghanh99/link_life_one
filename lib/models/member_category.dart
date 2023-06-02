@@ -5,5 +5,5 @@ class MemberCategory {
   MemberCategory({this.kbnCode, this.kbnmsaiName});
 
   factory MemberCategory.fromJson(Map<String, dynamic> json) => MemberCategory(
-      kbnCode: json['KBN_CD'] ?? '', kbnmsaiName: json['KBNMSAI_NAME'] ?? '');
+      kbnCode: json['KBNMSAI_CD'] ?? '', kbnmsaiName: json['KBNMSAI_NAME'] ?? '');
 }

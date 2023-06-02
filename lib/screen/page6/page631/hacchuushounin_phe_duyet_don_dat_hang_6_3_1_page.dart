@@ -31,6 +31,9 @@ class _HachuushouninPheDuyetDonDatHang631PageState
     extends State<HachuushouninPheDuyetDonDatHang631Page> {
   List<dynamic> hachuushouninList = [];
   TextEditingController textEditingController = TextEditingController();
+
+  bool? isEmptyList;
+
   @override
   void initState() {
     super.initState();
@@ -38,8 +41,10 @@ class _HachuushouninPheDuyetDonDatHang631PageState
   }
 
   Future<dynamic> callGetPurchaseOrderApproval() async {
-    final dynamic result =
-        await GetPurchaseOrderApproval().getPurchaseOrderApproval(
+    setState(() {
+      isEmptyList = null;
+    });
+    await GetPurchaseOrderApproval().getPurchaseOrderApproval(
             BUZAI_HACYU_ID: widget.BUZAI_HACYU_ID,
             onSuccess: (data) {
               for (var element in data) {
@@ -49,9 +54,18 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                 hachuushouninList = data;
                 textEditingController.text =
                     hachuushouninList[0]["HACNG_RIYU"] ?? '';
+                if(hachuushouninList.isEmpty){
+                  isEmptyList = true;
+                }
+                else{
+                  isEmptyList = false;
+                }
               });
             },
             onFailed: () {
+              setState(() {
+                isEmptyList = true;
+              });
               CustomToast.show(context, message: "発注承認リストを取得出来ませんでした。");
             });
   }
@@ -90,8 +104,16 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: _buildRows(hachuushouninList.length + 1),
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: _buildRows(hachuushouninList.length + 1) + [
+                            Visibility(
+                              visible: isEmptyList == null || isEmptyList!,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 50),
+                                child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     )

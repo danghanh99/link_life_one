@@ -42,6 +42,8 @@ class _TanaoroshiDanhMucHangTonKho62PageState
   bool isShowScandQR = false;
   late int currentRadioRow;
 
+  bool? isEmptyList;
+
   List<Inventory> listInventory = [];
 
   @override
@@ -74,35 +76,34 @@ class _TanaoroshiDanhMucHangTonKho62PageState
   }
 
   Future<void> getListInventory() async {
-    FToast? gettingToast;
     await GetInventoriesApi().getInventories(
         isContinue: widget.isContinue,
         onStart: (){
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            CustomToast.show(
-                context,
-                onShow: (toast){
-                  gettingToast = toast;
-                },
-                message: '読み込み中です。', backGround: Colors.grey
-            );
+          setState(() {
+            isEmptyList = null;
           });
         },
         onSuccess: (list) {
-          if(gettingToast!=null) gettingToast!.removeCustomToast();
           setState(
             () {
               listInventory = list;
             },
           );
           if(list.isEmpty){
-            CustomToast.show(
-                context,
-                message: 'データはありません。'
-            );
+            setState(() {
+              isEmptyList = true;
+            });
+          }
+          else{
+            setState(() {
+              isEmptyList = false;
+            });
           }
         },
         onFailed: () {
+          setState(() {
+            isEmptyList = true;
+          });
           CustomToast.show(context, message: 'データを取得出来ませんでした。');
         });
   }
@@ -247,16 +248,27 @@ class _TanaoroshiDanhMucHangTonKho62PageState
                 : Expanded(
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Flexible(
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: _buildRows(listInventory.length + 1),
-                              ),
+                      child: Column(
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Flexible(
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: _buildRows(listInventory.length + 1),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          Visibility(
+                            visible: isEmptyList == null || isEmptyList!,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 50),
+                              child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
                             ),
                           )
                         ],
@@ -344,6 +356,12 @@ class _TanaoroshiDanhMucHangTonKho62PageState
                                     listInventory.add(i);
                                   }
                                 }
+                                if(listInventory.isEmpty){
+                                  isEmptyList = true;
+                                }
+                                else{
+                                  isEmptyList = false;
+                                }
                               });
                             },
                           ),
@@ -381,6 +399,12 @@ class _TanaoroshiDanhMucHangTonKho62PageState
                             setState(() {
                               for(var i in listInventory.where((e) => e.STATUS == true).toList()){
                                 listInventory.removeAt(listInventory.indexOf(i));
+                              }
+                              if(listInventory.isEmpty){
+                                isEmptyList = true;
+                              }
+                              else{
+                                isEmptyList = false;
                               }
                             });
                             CustomToast.show(context,
@@ -475,6 +499,12 @@ class _TanaoroshiDanhMucHangTonKho62PageState
                                   onSuccess: (api) {
                                     setState(() {
                                       listInventory.addAll(api);
+                                      if(listInventory.isEmpty){
+                                        isEmptyList = true;
+                                      }
+                                      else{
+                                        isEmptyList = false;
+                                      }
                                     });
                                   },
                                   onFailed: () {

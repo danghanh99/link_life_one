@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -40,6 +42,8 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
 
   List<dynamic> listPullDown = [];
 
+  bool? isEmptyList;
+
   @override
   void initState() {
     currentRadioRow = -1;
@@ -60,24 +64,14 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
     });
   }
 
-  Future<dynamic> callGetPartOrderListIchiran({bool isFirstTime = true}) async {
-    FToast? gettingToast;
-    final dynamic result = await GetPartOrderListIchiran().getPartOrderListApprove(
+  Future<dynamic> callGetPartOrderListIchiran() async {
+    await GetPartOrderListIchiran().getPartOrderListApprove(
       onStart: (){
-        if(isFirstTime){
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            CustomToast.show(
-                context,
-                onShow: (toast){
-                  gettingToast = toast;
-                },
-                message: '読み込み中です。', backGround: Colors.grey
-            );
-          });
-        }
+        setState(() {
+          isEmptyList = null;
+        });
       },
       onSuccess: (data) {
-        if(gettingToast!=null && isFirstTime) gettingToast!.removeCustomToast();
         listIchiran.clear();
         listIchiranThayDoi.clear();
         setState(() {
@@ -86,16 +80,20 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
           currentRadioRow = -1;
         });
         if(data.isEmpty){
-          CustomToast.show(
-              context,
-              message: 'データはありません。'
-          );
+          setState(() {
+            isEmptyList = true;
+          });
+        }
+        else{
+          setState(() {
+            isEmptyList = false;
+          });
         }
       }, onFailed: () {
-        if(gettingToast!=null && isFirstTime) {
-          gettingToast!.removeCustomToast();
-          CustomToast.show(context, message: "部材発注一覧リストを取得出来ませんでした。");
-        }
+        setState(() {
+          isEmptyList = true;
+        });
+        CustomToast.show(context, message: "部材発注一覧リストを取得出来ませんでした。");
       }
     );
   }
@@ -193,7 +191,14 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                         listIchiranThayDoi = listIchiranThayDoi.where((element) => element['KBNMSAI_NAME']==currentPullDownValue).toList();
                       }
 
-                      setState(() {});
+                      setState(() {
+                        if(listIchiranThayDoi.isEmpty){
+                          isEmptyList = true;
+                        }
+                        else{
+                          isEmptyList = false;
+                        }
+                      });
                       
                     },
                     child: const Text(
@@ -225,6 +230,12 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                         idController.clear();
                         tantController.clear();
                         listIchiranThayDoi = listIchiran;
+                        if(listIchiranThayDoi.isEmpty){
+                          isEmptyList = true;
+                        }
+                        else{
+                          isEmptyList = false;
+                        }
                       });
                     },
                     child: const Text(
@@ -248,8 +259,16 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: _buildRows(listIchiranThayDoi.length + 1),
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: _buildRows(listIchiranThayDoi.length + 1) + [
+                      Visibility(
+                        visible: isEmptyList == null || isEmptyList!,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 50),
+                          child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
@@ -284,7 +303,7 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
                           ),
                         );
                         callGetPullDownStatusIchiran();
-                        callGetPartOrderListIchiran(isFirstTime: false);
+                        callGetPartOrderListIchiran();
                       }
                     },
                     child: const Text(
@@ -563,26 +582,15 @@ class _SaibuhacchuuichiranPageState extends State<SaibuhacchuuichiranPage> {
     ];
 
     Size size = MediaQuery.of(context).size;
-    List<double> colwidth =
-        MediaQuery.of(context).orientation == Orientation.portrait
-            ? [
-                30,
-                130,
-                130,
-                100,
-                100,
-                120,
-                120,
-              ]
-            : [
-                30,
-                (size.width - 33) * 2 / 7 + -30,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-              ];
+    List<double> colwidth = [
+      30,
+      max(130, (size.width - 33) * 2 / 7 + -30),
+      max(130, (size.width - 33) / 7),
+      max(100, (size.width - 33) / 7),
+      max(100, (size.width - 33) / 7),
+      max(120, (size.width - 33) / 7),
+      max(120, (size.width - 33) / 7)
+    ];
 
     return List.generate(count, (col) {
       if (row == 0) {

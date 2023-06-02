@@ -52,6 +52,8 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
   
   List<List<TextEditingController>> textControllerNewValues = [];
 
+  bool? isEmptyList;
+
   dynamic first = {
     "MAKER_NAME": "",
     "BUNRUI": '',
@@ -147,27 +149,17 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
   }
 
   Future<dynamic> getMaterialOrderingListSave() async {
-    FToast? gettingToast;
     await MaterialOrderingList().getMaterialOrderingList(
         onStart: (){
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            CustomToast.show(
-                context,
-                onShow: (toast){
-                  gettingToast = toast;
-                },
-                message: '読み込み中です。', backGround: Colors.grey
-            );
+          setState(() {
+            isEmptyList = null;
           });
         },
         onSuccess: (data) {
-          if(gettingToast!=null) gettingToast!.removeCustomToast();
           if (data.isEmpty) {
-            setState(() {});
-            CustomToast.show(
-                context,
-                message: 'データはありません。'
-            );
+            setState(() {
+              isEmptyList = true;
+            });
           } else {
 
             saibuList.clear();
@@ -178,11 +170,15 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
             }
             setState(() {
               saibuList.addAll(tmpList);
+              isEmptyList = false;
             });
 
           }
         },
         onFailed: () {
+          setState(() {
+            isEmptyList = true;
+          });
           CustomToast.show(context, message: "データを取得出来ませんでした。");
         });
   }
@@ -209,31 +205,30 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
   }
 
   Future<dynamic> callGetCheckList(Function(List<dynamic>) onSccess) async {
-    FToast? gettingToast;
     await GetCheckList().getCheckList(
         BUZAI_HACYU_ID: widget.buzaiHacyuId ?? '',
         onStart: (){
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            CustomToast.show(
-                context,
-                onShow: (toast){
-                  gettingToast = toast;
-                },
-                message: '読み込み中です。', backGround: Colors.grey
-            );
+          setState(() {
+            isEmptyList = null;
           });
         },
         onSuccess: (data) {
-          if(gettingToast!=null) gettingToast!.removeCustomToast();
           onSccess.call(data);
           if(data.isEmpty){
-            CustomToast.show(
-                context,
-                message: 'データはありません。'
-            );
+            setState(() {
+              isEmptyList = true;
+            });
+          }
+          else{
+            setState(() {
+              isEmptyList = false;
+            });
           }
         },
         onFailed: () {
+          setState(() {
+            isEmptyList = true;
+          });
           CustomToast.show(context, message: "データを取得出来ませんでした。");
         });
   }
@@ -270,18 +265,29 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                   Expanded(
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Flexible(
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: widget.buzaiHacyuId!=null || widget.fromMenu
-                                  ? _buildRows(saibuList.length + 1)
-                                  : _buildRows(saibuList.length + 1)+_emptyRow(newRecords.length+1),
-                              ),
+                      child: Column(
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Flexible(
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: widget.buzaiHacyuId!=null || widget.fromMenu
+                                      ? _buildRows(saibuList.length + 1)
+                                      : _buildRows(saibuList.length + 1)+_emptyRow(newRecords.length+1),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          Visibility(
+                            visible: (isEmptyList == null || isEmptyList!) && (widget.fromMenu || widget.buzaiHacyuId!=null) && (saibuList + newRecords).isEmpty,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 50),
+                              child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
                             ),
                           )
                         ],
@@ -345,8 +351,13 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                                               mtp.add(itemConvert);
                                             }
                                             setState(() {
-                                              // list;
                                               saibuList.addAll(mtp);
+                                              if(saibuList.isEmpty){
+                                                isEmptyList = true;
+                                              }
+                                              else{
+                                                isEmptyList = false;
+                                              }
                                             });
                                           }
                                           else{
@@ -423,6 +434,12 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                                     }
                                     setState(() {
                                       saibuList.addAll(tmp);
+                                      if(saibuList.isEmpty){
+                                        isEmptyList = true;
+                                      }
+                                      else{
+                                        isEmptyList = false;
+                                      }
                                     });
                                   },
                                 ),
@@ -518,6 +535,15 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                                 });
                               }
                             }
+
+                            setState(() {
+                              if(saibuList.isEmpty){
+                                isEmptyList = true;
+                              }
+                              else{
+                                isEmptyList = false;
+                              }
+                            });
                           },
                           child: const Text(
                             '削除',

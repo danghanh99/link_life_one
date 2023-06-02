@@ -33,32 +33,22 @@ class _Page53DanhSachNhanLaiVatLieuState
   List<bool> checkboxState = [];
   List<int> amountState = [];
 
+  bool? isEmptyList;
+
   @override
   void initState() {
     getMaterialTakeBack();
     super.initState();
   }
 
-  void getMaterialTakeBack({bool isFirstTime = true}) async {
-    FToast? gettingToast;
+  void getMaterialTakeBack() async {
     MaterialAPI.shared.getListDefaultMaterialTakeBack(
       onStart: (){
-        if(isFirstTime) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            CustomToast.show(
-                context,
-                onShow: (toast){
-                  gettingToast = toast;
-                },
-                message: '読み込み中です。', backGround: Colors.grey
-            );
-          });
-        }
+        setState(() {
+          isEmptyList = null;
+        });
       },
       onSuccess: (materials) {
-
-        if(gettingToast!=null && isFirstTime) gettingToast!.removeCustomToast();
-
         setState(() {
           checkboxState.clear();
           amountState.clear();
@@ -68,43 +58,36 @@ class _Page53DanhSachNhanLaiVatLieuState
             amountState.add(0);
           }
         });
-        if(materials.isEmpty && isFirstTime){
-          CustomToast.show(
-              context,
-              message: 'データはありません。'
-          );
+        if(materials.isEmpty){
+          setState(() {
+            isEmptyList = true;
+          });
+        }
+        else{
+          setState(() {
+            isEmptyList = false;
+          });
         }
 
       },
       onFailed: () {
-        if(gettingToast!=null && isFirstTime) {
-          gettingToast!.removeCustomToast();
-          CustomToast.show(context, message: 'データを取得できません。');
-        }
-    }
+        setState(() {
+          isEmptyList = true;
+        });
+        CustomToast.show(context, message: 'データを取得できません。');
+      }
     );
   }
 
-  void searchMaterialTakeBack({required String date, bool isFirstTime = true}) async {
-    FToast? gettingToast;
+  void searchMaterialTakeBack({required String date}) async {
     MaterialAPI.shared.getSearchListMaterial(
         searchDate: date,
         onStart: (){
-          if(isFirstTime){
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              CustomToast.show(
-                  context,
-                  onShow: (toast){
-                    gettingToast = toast;
-                  },
-                  message: '読み込み中です。', backGround: Colors.grey
-              );
-            });
-          }
+          setState(() {
+            isEmptyList = null;
+          });
         },
         onSuccess: (materials) {
-          if(gettingToast!=null && isFirstTime) gettingToast!.removeCustomToast();
-
           setState(() {
             checkboxState.clear();
             amountState.clear();
@@ -114,18 +97,22 @@ class _Page53DanhSachNhanLaiVatLieuState
               amountState.add(0);
             }
           });
-          if(materials.isEmpty && isFirstTime){
-            CustomToast.show(
-                context,
-                message: 'データがありません。'
-            );
+          if(materials.isEmpty){
+            setState(() {
+              isEmptyList = true;
+            });
+          }
+          else{
+            setState(() {
+              isEmptyList = false;
+            });
           }
         },
         onFailed: () {
-          if(gettingToast!=null && isFirstTime) {
-            gettingToast!.removeCustomToast();
-            CustomToast.show(context, message: 'データを取得できません。');
-          }
+          setState(() {
+            isEmptyList = true;
+          });
+          CustomToast.show(context, message: 'データを取得できません。');
         },
     );
   }
@@ -211,7 +198,7 @@ class _Page53DanhSachNhanLaiVatLieuState
                   child: TextButton(
                     onPressed: () {
                       if(dateSearchController.text.isEmpty){
-                        getMaterialTakeBack(isFirstTime: false);
+                        getMaterialTakeBack();
                       }
                       else if(isDate(dateSearchController.text, 'yyyy-MM-dd')){
                         searchMaterialTakeBack(date: dateSearchController.text);
@@ -236,16 +223,27 @@ class _Page53DanhSachNhanLaiVatLieuState
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Flexible(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: _buildRows(materials.length + 1),
-                        ),
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Flexible(
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: _buildRows(materials.length + 1),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    Visibility(
+                      visible: isEmptyList == null || isEmptyList!,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 50),
+                        child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
                       ),
                     )
                   ],
@@ -281,13 +279,10 @@ class _Page53DanhSachNhanLaiVatLieuState
                       returnSus: returnSus,
                       onSuccess: (result) {
                         if(dateSearchController.text.isEmpty){
-                          getMaterialTakeBack(isFirstTime: false);
+                          getMaterialTakeBack();
                         }
                         else if(isDate(dateSearchController.text, 'yyyy-MM-dd')){
-                          searchMaterialTakeBack(
-                            date: dateSearchController.text,
-                            isFirstTime: false
-                          );
+                          searchMaterialTakeBack(date: dateSearchController.text);
                         }
                         CustomToast.show(context,
                             message: '画面で選択した項目を登録できました。',

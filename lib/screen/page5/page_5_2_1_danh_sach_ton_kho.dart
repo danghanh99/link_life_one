@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
 
   List<MemberCategory> members = [];
   int currentDropdownIndex = -1;
+  String defaultDropDownItem = '部材カテゴリを選択';
   List<DefaultInventory> inventories = [];
   List<int> selectAmounts = [];
   final TextEditingController _jisyaCodeController = TextEditingController();
@@ -40,6 +42,8 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
   final TextEditingController _syohinNameController = TextEditingController();
 
   List<bool> checkBoxState = [];
+
+  bool? isEmptyList;
 
   @override
   void initState() {
@@ -54,17 +58,15 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
 
   void getDataDropdown() {
     InventoryAPI.shared.getListMemberCategory(onSuccess: (members) {
-      log('getListMemberCategory onSuccess');
       if (members.isNotEmpty) {
         setState(() {
-          currentDropdownIndex = 0;
+          // currentDropdownIndex = 0;
           this.members = members;
         });
         // CustomToast.show(context,
         //     message: 'ドロップダウンリストのデータを取得できました。', backGround: Colors.green);
       }
     }, onFailed: () {
-      log('getListMemberCategory onFailed');
       CustomToast.show(context, message: 'ドロップダウンリストのデータを取得できません。');
     });
   }
@@ -73,30 +75,19 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
       {String categoryCode = '',
       String makerName = '',
       String jisyaCode = '',
-      String syohinName = ''}) {
+      String syohinName = ''}) async {
 
-    FToast? gettingToast;
-
-    InventoryAPI.shared.getListDefaultInventory(
+    await InventoryAPI.shared.getListDefaultInventory(
       categoryCode: categoryCode,
       makerName: makerName,
       jisyaCode: jisyaCode,
       syohinName: syohinName,
       onStart: (){
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          CustomToast.show(
-              context,
-              onShow: (toast){
-                gettingToast = toast;
-              },
-              message: '読み込み中です。', backGround: Colors.grey
-          );
+        setState(() {
+          isEmptyList = null;
         });
       },
       onSuccess: (inventories) {
-
-        if(gettingToast!=null) gettingToast!.removeCustomToast();
-
         selectAmounts.clear();
         checkBoxState.clear();
         setState(() {
@@ -105,17 +96,20 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
           checkBoxState = List.generate(inventories.length, (index) => false);
         });
         if(inventories.isEmpty){
-          CustomToast.show(
-              context,
-              message: 'データはありません。'
-          );
+          setState(() {
+            isEmptyList = true;
+          });
         }
-        // CustomToast.show(context,
-        //     message: 'データリストを取得できました。', backGround: Colors.green);
+        else{
+          setState(() {
+            isEmptyList = false;
+          });
+        }
       },
       onFailed: () {
-        if(gettingToast!=null) gettingToast!.removeCustomToast();
-
+        setState(() {
+          isEmptyList = true;
+        });
         CustomToast.show(context, message: 'データリストを取得できません。');
       }
     );
@@ -200,18 +194,20 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      // String categoryCode =
-                      //     members.elementAt(currentDropdownIndex).kbnCode ?? '';
-                      String categoryCode = '';
-                      String makerName = _makerNameController.text;
-                      String jisyaCode = _jisyaCodeController.text;
-                      String syohinName = _syohinNameController.text;
-                      log('search with params: categoryCode: $categoryCode makerName: $makerName jisyaCode: $jisyaCode syohinName: $syohinName');
-                      getInventories(
-                          categoryCode: categoryCode,
-                          makerName: makerName,
-                          jisyaCode: jisyaCode,
-                          syohinName: syohinName);
+                      if(currentDropdownIndex==-1){
+                        CustomToast.show(context, message: "部材カテゴリを選択");
+                      }
+                      else{
+                        String categoryCode = members[currentDropdownIndex].kbnCode ?? '';
+                        String makerName = _makerNameController.text;
+                        String jisyaCode = _jisyaCodeController.text;
+                        String syohinName = _syohinNameController.text;
+                        getInventories(
+                            categoryCode: categoryCode,
+                            makerName: makerName,
+                            jisyaCode: jisyaCode,
+                            syohinName: syohinName);
+                      }
                     },
                     child: const Text(
                       '検索',
@@ -237,7 +233,7 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
                   child: TextButton(
                     onPressed: () {
                       setState(() {
-                        currentDropdownIndex = 0;
+                        currentDropdownIndex = -1;
                       });
                       _jisyaCodeController.text = '';
                       _makerNameController.text = '';
@@ -265,8 +261,16 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _buildRows(inventories.length + 1),
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: _buildRows(inventories.length + 1) + [
+                    Visibility(
+                      visible: isEmptyList == null || isEmptyList!,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 50),
+                        child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
@@ -344,17 +348,33 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
           ],
         ),
       ));
-      if (i < members.length - 1) {
+      if (i < members.length) {
         widgets.add(const PopupMenuDivider());
       }
     }
+
+    widgets.add(PopupMenuItem(
+      height: 25,
+      padding: const EdgeInsets.only(right: 0, left: 10),
+      value: members.length,
+      child: Row(
+        children: [
+          const SizedBox(
+            width: 14,
+          ),
+          Text(
+            defaultDropDownItem,
+          ),
+        ],
+      ),
+    ));
 
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
       onSelected: (number) {
         setState(() {
-          currentDropdownIndex = number;
+          currentDropdownIndex = number < members.length ? number : -1;
         });
       },
       shape: const RoundedRectangleBorder(
@@ -479,7 +499,7 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
         _dropDownButton(
             context,
             currentDropdownIndex < 0
-                ? ''
+                ? defaultDropDownItem
                 : members.elementAt(currentDropdownIndex).kbnmsaiName ?? '',
             width ?? 30),
       ],
@@ -664,26 +684,15 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
     ];
 
     Size size = MediaQuery.of(context).size;
-    List<double> colwidth =
-        MediaQuery.of(context).orientation == Orientation.portrait
-            ? [
-                30,
-                130,
-                130,
-                100,
-                130,
-                120,
-                120,
-              ]
-            : [
-                30,
-                (size.width - 33) * 2 / 8 + -30,
-                (size.width - 33) / 8,
-                (size.width - 33) / 8,
-                (size.width - 33) * 2 / 8,
-                (size.width - 33) / 8,
-                (size.width - 33) / 8,
-              ];
+    List<double> colwidth = [
+      30,
+      max(130, (size.width - 33) * 2 / 8 + -30),
+      max(130, (size.width - 33) / 8),
+      max(100, (size.width - 33) / 8),
+      max(130, (size.width - 33) * 2 / 8),
+      max(120, (size.width - 33) / 8),
+      max(120, (size.width - 33) / 8),
+    ];
 
     return List.generate(count, (col) {
       if (row == 0) {

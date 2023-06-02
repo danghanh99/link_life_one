@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:link_life_one/api/inventory/get_buzai_api.dart';
@@ -41,11 +43,10 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
   final TextEditingController mekaController = TextEditingController();
   final TextEditingController shohinmeiController = TextEditingController();
 
-  late int currentRadioRow;
+  bool? isEmptyList;
 
   @override
   void initState() {
-    currentRadioRow = -1;
     getListBuzai();
     getPullDown();
     super.initState();
@@ -57,36 +58,35 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
     String? hinban,
     String? syohinName
   }) async {
-    FToast? gettingToast;
     await GetBuzaiApi().getBuzai(
       buzaiBunrui: buzaiBunrui,
       makerName: makerName,
       hinban: hinban,
       syohinName: syohinName,
       onStart: (){
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          CustomToast.show(
-              context,
-              onShow: (toast){
-                gettingToast = toast;
-              },
-              message: '読み込み中です。', backGround: Colors.grey
-          );
+        setState(() {
+          isEmptyList = null;
         });
       },
       onSuccess: (buzaiResponse) {
-        if(gettingToast!=null) gettingToast!.removeCustomToast();
         setState(() {
           listBuzai.clear();
           listBuzai = buzaiResponse;
         });
         if(buzaiResponse.isEmpty){
-          CustomToast.show(
-              context,
-              message: 'データはありません。'
-          );
+          setState(() {
+            isEmptyList = true;
+          });
+        }
+        else{
+          setState(() {
+            isEmptyList = false;
+          });
         }
       }, onFailed: () {
+        setState(() {
+          isEmptyList = true;
+        });
         CustomToast.show(context, message: 'データを取得出来ませんでした。');
       }
     );
@@ -244,8 +244,16 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: _buildRows(listBuzai.length + 1),
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: _buildRows(listBuzai.length + 1) + [
+                      Visibility(
+                        visible: isEmptyList == null || isEmptyList!,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 50),
+                          child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
@@ -524,26 +532,15 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
     ];
 
     Size size = MediaQuery.of(context).size;
-    List<double> colwidth =
-        MediaQuery.of(context).orientation == Orientation.portrait
-            ? [
-                30,
-                130,
-                130,
-                100,
-                100,
-                130,
-                130,
-              ]
-            : [
-                30,
-                (size.width - 33) * 2 / 7 + -30,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-              ];
+    List<double> colwidth = [
+      30,
+      max(130, (size.width - 33) * 2 / 7 + -30),
+      max(130, (size.width - 33) / 7),
+      max(100, (size.width - 33) / 7),
+      max(100, (size.width - 33) / 7),
+      max(130, (size.width - 33) / 7),
+      max(130, (size.width - 33) / 7),
+    ];
 
     return List.generate(count, (col) {
       if (row == 0) {

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,33 +32,23 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
 
   List<InventorySchedule> schedules = [];
 
+  bool? isEmptyList;
+
   @override
   void initState() {
     super.initState();
     getData();
   }
 
-  Future<void> getData({isFirstTime = true}) async {
-
-    FToast? gettingToast;
+  Future<void> getData() async {
 
     InventoryAPI.shared.getListInventorySchedule(
       onStart: (){
-        if(isFirstTime){
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            CustomToast.show(
-                context,
-                onShow: (toast){
-                  gettingToast = toast;
-                },
-                message: '読み込み中です。', backGround: Colors.grey
-            );
-          });
-        }
+        setState(() {
+          isEmptyList = null;
+        });
       },
       onSuccess: (result) {
-        if(isFirstTime && gettingToast!=null) gettingToast!.removeCustomToast();
-
         currentCheckBoxState.clear();
         WidgetsBinding.instance.addPostFrameCallback((_) {
           setState(() {
@@ -66,18 +57,24 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
           for(var res in result){
             currentCheckBoxState.add(false);
           }
-          if(isFirstTime && result.isEmpty){
-            CustomToast.show(context,
-                message: 'データはありません。');
+          if(result.isEmpty){
+            setState(() {
+              isEmptyList = true;
+            });
+          }
+          else{
+            setState(() {
+              isEmptyList = false;
+            });
           }
         });
       // CustomToast.show(context,
       //     message: 'データリストを取得できました。', backGround: Colors.green);
     }, onFailed: () {
-        if(isFirstTime){
-          if(gettingToast!=null) gettingToast!.removeCustomToast();
-          CustomToast.show(context, message: 'データリストを取得できません。');
-        }
+      setState(() {
+        isEmptyList = true;
+      });
+        CustomToast.show(context, message: 'データリストを取得できません。');
     });
   }
 
@@ -88,7 +85,7 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
     }, onFailed: () {
       CustomToast.show(context, message: 'リストで選択した項目のデータを更新できません。');
     });
-    await getData(isFirstTime: false);
+    await getData();
   }
 
   void showAlertConfirm(List<String> nyukoId) {
@@ -120,23 +117,33 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Flexible(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: _buildRows(schedules.length + 1),
-                        ),
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Flexible(
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: _buildRows(schedules.length + 1),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    Visibility(
+                      visible: isEmptyList == null || isEmptyList!,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 50),
+                        child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
                       ),
                     )
                   ],
                 ),
               ),
             ),
-            // Expanded(child: Container()),
             const SizedBox(
               height: 10,
             ),
@@ -314,30 +321,17 @@ class _Page51LichKiemKeState extends State<Page51LichKiemKe> {
     ];
 
     Size size = MediaQuery.of(context).size;
-    List<double> colwidth =
-        MediaQuery.of(context).orientation == Orientation.portrait
-            ? [
-                30,
-                170,
-                130,
-                100,
-                100,
-                100,
-                50,
-                100,
-                100,
-              ]
-            : [
-                30,
-                (size.width - 33) / 9,
-                (size.width - 33) / 9,
-                (size.width - 33) / 9,
-                (size.width - 33) / 9,
-                2 * (size.width - 33) / 9,
-                0.7 * (size.width - 33) / 9,
-                (size.width - 33) / 9,
-                (size.width - 33) / 9,
-              ];
+    List<double> colwidth = [
+      30,
+      max(170, (size.width - 33) / 9),
+      max(130, (size.width - 33) / 9),
+      max(100, (size.width - 33) / 9),
+      max(100, (size.width - 33) / 9),
+      max(100, 2 * (size.width - 33) / 9),
+      max(50, 0.7 * (size.width - 33) / 9),
+      max(100, (size.width - 33) / 9),
+      max(100, (size.width - 33) / 9)
+    ];
 
     return List.generate(count, (col) {
       if (row == 0) {

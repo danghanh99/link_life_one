@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:link_life_one/api/order/saubulist/get_part_list.dart';
 import 'package:link_life_one/api/order/saubulist/get_pull_down_category.dart';
@@ -39,6 +41,8 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
 
   String pulldownCategory = 'カテゴリを選択';
 
+  bool? isEmptyList;
+
   @override
   void initState() {
     currentRadioRow = -1;
@@ -66,7 +70,10 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
   }
 
   Future<dynamic> callGetPartList() async {
-    final dynamic result = await GetPartList().getPartList(onSuccess: (data) {
+    setState(() {
+      isEmptyList = null;
+    });
+    await GetPartList().getPartList(onSuccess: (data) {
       List<dynamic> elements = [];
       for (var element in data) {
         elements.add(toMap(element));
@@ -74,8 +81,17 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
       saibuList.clear();
       setState(() {
         saibuList.addAll(elements);
+        if(saibuList.isEmpty){
+          isEmptyList = true;
+        }
+        else{
+          isEmptyList = false;
+        }
       });
     }, onFailed: () {
+      setState(() {
+        isEmptyList = true;
+      });
       CustomToast.show(context, message: "データを取得出来ませんでした。");
     });
   }
@@ -231,8 +247,16 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _buildRows(saibuList.length + 1),
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: _buildRows(saibuList.length + 1) + [
+                    Visibility(
+                      visible: isEmptyList == null || isEmptyList!,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 50),
+                        child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
@@ -284,7 +308,10 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
   }
 
   _callSearchAPI() async {
-    final dynamic result = await GetPartList().getPartList2(
+    setState(() {
+      isEmptyList = null;
+    });
+    await GetPartList().getPartList2(
       bunrui: pulldownCategory!='カテゴリを選択' ? pulldownCategory : '',
       markerName: markerNameEditTextController.text,
       hinban: hinbanEditTextController.text,
@@ -297,8 +324,17 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
         saibuList.clear();
         setState(() {
           saibuList.addAll(elements);
+          if(saibuList.isEmpty){
+            isEmptyList = true;
+          }
+          else{
+            isEmptyList = false;
+          }
         });
       }, onFailed: () {
+        setState(() {
+          isEmptyList = true;
+        });
         CustomToast.show(context, message: "データを取得出来ませんでした。");
       }
     );
@@ -537,26 +573,15 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
     ];
 
     Size size = MediaQuery.of(context).size;
-    List<double> colwidth =
-        MediaQuery.of(context).orientation == Orientation.portrait
-            ? [
-                30,
-                130,
-                130,
-                100,
-                100,
-                130,
-                130,
-              ]
-            : [
-                30,
-                (size.width - 33) * 2 / 7 + -30,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-              ];
+    List<double> colwidth = [
+      30,
+      max(130, (size.width - 33) * 2 / 7 + -30),
+      max(130, (size.width - 33) / 7),
+      max(100, (size.width - 33) / 7),
+      max(100, (size.width - 33) / 7),
+      max(130, (size.width - 33) / 7),
+      max(130, (size.width - 33) / 7),
+    ];
 
     return List.generate(count, (col) {
       if (row == 0) {

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,6 +35,8 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
   Barcode? result;
   bool isShowScandQR = false;
 
+  bool? isEmptyList;
+
   // List<Widget> _buildCells(int count) {
   //   return List.generate(
   //     count,
@@ -66,26 +70,15 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     ];
 
     Size size = MediaQuery.of(context).size;
-    List<double> colwidth =
-        MediaQuery.of(context).orientation == Orientation.portrait
-            ? [
-                40,
-                130,
-                130,
-                100,
-                240,
-                100,
-                160,
-              ]
-            : [
-                40,
-                (size.width - 33) * 2 / 7 + -40,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-              ];
+    List<double> colwidth = [
+      40,
+      max(130, (size.width - 33) * 2 / 7 + -40),
+      max(130, (size.width - 33) / 7),
+      max(100, (size.width - 33) / 7),
+      max(240, (size.width - 33) / 7),
+      max(100, (size.width - 33) / 7),
+      max(160, (size.width - 33) / 7)
+    ];
 
     return List.generate(count, (col) {
       if (row == 0) {
@@ -281,23 +274,11 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
   }
 
   void checkSave() {
-
-    FToast? gettingToast;
-
     MaterialAPI.shared.checkSave(onStart: () {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        CustomToast.show(
-            context,
-            onShow: (toast){
-              gettingToast = toast;
-            },
-            message: '読み込み中です。', backGround: Colors.grey
-        );
+      setState(() {
+        isEmptyList = null;
       });
     }, onSuccess: (showPopUp) {
-
-      if(gettingToast!=null) gettingToast!.removeCustomToast();
-
       if (showPopUp) {
         showDialog(
           context: context,
@@ -319,6 +300,9 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                 actions: <Widget>[
                   TextButton(
                       onPressed: () {
+                        setState(() {
+                          isEmptyList = false;
+                        });
                         Navigator.pop(dialogContext);
                       },
                       child: const Text(
@@ -349,9 +333,6 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
         );
       } else {}
     }, onSuccessList: (listMaterials) {
-
-      if(gettingToast!=null) gettingToast!.removeCustomToast();
-
       setState(() {
         materials = listMaterials;
         checkboxsState.clear();
@@ -359,15 +340,20 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
           checkboxsState.add(false);
         }
       });
-      if (listMaterials.isEmpty) {
-        CustomToast.show(context, message: 'データがありません。');
+      if (materials.isEmpty) {
+        setState(() {
+          isEmptyList = true;
+        });
       }
-      // CustomToast.show(context,
-      //     message: '保存したデータを確認できました。', backGround: Colors.green);
+      else{
+        setState(() {
+          isEmptyList = false;
+        });
+      }
     }, onFailed: () {
-
-      if(gettingToast!=null) gettingToast!.removeCustomToast();
-
+      setState(() {
+        isEmptyList = true;
+      });
       CustomToast.show(context, message: '保存したデータを確認できません。');
     });
   }
@@ -383,8 +369,21 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
             checkboxsState.add(false);
           }
         });
+        if (materials.isEmpty) {
+          setState(() {
+            isEmptyList = true;
+          });
+        }
+        else{
+          setState(() {
+            isEmptyList = false;
+          });
+        }
       },
       onFailed: () {
+        setState(() {
+          isEmptyList = true;
+        });
         CustomToast.show(context, message: '保存したデータを確認できません。');
       }
     );
@@ -441,6 +440,12 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
               for(var m in materials) {
                 checkboxsState.add(false);
               }
+              if(materials.isEmpty){
+                isEmptyList = true;
+              }
+              else{
+                isEmptyList = false;
+              }
             });
             // CustomToast.show(
             //   context,
@@ -465,11 +470,20 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
             }
           });
           if(materials.isEmpty){
-            CustomToast.show(context,
-                message: 'データはありません。', backGround: Colors.green);
+            setState(() {
+              isEmptyList = true;
+            });
+          }
+          else{
+            setState(() {
+              isEmptyList = false;
+            });
           }
         },
         onFailed: () {
+          setState(() {
+            isEmptyList = true;
+          });
           CustomToast.show(context, message: 'データを取得できません。');
         });
   }
@@ -561,7 +575,15 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                         scrollDirection: Axis.vertical,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: _buildRows(materials.length, 1),
+                          children: _buildRows(materials.length, 1) + [
+                            Visibility(
+                              visible: (isEmptyList == null || isEmptyList!) && materials.isEmpty,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 50),
+                                child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ),
