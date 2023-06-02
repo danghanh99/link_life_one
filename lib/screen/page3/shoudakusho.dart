@@ -32,6 +32,7 @@ class ShoudakuSho extends StatefulWidget {
   final Function() onSaveSuccess;
   final List<KojiHoukokuModel> kojiHoukoku;
   final bool checkSign;
+  final bool checkFlg;
   const ShoudakuSho(
       {super.key,
       this.initialDate,
@@ -43,7 +44,8 @@ class ShoudakuSho extends StatefulWidget {
       required this.biko,
       required this.onSaveSuccess,
       required this.kojiHoukoku,
-      required this.checkSign});
+      required this.checkSign,
+      required this.checkFlg});
 
   @override
   State<ShoudakuSho> createState() => _ShoudakuShoState();
@@ -112,17 +114,28 @@ class _ShoudakuShoState extends State<ShoudakuSho> {
   }
 
   void loadCachedata(BuildContext context) {
-    List<bool> selectedCheckbox =
-        context.read<CacheNotifier>().cacheSelectedCheckBoxs[widget.jyucyuId] ??
-            [];
-    if (selectedCheckbox.isNotEmpty && selectedCheckbox.length == 7) {
-      checkedValue1 = selectedCheckbox.first;
-      checkedValue2 = selectedCheckbox[1];
-      checkedValue3 = selectedCheckbox[2];
-      checkedValue4 = selectedCheckbox[3];
-      checkedValue5 = selectedCheckbox[4];
-      checkedValue6 = selectedCheckbox[5];
-      checkedValue7 = selectedCheckbox[6];
+    if(widget.checkFlg){
+      checkedValue1 = true;
+      checkedValue2 = true;
+      checkedValue3 = true;
+      checkedValue4 = true;
+      checkedValue5 = true;
+      checkedValue6 = true;
+      checkedValue7 = true;
+    }
+    else{
+      List<bool> selectedCheckbox =
+          context.read<CacheNotifier>().cacheSelectedCheckBoxs[widget.jyucyuId] ??
+              [];
+      if (selectedCheckbox.isNotEmpty && selectedCheckbox.length == 7) {
+        checkedValue1 = selectedCheckbox.first;
+        checkedValue2 = selectedCheckbox[1];
+        checkedValue3 = selectedCheckbox[2];
+        checkedValue4 = selectedCheckbox[3];
+        checkedValue5 = selectedCheckbox[4];
+        checkedValue6 = selectedCheckbox[5];
+        checkedValue7 = selectedCheckbox[6];
+      }
     }
   }
 

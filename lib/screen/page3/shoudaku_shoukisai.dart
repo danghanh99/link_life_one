@@ -51,13 +51,14 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
   Map<int, Tuple2<TextEditingController?, FocusNode?>> codeCtrls = {};
   Map<int, Tuple2<TextEditingController?, FocusNode?>> quantityCtrls = {};
   Map<int, Tuple2<TextEditingController?, FocusNode?>> unitPriceCtrls = {};
-  TextEditingController remarkCtrl = TextEditingController();
+  final TextEditingController remarkCtrl = TextEditingController();
 
   late AutoScrollController _scrollController;
   int _firstVisibleItemIndex = 0;
 
   bool hasAnyEmpty = false;
   bool? checkSign;
+  bool? checkFlg;
 
   @override
   void initState() {
@@ -165,6 +166,12 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
           if (body["CHECK_SIGN"] != null) {
             checkSign = body["CHECK_SIGN"];
           }
+          if (body["CHECK_FLG"] != null) {
+            checkFlg = body["CHECK_FLG"];
+          }
+
+          remarkCtrl.text = KOJI_DATA['BIKO'].toString();
+
           loadCachedata(context);
         },
         onFailed: () {
@@ -187,7 +194,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
 
     String remark =
         context.read<CacheNotifier>().cacheRemarks[widget.JYUCYU_ID] ?? '';
-    remarkCtrl.text = remark;
+    remarkCtrl.text = remark.isEmpty ? remarkCtrl.text : remark;
     setState(() {});
   }
 
@@ -1195,6 +1202,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
                       callGetKojiHoukoku();
                     },
                     kojiHoukoku: widget.kojiHoukoku,
+                    checkFlg: checkFlg ?? false,
                   ),
                 ),
               );
