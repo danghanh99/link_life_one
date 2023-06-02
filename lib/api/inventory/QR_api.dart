@@ -11,7 +11,7 @@ class QRApi {
 
   Future<void> getQRApi({
     required String hinban,
-    required Function(Inventory list) onSuccess,
+    required Function(List<Inventory> list) onSuccess,
     required Function onFailed,
   }) async {
     final box = Hive.box<User>('userBox');
@@ -24,7 +24,7 @@ class QRApi {
     if (response.statusCode == 200) {
       final List<dynamic> body = jsonDecode(response.body);
       // final dynamic body = jsonDecode(response.body);
-      onSuccess.call(Inventory.fromJson(body.first));
+      onSuccess.call(body.map((e) => Inventory.fromJson(e)).toList());
     } else {
       onFailed.call();
     }

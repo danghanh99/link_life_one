@@ -474,7 +474,7 @@ class _TanaoroshiDanhMucHangTonKho62PageState
                                   hinban: code,
                                   onSuccess: (api) {
                                     setState(() {
-                                      listInventory.add(api);
+                                      listInventory.addAll(api);
                                     });
                                   },
                                   onFailed: () {
