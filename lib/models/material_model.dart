@@ -58,7 +58,7 @@ class MaterialModel {
     makerName: inventory.makerName,
     jisyaCode: inventory.jisyaCode,
     syoshinName: inventory.syoshinName,
-    jissu: inventory.jissu,
+    jissu: (inventory.jissu??'').isEmpty ? '${inventory.zaikoSu}' : inventory.jissu,
     suryo: ''
   );
 
@@ -67,7 +67,7 @@ class MaterialModel {
       makerName: inventory.makerName,
       jisyaCode: inventory.jisyaCode,
       syoshinName: inventory.syoshinName,
-      jissu: inventory.jissu,
+      jissu: (inventory.jissu??'').isEmpty ? '${inventory.zaikoSu}' : inventory.jissu,
       suryo: '$suryo'
   );
 

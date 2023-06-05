@@ -194,20 +194,15 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      if(currentDropdownIndex==-1){
-                        CustomToast.show(context, message: "部材カテゴリを選択");
-                      }
-                      else{
-                        String categoryCode = members[currentDropdownIndex].kbnCode ?? '';
-                        String makerName = _makerNameController.text;
-                        String jisyaCode = _jisyaCodeController.text;
-                        String syohinName = _syohinNameController.text;
-                        getInventories(
-                            categoryCode: categoryCode,
-                            makerName: makerName,
-                            jisyaCode: jisyaCode,
-                            syohinName: syohinName);
-                      }
+                      String categoryCode = currentDropdownIndex == -1 ? '' : (members[currentDropdownIndex].kbnCode ?? '');
+                      String makerName = _makerNameController.text;
+                      String jisyaCode = _jisyaCodeController.text;
+                      String syohinName = _syohinNameController.text;
+                      getInventories(
+                          categoryCode: categoryCode,
+                          makerName: makerName,
+                          jisyaCode: jisyaCode,
+                          syohinName: syohinName);
                     },
                     child: const Text(
                       '検索',

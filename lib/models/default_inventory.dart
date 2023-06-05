@@ -5,6 +5,8 @@ class DefaultInventory {
   String? jisyaCode;
   String? syoshinName;
   String? jissu;
+  String? hikiZumiSu;
+  int? zaikoSu;
 
   DefaultInventory(
       {this.zaikoId,
@@ -12,16 +14,21 @@ class DefaultInventory {
       this.makerName,
       this.jisyaCode,
       this.syoshinName,
-      this.jissu});
+      this.jissu,
+      this.hikiZumiSu,
+      this.zaikoSu});
 
   factory DefaultInventory.fromJson(Map<String, dynamic> json) =>
       DefaultInventory(
-          zaikoId: '',
+          zaikoId: json['ZAIKO_ID'] ?? '',
           categoryName: json['CTGORY_NAME'] ?? '',
           makerName: json['MAKER_NAME'] ?? '',
-          jisyaCode: json['HINBAN'] ?? '',
+          jisyaCode: json['JISYA_CD'] ?? json['HINBAN'] ?? '',
           syoshinName: json['SYOHIN_NAME'] ?? '',
-          jissu: json['JISSU'] ?? '');
+          jissu: json['JISSU'] ?? '',
+          hikiZumiSu: json['HIKI_ZUMI_SU'] ?? '',
+          zaikoSu: json['ZAIKO_SU'] ?? 0
+      );
 
   factory DefaultInventory.fromQRJson(Map<String, dynamic> json) =>
       DefaultInventory(
@@ -30,5 +37,8 @@ class DefaultInventory {
           makerName: json['MAKER_NAME'] ?? '',
           jisyaCode: json['HINBAN'] ?? '',
           syoshinName: json['SYOHIN_NAME'] ?? '',
-          jissu: '${json['ZAIKO_SU']}' ?? '');
+          jissu: '${json['JISSU']}' ?? '',
+          hikiZumiSu: json['HIKI_ZUMI_SU'] ?? '',
+          zaikoSu: json['ZAIKO_SU'] ?? 0
+      );
 }

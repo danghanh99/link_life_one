@@ -1381,7 +1381,7 @@ class LocalStorageServices{
 
       if(kh.isEmpty) continue;
 
-      late TKojimsai tKojimsai;
+      TKojimsai? tKojimsai;
       for(TKojimsai km in tKojimsais){
         if(km.jyucyumsaiId==kh.jyucyuMsaiId && km.jyucyuId==jyucyuId){
           tKojimsai = km;
@@ -1405,37 +1405,39 @@ class LocalStorageServices{
           }
         }
       }
-      tKojimsai.jyucyumsaiIdKikan = kh.jyucyuMsaiIdKikan;
-      tKojimsai.hinban = kh.hinban;
-      tKojimsai.makerCd = kh.makerCd;
-      tKojimsai.ctgotyCd = kh.ctgoryCd;
-      tKojimsai.suryo = kh.suryo;
-      tKojimsai.kingak = kh.kingak;
-      tKojimsai.kisetuHinban = kh.kisetuHinban;
-      tKojimsai.kisetuMaker = kh.kisetuMaker;
-      tKojimsai.kensetuKeitai = kh.kensetuKeitai;
-      if(kh.isChangeBefore){
-        tKojimsai.befSekoPhotoFilePath = _isNetworkPath(kh.befSekiPhotoFilePath)?kh.befSekiPhotoFilePath:await FileController().copyFile(file: File(kh.befSekiPhotoFilePath!), isNew: true, onFailed: (){});
+      if(tKojimsai!=null){
+        tKojimsai.jyucyumsaiIdKikan = kh.jyucyuMsaiIdKikan;
+        tKojimsai.hinban = kh.hinban;
+        tKojimsai.makerCd = kh.makerCd;
+        tKojimsai.ctgotyCd = kh.ctgoryCd;
+        tKojimsai.suryo = kh.suryo;
+        tKojimsai.kingak = kh.kingak;
+        tKojimsai.kisetuHinban = kh.kisetuHinban;
+        tKojimsai.kisetuMaker = kh.kisetuMaker;
+        tKojimsai.kensetuKeitai = kh.kensetuKeitai;
+        if(kh.isChangeBefore){
+          tKojimsai.befSekoPhotoFilePath = _isNetworkPath(kh.befSekiPhotoFilePath)?kh.befSekiPhotoFilePath:await FileController().copyFile(file: File(kh.befSekiPhotoFilePath!), isNew: true, onFailed: (){});
+        }
+        if(kh.isChangeAfter){
+          tKojimsai.aftSekoPhotoFilePath = _isNetworkPath(kh.aftSekoPhotoFilePath)?kh.aftSekoPhotoFilePath:await FileController().copyFile(file: File(kh.aftSekoPhotoFilePath!), isNew: true, onFailed: (){});
+        }
+        tKojimsai.otherPhotoFolderPath = otherPhotosPathOrBase64;
+        tKojimsai.tuikaJisyaCd = 'KOJ-${kh.tuikaJisyaCd}';
+        tKojimsai.tuikaSyohinName = kh.tuikaSyohinName;
+        tKojimsai.updPGID = "KOJ1120F";
+        tKojimsai.updTantCd = loginId;
+        tKojimsai.updYMD = DateFormat('yyyy-MM-dd HH:mm:ss', 'ja').format(now).toString();
+        tKojimsai.storage(
+            localBefSekoPhotoFilePath: kh.isChangeBefore?tKojimsai.befSekoPhotoFilePath:null,
+            localAftSekoPhotoFilePath: kh.isChangeAfter?tKojimsai.aftSekoPhotoFilePath:null,
+            localOtherSekoPhotoFilePath: kh.isAddOthers?tKojimsai.otherPhotoFolderPath:null
+        );
+        await LocalStorageBase.add(
+            boxName: boxKojimsaiName,
+            key: '${tKojimsai.jyucyuId}_${tKojimsai.jyucyumsaiId}',
+            model: tKojimsai
+        );
       }
-      if(kh.isChangeAfter){
-        tKojimsai.aftSekoPhotoFilePath = _isNetworkPath(kh.aftSekoPhotoFilePath)?kh.aftSekoPhotoFilePath:await FileController().copyFile(file: File(kh.aftSekoPhotoFilePath!), isNew: true, onFailed: (){});
-      }
-      tKojimsai.otherPhotoFolderPath = otherPhotosPathOrBase64;
-      tKojimsai.tuikaJisyaCd = 'KOJ-${kh.tuikaJisyaCd}';
-      tKojimsai.tuikaSyohinName = kh.tuikaSyohinName;
-      tKojimsai.updPGID = "KOJ1120F";
-      tKojimsai.updTantCd = loginId;
-      tKojimsai.updYMD = DateFormat('yyyy-MM-dd HH:mm:ss', 'ja').format(now).toString();
-      tKojimsai.storage(
-        localBefSekoPhotoFilePath: kh.isChangeBefore?tKojimsai.befSekoPhotoFilePath:null,
-        localAftSekoPhotoFilePath: kh.isChangeAfter?tKojimsai.aftSekoPhotoFilePath:null,
-        localOtherSekoPhotoFilePath: kh.isAddOthers?tKojimsai.otherPhotoFolderPath:null
-      );
-      await LocalStorageBase.add(
-          boxName: boxKojimsaiName,
-          key: '${tKojimsai.jyucyuId}_${tKojimsai.jyucyumsaiId}',
-          model: tKojimsai
-      );
     }
 
     //INSERT T_KOJI_CHECK
