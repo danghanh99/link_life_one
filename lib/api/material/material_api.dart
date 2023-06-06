@@ -160,6 +160,7 @@ class MaterialAPI {
   }
 
   Future<void> getListDefaultMaterialTakeBack({
+    String? searchDate,
     Function? onStart,
     required Function(List<MaterialTakeBackModel>) onSuccess,
     required Function onFailed,
@@ -167,7 +168,7 @@ class MaterialAPI {
     if(onStart!=null) onStart.call();
     String currentDate = DateFormat(('yyyy-MM-dd')).format(DateTime.now());
     String urlEndpoint =
-        '${Constant.getListDefaultMaterialTakeBack}TANT_CD=${user.TANT_CD}&SYUKKO_DATE=$currentDate';
+        '${Constant.getListDefaultMaterialTakeBack}TANT_CD=${user.TANT_CD}&SYUKKO_DATE=${searchDate ?? currentDate}';
 
     final Response response = await RestAPI.shared.getData(urlEndpoint);
 
@@ -181,26 +182,26 @@ class MaterialAPI {
     }
   }
 
-  Future<void> getSearchListMaterial({
-    required String searchDate,
-    Function? onStart,
-    required Function(List<MaterialTakeBackModel>) onSuccess,
-    required Function onFailed,
-  }) async {
-    if(onStart!=null) onStart.call();
-    String urlEndpoint = '${Constant.getSearchListMaterial}TANT_CD=${user.TANT_CD}&SEARCH_DATE=$searchDate';
-
-    final Response response = await RestAPI.shared.getData(urlEndpoint);
-
-    if (response.statusCode == 200) {
-      List<dynamic> data = response.data;
-      List<MaterialTakeBackModel> materials =
-      data.map((e) => MaterialTakeBackModel.fromJson(e)).toList();
-      onSuccess(materials);
-    } else {
-      onFailed();
-    }
-  }
+  // Future<void> getSearchListMaterial({
+  //   required String searchDate,
+  //   Function? onStart,
+  //   required Function(List<MaterialTakeBackModel>) onSuccess,
+  //   required Function onFailed,
+  // }) async {
+  //   if(onStart!=null) onStart.call();
+  //   String urlEndpoint = '${Constant.getSearchListMaterial}TANT_CD=${user.TANT_CD}&SEARCH_DATE=$searchDate';
+  //
+  //   final Response response = await RestAPI.shared.getData(urlEndpoint);
+  //
+  //   if (response.statusCode == 200) {
+  //     List<dynamic> data = response.data;
+  //     List<MaterialTakeBackModel> materials =
+  //     data.map((e) => MaterialTakeBackModel.fromJson(e)).toList();
+  //     onSuccess(materials);
+  //   } else {
+  //     onFailed();
+  //   }
+  // }
 
   Future<void> insertMaterialTakeBackById({
     required List<MaterialTakeBackModel> items,

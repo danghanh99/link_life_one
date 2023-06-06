@@ -568,7 +568,7 @@ class _Page521DanhSachTonKhoState extends State<Page521DanhSachTonKho> {
       case 4:
         return inventory.syoshinName ?? '';
       case 5:
-        return inventory.jissu ?? '';
+        return inventory.zaikoSu ?? '';
       default:
         return '';
     }

@@ -58,7 +58,7 @@ class _Page53DanhSachNhanLaiVatLieuState
             amountState.add(0);
           }
         });
-        if(materials.isEmpty){
+        if(this.materials.isEmpty){
           setState(() {
             isEmptyList = true;
           });
@@ -80,7 +80,7 @@ class _Page53DanhSachNhanLaiVatLieuState
   }
 
   void searchMaterialTakeBack({required String date}) async {
-    MaterialAPI.shared.getSearchListMaterial(
+    MaterialAPI.shared.getListDefaultMaterialTakeBack(
         searchDate: date,
         onStart: (){
           setState(() {
@@ -97,7 +97,7 @@ class _Page53DanhSachNhanLaiVatLieuState
               amountState.add(0);
             }
           });
-          if(materials.isEmpty){
+          if(this.materials.isEmpty){
             setState(() {
               isEmptyList = true;
             });
@@ -222,30 +222,27 @@ class _Page53DanhSachNhanLaiVatLieuState
             ),
             Expanded(
               child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
+                scrollDirection: Axis.horizontal,
                 child: Column(
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Flexible(
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: _buildRows(materials.length + 1),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Visibility(
-                      visible: isEmptyList == null || isEmptyList!,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 50),
-                        child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
+                    ..._buildRows(1, 0),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: _buildRows(materials.length, 1) + [
+                            Visibility(
+                              visible: isEmptyList == null || isEmptyList!,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 50),
+                                child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -529,10 +526,10 @@ class _Page53DanhSachNhanLaiVatLieuState
     }
   }
 
-  List<Widget> _buildRows(int count) {
+  List<Widget> _buildRows(int count, int start) {
     return List.generate(count, (index) {
       return Row(
-        children: _buildCells2(7, index),
+        children: _buildCells2(7, start+index),
       );
     });
   }
