@@ -195,10 +195,10 @@ class _TanaoroshiDanhMucHangTonKho62PageState
     });
   }
 
-  List<Widget> _buildRows(int count) {
+  List<Widget> _buildRows(int count, int start) {
     return List.generate(count, (index) {
       return Row(
-        children: _buildCells2(12, index),
+        children: _buildCells2(12, start + index),
       );
     });
   }
@@ -225,56 +225,33 @@ class _TanaoroshiDanhMucHangTonKho62PageState
             const SizedBox(
               height: 25,
             ),
-            listInventory.isNotEmpty
-                ? Expanded(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Flexible(
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: _buildRows(listInventory.length + 1),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Column(
+                  children: [
+                    ..._buildRows(1, 0),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: _buildRows(listInventory.length, 1) + [
+                            Visibility(
+                              visible: isEmptyList == null || isEmptyList!,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 50),
+                                child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
                               ),
-                            ),
-                          )
-                        ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  )
-                : Expanded(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Column(
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Flexible(
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: _buildRows(listInventory.length + 1),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          Visibility(
-                            visible: isEmptyList == null || isEmptyList!,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 50),
-                              child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                  ],
+                ),
+              ),
+            ),
             const SizedBox(
               height: 10,
             ),

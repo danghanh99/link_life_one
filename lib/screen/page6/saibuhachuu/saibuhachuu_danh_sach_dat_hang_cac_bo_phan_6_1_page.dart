@@ -282,21 +282,28 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
             ),
             Expanded(
               child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: _buildRows(listOrderKhongCoDinh.length + 1) + [
-                      Visibility(
-                        visible: isEmptyList == null || isEmptyList!,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 50),
-                          child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
+                scrollDirection: Axis.horizontal,
+                child: Column(
+                  children: [
+                    ..._buildRows(1, 0),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: _buildRows(listOrderKhongCoDinh.length, 1) + [
+                            Visibility(
+                              visible: isEmptyList == null || isEmptyList!,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 50),
+                                child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
+                              ),
+                            )
+                          ],
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -689,10 +696,10 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
     });
   }
 
-  List<Widget> _buildRows(int count) {
+  List<Widget> _buildRows(int count, int start) {
     return List.generate(count, (index) {
       return Row(
-        children: _buildCells2(7, index),
+        children: _buildCells2(7, start + index),
       );
     });
   }
