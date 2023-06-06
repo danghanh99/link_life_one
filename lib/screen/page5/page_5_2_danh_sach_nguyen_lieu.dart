@@ -104,7 +104,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
       return Container(
         decoration: BoxDecoration(
           border: Border.all(width: 0.5),
-          color: Colors.white,
+          color: materials[row - 1].autoFlg == '1'? Colors.black12 : Colors.white,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
         alignment: col == 1 || col == 2 || col == 3 || col == 4
@@ -112,12 +112,12 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
             : Alignment.center,
         width: colwidth[col],
         height: 50,
-        child: contentTable(col, row),
+        child: contentTable(col, row, autoFlg: materials[row - 1].autoFlg ?? '0'),
       );
     });
   }
 
-  Widget _moreButton(BuildContext context, int jussu, Function(int) onChange) {
+  Widget _moreButton(BuildContext context, int jussu, Function(int) onChange, {bool canChanged = true}) {
     List<PopupMenuEntry<int>> widgets = [];
 
     for (var i = 1; i <= jussu; i++) {
@@ -143,6 +143,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     return PopupMenuButton<int>(
       color: Colors.white,
       padding: EdgeInsets.zero,
+      enabled: canChanged,
       onSelected: (number) {
         onChange(number);
       },
@@ -156,7 +157,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     );
   }
 
-  Widget contentTable(int col, int row) {
+  Widget contentTable(int col, int row, {String autoFlg = '0'}) {
     if (col == 6) {
       return Row(
         children: [
@@ -183,7 +184,8 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
               setState(() {
                 materials[row - 1].suryo = '$number';
               });
-            }),
+            },
+            canChanged: materials[row - 1].autoFlg == '0'),
           ),
         ],
       );
@@ -234,10 +236,10 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
         ? Checkbox(
           activeColor: Colors.blue,
           checkColor: Colors.white,
-          value: checkboxsState[row - 1],
+          value: autoFlg == '0' ? checkboxsState[row - 1] : false,
           onChanged: (newValue) {
             setState(() {
-              checkboxsState[row - 1] = newValue ?? false;
+              checkboxsState[row - 1] = (autoFlg == '0' ? (newValue ?? false) : false);
             });
           },
         )
@@ -300,9 +302,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                 actions: <Widget>[
                   TextButton(
                       onPressed: () {
-                        setState(() {
-                          isEmptyList = false;
-                        });
+                        getListDefaultMaterialSave();
                         Navigator.pop(dialogContext);
                       },
                       child: const Text(
@@ -356,6 +356,31 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
       });
       CustomToast.show(context, message: '保存したデータを確認できません。');
     });
+  }
+
+  void getListDefaultMaterialSave() async {
+    await MaterialAPI.shared.getListDefaultMaterialSave(
+        onSuccess: (models){
+          setState(() {
+            materials = models;
+            checkboxsState.clear();
+            for(var m in materials) {
+              checkboxsState.add(false);
+            }
+          });
+          if (materials.isEmpty) {
+            setState(() {
+              isEmptyList = true;
+            });
+          }
+          else{
+            setState(() {
+              isEmptyList = false;
+            });
+          }
+        },
+        onFailed: (){}
+    );
   }
 
   void reloadList() {

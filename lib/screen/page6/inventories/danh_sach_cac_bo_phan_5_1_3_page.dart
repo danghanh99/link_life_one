@@ -282,7 +282,14 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
                               buzaiKanriGoban: e.BUZAI_KANRI_NO,
                               meekaa: e.MAKER_NAME,
                               hinban: e.HINBAN,
-                              shohinmei: e.SYOHIN_NAME)))
+                              shohinmei: e.SYOHIN_NAME,
+                              jisyaCd: e.jisyaCd,
+                              kbnmsaiName: e.kbnmsaiName,
+                              tougetsuJitsuZaiko: int.parse(e.jituzaikoSu ?? '0'),
+                              shukkoSuuryou: e.syukkojisekiSuryo,
+                              hacchuuSuuryou: e.buzaihacyumsaiSuryo,
+                              jissu: e.jissu
+                      )))
                           .toList());
                       Navigator.pop(context);
                     },
@@ -481,7 +488,7 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
     }
     if (col == 2) {
       return Text(
-        listBuzai.isNotEmpty ? listBuzai[row - 1].BUZAI_BUNRUI.toString() : '',
+        listBuzai.isNotEmpty ? listBuzai[row - 1].kbnmsaiName.toString() : '',
         style: const TextStyle(color: Colors.black),
       );
     }
@@ -500,6 +507,12 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
     if (col == 5) {
       return Text(
         listBuzai.isNotEmpty ? listBuzai[row - 1].SYOHIN_NAME.toString() : '',
+        style: const TextStyle(color: Colors.black),
+      );
+    }
+    if (col == 6) {
+      return Text(
+        listBuzai.isNotEmpty ? listBuzai[row - 1].jituzaikoSu.toString() : '',
         style: const TextStyle(color: Colors.black),
       );
     }

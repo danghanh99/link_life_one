@@ -337,16 +337,16 @@ class LocalStorageServices{
           if (others.runtimeType == List<String>) {
             otherPhotos = others;
           }
-          String otherPaths = '';
+          List<String> otherPaths = [];
           for(String p in otherPhotos){
             if(IdNameController().detectStateSuffix(p)>0){
-              otherPaths = '${otherPaths.isEmpty?'':'$otherPaths;'}${await _base64String(p)}';
+              otherPaths.add(await _base64String(p));// = '${otherPaths.isEmpty?'':'$otherPaths;'}${await _base64String(p)}';
             }
             else{
-              otherPaths = '${otherPaths.isEmpty?'':'$otherPaths;'}${km.originalOtherSekoPhotoFilePath![otherPhotos.indexOf(p)]}';//original Value
+              otherPaths.add(km.originalOtherSekoPhotoFilePath![otherPhotos.indexOf(p)]);// = '${otherPaths.isEmpty?'':'$otherPaths;'}${km.originalOtherSekoPhotoFilePath![otherPhotos.indexOf(p)]}';//original Value
             }
           }
-          chaneRecord['OTHER_PHOTO_FOLDERPATH'] = [otherPaths];
+          chaneRecord['OTHER_PHOTO_FOLDERPATH'] = otherPaths;
         }
 
         kojimsaiChangeData.add(chaneRecord);
@@ -660,6 +660,7 @@ class LocalStorageServices{
     var mGyosya = await LocalStorageBase.getValues(boxName: boxGyosyaName);
     var tkojimsai = await LocalStorageBase.getValues(boxName: boxKojimsaiName);
     var msyohin = await LocalStorageBase.getValues(boxName: boxSyohinName);
+    var tKojiCheck = await LocalStorageBase.getValues(boxName: boxKojiCheckName);
     var tKojiFilePath = await LocalStorageBase.getValues(boxName: boxKojiFilePathName);
 
     List<dynamic> kojiData = [];
@@ -681,7 +682,8 @@ class LocalStorageServices{
               "KOJIGYOSYA_CD": k.kojigyosyaCd,
               "KOJI_ST": k.kojiSt,
               "HOJIN_FLG": k.hojinFlg,
-              "KOJIGYOSYA_NAME": g.kojiGyosyaName
+              "KOJIGYOSYA_NAME": g.kojiGyosyaName,
+              "BIKO": k.biko
             });
           }
         }
@@ -718,11 +720,19 @@ class LocalStorageServices{
       }
     }
 
+    bool kojiCheck = false;
+    for(TKojiCheck k in tKojiCheck){
+      if(k.jyucyuId == jyucyuId && k.checkFlg1 == '1' && k.checkFlg2 == '1' && k.checkFlg3 == '1' && k.checkFlg4 == '1' && k.checkFlg5 == '1' && k.checkFlg6 == '1' && k.checkFlg7 == '1'){
+        kojiCheck = true;
+      }
+    }
+
     resultList.addAll({
       'KOJI_DATA': kojiData,
       'TABLE_DATA': tableData,
       'KOJI_KAKAKU': kojiKakaku,
-      'CHECK_SIGN': signCheck
+      'CHECK_SIGN': signCheck,
+      'CHECK_FLG': kojiCheck
     });
 
     return resultList;
@@ -1721,7 +1731,7 @@ class LocalStorageServices{
 
   Future<List<String>?> _storageLocalDirectoryList(dynamic urls) async {
     if(urls==null || urls.isEmpty) return null;
-    List urlList = '$urls'.split(';');
+    List urlList = (urls as List);
     List<String> storagePaths = [];
     for(var u in urlList){
       if(u!=null && u.isNotEmpty){

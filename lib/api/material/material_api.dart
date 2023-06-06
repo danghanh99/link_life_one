@@ -167,7 +167,7 @@ class MaterialAPI {
     if(onStart!=null) onStart.call();
     String currentDate = DateFormat(('yyyy-MM-dd')).format(DateTime.now());
     String urlEndpoint =
-        '${Constant.getListDefaultMaterialTakeBack}SYOZOKU_CD=${user.SYOZOKU_CD}&SYUKKO_DATE=$currentDate';
+        '${Constant.getListDefaultMaterialTakeBack}TANT_CD=${user.TANT_CD}&SYUKKO_DATE=$currentDate';
 
     final Response response = await RestAPI.shared.getData(urlEndpoint);
 
@@ -349,6 +349,23 @@ print('body: ${json.encode(body)}');
 print('res: ${response.data}');
     if (response.statusCode == 200) {
       onSuccess();
+    } else {
+      onFailed();
+    }
+  }
+
+  Future<void> getListDefaultMaterialSave({
+    required Function(List<MaterialModel>) onSuccess,
+    required Function() onFailed,
+  }) async {
+    String urlEndpoint = '${Constant.getListDefaultMaterialSave}SOKO_CD=${user.SYOZOKU_CD}&DELETE_SAVE_FLG=${0}';
+
+    final Response response = await RestAPI.shared.getData(urlEndpoint);
+
+    if (response.statusCode == 200) {
+      List data = response.data;
+      List<MaterialModel> models = data.map((e) => MaterialModel.fromJson(e)).toList();
+      onSuccess(models);
     } else {
       onFailed();
     }

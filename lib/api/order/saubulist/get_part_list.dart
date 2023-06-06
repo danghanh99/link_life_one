@@ -10,6 +10,10 @@ class GetPartList {
   GetPartList() : super();
 
   Future<List<dynamic>> getPartList({
+    String? bunrui = '',
+    String? markerName = '',
+    String? hinban = '',
+    String? syohinName = '',
     required Function(List<dynamic>) onSuccess,
     required Function onFailed,
   }) async {
@@ -18,7 +22,7 @@ class GetPartList {
 
     final response = await http.get(
       Uri.parse(
-          "${Constant.url}Request/Order/requestGetPartList.php?SYOZOKU_CD=${SYOZOKU_CD}"),
+          "${Constant.url}Request/Order/requestGetPartList.php?SYOZOKU_CD=$SYOZOKU_CD&BUZAI_BUNRUI=$bunrui&HINBAN=$hinban&MAKER_NAME=$markerName&SYOHIN_NAME=$syohinName"),
     );
 
     if (response.statusCode == 200) {

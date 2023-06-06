@@ -65,6 +65,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
       "HACYU_TANKA": element['LOT'] ?? '',
       "TANI_CD": element['TANI'] ?? '',
       "HAIBAN_FLG": element ['HAIBAN_FLG'] ?? '0',
+      "KBNMSAI_NAME": element['KBNMSAI_NAME'] ?? '',
       'status': false
     };
   }
@@ -242,28 +243,29 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
             const SizedBox(
               height: 10,
             ),
-            SingleChildScrollView(
-              scrollDirection: Axis.vertical,
+            Expanded(
               child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: _buildRows(saibuList.length + 1) + [
-                    Visibility(
-                      visible: isEmptyList == null || isEmptyList!,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 50),
-                        child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
-                      ),
-                    )
-                  ],
+                scrollDirection: Axis.vertical,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: _buildRows(saibuList.length + 1) + [
+                      Visibility(
+                        visible: isEmptyList == null || isEmptyList!,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 50),
+                          child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
             const SizedBox(
               height: 10,
             ),
-            Expanded(child: Container()),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -311,7 +313,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
     setState(() {
       isEmptyList = null;
     });
-    await GetPartList().getPartList2(
+    await GetPartList().getPartList(
       bunrui: pulldownCategory!='カテゴリを選択' ? pulldownCategory : '',
       markerName: markerNameEditTextController.text,
       hinban: hinbanEditTextController.text,
@@ -518,7 +520,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
         value = saibuList[row - 1]["BUZAI_HACYUMSAI_ID"] ?? saibuList[row - 1]["BUZAI_KANRI_NO"] ?? '';
       }
       if (col == 2) {
-        value = saibuList[row - 1]["BUNRUI"] ?? saibuList[row - 1]["BUZAI_BUNRUI"] ?? '';
+        value = saibuList[row - 1]["KBNMSAI_NAME"] ?? '';
       }
       if (col == 3) {
         value = saibuList[row - 1]["MAKER_NAME"] ?? saibuList[row - 1]["MAKER_NAME_BUZAI"] ?? '';

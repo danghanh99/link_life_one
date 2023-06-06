@@ -16,6 +16,7 @@ class MaterialModel {
   String? zaikoSybetCode;
   String? zaikoId;
   String? autoFlg;
+  String? zaikoSu;
 
   MaterialModel({
     this.syukkoId,
@@ -32,7 +33,8 @@ class MaterialModel {
     this.sokoCode,
     this.zaikoSybetCode,
     this.zaikoId,
-    this.autoFlg = '0'
+    this.autoFlg = '0',
+    this.zaikoSu
   });
 
   factory MaterialModel.fromJson(Map<String, dynamic> json) => MaterialModel(
@@ -51,6 +53,7 @@ class MaterialModel {
     zaikoSybetCode: json['ZAIKO_SYBET_CD'] ?? '',
     zaikoId: json['ZAIKO_ID'] ?? '',
     autoFlg: json['AUTO_FLG'] ?? '0',
+    zaikoSu: '${json['ZAIKO_SU']}',
   );
 
   factory MaterialModel.fromDefaultInventory(DefaultInventory inventory) => MaterialModel(
@@ -58,7 +61,8 @@ class MaterialModel {
     makerName: inventory.makerName,
     jisyaCode: inventory.jisyaCode,
     syoshinName: inventory.syoshinName,
-    jissu: (inventory.jissu??'').isEmpty ? '${inventory.zaikoSu}' : inventory.jissu,
+    jissu: (inventory.jissu ?? '').isEmpty ? '${inventory.zaikoSu}' : inventory.jissu,
+    zaikoSu: '${inventory.zaikoSu}',
     suryo: ''
   );
 
@@ -68,6 +72,7 @@ class MaterialModel {
       jisyaCode: inventory.jisyaCode,
       syoshinName: inventory.syoshinName,
       jissu: (inventory.jissu??'').isEmpty ? '${inventory.zaikoSu}' : inventory.jissu,
+      zaikoSu: '${inventory.zaikoSu}',
       suryo: '$suryo'
   );
 
@@ -86,5 +91,6 @@ class MaterialModel {
     'ZAIKO_SYBET_CD': zaikoSybetCode ?? '',
     'ZAIKO_ID': zaikoId ?? '',
     'AUTO_FLG': autoFlg ?? '',
+    'ZAIKO_SU': zaikoSu ?? '0'
   };
 }

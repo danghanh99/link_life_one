@@ -23,6 +23,10 @@ class Inventory {
   String? buzaiSiireTanka;
   String? buzaiSoryo;
   String? buzaiHcyuId;
+  String? jisyaCd;
+  String? kbnmsaiName;
+  String? genka;
+  String? jissu;
 
   Inventory(
       {this.buzaiKanriGoban,
@@ -47,6 +51,10 @@ class Inventory {
       this.buzaiSiireTanka,
       this.buzaiSoryo,
       this.buzaiHcyuId,
+      this.jisyaCd,
+      this.kbnmsaiName,
+      this.genka,
+      this.jissu,
       this.STATUS = false,
       this.isFromDatabase = false});
 
@@ -74,6 +82,10 @@ class Inventory {
         buzaiSiireTanka: json['BUZAI_SIIRE_TANKA'] ?? '',
         buzaiSoryo: json['BUZAI_SORYO'] ?? '',
         buzaiHcyuId: json['BUZAI_HACYU_ID'] ?? '',
+        jisyaCd: json['JISYA_CD'] ?? '',
+        kbnmsaiName: json['KBNMSAI_NAME'] ?? '',
+        genka: json['GENKA'] ?? '',
+        jissu: json['JISSU'] ?? '',
         isFromDatabase: isFromDatabase
     );
   }

@@ -163,10 +163,10 @@ class InventoryAPI {
       },
       'INVENTORY_DETAIL': INVENTORY_DETAIL.map((e) => {
         'BUZAI_KANRI_NO': e.buzaiKanriGoban,
-        "JISYA_CD": e.hinban,
+        "JISYA_CD": e.jisyaCd,
         "HINBAN": e.hinban,
         "SYOHIN_NAME": e.shohinmei,
-        "JITUZAIKO_SU": e.tougetsuJitsuZaiko ?? "0"
+        "JITUZAIKO_SU": '${e.tougetsuJitsuZaiko}' ?? "0"
       }).toList()
     };
 

@@ -17,10 +17,12 @@ class RiyuuKoNyuuGamen extends StatefulWidget {
   final String JYUCYU_ID;
   final int index;
   final String KOJI_ST;
+  final String lableTextField;
   const RiyuuKoNyuuGamen({
     required this.JYUCYU_ID,
     required this.index,
     required this.KOJI_ST,
+    required this.lableTextField,
     Key? key,
   }) : super(key: key);
 
@@ -129,12 +131,12 @@ class _RiyuuKoNyuuGamenState extends State<RiyuuKoNyuuGamen> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
+                  children: [
                     Padding(
-                      padding: EdgeInsets.only(left: 20),
+                      padding: const EdgeInsets.only(left: 20),
                       child: Text(
-                        '遅延理由／キャンセル理由',
-                        style: TextStyle(
+                        widget.lableTextField,
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w700),
                       ),
                     ),

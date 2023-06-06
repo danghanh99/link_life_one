@@ -135,6 +135,7 @@ class _ShitamiHoukokuState extends State<ShitamiHoukoku> {
                       index: 2,
                       JYUCYU_ID: widget.JYUCYU_ID,
                       KOJI_ST: widget.KOJI_ST,
+                      lableTextField: '遅延理由',
                     ),
                   );
                 },
@@ -163,6 +164,7 @@ class _ShitamiHoukokuState extends State<ShitamiHoukoku> {
                       KOJI_ST: widget.KOJI_ST,
                       index: 3,
                       JYUCYU_ID: widget.JYUCYU_ID,
+                      lableTextField: 'キャンセル理由',
                     ),
                   );
                 },

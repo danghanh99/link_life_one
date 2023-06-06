@@ -31,6 +31,7 @@ class Constant {
   static const String insertTSyukkojisekiSave = '${url}src/APIs/Material/insertTSyukkojisekiSave.php';
   static const String requestPostClearSavedAll = '${url}Request/Order/requestPostClearSavedAll.php';
   static const String requestPostAddBuzaihacyumsaiSave = '${url}Request/Order/requestPostAddBuzaihacyumsaiSave.php';
+  static const String getListDefaultMaterialSave = '${url}src/APIs/Material/getListDefaultMaterialSave.php?';
 
   static const int compressTargetWidth = 600;
 }

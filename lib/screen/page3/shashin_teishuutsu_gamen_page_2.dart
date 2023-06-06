@@ -193,77 +193,79 @@ class _ShashinTeishuutsuGamenPage2State
                 ],
               ),
               const SizedBox(height: 50),
-              Container(
-                width: size.width - 50,
-                height: imageContainerHeight,
-                padding: const EdgeInsets.all(5),
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.black)),
-                child: SingleChildScrollView(
-                  child: Wrap(
-                    spacing: 5.0,
-                    runSpacing: 5.0,
-                    children: [
-                      ...selectedImages.map((e) {
-                        print('e: $e');
-                        return SizedBox(
-                          width: (imageContainerHeight / 4) - 5,
-                          height: (imageContainerHeight / 4) - 5,
-                          child: Stack(
-                            children: [
-                              Positioned.fill(
-                                  child: e.runtimeType == XFile
-                                      ? Image.file(
-                                          File(e.path),
-                                          fit: BoxFit.cover,
-                                        )
-                                      : e['FILEPATH']!=null ? CachedNetworkImage(
-                                          imageUrl: e['FILEPATH'],
-                                          placeholder: (context, url) =>
-                                              const Center(
-                                            child: SizedBox(
-                                              width: 100,
-                                              height: 100,
-                                              child: CircularProgressIndicator(
-                                                color: Colors.yellow,
+              Expanded(
+                child: Container(
+                  width: size.width - 50,
+                  // height: imageContainerHeight,
+                  padding: const EdgeInsets.all(5),
+                  decoration:
+                      BoxDecoration(border: Border.all(color: Colors.black)),
+                  child: SingleChildScrollView(
+                    child: Wrap(
+                      spacing: 5.0,
+                      runSpacing: 5.0,
+                      children: [
+                        ...selectedImages.map((e) {
+                          print('e: $e');
+                          return SizedBox(
+                            width: (size.width / 4) - 20,
+                            height: (size.width / 4) - 20,
+                            child: Stack(
+                              children: [
+                                Positioned.fill(
+                                    child: e.runtimeType == XFile
+                                        ? Image.file(
+                                            File(e.path),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : e['FILEPATH']!=null ? CachedNetworkImage(
+                                            imageUrl: e['FILEPATH'],
+                                            placeholder: (context, url) =>
+                                                const Center(
+                                              child: SizedBox(
+                                                width: 100,
+                                                height: 100,
+                                                child: CircularProgressIndicator(
+                                                  color: Colors.yellow,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                          !isOnline  && LocalStorageNotifier.isTodayDownload()
-                                              ? Image.file(
-                                                File(e['FILEPATH']),
-                                                fit: BoxFit.cover,
-                                              )
-                                              : const Icon(Icons.error),
-                                        ): const Icon(Icons.error)),
-                              Visibility(
-                                visible: e.runtimeType == XFile,
-                                child: Positioned(
-                                    top: 0,
-                                    right: 0,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 5, right: 5),
-                                      child: IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              selectedImages.remove(e);
-                                            });
-                                          },
-                                          padding: EdgeInsets.zero,
-                                          alignment: Alignment.topRight,
-                                          icon: const Icon(
-                                            Icons.remove_circle_rounded,
-                                            color: Colors.red,
-                                          )),
-                                    )),
-                              )
-                            ],
-                          ),
-                        );
-                      }).toList()
-                    ],
+                                            errorWidget: (context, url, error) =>
+                                            !isOnline  && LocalStorageNotifier.isTodayDownload()
+                                                ? Image.file(
+                                                  File(e['FILEPATH']),
+                                                  fit: BoxFit.cover,
+                                                )
+                                                : const Icon(Icons.error),
+                                          ): const Icon(Icons.error)),
+                                Visibility(
+                                  visible: e.runtimeType == XFile,
+                                  child: Positioned(
+                                      top: 0,
+                                      right: 0,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 5, right: 5),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                selectedImages.remove(e);
+                                              });
+                                            },
+                                            padding: EdgeInsets.zero,
+                                            alignment: Alignment.topRight,
+                                            icon: const Icon(
+                                              Icons.remove_circle_rounded,
+                                              color: Colors.red,
+                                            )),
+                                      )),
+                                )
+                              ],
+                            ),
+                          );
+                        }).toList()
+                      ],
+                    ),
                   ),
                 ),
               ),

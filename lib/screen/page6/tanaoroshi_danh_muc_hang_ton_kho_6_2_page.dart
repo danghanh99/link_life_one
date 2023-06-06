@@ -624,7 +624,7 @@ class _TanaoroshiDanhMucHangTonKho62PageState
           listInventory.isEmpty ? '' : listInventory[row - 1].buzaiKanriGoban!);
     }
     if (col == 2) {
-      return Text(listInventory.isEmpty ? '' : listInventory[row - 1].bunrui!);
+      return Text(listInventory.isEmpty ? '' : listInventory[row - 1].kbnmsaiName!);
     }
     if (col == 3) {
       return Text(listInventory.isEmpty ? '' : listInventory[row - 1].meekaa!);
@@ -641,7 +641,7 @@ class _TanaoroshiDanhMucHangTonKho62PageState
     if (col == 6) {
       return Text(listInventory.isEmpty
           ? ''
-          : (listInventory[row - 1].sengetsuJitsuZaiko ?? '0'));
+          : '${listInventory[row - 1].tougetsuJitsuZaiko}');
     }
     if (col == 7) {
       return Text(listInventory.isEmpty
@@ -656,7 +656,7 @@ class _TanaoroshiDanhMucHangTonKho62PageState
     if (col == 9) {
       return Text(listInventory.isEmpty
           ? ''
-          : (listInventory[row - 1].tanka ?? '').toString());
+          : (listInventory[row - 1].genka ?? '').toString());
     }
     if (col == 10) {
       return Row(
@@ -665,7 +665,7 @@ class _TanaoroshiDanhMucHangTonKho62PageState
             width: 5,
           ),
           Text(listInventory.isNotEmpty
-              ? listInventory[row - 1].tougetsuJitsuZaiko.toString()
+              ? listInventory[row - 1].jissu.toString()
               : 0.toString()),
           const Spacer(),
           Container(
