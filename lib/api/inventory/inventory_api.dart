@@ -179,6 +179,9 @@ class InventoryAPI {
       if(isContinue){
         postTanamsaiSaveDelete(onSuccess: onSuccess, onFailed: onFailed);
       }
+      else{
+        onSuccess();
+      }
     } else {
       onFailed.call();
     }

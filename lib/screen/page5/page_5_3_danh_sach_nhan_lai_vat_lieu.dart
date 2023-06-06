@@ -520,7 +520,7 @@ class _Page53DanhSachNhanLaiVatLieuState
       case 4:
         return material.syohinName ?? '';
       case 5:
-        return material.suryo ?? '';
+        return material.suryoReturn ?? '';
       default:
         return '';
     }

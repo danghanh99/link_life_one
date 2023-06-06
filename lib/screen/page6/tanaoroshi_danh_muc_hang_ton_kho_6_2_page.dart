@@ -425,6 +425,7 @@ class _TanaoroshiDanhMucHangTonKho62PageState
                         onSuccess: () {
                           CustomToast.show(context,
                               message: '登録出来ました。', backGround: Colors.green);
+                          Navigator.pop(context);
                         },
                         onFailed: () {
                           CustomToast.show(
@@ -439,7 +440,6 @@ class _TanaoroshiDanhMucHangTonKho62PageState
                           return e;
                         }).toList();
                       });
-                      Navigator.pop(context);
                     },
                     child: const Text(
                       '棚卸確定',
