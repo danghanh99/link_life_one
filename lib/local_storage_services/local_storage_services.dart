@@ -698,7 +698,7 @@ class LocalStorageServices{
             tableData.add({
               "STATUS": k.jyucyuId,
               "TUIKA_SYOHIN_NAME": km.tuikaSyohinName,
-              "TUIKA_JISYA_CD": '${km.tuikaJisyaCd}'.substring(4),
+              "TUIKA_JISYA_CD": '${km.tuikaJisyaCd}'.length>4 ? '${km.tuikaJisyaCd}'.substring(4) : km.tuikaJisyaCd,
               "SURYO": km.suryo,
               "HANBAI_TANKA": km.hanbaiTanka,
               "KINGAK": km.kingak
@@ -1437,6 +1437,55 @@ class LocalStorageServices{
         tKojimsai.updPGID = "KOJ1120F";
         tKojimsai.updTantCd = loginId;
         tKojimsai.updYMD = DateFormat('yyyy-MM-dd HH:mm:ss', 'ja').format(now).toString();
+        tKojimsai.storage(
+            localBefSekoPhotoFilePath: kh.isChangeBefore?tKojimsai.befSekoPhotoFilePath:null,
+            localAftSekoPhotoFilePath: kh.isChangeAfter?tKojimsai.aftSekoPhotoFilePath:null,
+            localOtherSekoPhotoFilePath: kh.isAddOthers?tKojimsai.otherPhotoFolderPath:null
+        );
+        await LocalStorageBase.add(
+            boxName: boxKojimsaiName,
+            key: '${tKojimsai.jyucyuId}_${tKojimsai.jyucyumsaiId}',
+            model: tKojimsai
+        );
+      }
+      else{
+        String newId = IdNameController().getId();
+        var befSekoPhotoPath, afterSekoPhotoFilePath;
+        if(kh.isChangeBefore){
+          befSekoPhotoPath = _isNetworkPath(kh.befSekiPhotoFilePath)?kh.befSekiPhotoFilePath:await FileController().copyFile(file: File(kh.befSekiPhotoFilePath!), isNew: true, onFailed: (){});
+        }
+        if(kh.isChangeAfter){
+          afterSekoPhotoFilePath = _isNetworkPath(kh.aftSekoPhotoFilePath)?kh.aftSekoPhotoFilePath:await FileController().copyFile(file: File(kh.aftSekoPhotoFilePath!), isNew: true, onFailed: (){});
+        }
+
+        tKojimsai = TKojimsai(
+          jyucyuId: jyucyuId,
+          jyucyumsaiId: newId,
+          jyucyumsaiIdKikan: kh.jyucyuMsaiIdKikan,
+          hinban: kh.hinban,
+          makerCd: kh.makerCd,
+          ctgotyCd: kh.ctgoryCd,
+          suryo: kh.suryo,
+          hanbaiTanka: '',
+          kingak: kh.kingak,
+          kisetuHinban: kh.kisetuHinban,
+          kisetuMaker: kh.kisetuMaker,
+          kensetuKeitai: kh.kensetuKeitai,
+          befSekoPhotoFilePath: befSekoPhotoPath,
+          aftSekoPhotoFilePath: afterSekoPhotoFilePath,
+          otherPhotoFolderPath: otherPhotosPathOrBase64,
+          tuikaJisyaCd: kh.tuikaJisyaCd,
+          tuikaSyohinName: kh.tuikaSyohinName,
+          kojijituikaFlg: '0',
+          delFlg: '0',
+          addPGID: 'KOJ1120F',
+          addTantCd: loginId,
+          addYMD: DateFormat('yyyy-MM-dd HH:mm:ss', 'ja').format(now).toString(),
+          updPGID: 'KOJ1120F',
+          updTantCd: loginId,
+          updYMD: DateFormat('yyyy-MM-dd HH:mm:ss', 'ja').format(now).toString()
+        );
+
         tKojimsai.storage(
             localBefSekoPhotoFilePath: kh.isChangeBefore?tKojimsai.befSekoPhotoFilePath:null,
             localAftSekoPhotoFilePath: kh.isChangeAfter?tKojimsai.aftSekoPhotoFilePath:null,

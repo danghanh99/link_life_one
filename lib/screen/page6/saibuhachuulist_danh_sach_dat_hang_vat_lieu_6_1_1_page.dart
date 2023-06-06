@@ -57,6 +57,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
   dynamic first = {
     "MAKER_NAME": "",
     "BUNRUI": '',
+    "KBNMSAI_NAME": '',
     "JISYA_CD": "",
     "SYOHIN_NAME": "",
     "LOT": "",
@@ -106,11 +107,12 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
         "MAKER_CD": element["MAKER_CD"] ?? '',
         "MAKER_NAME": element["MAKER_NAME"] ?? '',
         "BUNRUI": element["BUNRUI"] ?? element["BUZAI_BUNRUI"] ?? '',
+        "KBNMSAI_NAME": element["KBNMSAI_NAME"] ?? '',
         "HINBAN": element["HINBAN"] ?? '',
         "SYOHIN_NAME": element["SYOHIN_NAME"] ?? '',
         "LOT": element["LOT"] ?? '',
         "HACYU_TANKA": element["HACYU_TANKA"] ?? element["SIIRE_TANKA"] ?? '',
-        "TANI_CD": element["TANI_CD"] ?? element["TANI"] ?? '',
+        "TANI_CD": element["TANI"] ?? element["TANI_CD"] ?? '',
         "JISYA_CD": element["JISYA_CD"] ?? '',
         "SURYO": element["SURYO"] ?? '',
         "KINGAK": element["KINGAK"] ?? '',
@@ -122,11 +124,12 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
         "MAKER_CD": element["MAKER_CD"] ?? '',
         "MAKER_NAME": element["MAKER_NAME"] ?? '',
         "BUNRUI": element["BUNRUI"] ?? element["BUZAI_BUNRUI"] ?? '',
+        "KBNMSAI_NAME": element["KBNMSAI_NAME"] ?? '',
         "HINBAN": element["HINBAN"] ?? '',
         "SYOHIN_NAME": element["SYOHIN_NAME"] ?? '',
         "LOT": element["LOT"] ?? '',
         "HACYU_TANKA": element["HACYU_TANKA"] ?? element["SIIRE_TANKA"] ?? '',
-        "TANI_CD": element["TANI_CD"] ?? element["TANI"] ?? '',
+        "TANI_CD": element["TANI"] ?? element["TANI_CD"] ?? '',
         "JISYA_CD": element["JISYA_CD"] ?? '',
         "SURYO": element["SURYO"] ?? '',
         "KINGAK": element["KINGAK"] ?? '',
@@ -138,6 +141,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
   isEmptyElement(e){
     if (e['MAKER_NAME'].toString().trim().isNotEmpty) return false;
     if (e['BUNRUI'].toString().trim().isNotEmpty) return false;
+    if (e['KBNMSAI_NAME'].toString().trim().isNotEmpty) return false;
     if (e['HINBAN'].toString().trim().isNotEmpty) return false;
     if (e['SYOHIN_NAME'].toString().trim().isNotEmpty) return false;
     if (e['LOT'].toString().trim().isNotEmpty) return false;
@@ -264,32 +268,29 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                   ),
                   Expanded(
                     child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
+                      scrollDirection: Axis.horizontal,
                       child: Column(
                         children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Flexible(
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: widget.buzaiHacyuId!=null || widget.fromMenu
-                                      ? _buildRows(saibuList.length + 1)
-                                      : _buildRows(saibuList.length + 1)+_emptyRow(newRecords.length+1),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          Visibility(
-                            visible: (isEmptyList == null || isEmptyList!) && (widget.fromMenu || widget.buzaiHacyuId!=null) && (saibuList + newRecords).isEmpty,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 50),
-                              child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
+                          ..._buildRows(1, 0),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: (widget.buzaiHacyuId!=null || widget.fromMenu
+                                  ? _buildRows(saibuList.length, 1)
+                                  : _buildRows(saibuList.length, 1) + _emptyRow(newRecords.length+1)) + [
+                                  Visibility(
+                                    visible: (isEmptyList == null || isEmptyList!) && (widget.fromMenu || widget.buzaiHacyuId!=null) && (saibuList + newRecords).isEmpty,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 50),
+                                      child: Center(child: Text(isEmptyList == null ? Assets.gettingMessage : Assets.emptyMessage),),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -840,10 +841,10 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
         value = saibuList[row - 1]["MAKER_NAME"] ?? '';
       }
       if (col == 2) {
-        value = saibuList[row - 1]["BUNRUI"] ?? '';
+        value = saibuList[row - 1]["KBNMSAI_NAME"] ?? '';
       }
       if (col == 3) {
-        value = saibuList[row - 1]["HINBAN"] ?? '';
+        value = saibuList[row - 1]["HINBAN"] ?? saibuList[row - 1]["JISYA_CD"] ?? '';
       }
       if (col == 4) {
         value = saibuList[row - 1]["SYOHIN_NAME"] ?? '';
@@ -1086,7 +1087,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
             if(row<newRecords.length  && row>=textControllerNewValues.length){
               textControllerNewValues.add(List.generate(10, (index) {
                 if(index==1) return TextEditingController(text: newRecords[row]['MAKER_NAME']);
-                if(index==2) return TextEditingController(text: newRecords[row]['BUNRUI']);
+                if(index==2) return TextEditingController(text: newRecords[row]['KBNMSAI_NAME']);
                 if(index==3) return TextEditingController(text: newRecords[row]['HINBAN']);
                 if(index==4) return TextEditingController(text: newRecords[row]['SYOHIN_NAME']);
                 if(index==5) return TextEditingController(text: newRecords[row]['LOT']);
@@ -1152,7 +1153,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                       break;
                     case 2:
                       setState(() {
-                        newRecords[row]['BUNRUI'] = value;
+                        newRecords[row]['KBNMSAI_NAME'] = value;
                       });
                       break;
                     case 3:
@@ -1195,10 +1196,10 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
     ));
   }
 
-  List<Widget> _buildRows(int count) {
+  List<Widget> _buildRows(int count, int start) {
     return List.generate(count, (index) {
       return Row(
-        children: _buildCells2(10, index),
+        children: _buildCells2(10, start + index),
       );
     });
   }
