@@ -30,11 +30,6 @@ class QuanLyLichBieu71Page extends StatefulWidget {
 
 class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page>
     with RouteAware {
-  List<String> listNames = [
-    '入出庫管理',
-    '部材管理',
-    '出納帳',
-  ];
 
   List<PersonModel> listNhanVien = [];
 
@@ -49,7 +44,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page>
   List<dynamic> listPhongBan = [];
 
   String value1nguoi = 'グループ';
-  // DateTime date = DateTime.parse('2022-11-11');
   DateTime currentDate = DateTime.now();
   ScrollController scrollControllerItem = ScrollController();
   ScrollController scrollController = ScrollController();
@@ -1003,23 +997,6 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page>
     return List.generate(count, (col) {
       if (row == 0) {
         return Container();
-        // return Container(
-        //   decoration: BoxDecoration(
-        //     border: Border.all(width: 0.5),
-        //     color: const Color(0xFFA5A7A9),
-        //   ),
-        //   alignment: Alignment.center,
-        //   width: colWidth()[col],
-        //   height: 30,
-        //   child: Text(
-        //     listDayOfWeek()[col],
-        //     style: const TextStyle(
-        //       color: Colors.black,
-        //       fontSize: 15,
-        //       fontWeight: FontWeight.w700,
-        //     ),
-        //   ),
-        // );
       }
 
       if (row != 0) {
@@ -1195,6 +1172,24 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page>
     });
   }
 
+  double time(String time){
+    int hour = int.parse(time.split(':')[0]);
+    int min = int.parse(time.split(':')[1]);
+    return hour + min/60.0;
+  }
+
+  List<dynamic> sortAsc(list){
+    list.sort((a, b){
+      String timeA = a['SITAMIHOMONJIKAN'] ?? a['KOJIHOMONJIKAN'] ?? a['START_TIME'] ?? '';
+      String timeB = b['SITAMIHOMONJIKAN'] ?? b['KOJIHOMONJIKAN'] ?? b['START_TIME'] ??'';
+      if(timeA.isEmpty && timeB.isEmpty) return 0;
+      if(timeA.isEmpty) return -1;
+      if(timeB.isEmpty) return 1;
+      return time(timeA)<time(timeB) ? -1 : time(timeA)==time(timeB) ? 0 : 1;
+    });
+    return list;
+  }
+
   List<Widget> kojiItems(int row, int col) {
     List<Widget> xxx = [];
     PersonModel nv = listNhanVien[row - 1];
@@ -1213,7 +1208,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page>
             selectedUser[element] != null &&
             selectedUser[element].isNotEmpty &&
             element == _listDay()[col - 1]) {
-          selectedUser[element].forEach(
+
+          sortAsc(selectedUser[element]).forEach(
             (e) => xxx.addAll([
               kojiItemWithType(
                 row - 1,
@@ -1387,7 +1383,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page>
     if (selectedUser != null &&
         selectedUser[dateStr] != null &&
         selectedUser[dateStr].isNotEmpty) {
-      selectedUser[dateStr].forEach(
+      sortAsc(selectedUser[dateStr]).forEach(
         (e) => widgets.addAll([
           kojiItemWithType(
             row,
