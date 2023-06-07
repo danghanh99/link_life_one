@@ -76,10 +76,12 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
   @override
   void reassemble() {
     super.reassemble();
-    if (Platform.isAndroid) {
-      controller!.pauseCamera();
-    } else if (Platform.isIOS) {
-      controller!.resumeCamera();
+    if(controller!=null){
+      if (Platform.isAndroid) {
+        controller!.pauseCamera();
+      } else if (Platform.isIOS) {
+        controller!.resumeCamera();
+      }
     }
   }
 

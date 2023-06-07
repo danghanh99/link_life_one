@@ -1428,7 +1428,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page>
             sukejuuruPhongBan[element] != null &&
             sukejuuruPhongBan[element].isNotEmpty &&
             element == _listDay()[col - 1]) {
-          sukejuuruPhongBan[element].forEach(
+          sortAsc(sukejuuruPhongBan[element]).forEach(
             (e) => xxx.addAll([
               kojiItemWithType(
                 row,

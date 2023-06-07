@@ -49,10 +49,12 @@ class _TanaoroshiDanhMucHangTonKho62PageState
   @override
   void reassemble() {
     super.reassemble();
-    if (Platform.isAndroid) {
-      controller!.pauseCamera();
-    } else if (Platform.isIOS) {
-      controller!.resumeCamera();
+    if(controller!=null){
+      if (Platform.isAndroid) {
+        controller!.pauseCamera();
+      } else if (Platform.isIOS) {
+        controller!.resumeCamera();
+      }
     }
   }
 
@@ -295,7 +297,7 @@ class _TanaoroshiDanhMucHangTonKho62PageState
                   child: TextButton(
                     onPressed: () {
                       setState(() {
-                        isShowScandQR = true;
+                        isShowScandQR = !isShowScandQR;
                       });
                     },
                     child: const Text(
