@@ -44,7 +44,7 @@ class GetListKojiApi {
             }
 
             if(k.kbnCd == kbnCd && k.kbnmsaiCd == kbnmsaiCd){
-              kbnName = k.kbnName;
+              kbnName = k.kbnmsaiName;
               yobikomoku1 = k.yobikomoku1;
               yobikomoku2 = k.yobikomoku2;
             }
@@ -79,7 +79,7 @@ class GetListKojiApi {
             }
 
             if(k.kbnCd == kbnCd && k.kbnmsaiCd == kbnmsaiCd){
-              kbnName = k.kbnName;
+              kbnName = k.kbnmsaiName;
               yobikomoku1 = k.yobikomoku1;
               yobikomoku2 = k.yobikomoku2;
             }

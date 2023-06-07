@@ -164,7 +164,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
     );
   }
 
-  showLoadingPopup({required Function(BuildContext) onShow}) {
+  showLoadingPopup(String title, {required Function(BuildContext) onShow, Function? onCancel}) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -183,9 +183,12 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 32.0),
-                    child: CupertinoActivityIndicator(),
+                  const SizedBox(height: 32.0),
+                  Center(
+                      child: Text(
+                          title,
+                        style: const TextStyle(fontSize: 17),
+                      )
                   ),
                   Padding(
                     padding: const EdgeInsets.all(32.0),
@@ -194,10 +197,11 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                   const Divider(height: 0),
                   TextButton(
                     onPressed: () {
+                      if(onCancel!=null) onCancel();
                       Navigator.pop(context);
                     },
                     child: const Text(
-                      'OK',
+                      'キャンセル',
                       style: TextStyle(
                         color: Color(0xFF007AFF),
                         fontSize: 16,
@@ -731,14 +735,26 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                       ),
                       child: TextButton(
                         onPressed: () async {
+                          bool isCancel = false;
                           var dialogContext;
                           showLoadingPopup(
-                              onShow: (context){
-                                dialogContext = context;
-                              }
+                            'ダウンロード中',
+                            onShow: (context){
+                              dialogContext = context;
+                            },
+                            onCancel: (){
+                              dialogContext = null;
+                              isCancel = true;
+                            }
                           );
                           await context.read<LocalStorageNotifier>().downloadData();
-                          Navigator.pop(dialogContext);
+                          if(isCancel){
+                            context.read<LocalStorageNotifier>().uploadData(
+                                onSuccess: (){},
+                                onFailed: (){}
+                            );
+                          }
+                          if(dialogContext!=null) Navigator.pop(dialogContext);
                           setState(() {
                             callGetListKojiApi(inputDate: date);
                             callGetTirasi(inputDate: date);
@@ -767,23 +783,24 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                           var dialogContext;
                           var screenContext = context;
                           showLoadingPopup(
-                              onShow: (context)async{
-                                dialogContext = context;
-                                await context.read<LocalStorageNotifier>().uploadData(
-                                    onSuccess: (){
-                                      Navigator.pop(dialogContext);
-                                      CustomToast.show(screenContext, message: "工事データアップロードが完了しました。", backGround: Colors.green);
-                                    },
-                                    onFailed: (){
-                                      Navigator.pop(dialogContext);
-                                      CustomToast.show(screenContext, message: "工事データアップロードが完了できませんでした。", backGround: Colors.red);
-                                    }
-                                );
-                                setState(() {
-                                  callGetListKojiApi(inputDate: date);
-                                  callGetTirasi(inputDate: date);
-                                });
-                              }
+                            'アップロード中',
+                            onShow: (context)async{
+                              dialogContext = context;
+                              await context.read<LocalStorageNotifier>().uploadData(
+                                  onSuccess: (){
+                                    Navigator.pop(dialogContext);
+                                    CustomToast.show(screenContext, message: "工事データアップロードが完了しました。", backGround: Colors.green);
+                                  },
+                                  onFailed: (){
+                                    Navigator.pop(dialogContext);
+                                    CustomToast.show(screenContext, message: "工事データアップロードが完了できませんでした。", backGround: Colors.red);
+                                  }
+                              );
+                              setState(() {
+                                callGetListKojiApi(inputDate: date);
+                                callGetTirasi(inputDate: date);
+                              });
+                            }
                           );
                         },
                         child: const Text(
