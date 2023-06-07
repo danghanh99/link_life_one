@@ -47,7 +47,6 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
 
   @override
   void initState() {
-    getListBuzai();
     getPullDown();
     super.initState();
   }
@@ -93,7 +92,10 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
   }
 
   Future<void> getPullDown() async {
-    await GetPullDownApi().getPullDown(onSuccess: (list) {
+    await GetPullDownApi().getPullDown(onSuccess: (list) async {
+      await getListBuzai(
+        buzaiBunrui: list.first['KBNMSAI_CD']
+      );
       setState(() {
         var a = list;
         a.add(null);
@@ -185,7 +187,7 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
                   child: TextButton(
                     onPressed: () {
                       getListBuzai(
-                        buzaiBunrui: pullDownSelected == '全部' ? '' : pullDownSelected,
+                        buzaiBunrui: pullDownSelected == '全部' ? '' : pullDown.firstWhere((element) => element['KBNMSAI_NAME']==pullDownSelected)['KBNMSAI_CD'],
                         makerName: mekaController.text,
                         hinban: hinbanController.text,
                         syohinName: shohinmeiController.text

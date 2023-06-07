@@ -170,7 +170,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
             checkFlg = body["CHECK_FLG"];
           }
 
-          remarkCtrl.text = KOJI_DATA['BIKO'].toString();
+          remarkCtrl.text = KOJI_DATA['BIKO'] ?? '';
 
           loadCachedata(context);
         },

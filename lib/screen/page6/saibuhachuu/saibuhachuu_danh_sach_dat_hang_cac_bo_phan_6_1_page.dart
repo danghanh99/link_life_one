@@ -588,7 +588,7 @@ class _SaibuhachuuDanhSachDatHangCacBoPhan61PageState
         value = tmp[row - 1]["TANT_NAME"] ?? '';
       }
       if (col == 5) {
-        value = tmp[row - 1]["JISYA_CD"] ?? '';
+        value = tmp[row - 1]["HINBAN"] ?? '';
       }
       if (col == 6) {
         value = tmp[row - 1]["SYOHIN_NAME"] ?? '';

@@ -66,6 +66,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
       "TANI_CD": element['TANI'] ?? '',
       "HAIBAN_FLG": element ['HAIBAN_FLG'] ?? '0',
       "KBNMSAI_NAME": element['KBNMSAI_NAME'] ?? '',
+      "JISSU": '${element['JISSU']??''}',
       'status': false
     };
   }
@@ -539,7 +540,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
         value = saibuList[row - 1]["SYOHIN_NAME"] ?? saibuList[row - 1]["SYOHIN_NAME_BUZAI"] ?? '';
       }
       if (col == 6) {
-        value = saibuList[row - 1]["SURYO"] ?? saibuList[row - 1]["SURYO"] ?? '';
+        value = saibuList[row - 1]["JISSU"] ?? '';
       }
 
       return Text(
