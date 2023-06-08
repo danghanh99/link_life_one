@@ -407,7 +407,8 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page>
                         child: TextButton(
                           onPressed: () {
                             ShowHoliday().showHoliday(
-                              TANT_CD: sukejuuruSelectedUser?.tantCode ?? '',
+                              tantCd: sukejuuruSelectedUser?.tantCode ?? '',
+                              yearMonth: DateFormat('yyyy-MM').format(currentDate),
                               onSuccess: ((body) {
                                 CustomDialog.showCustomDialog(
                                   context: context,

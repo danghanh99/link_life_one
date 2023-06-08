@@ -29,35 +29,14 @@ class _PopupHienThiState extends State<PopupHienThi> {
 
     }
     else{
-      tongNgayNghiCuaNam = widget.body['YEAR'] != null &&
-          widget.body['YEAR']['AVAILABLE_DAYS'].isNotEmpty
-          ? widget.body['YEAR']['AVAILABLE_DAYS'].first.toString()
-          : '0';
-      soNgayDaNghiTrongNam = widget.body['YEAR'] != null &&
-          widget.body['YEAR']['DAY_OFFS'].isNotEmpty
-          ? widget.body['YEAR']['DAY_OFFS'].first.toString()
-          : '0';
-      soNgayNghiConLaiTrongNam = widget.body['YEAR'] != null &&
-          widget.body['YEAR']['THE_REST_OF_DAY_OFFS'].isNotEmpty
-          ? widget.body['YEAR']['THE_REST_OF_DAY_OFFS'].first.toString()
-          : '0';
+      tongNgayNghiCuaNam = widget.body['YEAR']?['AVAILABLE_DAYS'] ?? '';
+      soNgayDaNghiTrongNam = widget.body['YEAR']?['DAY_OFFS'] ?? '';
+      soNgayNghiConLaiTrongNam = widget.body['YEAR']?['THE_REST_OF_DAY_OFFS'] ?? '';
 
-      tongNgayNghiCuaThang = widget.body['MONTH'] != null &&
-          widget.body['MONTH']['AVAILABLE_DAYS'].isNotEmpty
-          ? widget.body['MONTH']['AVAILABLE_DAYS'].first.toString()
-          : '0';
-      soNgayDaNghiTrongThang = widget.body['MONTH'] != null &&
-          widget.body['MONTH']['DAY_OFFS'].isNotEmpty
-          ? widget.body['MONTH']['DAY_OFFS'].first.toString()
-          : '0';
-      soNgayNghiConLaiTrongThang = widget.body['MONTH'] != null &&
-          widget.body['MONTH']['THE_REST_OF_DAY_OFFS'].isNotEmpty
-          ? widget.body['MONTH']['THE_REST_OF_DAY_OFFS'].first.toString()
-          : '0';
-      soNgayNghiVuotQuaTrongThang = widget.body['MONTH'] != null &&
-          widget.body['MONTH']['DAY_OFFS_OVER'].isNotEmpty
-          ? widget.body['MONTH']['DAY_OFFS_OVER'].first.toString()
-          : '0';
+      tongNgayNghiCuaThang = widget.body['MONTH']?['AVAILABLE_DAYS'] ?? '';
+      soNgayDaNghiTrongThang = widget.body['MONTH']?['DAY_OFFS'] ?? '';
+      soNgayNghiConLaiTrongThang = widget.body['MONTH']?['THE_REST_OF_DAY_OFFS'] ?? '';
+      soNgayNghiVuotQuaTrongThang = widget.body['MONTH']?['DAY_OFFS_OVER'] ?? '';
     }
     super.initState();
   }

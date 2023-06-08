@@ -6,13 +6,15 @@ import '../../constants/constant.dart';
 class ShowHoliday {
   ShowHoliday() : super();
 
-  Future<dynamic> showHoliday(
-      {required String TANT_CD,
-      required Function(dynamic) onSuccess}) async {
+  Future<dynamic> showHoliday({
+    required String tantCd,
+    required String yearMonth,
+      required Function(dynamic) onSuccess
+  }) async {
     try {
       final response = await http.get(
         Uri.parse(
-            "${Constant.url}Request/Schedule/requestShowHoliday.php?TANT_CD=$TANT_CD"),
+            "${Constant.url}Request/Schedule/requestShowHoliday.php?TANT_CD=$tantCd&YM=$yearMonth"),
       );
 
       if (response.statusCode == 200) {
