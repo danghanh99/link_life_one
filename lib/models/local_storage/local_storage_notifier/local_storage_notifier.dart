@@ -76,12 +76,15 @@ class LocalStorageNotifier extends ChangeNotifier {
   //   return isOfflineMode;
   // }
 
-  Future<void> uploadData({required Function onSuccess, required Function onFailed}) async {
+  Future<void> uploadData({required Function onSuccess, required Function(String) onFailed}) async {
     if(await isOnline() && isTodayDownload()) {
       var body = await localStorageServices.uploadDB(onProgress: (progress) {});
       print('body: ${json.encode(body)}');
       await UploadChangedDataAPI().uploadDB(
           body: body,
+          onProgress: (percent){
+            progressController.add(percent);
+          },
           onSuccess: () async {
             // await LocalStorageBase.add(boxName: boxOfflineName, key: offlineParamName, model: false);
             downloadDate = null;
@@ -91,7 +94,12 @@ class LocalStorageNotifier extends ChangeNotifier {
       print('Done upload');
     }
     else{
-      onFailed.call();
+      if(!isTodayDownload()) {
+        onFailed.call('データをアップロードされたました。再度アップロードデータが存在しません。');
+      }
+      else{
+        onFailed.call('');
+      }
     }
   }
 

@@ -288,8 +288,8 @@ class TKoji extends HiveObject{
   factory TKoji.fromRequest(Map<String, dynamic> json) {
     return TKoji(
       jyucyuId: json['JYUCYU_ID'] as String,
-      sitamiYMD: json['SITAMI_YMD'] as String?,
-      kojiYMD: json['KOJI_YMD'] as String?,
+      sitamiYMD: '${json['SITAMI_YMD']}'.contains('0000-00-00') ? '' : (json['SITAMI_YMD'] ?? ''),
+      kojiYMD: '${json['KOJI_YMD']}'.contains('0000-00-00') ? '' : (json['KOJI_YMD'] ?? ''),
       homonTantCd1: json['HOMON_TANT_CD1'] as String?,
       homonTantName1: json['HOMON_TANT_NAME1'] as String?,
       homonTantCd2: json['HOMON_TANT_CD2'] as String?,
@@ -324,7 +324,7 @@ class TKoji extends HiveObject{
       cancelRiyu: json['CANCEL_RIYU'] as String?,
       sitamiapoKbn: json['SITAMIAPO_KBN'] as String?,
       kojiapoKbn: json['KOJIAPO_KBN'] as String?,
-      mtmoriYMD: json['MTMORI_YMD'] as String?,
+      mtmoriYMD: '${json['MTMORI_YMD']}'.contains('0000-00-00') ? '' : (json['MTMORI_YMD'] ?? ''),
       memo: json['MEMO'] as String?,
       comment: json['COMMENT'] as String?,
       readFlg: json['READ_FLG']!=null ? int.parse('${json['READ_FLG']}') : null,
@@ -340,17 +340,17 @@ class TKoji extends HiveObject{
       coAddress: json['CO_ADDRESS'] as String?,
       sitItakuhi: json['SIT_ITAKUHI']!=null ? int.parse('${json['SIT_ITAKUHI']}') : null,
       kojiItakuhi: json['KOJI_ITAKUHI']!=null ? int.parse('${json['KOJI_ITAKUHI']}') : null,
-      skjRenkeiYMD: json['SKJ_RENKEI_YMD'] as String?,
-      kojiRenkeiYMD: json['KOJI_RENKEI_YMD'] as String?,
+      skjRenkeiYMD: '${json['SKJ_RENKEI_YMD']}'.contains('0000-00-00') ? '' : (json['SKJ_RENKEI_YMD'] ?? ''),
+      kojiRenkeiYMD: '${json['KOJI_RENKEI_YMD']}'.contains('0000-00-00') ? '' : (json['KOJI_RENKEI_YMD'] ?? ''),
       delFlg: json['DEL_FLG']!=null ? int.parse('${json['DEL_FLG']}') : null,
       addPGID: json['ADD_PGID'] as String?,
       addTantCd: json['ADD_TANTCD'] as String?,
       addTantNm: json['ADD_TANTNM'] as String?,
-      addYMD: json['ADD_YMD'] as String?,
+      addYMD: '${json['ADD_YMD']}'.contains('0000-00-00') ? '' : (json['ADD_YMD'] ?? ''),
       updPGID: json['UPD_PGID'] as String?,
       updTantCd: json['UPD_TANTCD'] as String,
       updTantNm: json['UPD_TANTNM'] as String?,
-      updYMD: json['UPD_YMD'] as String,
+      updYMD: '${json['UPD_YMD']}'.contains('0000-00-00') ? '' : (json['UPD_YMD'] ?? ''),
       status: 0
     );
   }

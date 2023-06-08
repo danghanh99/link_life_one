@@ -1180,8 +1180,20 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page>
 
   List<dynamic> sortAsc(list){
     list.sort((a, b){
-      String timeA = a['SITAMIHOMONJIKAN'] ?? a['KOJIHOMONJIKAN'] ?? a['START_TIME'] ?? '';
-      String timeB = b['SITAMIHOMONJIKAN'] ?? b['KOJIHOMONJIKAN'] ?? b['START_TIME'] ??'';
+      String timeA = '${a['SITAMIHOMONJIKAN'] ?? ''}'.isNotEmpty
+          ? a['SITAMIHOMONJIKAN']
+          : '${a['KOJIHOMONJIKAN'] ?? ''}'.isNotEmpty
+            ? a['KOJIHOMONJIKAN']
+            : '${a['START_TIME'] ?? ''}'.isNotEmpty
+              ? a['START_TIME']
+              : '';
+      String timeB = '${b['SITAMIHOMONJIKAN'] ?? ''}'.isNotEmpty
+          ? b['SITAMIHOMONJIKAN']
+          : '${b['KOJIHOMONJIKAN'] ?? ''}'.isNotEmpty
+          ? b['KOJIHOMONJIKAN']
+          : '${b['START_TIME'] ?? ''}'.isNotEmpty
+          ? b['START_TIME']
+          : '';
       if(timeA.isEmpty && timeB.isEmpty) return 0;
       if(timeA.isEmpty) return -1;
       if(timeB.isEmpty) return 1;

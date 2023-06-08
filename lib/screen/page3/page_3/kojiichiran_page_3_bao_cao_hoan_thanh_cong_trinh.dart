@@ -751,7 +751,7 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                           if(isCancel){
                             context.read<LocalStorageNotifier>().uploadData(
                                 onSuccess: (){},
-                                onFailed: (){}
+                                onFailed: (mess){}
                             );
                           }
                           if(dialogContext!=null) Navigator.pop(dialogContext);
@@ -791,9 +791,14 @@ class _KojiichiranPage3BaoCaoHoanThanhCongTrinhState
                                     Navigator.pop(dialogContext);
                                     CustomToast.show(screenContext, message: "工事データアップロードが完了しました。", backGround: Colors.green);
                                   },
-                                  onFailed: (){
+                                  onFailed: (mess){
                                     Navigator.pop(dialogContext);
-                                    CustomToast.show(screenContext, message: "工事データアップロードが完了できませんでした。", backGround: Colors.red);
+                                    if(mess.isEmpty) {
+                                      CustomToast.show(screenContext, message: "工事データアップロードが完了できませんでした。", backGround: Colors.red);
+                                    }
+                                    else{
+                                      CustomToast.show(screenContext, message: mess, backGround: Colors.red);
+                                    }
                                   }
                               );
                               setState(() {

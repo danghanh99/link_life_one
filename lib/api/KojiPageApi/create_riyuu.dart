@@ -93,6 +93,8 @@ class CreateRiyuu {
           shitamiMenu: SHITAMI_MENU,
           loginId: loginID,
           filePaths: FILE_PATH_LIST,
+          cancelRiyu: CANCEL_RIYU,
+          mtMoriYmd: MTMORI_YMD,
           onSuccess: onSuccess,
           onFailed: onFailed
       );

@@ -14,12 +14,16 @@ class GetImage {
     required Function() onSuccess
   }) async {
     if(await LocalStorageServices.isTodayDataDownloaded()){
-      var res = await LocalStorageServices().getPhotoSubmission(
-          jyucyuId: jyucyuId,
-          kojiSt: kojiSt
-      );
-      onSuccess.call();
-      return res;
+      try{
+        var res = await LocalStorageServices().getPhotoSubmission(
+            jyucyuId: jyucyuId,
+            kojiSt: kojiSt
+        );
+        onSuccess.call();
+        return res;
+      } catch (e){
+        rethrow;
+      }
     }
     else{
       throw Exception('Failed to get list koji');

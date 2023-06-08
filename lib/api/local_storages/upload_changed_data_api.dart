@@ -8,11 +8,13 @@ class UploadChangedDataAPI {
 
   Future<void> uploadDB({
     required body,
+    required Function(double) onProgress,
     required Function onSuccess,
     required Function onFailed,
   }) async {
 
     try{
+      onProgress.call(0.5);
       final response = await http.post(
           Uri.parse(
             "${Constant.url}/Request/Koji/requestOfflineSync.php",
@@ -20,6 +22,7 @@ class UploadChangedDataAPI {
 
           body: json.encode(body));
       // print('res: $response');
+      onProgress.call(1);
       if (response.statusCode == 200) {
         print('res success: $response');
         await onSuccess.call();
