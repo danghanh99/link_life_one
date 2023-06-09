@@ -144,19 +144,22 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
             KOJI_DATA = body["KOJI_DATA"][0];
           }
 
-          if (body["TABLE_DATA"] != null) {
-            TABLE_DATA = body["TABLE_DATA"];
-            List tableData = TABLE_DATA;
-            for(var t in tableData){
-              Map<String, String> newData = {
-                'TUIKA_SYOHIN_NAME': t['TUIKA_SYOHIN_NAME'],
-                'TUIKA_JISYA_CD': t['TUIKA_JISYA_CD'],
-                'SURYO': t['SURYO'],
-                'HANBAI_TANKA': t['HANBAI_TANKA'],
-                'KINGAK': t['KINGAK'],
-                'CHANGE_FLG': '0'
-              };
-              NEW_TABLE_DATA[tableData.indexOf(t)] = newData;
+          loadCachedata(context);
+          if(NEW_TABLE_DATA.isEmpty){
+            if (body["TABLE_DATA"] != null) {
+              TABLE_DATA = body["TABLE_DATA"];
+              List tableData = TABLE_DATA;
+              for(var t in tableData){
+                Map<String, String> newData = {
+                  'TUIKA_SYOHIN_NAME': t['TUIKA_SYOHIN_NAME'],
+                  'TUIKA_JISYA_CD': t['TUIKA_JISYA_CD'],
+                  'SURYO': t['SURYO'],
+                  'HANBAI_TANKA': t['HANBAI_TANKA'],
+                  'KINGAK': t['KINGAK'],
+                  'CHANGE_FLG': '0'
+                };
+                NEW_TABLE_DATA[tableData.indexOf(t)] = newData;
+              }
             }
           }
 
@@ -172,7 +175,7 @@ class _ShoudakuShoukisaiState extends State<ShoudakuShoukisai>
 
           remarkCtrl.text = KOJI_DATA['BIKO'] ?? '';
 
-          loadCachedata(context);
+
         },
         onFailed: () {
           CustomToast.show(context, message: "承諾書を取得出来ませんでした。");

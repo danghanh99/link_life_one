@@ -657,9 +657,12 @@ class _TanaoroshiDanhMucHangTonKho62PageState
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 7, left: 7),
-            child: _moreButton(context, row),
+          Visibility(
+            visible: listInventory[row - 1].haibanFlg == '0',
+            child: Padding(
+              padding: const EdgeInsets.only(right: 7, left: 7),
+              child: _moreButton(context, row),
+            )
           ),
         ],
       );
@@ -702,7 +705,7 @@ class _TanaoroshiDanhMucHangTonKho62PageState
         return PopupMenuItem(
           onTap: () {
             setState(() {
-              listInventory[row - 1].tougetsuJitsuZaiko = (i + 1);
+              listInventory[row - 1].jissu = '${i + 1}';
             });
           },
           height: 25,
