@@ -221,7 +221,7 @@ class LocalStorageServices{
           print('start get tirasi');
           //Tirasi Storage
           await LocalStorageBase.clear(boxName: boxTirasiName);
-          for(var r in response['T_TIRASI']){
+          for(var r in ((response['T_TIRASI'] ?? []) as List)){
             TTirasi tTirasi = TTirasi.fromJson(r);
             await LocalStorageBase.add(
                 boxName: boxTirasiName,
@@ -857,9 +857,9 @@ class LocalStorageServices{
     var tTirasiList = await LocalStorageBase.getValues(boxName: boxTirasiName);
     for(TTirasi t in tTirasiList){
       if(t.tantCd == loginId && t.YMD == ymd){
-        t.kojiTirasisu = int.parse('$kojiTirasisu');
+        t.kojiTirasisu = kojiTirasisu;
         t.renkeiYMD = DateFormat('yyyy-MM-dd', 'ja').format(now).toString();
-        t.delFlg = 0;
+        t.delFlg = '0';
         t.addPGID = 'KOJ1120F';
         t.addTantCd = loginId;
         t.addYMD = DateFormat('yyyy-MM-dd HH:mm:ss', 'ja').format(now).toString();
@@ -878,9 +878,9 @@ class LocalStorageServices{
     TTirasi tTirasi = TTirasi(
       tantCd: loginId,
       YMD: ymd,
-      kojiTirasisu: int.parse('$kojiTirasisu'),
+      kojiTirasisu: kojiTirasisu,
       renkeiYMD: DateFormat('yyyy-MM-dd', 'ja').format(now).toString(),
-      delFlg: 0,
+      delFlg: '0',
       addPGID: 'KOJ1120F',
       addTantCd: loginId,
       addYMD: DateFormat('yyyy-MM-dd HH:mm:ss', 'ja').format(now).toString(),

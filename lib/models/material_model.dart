@@ -53,7 +53,7 @@ class MaterialModel {
     zaikoSybetCode: json['ZAIKO_SYBET_CD'] ?? '',
     zaikoId: json['ZAIKO_ID'] ?? '',
     autoFlg: json['AUTO_FLG'] ?? '0',
-    zaikoSu: '${json['ZAIKO_SU']}',
+    zaikoSu: '${json['ZAIKO_SU'] ?? '0'}',
   );
 
   factory MaterialModel.fromDefaultInventory(DefaultInventory inventory) => MaterialModel(

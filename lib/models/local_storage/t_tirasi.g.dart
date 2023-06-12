@@ -19,9 +19,9 @@ class TTirasiAdapter extends TypeAdapter<TTirasi> {
     return TTirasi(
       tantCd: fields[0] as String,
       YMD: fields[1] as String,
-      kojiTirasisu: fields[2] as int?,
+      kojiTirasisu: fields[2] as String?,
       renkeiYMD: fields[3] as String?,
-      delFlg: fields[4] as int?,
+      delFlg: fields[4] as String?,
       addPGID: fields[5] as String?,
       addTantCd: fields[6] as String?,
       addYMD: fields[7] as String?,
@@ -85,9 +85,9 @@ TTirasi _$TTirasiFromJson(Map<String, dynamic> json) {
   return TTirasi(
     tantCd: json['TANT_CD'] as String,
     YMD: json['YMD'] as String,
-    kojiTirasisu: json['KOJI_TIRASISU'] as int?,
+    kojiTirasisu: json['KOJI_TIRASISU'] as String?,
     renkeiYMD: json['RENKEI_YMD'] as String?,
-    delFlg: json['DEL_FLG'] as int?,
+    delFlg: json['DEL_FLG'] as String?,
     addPGID: json['ADD_PGID'] as String?,
     addTantCd: json['ADD_TANTCD'] as String?,
     addYMD: json['ADD_YMD'] as String?,

@@ -29,13 +29,13 @@ class TTirasi extends HiveObject{
   String YMD;
   @HiveField(2)
   @JsonKey(name: 'KOJI_TIRASISU', required: false)
-  int? kojiTirasisu;
+  String? kojiTirasisu;
   @HiveField(3)
   @JsonKey(name: 'RENKEI_YMD', required: false)
   String? renkeiYMD;
   @HiveField(4)
   @JsonKey(name: 'DEL_FLG', required: false)
-  int? delFlg;
+  String? delFlg;
   @HiveField(5)
   @JsonKey(name: 'ADD_PGID', required: false)
   String? addPGID;
@@ -77,9 +77,9 @@ class TTirasi extends HiveObject{
   factory TTirasi.fromRequest(Map<String, dynamic> json) => TTirasi(
     tantCd: json['TANT_CD'] as String,
     YMD: json['YMD'] as String,
-    kojiTirasisu: json['KOJI_TIRASISU']!=null ? int.parse('${json['KOJI_TIRASISU']}') : null,
+    kojiTirasisu: json['KOJI_TIRASISU'],
     renkeiYMD: json['RENKEI_YMD'] as String?,
-    delFlg: json['DEL_FLG']!=null ? int.parse('${json['DEL_FLG']}') : null,
+    delFlg: json['DEL_FLG'],
     addPGID: json['ADD_PGID'] as String?,
     addTantCd: json['ADD_TANTCD'] as String?,
     addYMD: json['ADD_YMD'] as String?,

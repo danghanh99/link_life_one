@@ -261,7 +261,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
       case 4:
         return material.syoshinName ?? '';
       case 5:
-        return material.jissu ?? '';
+        return material.zaikoSu ?? '';
       default:
         return '';
     }
