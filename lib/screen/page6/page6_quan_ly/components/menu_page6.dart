@@ -25,7 +25,7 @@ class _MenuPage6State extends State<MenuPage6> {
   }
 
   _checkBuzaiHacokFlg() async {
-    isShowMenu63 = await GetPartOrderListIchiran().checkBuzaiHacokFlg(
+    isShowMenu63 = !await GetPartOrderListIchiran().checkBuzaiHacokFlg(
         onSuccess: (){},
         onFailed: (){}
     );

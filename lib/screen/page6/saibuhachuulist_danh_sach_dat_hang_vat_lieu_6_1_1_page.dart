@@ -281,7 +281,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: (widget.buzaiHacyuId!=null || widget.fromMenu
                                   ? _buildRows(saibuList.length, 1)
-                                  : _buildRows(saibuList.length, 1) + _emptyRow(newRecords.length+1)) + [
+                                  : _buildRows(saibuList.length, 1) + _emptyRow(newRecords.length)) + [
                                   Visibility(
                                     visible: (isEmptyList == null || isEmptyList!) && (widget.fromMenu || widget.buzaiHacyuId!=null) && (saibuList + newRecords).isEmpty,
                                     child: Padding(
@@ -320,7 +320,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                     isReadOnly: true,
                     showCursor: false,
                     fillColor: const Color(0xFFA5A7A9),
-                    hint: 'テキストテキストテキスト',
+                    // hint: 'テキストテキストテキスト',
                     type: TextInputType.emailAddress,
                     onChanged: (text) {},
                     maxLines: 3,
@@ -911,6 +911,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
           onTap: () {
             setState(() {
               saibuList[row - 1]["SURYO"] = item.toString();
+              saibuList[row - 1]["KINGAK"] = '${int.parse('$item') * int.parse(saibuList[row -1 ]["HACYU_TANKA"] ?? '0')}';
             });
           },
           height: 25,
@@ -958,6 +959,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
               onTap: () {
                 setState(() {
                   newRecords[row]["SURYO"] = item.toString();
+                  newRecords[row]["KINGAK"] = '${int.parse('$item') * int.parse(newRecords[row]["HACYU_TANKA"] ?? '1')}';
                 });
               },
               height: 25,

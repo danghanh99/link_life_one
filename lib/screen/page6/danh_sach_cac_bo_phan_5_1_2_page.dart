@@ -59,15 +59,15 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
       "BUNRUI": element['BUNRUI'] ?? element['BUZAI_BUNRUI'] ?? '',
       "MAKER_NAME": element['MAKER_NAME'] ?? element['MAKER_NAME_BUZAI'] ?? '',
       "HINBAN": element['HINBAN'] ?? element['HINBAN_BUZAI'] ?? '',
+      "JISYA_CD": element['JISYA_CD'] ?? '',
       "SYOHIN_NAME": element['SYOHIN_NAME'] ?? element['SYOHIN_NAME_BUZAI'] ?? '',
-      "SURYO": element['SURYO'] ?? '',
       "LOT": element['LOT'] ?? '',
-      "HACYU_TANKA": element['LOT'] ?? '',
+      "SIIRE_TANKA": element['SIIRE_TANKA'] ?? '',
       "TANI_CD": element['TANI'] ?? '',
       "HAIBAN_FLG": element ['HAIBAN_FLG'] ?? '0',
       "KBNMSAI_NAME": element['KBNMSAI_NAME'] ?? '',
       "JISSU": '${element['JISSU']??''}',
-      'status': false
+      'status': false,
     };
   }
 
