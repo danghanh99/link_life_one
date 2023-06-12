@@ -27,7 +27,7 @@ class DefaultInventory {
           syoshinName: json['SYOHIN_NAME'] ?? '',
           jissu: json['JISSU'] ?? '',
           hikiZumiSu: json['HIKI_ZUMI_SU'] ?? '',
-          zaikoSu: '${json['ZAIKO_SU']}' ?? '0'
+          zaikoSu: '${json['ZAIKO_SU'] ?? '0'}'
       );
 
   factory DefaultInventory.fromQRJson(Map<String, dynamic> json) =>

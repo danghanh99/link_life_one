@@ -1267,7 +1267,7 @@ class _QuanLyLichBieu71PageState extends State<QuanLyLichBieu71Page>
     String tantName = user['TANT_NAME'] ?? '';
     String dailySales = user['DAYLY_SALES'] ?? '0';
     String monthlySales = user['MONTHLY_SALES'] ?? '0';
-    String sumItakuhi = item['SUM_ITAKUHI'] ?? '0';
+    String sumItakuhi = '${item['SUM_ITAKUHI'] ?? '0'}';
     String sumItakuhiBetweenDate = item['SUM_ITAKUHI_BETWEEN_DATE'] ?? '0';
     String percentItakuhi = item['PERCENT_ITAKUHI'] != null
         ? item['PERCENT_ITAKUHI'].toString()

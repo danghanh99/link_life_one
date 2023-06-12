@@ -171,7 +171,7 @@ class TableDetailModel {
     data['SURYO'] = suryo;
     data['HANBAI_TANKA'] = hanbaitanka;
     data['KINGAK'] = kingak;
-    data['TUIKA_JISYA_CD'] = tuikajisyaCode;
+    data['TUIKA_JISYA_CD'] = 'KOJ-$tuikajisyaCode';
     data['TUIKA_SYOHIN_NAME'] = tuikasyohinName;
     return data;
   }
