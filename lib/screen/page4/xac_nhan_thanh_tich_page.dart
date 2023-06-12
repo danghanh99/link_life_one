@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
@@ -45,29 +47,16 @@ class _XacNhanThanhTichPageState extends State<XacNhanThanhTichPage> {
       '物販件数',
     ];
     Size size = MediaQuery.of(context).size;
-    List<double> colwidth =
-        MediaQuery.of(context).orientation == Orientation.portrait
-            ? [
-                110,
-                130,
-                130,
-                100,
-                100,
-                100,
-                100,
-                100,
-              ]
-            : [
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-                (size.width - 33) / 7,
-              ];
+    List<double> colwidth = [
+      max(110, (size.width - 33) / 7),
+      max(130, (size.width - 33) / 7),
+      max(130, (size.width - 33) / 7),
+      max(100, (size.width - 33) / 7),
+      max(100, (size.width - 33) / 7),
+      max(100, (size.width - 33) / 7),
+      max(100, (size.width - 33) / 7),
+      max(100, (size.width - 33) / 7),
+    ];
     return List.generate(count, (col) {
       var y = NumberFormat("###,###");
       if (row == 0) {

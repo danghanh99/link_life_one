@@ -27,7 +27,7 @@ class MaterialAPI {
 
     if(onStart!=null) onStart.call();
 
-    String urlEndpoint = '${Constant.checkSaveMaterial}TANT_CD=${user.TANT_CD}';
+    String urlEndpoint = '${Constant.checkSaveMaterial}TANT_CD=${user.TANT_CD}&SYOZOKU_CD=${user.SYOZOKU_CD}&DELETE_SAVE_FLG=0';
 
     final Response response = await RestAPI.shared.getData(urlEndpoint);
 
