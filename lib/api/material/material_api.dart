@@ -62,8 +62,7 @@ class MaterialAPI {
     required Function onFailed,
   }) async {
     String urlEndpoint =
-        '${Constant.getListDefaultFromEditMaterial}TANT_CD=${user.TANT_CD}&show_popup=$showPopup';
-
+        '${Constant.getListDefaultFromEditMaterial}TANT_CD=${user.TANT_CD}&SYOZOKU_CD=${user.SYOZOKU_CD}';
     final Response response = await RestAPI.shared.getData(urlEndpoint);
 
     if (response.statusCode == 200) {

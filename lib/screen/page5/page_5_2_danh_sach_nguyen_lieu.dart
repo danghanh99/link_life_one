@@ -314,7 +314,7 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                       )),
                   TextButton(
                     onPressed: () {
-                      deleteExistSave();
+                      // deleteExistSave();
                       getEditMaterial(showPopUp);
                       Navigator.pop(dialogContext);
                     },
@@ -423,14 +423,14 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
     });
   }
 
-  void deleteExistSave() {
-    MaterialAPI.shared.deleteExistSave(onSuccess: (message) {
-      // CustomToast.show(context,
-      //     message: '保存したリストを削除できました。', backGround: Colors.green);
-    }, onFailed: () {
-      // CustomToast.show(context, message: '保存したリストを削除できません。');
-    });
-  }
+  // void deleteExistSave() {
+  //   MaterialAPI.shared.deleteExistSave(onSuccess: (message) {
+  //     // CustomToast.show(context,
+  //     //     message: '保存したリストを削除できました。', backGround: Colors.green);
+  //   }, onFailed: () {
+  //     // CustomToast.show(context, message: '保存したリストを削除できません。');
+  //   });
+  // }
 
   void deleteMaterialItem(MaterialModel item) {
     MaterialAPI.shared.deleteMaterialById(
