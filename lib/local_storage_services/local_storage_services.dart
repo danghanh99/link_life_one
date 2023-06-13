@@ -1634,6 +1634,10 @@ class LocalStorageServices{
           }
           isTKojimsaiExist = true;
           km.kensetuKeitai = k.kensetuKeitai;
+          km.hinban = k.hinban;
+          km.makerCd = k.makerCd;
+          km.kisetuHinban = k.kisetuHinban;
+          km.kisetuMaker = k.kisetuMaker;
           if(k.isChangeBefore){
             km.befSekoPhotoFilePath = _isNetworkPath(k.befSekiPhotoFilePath)?k.befSekiPhotoFilePath:await FileController().copyFile(file: File(k.befSekiPhotoFilePath!), isNew: true, onFailed: (){});
           }
@@ -1695,7 +1699,7 @@ class LocalStorageServices{
             otherPhotoFolderPath: otherPhotosPathOrBase64,
             tuikaJisyaCd: 'KOJ-${k.tuikaJisyaCd}',
             tuikaSyohinName: k.tuikaSyohinName,
-            kojijituikaFlg: "1",
+            kojijituikaFlg: "0",
             delFlg: "0",
             addPGID: "KOJ1120F",
             addTantCd: loginId,
