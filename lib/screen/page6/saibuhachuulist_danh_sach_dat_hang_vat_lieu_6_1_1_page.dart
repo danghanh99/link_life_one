@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:link_life_one/api/material/material_api.dart';
 import 'package:link_life_one/api/order/get_qr.dart';
 import 'package:link_life_one/models/thanh_tich.dart';
@@ -44,6 +45,8 @@ class SaibuhacchuulistDanhSachDatHangVatLieu611Page extends StatefulWidget {
 class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
     extends State<SaibuhacchuulistDanhSachDatHangVatLieu611Page> {
   late int currentRadioRow;
+
+  final TextEditingController _noteController = TextEditingController();
 
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
@@ -219,6 +222,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
           });
         },
         onSuccess: (data) {
+          _noteController.text = '${data[0]['HACNG_RIYU']}'.toLowerCase()=='null' ? '' : data[0]['HACNG_RIYU'] ?? '';
           onSccess.call(data);
           if(data.isEmpty){
             setState(() {
@@ -317,6 +321,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                     height: 5,
                   ),
                   CustomTextField(
+                    controller: _noteController,
                     isReadOnly: true,
                     showCursor: false,
                     fillColor: const Color(0xFFA5A7A9),
@@ -351,7 +356,9 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
 
                                             for (var item in data) {
                                               var itemConvert = toJson(item, nullId: true);
-                                              mtp.add(itemConvert);
+                                              if(saibuList.where((element) => element['HINBAN']==itemConvert['HINBAN'] && element['JISYA_CD']==itemConvert['JISYA_CD']).isEmpty) {
+                                                mtp.add(itemConvert);
+                                              }
                                             }
                                             setState(() {
                                               saibuList.addAll(mtp);
@@ -613,8 +620,16 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                         ),
                         child: TextButton(
                           onPressed: () async {
+                            List<dynamic> list = (saibuList+newRecords).where((element) => element["status"] == true).toList();
+                            if(list.where((element) => '${element['SURYO']}'.isEmpty || element['SURYO'] == '0').isNotEmpty) {
+                              CustomToast.show(
+                                  context,
+                                  message: "数量を入力して下さい",
+                                  backGround: Colors.yellow
+                              );
+                              return;
+                            }
                             if(await _showConfirmDialog()){
-                              List<dynamic> list = (saibuList+newRecords).where((element) => element["status"] == true).toList();
                               if (list.isEmpty) {
                                 CustomToast.show(
                                     context,
@@ -735,68 +750,73 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
   Widget header() {
     return CustomHeaderWidget(
       onBack: () {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return SizedBox(
-              width: double.infinity,
-              child: CupertinoAlertDialog(
-                content: const Padding(
-                  padding: EdgeInsets.only(top: 15),
-                  child: Text(
-                    "編集途中のリストを保存しますか？",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
+        if((saibuList+newRecords).isNotEmpty){
+          showDialog(
+            context: context,
+            builder: (context) {
+              return SizedBox(
+                width: double.infinity,
+                child: CupertinoAlertDialog(
+                  content: const Padding(
+                    padding: EdgeInsets.only(top: 15),
+                    child: Text(
+                      "編集途中のリストを保存しますか？",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                ),
-                actions: <Widget>[
-                  TextButton(
-                      onPressed: () async {
+                  actions: <Widget>[
+                    TextButton(
+                        onPressed: () async {
 
-                        List list = [];
+                          List list = [];
 
-                        for(var l in (saibuList+newRecords)){
-                          if(!isEmptyElement(l)){
-                            list.add(l);
+                          for(var l in (saibuList+newRecords)){
+                            if(!isEmptyElement(l)){
+                              list.add(l);
+                            }
                           }
-                        }
 
-                        await MaterialAPI.shared.postAddBuzaihacyumsaiSave(
-                            items: list,
-                            onSuccess: (){},
-                            onFailed: (){}
-                        );
+                          await MaterialAPI.shared.postAddBuzaihacyumsaiSave(
+                              items: list,
+                              onSuccess: (){},
+                              onFailed: (){}
+                          );
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          'はい',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )),
+                    TextButton(
+                      onPressed: (){
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },
                       child: const Text(
-                        'はい',
+                        'いいえ',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
-                      )),
-                  TextButton(
-                    onPressed: (){
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    child: const Text(
-                      'いいえ',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
                       ),
-                    ),
-                  )
-                ],
-              ),
-            );
-          },
-        );
+                    )
+                  ],
+                ),
+              );
+            },
+          );
+        }
+        else{
+          Navigator.pop(context);
+        }
       },
     );
   }
@@ -855,7 +875,8 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
         value = saibuList[row - 1]["LOT"] ?? '';
       }
       if (col == 6) {
-        value = saibuList[row - 1]["HACYU_TANKA"] ?? '';
+        value = saibuList[row - 1]["HACYU_TANKA"] ?? '0';
+        value  = NumberFormat('###,###').format(int.tryParse(value) ?? 0);
       }
 
       if (col == 7) {
@@ -883,7 +904,8 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
         value = saibuList[row - 1]["TANI_CD"] ?? '';
       }
       if (col == 9) {
-        value = saibuList[row - 1]["KINGAK"] ?? '';
+        value = saibuList[row - 1]["KINGAK"] ?? '0';
+        value  = NumberFormat('###,###').format(int.tryParse(value) ?? 0);
       }
 
       return Text(

@@ -47,13 +47,13 @@ class _HachuushouninPheDuyetDonDatHang631PageState
     await GetPurchaseOrderApproval().getPurchaseOrderApproval(
             BUZAI_HACYU_ID: widget.BUZAI_HACYU_ID,
             onSuccess: (data) {
-              for (var element in data) {
-                element["status"] = false;
-              }
+              // for (var element in data) {
+              //   // element["status"] = false;
+              // }
               setState(() {
                 hachuushouninList = data;
                 textEditingController.text =
-                    hachuushouninList[0]["HACNG_RIYU"] ?? '';
+                    '${hachuushouninList[0]["HACNG_RIYU"]}'.toLowerCase()=='null' ? '' : hachuushouninList[0]["HACNG_RIYU"] ?? '';
                 if(hachuushouninList.isEmpty){
                   isEmptyList = true;
                 }
@@ -142,7 +142,7 @@ class _HachuushouninPheDuyetDonDatHang631PageState
               CustomTextField(
                 controller: textEditingController,
                 fillColor: const Color(0xFFFFFFFF),
-                hint: 'テキストテキストテキスト',
+                // hint: 'テキストテキストテキスト',
                 type: TextInputType.emailAddress,
                 onChanged: (text) {},
                 maxLines: 3,
@@ -158,17 +158,17 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                     width: 100,
                     height: 37,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF96265),
+                      color: const Color(0xFF6D8FDB),
                       borderRadius: BorderRadius.circular(26),
                     ),
                     child: TextButton(
                       onPressed: () {
-                        List<dynamic> list = hachuushouninList
-                            .where((element) => element["status"] == true)
-                            .toList();
-                        if (list.length > 0) {
+                        // List<dynamic> list = hachuushouninList
+                        //     .where((element) => element["status"] == true)
+                        //     .toList();
+                        if (hachuushouninList.isNotEmpty) {
                           PostPurchaseOrderApproval().postPurchaseOrderApproval(
-                              BUZAI_HACYU_ID_List: list
+                              BUZAI_HACYU_ID_List: hachuushouninList
                                   .map((item) => item["BUZAI_HACYU_ID"])
                                   .toList(),
                               note: textEditingController.text,
@@ -179,11 +179,11 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                                   backGround: Colors.green,
                                 );
 
-                                setState(() {
-                                  for (var element in hachuushouninList) {
-                                    element["status"] = false;
-                                  }
-                                });
+                                // setState(() {
+                                //   // for (var element in hachuushouninList) {
+                                //   //   element["status"] = false;
+                                //   // }
+                                // });
                                 Navigator.pop(context);
                               },
                               onFailed: () {
@@ -212,17 +212,17 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                     width: 100,
                     height: 37,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF6D8FDB),
+                      color: const Color(0xFFF96265),
                       borderRadius: BorderRadius.circular(26),
                     ),
                     child: TextButton(
                       onPressed: () {
-                        List<dynamic> list = hachuushouninList
-                            .where((element) => element["status"] == true)
-                            .toList();
-                        if (list.length > 0) {
+                        // List<dynamic> list = hachuushouninList
+                        //     .where((element) => element["status"] == true)
+                        //     .toList();
+                        if (hachuushouninList.isNotEmpty) {
                           PostPurchaseOrderReject().postPurchaseOrderReject(
-                              BUZAI_HACYU_ID_List: list
+                              BUZAI_HACYU_ID_List: hachuushouninList
                                   .map((item) => item["BUZAI_HACYU_ID"])
                                   .toList(),
                               note: textEditingController.text,
@@ -233,11 +233,11 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                                   backGround: Colors.green,
                                 );
 
-                                setState(() {
-                                  for (var element in hachuushouninList) {
-                                    element["status"] = false;
-                                  }
-                                });
+                                // setState(() {
+                                //   for (var element in hachuushouninList) {
+                                //     element["status"] = false;
+                                //   }
+                                // });
                                 Navigator.pop(context);
                               },
                               onFailed: () {
@@ -378,7 +378,6 @@ class _HachuushouninPheDuyetDonDatHang631PageState
 
   List<Widget> _buildCells2(int count, int row) {
     List<String> colNames = [
-      '',
       'メーカー',
       '分類',
       '品番',
@@ -395,7 +394,6 @@ class _HachuushouninPheDuyetDonDatHang631PageState
     List<double> colwidth =
         MediaQuery.of(context).orientation == Orientation.portrait
             ? [
-                35,
                 200,
                 130,
                 100,
@@ -412,7 +410,6 @@ class _HachuushouninPheDuyetDonDatHang631PageState
                 100,
               ]
             : [
-                35,
                 4 * (size.width - 33) / 20,
                 1 * (size.width - 33) / 20,
                 2 * (size.width - 33) / 20,
@@ -425,17 +422,17 @@ class _HachuushouninPheDuyetDonDatHang631PageState
               ];
 
     return List.generate(count, (col) {
-      if (row != 0 && col != 0) {
+      if (row != 0) {
         String value = '';
         hachuushouninList;
 
-        if (col == 1) {
+        if (col == 0) {
           value = hachuushouninList[row - 1]["MAKER_NAME"] ?? '';
         }
-        if (col == 2) {
+        if (col == 1) {
           value = hachuushouninList[row - 1]["BUNRUI"] ?? '';
         }
-        if (col == 3) {
+        if (col == 2) {
           value = hachuushouninList[row - 1]["JISYA_CD"] ?? '';
           // if (hachuushouninList[row - 1]["JISYA_CD"] == null) {
           //   value = '';
@@ -445,22 +442,22 @@ class _HachuushouninPheDuyetDonDatHang631PageState
           //   value = DateFormat('yyyy/MM/dd', 'ja').format(time).toString();
           // }
         }
-        if (col == 4) {
+        if (col == 3) {
           value = hachuushouninList[row - 1]["SYOHIN_NAME"] ?? '';
         }
-        if (col == 5) {
+        if (col == 4) {
           value = hachuushouninList[row - 1]["LOT"] ?? '';
         }
-        if (col == 6) {
+        if (col == 5) {
           value = hachuushouninList[row - 1]["HACYU_TANKA"] ?? '';
         }
-        if (col == 7) {
+        if (col == 6) {
           value = hachuushouninList[row - 1]["SURYO"] ?? '';
         }
-        if (col == 8) {
+        if (col == 7) {
           value = hachuushouninList[row - 1]["TANI_CD"] ?? '';
         }
-        if (col == 9) {
+        if (col == 8) {
           int xx = int.parse(hachuushouninList[row - 1]["HACYU_TANKA"]) *
               int.parse(hachuushouninList[row - 1]["SURYO"]);
           value = xx.toString();
@@ -500,27 +497,27 @@ class _HachuushouninPheDuyetDonDatHang631PageState
           ),
         );
       }
-      if (col == 0 && row != 0 && hachuushouninList.length > 0) {
-        return Container(
-          decoration: BoxDecoration(
-            border: Border.all(width: 0.5),
-            color: Colors.white,
-          ),
-          alignment: Alignment.center,
-          width: colwidth[col],
-          height: 50,
-          child: Checkbox(
-            activeColor: Colors.blue,
-            checkColor: Colors.white,
-            value: hachuushouninList[row - 1]["status"],
-            onChanged: (newValue) {
-              setState(() {
-                hachuushouninList[row - 1]["status"] = newValue ?? false;
-              });
-            },
-          ),
-        );
-      }
+      // if (col == 0 && row != 0 && hachuushouninList.length > 0) {
+      //   return Container(
+      //     decoration: BoxDecoration(
+      //       border: Border.all(width: 0.5),
+      //       color: Colors.white,
+      //     ),
+      //     alignment: Alignment.center,
+      //     width: colwidth[col],
+      //     height: 50,
+      //     child: Checkbox(
+      //       activeColor: Colors.blue,
+      //       checkColor: Colors.white,
+      //       value: hachuushouninList[row - 1]["status"],
+      //       onChanged: (newValue) {
+      //         setState(() {
+      //           hachuushouninList[row - 1]["status"] = newValue ?? false;
+      //         });
+      //       },
+      //     ),
+      //   );
+      // }
 
       return Container(
         decoration: BoxDecoration(
@@ -541,7 +538,7 @@ class _HachuushouninPheDuyetDonDatHang631PageState
   List<Widget> _buildRows(int count) {
     return List.generate(count, (index) {
       return Row(
-        children: _buildCells2(10, index),
+        children: _buildCells2(9, index),
       );
     });
   }
