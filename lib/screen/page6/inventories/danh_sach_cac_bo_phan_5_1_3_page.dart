@@ -38,7 +38,8 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
 
   List<dynamic> pullDown = [];
 
-  dynamic pullDownSelected;
+  final String defaultPulldown = '分類を選択してください';
+  dynamic pullDownSelected = '分類を選択してください';
   final TextEditingController hinbanController = TextEditingController();
   final TextEditingController mekaController = TextEditingController();
   final TextEditingController shohinmeiController = TextEditingController();
@@ -94,14 +95,14 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
   Future<void> getPullDown() async {
     await GetPullDownApi().getPullDown(onSuccess: (list) async {
       await getListBuzai(
-        buzaiBunrui: list.first['KBNMSAI_CD']
+        buzaiBunrui: ''
       );
       setState(() {
         var a = list;
         a.add(null);
         a.reversed;
         pullDown = a;
-        pullDownSelected = pullDown.isEmpty ? '' : list.first['KBNMSAI_NAME'];
+        pullDownSelected = defaultPulldown;
       });
     }, onFailed: () {
       CustomToast.show(context, message: 'データを取得出来ませんでした。');
@@ -187,7 +188,7 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
                   child: TextButton(
                     onPressed: () {
                       getListBuzai(
-                        buzaiBunrui: pullDownSelected == '全部' ? '' : pullDown.firstWhere((element) => element['KBNMSAI_NAME']==pullDownSelected)['KBNMSAI_CD'],
+                        buzaiBunrui: pullDownSelected == defaultPulldown ? '' : pullDown.firstWhere((element) => element['KBNMSAI_NAME']==pullDownSelected)['KBNMSAI_CD'],
                         makerName: mekaController.text,
                         hinban: hinbanController.text,
                         syohinName: shohinmeiController.text
@@ -218,7 +219,7 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      pullDownSelected = '全部';
+                      pullDownSelected = defaultPulldown;
                       mekaController.clear();
                       hinbanController.clear();
                       shohinmeiController.clear();
@@ -337,13 +338,13 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
           onTap: () {
             setState(() {
               item == null
-                  ? pullDownSelected = '全部'
+                  ? pullDownSelected = defaultPulldown
                   : pullDownSelected = item['KBNMSAI_NAME'];
             });
           },
           height: 25,
           padding: const EdgeInsets.only(right: 0, left: 10),
-          value: item == null ? '全部' : item['KBNMSAI_NAME'],
+          value: item == null ? defaultPulldown : item['KBNMSAI_NAME'],
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -355,7 +356,7 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
                       width: 14,
                     ),
                     Text(
-                      item == null ? '全部' : item['KBNMSAI_NAME'],
+                      item == null ? defaultPulldown : item['KBNMSAI_NAME'],
                     ),
                   ],
                 ),
@@ -379,7 +380,7 @@ class _DanhSachCacBoPhan513PageState extends State<DanhSachCacBoPhan513Page> {
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                pullDownSelected ?? '全部',
+                pullDownSelected ?? defaultPulldown,
                 style: const TextStyle(
                   color: Color(0xFF999999),
                   fontSize: 14,

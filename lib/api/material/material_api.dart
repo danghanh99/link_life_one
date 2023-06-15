@@ -214,7 +214,7 @@ class MaterialAPI {
     for(int i=0; i<items.length; i++){
       var json = {
         "SYUKKO_ID": items[i].syukkoId,
-        "SURYO": items[i].suryo,
+        "SURYO": items[i].suryoReturn,
         "RETURN_SU": '${returnSus[i]}'
       };
       materialJsonList.add(json);

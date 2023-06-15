@@ -322,7 +322,7 @@ class _DanhSachCacBoPhan512PageState extends State<DanhSachCacBoPhan512Page> {
       isEmptyList = null;
     });
     await GetPartList().getPartList(
-      bunrui: pulldownCategory!='カテゴリを選択' ? pulldownCategory : '',
+      bunrui: pulldownCategory!='カテゴリを選択' ? listPullDown.firstWhere((element) => element['KBNMSAI_NAME']==pulldownCategory)['KBNMSAI_CD'] : '',
       markerName: markerNameEditTextController.text,
       hinban: hinbanEditTextController.text,
       syohinName: syohinNameEditTextController.text,
