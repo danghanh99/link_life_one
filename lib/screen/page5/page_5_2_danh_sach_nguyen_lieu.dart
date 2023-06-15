@@ -737,23 +737,21 @@ class _Page52DanhSachNguyenLieuState extends State<Page52DanhSachNguyenLieu> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: TextButton(
-                    onPressed: !checkboxsState.contains(true)
-                        ? null
-                        : () {
-                            for(int i = 0; i<checkboxsState.length; i++){
-                              if(checkboxsState[i]) {
-                                if (materials[i].syukkoId != null) {
-                                  deleteMaterialItem(materials[i]);
-                                  materials.removeAt(i);
-                                }
-                              }
-                            }
-                            checkboxsState.clear();
-                            for (var m in materials) {
-                              checkboxsState.add(false);
-                            }
-                            setState(() {});
-                          },
+                    onPressed: () {
+                      for(int i = 0; i<checkboxsState.length; i++){
+                        if(checkboxsState[i]) {
+                          // if (materials[i].syukkoId != null) {
+                          //   deleteMaterialItem(materials[i]);
+                          // }
+                          materials.removeAt(i);
+                        }
+                      }
+                      checkboxsState.clear();
+                      for (var m in materials) {
+                        checkboxsState.add(false);
+                      }
+                      setState(() {});
+                    },
                     child: const Text(
                       '削除',
                       style: TextStyle(

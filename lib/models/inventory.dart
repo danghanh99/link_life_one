@@ -67,8 +67,8 @@ class Inventory {
         tougetsuJitsuZaiko: int.parse(json['JITUZAIKO_SU'] ?? '0'),
         bunrui: json['BUZAI_BUNRUI'] ?? '',
         tanka: int.parse(json['SIIRE_TANKA'] ?? '1'),
-        shukkoSuuryou: json['SYUKKOJISEKI_SURYO'] ?? '',
-        hacchuuSuuryou: json['BUZAIHACYUMSAI_SURYO'] ?? '',
+        shukkoSuuryou: json['SYUKKOJISEKI_SURYO'] ?? '0',
+        hacchuuSuuryou: json['BUZAIHACYUMSAI_SURYO'] ?? '0',
         haibanFlg: json['HAIBAN_FLG'] ?? '0',
         meekaa: json['MAKER_NAME'] ?? json['BUZAI_MAKER_NAME'] ?? '',
         tanaId: json['TANA_ID'] ?? '',
@@ -84,8 +84,8 @@ class Inventory {
         buzaiHcyuId: json['BUZAI_HACYU_ID'] ?? '',
         jisyaCd: json['JISYA_CD'] ?? '',
         kbnmsaiName: json['KBNMSAI_NAME'] ?? '',
-        genka: json['GENKA'] ?? '',
-        jissu: json['JISSU'] ?? '',
+        genka: json['GENKA'] ?? '0',
+        jissu: json['JISSU'] ?? '0',
         isFromDatabase: isFromDatabase
     );
   }

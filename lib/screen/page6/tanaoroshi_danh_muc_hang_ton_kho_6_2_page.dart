@@ -258,34 +258,6 @@ class _TanaoroshiDanhMucHangTonKho62PageState
               height: 10,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
-                Text(
-                  '発注却下品番・理由 / コメント',
-                  style: TextStyle(
-                    color: Color(0xFF042C5C),
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            CustomTextField(
-              isReadOnly: true,
-              showCursor: false,
-              fillColor: const Color(0xFFA5A7A9),
-              hint: 'テキストテキストテキスト',
-              type: TextInputType.emailAddress,
-              onChanged: (text) {},
-              maxLines: 3,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
               children: [
                 Container(
                   width: 100,
@@ -658,7 +630,7 @@ class _TanaoroshiDanhMucHangTonKho62PageState
             ),
           ),
           Visibility(
-            visible: listInventory[row - 1].haibanFlg == '0',
+            visible: (listInventory[row - 1].haibanFlg ?? '0') == '0',
             child: Padding(
               padding: const EdgeInsets.only(right: 7, left: 7),
               child: _moreButton(context, row),

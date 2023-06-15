@@ -322,9 +322,9 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                   ),
                   CustomTextField(
                     controller: _noteController,
-                    isReadOnly: true,
-                    showCursor: false,
-                    fillColor: const Color(0xFFA5A7A9),
+                    // isReadOnly: true,
+                    // showCursor: false,
+                    // fillColor: const Color(0xFFA5A7A9),
                     // hint: 'テキストテキストテキスト',
                     type: TextInputType.emailAddress,
                     onChanged: (text) {},
@@ -493,6 +493,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                                     addUpdateList: [],
                                     removeSaveList: list.map((e) => toJson(e, hasStatus: false)).toList(),
                                     removeBuzaiList: [],
+                                    hacngRiyu: _noteController.text,
                                     onSuccess: () {
                                       setState(() {
                                         saibuList.removeWhere(
@@ -517,6 +518,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                                     addUpdateList: [],
                                     removeSaveList: [],
                                     removeBuzaiList: list.map((e) => toJson(e, hasStatus: false)).toList(),
+                                    hacngRiyu: _noteController.text,
                                     onSuccess: () {
                                       setState(() {
                                         saibuList.removeWhere(
@@ -642,6 +644,7 @@ class _SaibuhacchuulistDanhSachDatHangVatLieu611PageState
                                     addUpdateList: list.map((e) => toJson(e, hasStatus: false)).toList(),
                                     removeSaveList: [],
                                     removeBuzaiList: [],
+                                    hacngRiyu: _noteController.text,
                                     onSuccess: () {
                                       CustomToast.show(
                                         context,
